@@ -1,0 +1,15 @@
+include ':mopian', ':constant'
+rootProject.name = 'weex-project'
+
+include ":weex_sdk"
+
+include ":weex_debug"
+
+include ":xutils"
+include ":library"
+include ":richeditor"
+include ":presentation"
+include ":alertview"
+include ":photoview"
+include ":wx_sdk"
+include ":chat_ui"

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="color" name="gallery_camera_bg"/>
+    <attr format="dimension" name="gallery_camera_image"/>
+    <attr format="color" name="gallery_checkbox_button_tint_color"/>
+    <attr format="color" name="gallery_checkbox_text_color"/>
+    <attr format="color" name="gallery_color_active_widget"/>
+    <attr format="color" name="gallery_color_statusbar"/>
+    <attr format="dimension" name="gallery_default_image"/>
+    <attr format="dimension|color" name="gallery_imageview_bg"/>
+    <attr format="dimension|string" name="gallery_media_empty_tips"/>
+    <attr format="color" name="gallery_page_bg"/>
+    <attr format="dimension|string" name="gallery_request_camera_permission_tips"/>
+    <attr format="dimension|string" name="gallery_request_storage_access_permission_tips"/>
+    <attr format="dimension|string" name="gallery_request_storage_write_permission_tips"/>
+    <attr format="color" name="gallery_take_image_text_color"/>
+    <attr format="color" name="gallery_toolbar_bg"/>
+    <attr format="reference|dimension" name="gallery_toolbar_bottom_margin"/>
+    <attr format="color" name="gallery_toolbar_close_color"/>
+    <attr format="reference" name="gallery_toolbar_close_image"/>
+    <attr format="reference|color" name="gallery_toolbar_divider_bg"/>
+    <attr format="dimension" name="gallery_toolbar_divider_height"/>
+    <attr format="dimension" name="gallery_toolbar_height"/>
+    <attr format="reference" name="gallery_toolbar_over_button_bg"/>
+    <attr format="color" name="gallery_toolbar_over_button_normal_color"/>
+    <attr format="color" name="gallery_toolbar_over_button_pressed_color"/>
+    <attr format="color" name="gallery_toolbar_over_button_text_color"/>
+    <attr format="dimension" name="gallery_toolbar_over_button_text_size"/>
+    <attr format="color" name="gallery_toolbar_text_color"/>
+    <attr name="gallery_toolbar_text_gravity">
+        <!-- Push object to the top of its container, not changing its size. -->
+        <flag name="top" value="0x30"/>
+        <!-- Push object to the bottom of its container, not changing its size. -->
+        <flag name="bottom" value="0x50"/>
+        <!-- Push object to the left of its container, not changing its size. -->
+        <flag name="left" value="0x03"/>
+        <!-- Push object to the right of its container, not changing its size. -->
+        <flag name="right" value="0x05"/>
+        <!-- Place object in the vertical center of its container, not changing its size. -->
+        <flag name="center_vertical" value="0x10"/>
+        <!-- Grow the vertical size of the object if needed so it completely fills its container. -->
+        <flag name="fill_vertical" value="0x70"/>
+        <!-- Place object in the horizontal center of its container, not changing its size. -->
+        <flag name="center_horizontal" value="0x01"/>
+        <!-- Grow the horizontal size of the object if needed so it completely fills its container. -->
+        <flag name="fill_horizontal" value="0x07"/>
+        <!-- Place the object in the center of its container in both the vertical and horizontal axis, not changing its size. -->
+        <flag name="center" value="0x11"/>
+        <!-- Grow the horizontal and vertical size of the object if needed so it completely fills its container. -->
+        <flag name="fill" value="0x77"/>
+        <!-- Additional option that can be set to have the top and/or bottom edges of
+             the child clipped to its container's bounds.
+             The clip will be based on the vertical gravity: a top gravity will clip the bottom
+             edge, a bottom gravity will clip the top edge, and neither will clip both edges. -->
+        <flag name="clip_vertical" value="0x80"/>
+        <!-- Additional option that can be set to have the left and/or right edges of
+             the child clipped to its container's bounds.
+             The clip will be based on the horizontal gravity: a left gravity will clip the right
+             edge, a right gravity will clip the left edge, and neither will clip both edges. -->
+        <flag name="clip_horizontal" value="0x08"/>
+        <!-- Push object to the beginning of its container, not changing its size. -->
+        <flag name="start" value="0x00800003"/>
+        <!-- Push object to the end of its container, not changing its size. -->
+        <flag name="end" value="0x00800005"/>
+    </attr>
+    <attr format="dimension" name="gallery_toolbar_text_size"/>
+    <attr format="color" name="gallery_toolbar_widget_color"/>
+    <attr format="color" name="gallery_ucrop_activity_widget_color"/>
+    <attr format="color" name="gallery_ucrop_color_crop_background"/>
+    <attr format="color" name="gallery_ucrop_crop_frame_color"/>
+    <attr format="dimension" name="gallery_ucrop_crop_frame_stroke_width"/>
+    <attr format="color" name="gallery_ucrop_image_grid_color"/>
+    <attr format="dimension" name="gallery_ucrop_image_grid_stroke_size"/>
+    <attr format="color" name="gallery_ucrop_image_outer_frame_bg"/>
+    <attr format="boolean" name="gallery_ucrop_show_crop_frame"/>
+    <attr format="boolean" name="gallery_ucrop_show_crop_grid"/>
+    <attr format="integer" name="gallery_ucrop_show_crop_grid_column_count"/>
+    <attr format="integer" name="gallery_ucrop_show_crop_grid_row_count"/>
+    <attr format="color" name="gallery_ucrop_status_bar_color"/>
+    <attr format="string" name="gallery_ucrop_title_text"/>
+    <attr format="color" name="gallery_ucrop_toolbar_color"/>
+    <attr format="string" name="gallery_ucrop_toolbar_title"/>
+    <attr format="color" name="gallery_ucrop_toolbar_widget_color"/>
+    <attr format="dimension" name="gallery_ucrop_vector_ic_crop"/>
+    <bool name="gallery_default_ucrop_show_crop_frame">true</bool>
+    <bool name="gallery_default_ucrop_show_crop_grid">true</bool>
+    <color name="gallery_bucket_list_decoration_color">#D8D8D8</color>
+    <color name="gallery_bucket_list_item_normal_color">#F2F2F2</color>
+    <color name="gallery_bucket_list_item_pressed_color">#D8D8D8</color>
+    <color name="gallery_default_camera_bg_color">#282829</color>
+    <color name="gallery_default_checkbox_button_tint_color">#eb4e40</color>
+    <color name="gallery_default_checkbox_text_color">#ffffff</color>
+    <color name="gallery_default_color_statusbar">#151515</color>
+    <color name="gallery_default_color_toolbar_bg">#2A2A2F</color>
+    <color name="gallery_default_color_toolbar_icon">#fff</color>
+    <color name="gallery_default_color_toolbar_text">#fff</color>
+    <color name="gallery_default_page_bg">#151515</color>
+    <color name="gallery_default_take_image_text_color">#E2E2E2</color>
+    <color name="gallery_default_toolbar_bg">#eb4e40</color>
+    <color name="gallery_default_toolbar_divider_bg">#151515</color>
+    <color name="gallery_default_toolbar_over_button_normal_color">#FF6E40</color>
+    <color name="gallery_default_toolbar_over_button_pressed_color">#CC5833</color>
+    <color name="gallery_default_toolbar_over_button_text_color">#ffffff</color>
+    <color name="gallery_default_toolbar_text_color">#ffffff</color>
+    <color name="gallery_default_toolbar_widget_color">#ffffff</color>
+    <color name="gallery_default_ucrop_color_crop_background">#000</color>
+    <color name="gallery_default_ucrop_color_default_crop_frame">#ffffff</color>
+    <color name="gallery_default_ucrop_color_default_crop_grid">#80ffffff</color>
+    <color name="gallery_default_ucrop_color_default_dimmed">#8c000000</color>
+    <color name="gallery_default_ucrop_color_default_logo">#4f212121</color>
+    <color name="gallery_default_ucrop_color_progress_wheel_line">#808080</color>
+    <color name="gallery_default_ucrop_color_widget">#000</color>
+    <color name="gallery_default_ucrop_color_widget_active">#FF6E40</color>
+    <color name="gallery_default_ucrop_color_widget_background">#fff</color>
+    <color name="gallery_default_ucrop_color_widget_text">#000</color>
+    <color name="gallery_media_grid_block_color">#D9000000</color>
+    <color name="gallery_take_image_item_bg">#E2E2E2</color>
+    <color name="lineColor">#cccccc</color>
+    <color name="puzzleBg">#EFF0F5</color>
+    <color name="textColor">#515151</color>
+    <color name="ucrop_color_crop_background">#000</color>
+    <color name="ucrop_color_default_crop_frame">#ffffff</color>
+    <color name="ucrop_color_default_crop_grid">#80ffffff</color>
+    <color name="ucrop_color_default_dimmed">#8c000000</color>
+    <color name="ucrop_color_default_logo">#4f212121</color>
+    <color name="ucrop_color_progress_wheel_line">#808080</color>
+    <color name="ucrop_color_statusbar">#CC5833</color>
+    <color name="ucrop_color_toolbar">#FF6E40</color>
+    <color name="ucrop_color_toolbar_widget">#fff</color>
+    <color name="ucrop_color_widget">#000</color>
+    <color name="ucrop_color_widget_active">#FF6E40</color>
+    <color name="ucrop_color_widget_background">#fff</color>
+    <color name="ucrop_color_widget_text">#000</color>
+    <color name="wxColor">#eb4e40</color>
+    <declare-styleable name="ImageButtonWithText"><attr format="reference" name="picture"/></declare-styleable>
+    <declare-styleable name="ucrop_AspectRatioTextView"><attr format="string" name="ucrop_artv_ratio_title"/><attr format="float" name="ucrop_artv_ratio_x"/><attr format="float" name="ucrop_artv_ratio_y"/></declare-styleable>
+    <declare-styleable name="ucrop_UCropView"><attr format="float" name="ucrop_aspect_ratio_x"/><attr format="float" name="ucrop_aspect_ratio_y"/><attr format="boolean" name="ucrop_show_oval_crop_frame"/><attr format="boolean" name="ucrop_circle_dimmed_layer"/><attr format="color" name="ucrop_dimmed_color"/><attr format="dimension" name="ucrop_grid_stroke_size"/><attr format="color" name="ucrop_grid_color"/><attr format="integer" name="ucrop_grid_row_count"/><attr format="integer" name="ucrop_grid_column_count"/><attr format="boolean" name="ucrop_show_grid"/><attr format="dimension" name="ucrop_frame_stroke_size"/><attr format="color" name="ucrop_frame_color"/><attr format="boolean" name="ucrop_show_frame"/></declare-styleable>
+    <dimen name="gallery_bucket_margin">10dp</dimen>
+    <dimen name="gallery_default_toolbar_bottom_margin">1dp</dimen>
+    <dimen name="gallery_default_toolbar_divider_height">0.3dp</dimen>
+    <dimen name="gallery_default_toolbar_height">@dimen/abc_action_bar_default_height_material
+    </dimen>
+    <dimen name="gallery_default_toolbar_over_button_text_size">18sp</dimen>
+    <dimen name="gallery_default_toolbar_text_size">@dimen/abc_text_size_title_material_toolbar
+    </dimen>
+    <dimen name="gallery_divider_decoration_height">0.5dp</dimen>
+    <dimen name="gallery_grid_item_margin">1dp</dimen>
+    <dimen name="gallery_margin">10dp</dimen>
+    <dimen name="ucrop_default_crop_frame_stoke_width">1dp</dimen>
+    <dimen name="ucrop_default_crop_grid_stoke_width">1dp</dimen>
+    <dimen name="ucrop_default_crop_rect_corner_touch_area_line_length">10dp</dimen>
+    <dimen name="ucrop_default_crop_rect_corner_touch_threshold">30dp</dimen>
+    <dimen name="ucrop_default_crop_rect_min_size">100dp</dimen>
+    <dimen name="ucrop_height_crop_aspect_ratio_text">40dp</dimen>
+    <dimen name="ucrop_height_divider_shadow">3dp</dimen>
+    <dimen name="ucrop_height_horizontal_wheel_progress_line">20dp</dimen>
+    <dimen name="ucrop_height_wrapper_controls">64dp</dimen>
+    <dimen name="ucrop_height_wrapper_states">72dp</dimen>
+    <dimen name="ucrop_margin_horizontal_wheel_progress_line">10dp</dimen>
+    <dimen name="ucrop_margit_top_widget_text">10sp</dimen>
+    <dimen name="ucrop_padding_crop_frame">16dp</dimen>
+    <dimen name="ucrop_progress_size">30dp</dimen>
+    <dimen name="ucrop_size_dot_scale_text_view">8dp</dimen>
+    <dimen name="ucrop_size_wrapper_rotate_button">50dp</dimen>
+    <dimen name="ucrop_text_size_widget_text">13sp</dimen>
+    <dimen name="ucrop_width_horizontal_wheel_progress_line">2dp</dimen>
+    <drawable name="gallery_default_toolbar_close_image">@drawable/gallery_ic_cross</drawable>
+    <integer name="gallery_default_toolbar_text_gravity">0x03</integer>
+    <integer name="gallery_default_ucrop_show_crop_grid_column_count">2</integer>
+    <integer name="gallery_default_ucrop_show_crop_grid_row_count">2</integer>
+    <integer name="ucrop_progress_loading_anim_time">1500</integer>
+    <string name="gallery_all_image">所有图片</string>
+    <string name="gallery_all_video">所有视频</string>
+    <string name="gallery_default_camera_access_permission_tips">App请求拍照权限,否则无法拍照</string>
+    <string name="gallery_default_media_empty_tips">空空如也</string>
+    <string name="gallery_default_request_storage_access_permission_tips">App请求读取你的相册</string>
+    <string name="gallery_default_request_storage_write_permission_tips">App请求写入你的相册</string>
+    <string name="gallery_device_camera_unable">相机不可用</string>
+    <string name="gallery_device_no_camera_tips">该设备无摄像头</string>
+    <string name="gallery_edit_phote">裁剪</string>
+    <string name="gallery_image_max_size_tip">你最多只能选择%1$d张照片</string>
+    <string name="gallery_loading_view_click_loading_more">加载更多</string>
+    <string name="gallery_loading_view_loading">加载中…</string>
+    <string name="gallery_loading_view_no_more">没有更多了</string>
+    <string name="gallery_media_grid_image_title">相册</string>
+    <string name="gallery_media_grid_video_title">视频</string>
+    <string name="gallery_over_button_text">完成</string>
+    <string name="gallery_over_button_text_checked">完成(%1$d/%2$d)</string>
+    <string name="gallery_page_title">%1$d/%2$d</string>
+    <string name="gallery_preview_title">预览</string>
+    <string name="gallery_take_image">拍摄照片</string>
+    <string name="gallery_video">录制视频</string>
+    <string name="ucrop_error_input_data_is_absent" translatable="false">Both input and output Uri must be specified</string>
+    <string name="ucrop_label_edit_photo">Edit Photo</string>
+    <string name="ucrop_label_original">Original</string>
+    <string name="ucrop_menu_crop">Crop</string>
+    <string name="ucrop_mutate_exception_hint" translatable="false">Therefore, override color resource (ucrop_color_toolbar_widget) in your app to make it work on pre-L devices</string>
+    <style name="gallery_NoSpaceActionBarTheme" parent="Base.Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+    <style name="progress_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <style name="ucrop_ImageViewWidgetIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:duplicateParentState">true</item>
+    </style>
+    <style name="ucrop_TextViewCropAspectRatio">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/ucrop_height_crop_aspect_ratio_text</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:duplicateParentState">true</item>
+        <item name="android:textColor">@color/ucrop_scale_text_view_selector</item>
+    </style>
+    <style name="ucrop_TextViewWidgetText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginTop">@dimen/ucrop_margit_top_widget_text</item>
+        <item name="android:textColor">@color/ucrop_color_widget_text</item>
+        <item name="android:textSize">@dimen/ucrop_text_size_widget_text</item>
+    </style>
+    <style name="ucrop_WrapperIconState">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="ucrop_WrapperRotateButton">
+        <item name="android:layout_width">@dimen/ucrop_size_wrapper_rotate_button</item>
+        <item name="android:layout_height">@dimen/ucrop_size_wrapper_rotate_button</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+    </style>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_pressed="true"><!--点击时-->
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp" />
+                    <solid android:color="@color/colorBefore" />
+                </shape>
+            </item>
+        </layer-list>
+    </item><!--不可点击-->
+    <item android:state_enabled="false">
+        <layer-list>
+            <item>
+                <shape>
+                    <corners android:radius="5dp" />
+                    <solid android:color="#bbbbbb" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item><!--正常-->
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp" />
+                    <solid android:color="@color/colorBefore" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

@@ -1,0 +1,400 @@
+<resources>
+    <string name="app_name">魔篇</string>
+
+    <string name="scan_qr_code">扫码</string>
+    <string name="page_refresh">刷新</string>
+    <string name="dummy_content">WEEX\nPLAYGROUND</string>
+    <string name="capture_qrcode_prompt">请将条码置于取景框内扫描</string>
+    <string name="cpu_not_support_tip">Sorry, your current device is x86 architecture.\n We only
+        support arm architecture devices!
+    </string>
+    <string name="index_tip">
+        网络加载失败
+    </string>
+
+    <!--伪协议-->
+    <string name="href_home">yundian</string>
+
+
+    <!-- time -->
+    <string name="time_yesterday">昨天</string>
+    <string name="time_day">日</string>
+    <string name="time_month">月</string>
+    <string name="time_year">年</string>
+    <string name="time_more">99+</string>
+    <string name="title_activity_group_chat_setting">GroupChatSettingActivity</string>
+
+    <!--wxchat-->
+
+    <string name="default_group_name">默认分组</string>
+
+    <string name="file_not_found">未找到文件，请稍后重试</string>
+    <string name="save_exist">文件已存在</string>
+    <string name="save_succ">保存成功</string>
+    <string name="download_fail">下载失败</string>
+    <string name="downloading">正在下载，请稍候</string>
+    <string name="chat_typing">对方正在输入…</string>
+    <string name="chat_content_bad">内容含有敏感词</string>
+    <string name="chat_audio_too_long">录音过长，请重试</string>
+    <string name="chat_pullback">撤回</string>
+    <string name="chat_pullback_not_support">改会话不支持消息撤回</string>
+    <!-- message -->
+    <string name="summary_image">[图片]</string>
+    <string name="summary_voice">[语音]</string>
+    <string name="summary_video">[小视频]</string>
+    <string name="summary_file">[文件]</string>
+    <string name="summary_friend_add">请求添加好友</string>
+    <string name="summary_friend_added">我已添加</string>
+    <string name="summary_friend_add_me">请求添加</string>
+    <string name="summary_friend_recommend">推荐添加</string>
+    <string name="summary_me">我</string>
+    <string name="summary_group_apply">申请加群</string>
+    <string name="summary_group_invite">邀请</string>
+    <string name="summary_group_add">加入群</string>
+    <string name="summary_agree">同意</string>
+    <string name="summary_disagree">拒绝</string>
+    <string name="summary_invite_person">邀请人</string>
+    <string name="summary_handle_person">处理人</string>
+    <string name="summary_group_admin_change">管理员变更</string>
+    <string name="summary_group_info_change">群资料变更</string>
+    <string name="summary_group_mem_change">群成员变更</string>
+    <string name="summary_group_mem_add">加入群</string>
+    <string name="summary_group_mem_quit">退出群</string>
+    <string name="summary_group_mem_kick">被踢出群</string>
+    <string name="summary_group_mem_modify">资料变更</string>
+    <!--wxchat-->
+
+    <!--google scan-->
+
+    <string name="encode_qrcode">生成二维码</string>
+    <string name="dencode_qrcode">扫描二维码</string>
+    <string name="code_text">请输入生成二维码的文本信息</string>
+    <string name="qrcodetext">这里显示扫描结果</string>
+    <!--wechat-->
+    <string name="errcode_success">发送成功</string>
+    <string name="errcode_cancel">发送取消</string>
+    <string name="errcode_deny">发送被拒绝</string>
+    <string name="errcode_unsupported">不支持错误</string>
+    <string name="errcode_unknown">发送返回</string>
+
+    <string name="remember_password">自动登录</string>
+    <string name="find_password">找回密码</string>
+    <string name="login">登录</string>
+    <string name="cancel">取消</string>
+    <string name="test">体验账号</string>
+    <string name="register_now">立即注册</string>
+
+
+    <string name="toast_success">请求成功</string>
+    <string name="toast_fail">请求失败</string>
+    <string name="title">标题</string>
+    <string name="options">操作</string>
+
+    <!--tab-->
+    <string name="main_activity_home_text">首页</string>
+    <string name="main_activity_vip_text">会员</string>
+    <string name="main_activity_huihua_text">会话</string>
+    <string name="main_activity_yingxiao_text">营销</string>
+    <string name="main_activity_me_text">我的</string>
+    <string name="off_line">离线状态，是否重新登录</string>
+
+    <!-- 店铺主界面 -->
+    <string name="stores">店铺</string>
+    <string name="note_taking">随手记</string>
+    <string name="stores_monitor">店铺监控</string>
+    <string name="stores_preview">预览</string>
+    <string name="qr_code">二维码</string>
+    <string name="copy_url">复制链接</string>
+    <string name="stores_share">分享</string>
+    <string name="stores_decorate">店铺装修</string>
+    <string name="freight_setting">运费设置</string>
+    <string name="to_pay">货到付款</string>
+    <string name="no_reason">七天退货</string>
+    <string name="tam_po">担保交易</string>
+    <string name="deliverys">门店管理</string>
+    <string name="employees">员工管理</string>
+    <string name="network_error">网络异常</string>
+    <string name="qr_code_text">扫描二维码，关注我的店铺</string>
+    <string name="bind_wx">绑定微信</string>
+    <string name="check_network">"请检查网络"</string>
+    <!--xlistview-->
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载&#8230;</string>
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    <string name="xlistview_footer_hint_stop_load">亲，没有更多数据了</string>
+
+    <!--店铺信息-->
+
+    <string name="stores_info">店铺信息</string>
+    <string name="stores_head">头像</string>
+    <string name="stores_name">名称</string>
+    <string name="stores_grade">等级</string>
+    <string name="weixin_public">微信公众号</string>
+    <string name="main_categories">主营类目</string>
+    <string name="stores_info_shortIntro">简介</string>
+
+    <!-- 7天退货 -->
+    <string name="return_guarante">退货保障</string>
+    <string name="join_seven_days_return">加入7天退货保障</string>
+    <string name="exit_seven_days_return">退出7天退货保障</string>
+    <string name="return_long_str">&#160;&#160;&#160;&#160;&#160;注：开通期间已产生的订单，在关闭服务后，仍需按照7天退货服务规则处理。</string>
+    <string name="see_seven_days_rules"><u>查看7天退货规则</u></string>
+    <string name="return_guantee">退货保障</string>
+    <string name="seven_days_detail_rule">七天退货服务详细规则</string>
+    <string name="exit_seven_days_return_hint">退出后的七天内，目前进行中的订单仍然按照7天退货规则处理。是否确认退出？</string>
+    <!--店铺列表-->
+    <string name="stores_short_introduce">店铺简称</string>
+    <string name="location_area">所在区域</string>
+    <string name="detail_address">详细地址</string>
+    <string name="contant_phone">联系电话</string>
+    <string name="stores_number">门店编码</string>
+    <string name="delete">删除</string>
+    <string name="location">所在区域</string>
+    <string name="repeat_location">重新定位</string>
+    <string name="add_store">添加门店</string>
+    <string name="phone_hint">请输入联系电话</string>
+    <string name="shop_number_hint">请选择门店编码</string>
+    <string name="detail_address_hint">请输入详细地址</string>
+    <string name="shop_intro_hint">请输入门店简介</string>
+
+    <!--担保交易-->
+    <string name="open_security_deal">开通担保交易</string>
+    <string name="exit_security_deal">退出担保交易</string>
+    <string name="deal_agreement">担保交易服务约定</string>
+    <string name="security_deal_hint">您在开通期间产生的订单，在取消设置后仍属于担保交易订单。是否确认退出？</string>
+    <string name="read_and_agree"> 已阅读并同意</string>
+
+    <!--员工管理-->
+    <string name="stores_manager_my_employee">我的员工</string>
+    <string name="add">添加</string>
+    <string name="own_store">所属门店:</string>
+    <string name="add_employee">添加员工</string>
+    <string name="employee_info">员工信息</string>
+    <string name="please_input_phone">请输入手机号</string>
+    <string name="input_short_message_code">输入短信验证码</string>
+    <string name="location_shop">所属门店</string>
+    <string name="employee_role">角色</string>
+    <string name="phone_start">+86></string>
+    <string name="qr_code_png">二维码图片</string>
+    <string name="get_vertification">获取验证码</string>
+
+    <string name="name">姓名&#160;&#160;</string>
+
+    <!--开通店铺-->
+    <string name="open_store">开通店铺</string>
+    <string name="open_store_hint">更换门店店招</string>
+    <string name="open_store_dingwei">请于门店范围内选择定位</string>
+    <!--会员中心-->
+    <string name="member_head">头像</string>
+    <string name="member_name">姓名</string>
+    <string name="member_sex">性别</string>
+    <string name="member_qrcode">二维码</string>
+    <string name="member_qrcode_scan">扫描二维码，关注我</string>
+    <string name="member_authentication">实名认证</string>
+    <string name="member_bind_phone">绑定手机</string>
+    <string name="member_login_pwd">登录密码</string>
+    <string name="member_pay_pwd">支付密码</string>
+    <string name="member_service_limit">服务期限</string>
+    <string name="member_clean_cache">清理缓存</string>
+    <string name="member_version">版本检测</string>
+    <string name="member_copyright">版权所有</string>
+    <string name="member_copyright_vst">安徽威思通电子商务有限公司</string>
+    <string name="member_man">男</string>
+    <string name="member_female">女</string>
+    <string name="member_not_bind">未绑定</string>
+    <string name="member_binded">已绑定</string>
+    <string name="member_not_authen">未认证</string>
+    <string name="member_wait_authen">等待审核</string>
+    <string name="member_authened">认证通过</string>
+    <string name="member_authen_refuse">认证拒绝</string>
+    <string name="member_reset_pwd">重置密码</string>
+    <string name="logout">退出登录</string>
+    <string name="member_buy">立即购买</string>
+    <string name="member_setting">设置</string>
+    <string name="member_commit">保存</string>
+    <string name="member_name_hint">请输入姓名</string>
+    <string name="member_qr_code_text">扫描上面的二维图案，加我微信</string>
+
+    <string name="please_input_stores_intro">请输入店铺简介，不得超过127个字</string>
+    <string name="weixin_public_hint">请输入微信号码（可不填）</string>
+    <string name="not_cg_30">不得超过30个字</string>
+
+    <string name="no_permissions_operation">无权操作</string>
+
+    <string name="activity_hint">请输入活动内容,限15字以内</string>
+    <string name="stores_decortate_advise">建议尺寸640*251</string>
+    <string name="activity_1_hint">如店庆十周年，全场九折</string>
+    <string name="connect_add">广告位关联</string>
+    <string name="click_to_connect_ad">点击关联商品</string>
+
+
+    <string name="pay_result_tip">这个界面用于显示第三方app通过微信支付的结果</string>
+    <!--商品-->
+    <string name="goods_search_hint">搜索商品名称、货号</string>
+    <string name="share_to">分享到</string>
+    <string name="share_red_to">将红包分享至</string>
+    <string name="good_sales">总销量:</string>
+    <string name="good_stock">库存:</string>
+    <string name="finish">完成</string>
+
+    <string name="new_category">新建分类</string>
+    <string name="edit_category">编辑分类</string>
+    <string name="product_category_selection">选择商品分类</string>
+
+    <string name="goods_category_delete">移除</string>
+    <string name="goods_category_move">分类至</string>
+    <string name="goods_category_hint">（按分类展示商品，方便买家筛选）</string>
+
+    <string name="goods_add_category">添加商品</string>
+    <string name="goods_no_category">该分类暂无商品</string>
+    <string name="goods_search">搜索商品</string>
+    <string name="good_add">添加</string>
+    <string name="search">搜索</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="oks_share_failed">分享失败</string>
+
+    <!-- 满包邮-->
+    <string name="full_package_email">满包邮</string>
+    <string name="please_input_money">请输入金额</string>
+    <string name="full_package_activity_rule">满包邮活动规则</string>
+    <string name="full_package_activity_rule_1">● 买家消费满足你设置的金额，则订单包邮</string>
+    <string name="full_package_activity_rule_2">● 如果你同时设置了以下活动，买家购买时可以同时享受优惠，包括：店铺优惠券，限时折扣</string>
+    <string name="full_package_activity_rule_3">● 包邮只对自营商品生效，分销商品只能由供应商设置</string>
+    <string name="spend_full">消费满</string>
+    <string name="full_money_unit">元</string>
+    <string name="activity_ongoing">活动正在进行中</string>
+    <string name="update">修改</string>
+
+    <!--买赠搭配-->
+    <string name="activity_good">活动商品</string>
+    <string name="gift_manager">赠品管理</string>
+    <string name="search_goods">搜索商品名</string>
+    <string name="all_goods">所有商品</string>
+    <string name="goods_category">商品分类</string>
+    <string name="gift_name">赠品名称</string>
+    <string name="start_time">开始时间</string>
+    <string name="end_time">结束时间</string>
+    <string name="everyone_limit">每人限购</string>
+    <string name="warm_hint">温馨提示:</string>
+    <string name="warm_hint_text">买赠搭配的商品，拍下30分钟未付款将自动关闭订单</string>
+
+    <!-- 限时折扣-->
+    <string name="marketing_discount_add">添加</string>
+    <string name="marketing_discount_selection">选择折扣商品</string>
+    <string name="marketing_discount_price_type">按折扣价格</string>
+    <string name="marketing_discount_persent_type">按折扣率</string>
+    <string name="marketing_discount_price">折扣价格</string>
+    <string name="marketing_discount_persent">折扣率</string>
+    <string name="marketing_discount_begin_time">开始时间</string>
+    <string name="marketing_discount_end_time">结束时间</string>
+    <string name="marketing_discount_limit">每人限购</string>
+    <string name="marketing_discount_notice">温馨提示</string>
+    <string name="marketing_discount_notice_hint">限时折扣的商品，拍下30分钟内未付款将自动关闭订单</string>
+    <string name="marketing_discount_complete">完成</string>
+
+    <!-- 代金券-->
+    <string name="marketing_voucher_add">添加</string>
+    <string name="marketing_voucher_del">删除</string>
+    <string name="marketing_voucher_statisc">统计</string>
+    <string name="marketing_voucher_share">分享</string>
+    <string name="marketing_voucher_receive_detail">领用详情</string>
+    <string name="marketing_voucher_use_detail">使用详情</string>
+    <string name="marketing_voucher_date">日期</string>
+    <string name="marketing_voucher_receive_count">领用量</string>
+    <string name="marketing_voucher_receive_person_count">领用人数</string>
+    <string name="marketing_voucher_use_count">使用量</string>
+    <string name="marketing_voucher_use_person_count">使用人数</string>
+    <!--添加代金券-->
+    <string name="marketing_voucher_baseinfo">基本信息</string>
+    <string name="marketing_voucher_amount">券的面额</string>
+    <string name="marketing_voucher_amount_hint">优惠券的金额</string>
+    <string name="marketing_voucher_minimum_price">最低消费</string>
+    <string name="marketing_voucher_minimum_price_hint">可以用券的最低订单金额</string>
+    <string name="marketing_voucher_count">券的库存</string>
+    <string name="marketing_voucher_count_hint">可被领用的总券数</string>
+    <string name="marketing_voucher_receive_times">领券限制</string>
+    <string name="marketing_voucher_receive_times_hint">每人限制张数</string>
+    <string name="marketing_voucher_limit_date">有效期&#160;&#160;&#160;&#160;</string>
+    <string name="marketing_voucher_limit_date_to">至</string>
+    <string name="marketing_voucher_begin_time_hint">开始时间</string>
+    <string name="marketing_voucher_end_time_hint">结束时间</string>
+    <string name="marketing_voucher_info">分享文案</string>
+    <string name="marketing_voucher_info_hint">内容会出现在你分享的领券界面(50个字内)</string>
+    <string name="marketing_voucher_commit">完成</string>
+
+    <!--注册-->
+    <string name="register_hint">请输入你的国家和地区并输入手机号</string>
+    <string name="register_text">国家和地区</string>
+    <string name="register_area_test">请选择地区  </string>
+    <string name="register_phone_front">+86</string>
+    <string name="tiaohuowang_agree">《用户注册协议》</string>
+    <string name="input_secret">输入验证码</string>
+
+
+    <string name="weixin">&#160;微信</string>
+    <string name="alipay">&#160;支付宝</string>
+
+    <!--收银台-->
+    <string name="cashier_detials">收银明细</string>
+
+    <!--chat-->
+    <string name="chat_take_picture">拍照</string>
+    <string name="chat_photo">图片</string>
+    <string name="chat_location">位置</string>
+    <string name="chat_shareticket">分享现金券</string>
+    <string name="chat_sharegoods">分享商品</string>
+    <string name="chat_shareredpacket">分享红包</string>
+    <string name="chat_shareredyouhuiquan">分享优惠券</string>
+    <string name="share">分享</string>
+
+    <!--Common-->
+    <string name="dialog_ok">确定</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_tip">提示</string>
+    <string name="dialog_deleteornot">是否删除</string>
+
+    <!--warning-->
+    <string name="warning_emptycontent">输入的内容不能为空</string>
+    <string name="warning_hassubcat">"有下级分类，不能删除"</string>
+    <string name="youhuiandhongbaodetail">"\"零食全球购"\来送优惠啦！线下优惠买单,线上商城均可使用!"</string>
+
+    <!--<style name="text_flag">-->
+    <!--<item name="android:layout_width">wrap_content</item>-->
+    <!--<item name="android:layout_height">wrap_content</item>-->
+    <!--<item name="android:layout_marginLeft">2dp</item>-->
+    <!--<item name="android:layout_marginRight">2dp</item>-->
+    <!--<item name="android:layout_marginTop">1dp</item>-->
+    <!--<item name="android:layout_marginBottom">1dp</item>-->
+    <!--<item name="android:background">@drawable/flow_style</item>-->
+    <!--<item name="android:textColor">#ffffff</item>-->
+    <!--</style>-->
+
+    <!--<style name="text_flag2">-->
+    <!--<item name="android:layout_width">70dp</item>-->
+    <!--<item name="android:layout_height">22dp</item>-->
+    <!--<item name="android:gravity">center</item>-->
+    <!--<item name="android:background">@drawable/flow_style2</item>-->
+    <!--<item name="android:textColor">#E0C480</item>-->
+    <!--</style>-->
+
+    <!--<style name="text_flag3">-->
+    <!--<item name="android:layout_width">55dp</item>-->
+    <!--<item name="android:layout_height">22dp</item>-->
+    <!--<item name="android:gravity">center</item>-->
+    <!--<item name="android:background">@drawable/guanzhu_style</item>-->
+    <!--<item name="android:textColor">#ffffff</item>-->
+    <!--</style>-->
+
+    <!--<style name="text_flag4">-->
+    <!--<item name="android:layout_width">55dp</item>-->
+    <!--<item name="android:layout_height">22dp</item>-->
+    <!--<item name="android:gravity">center</item>-->
+    <!--<item name="android:background">@drawable/guanzhu_style2</item>-->
+    <!--<item name="android:textColor">#ff5452</item>-->
+    <!--</style>-->
+</resources>

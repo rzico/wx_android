@@ -1,0 +1,260 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.yalantis.ucrop.view.TopView
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--style="@style/gallery_NoSpaceActionBarTheme"-->
+        <!--app:navigationIcon="?attr/homeAsUpIndicator"-->
+        <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
+        <!--android:gravity="center"-->
+        <!--android:background="@color/wxColor">-->
+        <!--<TextView-->
+            <!--android:id="@+id/title_name"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="left"-->
+            <!--android:textSize="20sp"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:text="@string/app_name"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/tv_over_action"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:layout_margin="8dp"-->
+            <!--android:text="@string/gallery_over_button_text" />-->
+
+    <!--</android.support.v7.widget.Toolbar>-->
+
+    <jp.wasabeef.richeditor.RichEditor
+        android:id="@+id/editor"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:focusable="true"
+        />
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:text="HTML Preview"-->
+        <!--android:textSize="12sp"-->
+        <!--/>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/preview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--/>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingLeft="5dp"
+        android:background="@color/rich_editor_bottom"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|left">
+
+            <TextView
+                android:id="@+id/select_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:background="@drawable/corner_bg"
+                android:text="全选"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right">
+
+
+            <LinearLayout
+                android:id="@+id/action_txt_black"
+                style="@style/editorButtonStyle"
+                android:background="@drawable/corner_button_bg"
+                android:gravity="center">
+                <LinearLayout
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/color_black"
+                    ></LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/action_txt_red"
+                android:background="@color/rich_editor_bottom"
+                style="@style/editorButtonStyle"
+                android:gravity="center">
+                <LinearLayout
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/color_red"
+                    ></LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/action_txt_blue"
+                style="@style/editorButtonStyle"
+                android:background="@color/rich_editor_bottom"
+                android:gravity="center">
+                <LinearLayout
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/color_blue"
+                    ></LinearLayout>
+
+            </LinearLayout>
+
+
+            <ImageButton
+                android:id="@+id/action_bold"
+                style="@style/editorButtonStyle"
+                android:background="@color/rich_editor_bottom"
+                android:contentDescription="@null"
+                android:src="@drawable/ico_bold"
+                />
+
+            <ImageButton
+                android:id="@+id/action_italic"
+                style="@style/editorButtonStyle"
+                android:background="@color/rich_editor_bottom"
+                android:contentDescription="@null"
+                android:src="@drawable/ico_italic"
+                />
+
+            <ImageButton
+                android:id="@+id/action_underline"
+                style="@style/editorButtonStyle"
+                android:background="@color/rich_editor_bottom"
+                android:contentDescription="@null"
+                android:src="@drawable/ico_underline"
+                />
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/action_strikethrough"-->
+                <!--style="@style/editorButtonStyle"-->
+                <!--android:background="@color/white"-->
+                <!--android:contentDescription="@null"-->
+                <!--android:src="@drawable/ico_strikethrough"-->
+                <!--/>-->
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/rich_editor_bottom"
+        >
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0.0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageButton
+                android:id="@+id/action_undo"
+                style="@style/editorButtonStyle"
+                android:background="@drawable/editor_bg_select"
+                android:contentDescription="@null"
+                android:src="@drawable/editor_undo_select"
+                />
+
+            <ImageButton
+                android:id="@+id/action_redo"
+                style="@style/editorButtonStyle"
+                android:background="@drawable/editor_bg_select"
+                android:contentDescription="@null"
+                android:src="@drawable/editor_redo_select"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingRight="5dp"
+                android:gravity="right">
+
+
+                <ImageButton
+                    android:id="@+id/action_font_h2"
+                    style="@style/editorButtonStyle"
+                    android:background="@color/rich_editor_bottom"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ico_h1"
+                    />
+                <ImageButton
+                    android:id="@+id/action_font_h3"
+                    style="@style/editorButtonStyle"
+                    android:background="@drawable/corner_button_bg"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ico_h2_focus"
+                    />
+                <ImageButton
+                    android:id="@+id/action_font_h4"
+                    style="@style/editorButtonStyle"
+                    android:background="@color/rich_editor_bottom"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ico_h3"
+                    />
+
+
+                <ImageButton
+                    android:id="@+id/action_align_left"
+                    style="@style/editorButtonStyle"
+                    android:background="@drawable/corner_button_bg"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ico_left_focus"
+                    />
+
+                <ImageButton
+                    android:id="@+id/action_align_center"
+                    style="@style/editorButtonStyle"
+                    android:background="@color/rich_editor_bottom"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ico_center"
+                    />
+
+                <ImageButton
+                    android:id="@+id/action_align_right"
+                    style="@style/editorButtonStyle"
+                    android:background="@color/rich_editor_bottom"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ico_right"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

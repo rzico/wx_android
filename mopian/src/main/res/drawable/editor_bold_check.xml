@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+        <!--&lt;!&ndash; 默认时的背景图片&ndash;&gt;-->
+        <!--<item android:drawable="@drawable/ico_bold" />-->
+        <!--&lt;!&ndash; 触摸模式下单击时的背景图片&ndash;&gt;-->
+        <!--<item android:state_focused="false" android:state_pressed="true"   android:drawable="@drawable/ico_bold_focus" />-->
+        <!--&lt;!&ndash;选中时的图片背景&ndash;&gt;-->
+        <!--<item android:state_selected="true"   android:drawable="@drawable/ico_bold_focus" />-->
+        <!--&lt;!&ndash;获得焦点时的图片背景&ndash;&gt;-->
+        <!--<item android:state_focused="true"   android:drawable="@drawable/ico_bold_focus" />-->
+        <item android:drawable="@drawable/ico_bold_focus" android:state_checked="true"/>
+        <item android:drawable="@drawable/ico_bold" android:state_checked="false"/>
+        <item android:drawable="@drawable/ico_bold"/>
+</selector>

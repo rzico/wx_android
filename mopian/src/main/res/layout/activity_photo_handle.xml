@@ -1,0 +1,134 @@
+<RelativeLayout
+    android:id="@+id/photohandle_photobox"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.yalantis.ucrop.view.TopView
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--style="@style/gallery_NoSpaceActionBarTheme"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="?attr/colorPrimary"-->
+        <!--app:navigationIcon="?attr/homeAsUpIndicator"-->
+        <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
+        <!--android:gravity="center">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/toolbar_title"-->
+            <!--style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="left"-->
+            <!--android:text="图片编辑"-->
+            <!--android:textColor="@color/ucrop_color_toolbar_widget"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_over_action"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:textSize="18sp"-->
+            <!--android:layout_margin="12dp"-->
+
+            <!--android:textColor="#ffffff"-->
+            <!--android:text="@string/gallery_over_button_text" />-->
+    <!--</android.support.v7.widget.Toolbar>-->
+
+    <LinearLayout
+        android:id="@+id/ucrop_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:background="@color/ucrop_color_crop_background"
+        android:orientation="vertical">
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/iv_photo"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0.0dp"/>
+
+        <!--<ImageView-->            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/ucrop_height_divider_shadow"-->
+            <!--android:background="@drawable/ucrop_shadow_upside"/>-->
+        <include layout="@layout/line_horizontal"/>
+
+        <LinearLayout
+            android:id="@+id/wrapper_states"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@color/ucrop_color_widget_background"
+            android:baselineAligned="false"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/state_photo_change"
+                style="@style/ucrop_WrapperIconState">
+
+                <com.yalantis.ucrop.view.ImageButtonWithText
+                    xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/image_view_photo_change"
+                    style="@style/ucrop_ImageViewWidgetIcon"
+                    custom:picture="@mipmap/ico_photo"
+                    android:text="换图"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/state_photo_puzzle"
+                style="@style/ucrop_WrapperIconState">
+
+                <com.yalantis.ucrop.view.ImageButtonWithText
+                    xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/image_view_photo_puzzle"
+                    style="@style/ucrop_ImageViewWidgetIcon"
+                    custom:picture="@mipmap/ico_puzzle"
+                    android:text="拼图"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/image_view_photo_puzzle"-->
+                    <!--style="@style/ucrop_ImageViewWidgetIcon"-->
+                    <!--android:src="@mipmap/ico_puzzle"/>-->
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/state_filter"
+                style="@style/ucrop_WrapperIconState">
+
+                <com.yalantis.ucrop.view.ImageButtonWithText
+                    xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/image_view_state_filter"
+                    style="@style/ucrop_ImageViewWidgetIcon"
+                    custom:picture="@mipmap/ico_filter"
+                    android:text="滤镜"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/state_ucrop"
+                style="@style/ucrop_WrapperIconState">
+
+                <com.yalantis.ucrop.view.ImageButtonWithText
+                    xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/image_view_state_ucrop"
+                    style="@style/ucrop_ImageViewWidgetIcon"
+                    custom:picture="@mipmap/ico_crop"
+                    android:text="裁剪"/>
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

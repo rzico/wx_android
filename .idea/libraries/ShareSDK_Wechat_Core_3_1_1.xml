@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ShareSDK-Wechat-Core-3.1.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/mopian/libs/ShareSDK-Wechat-Core-3.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

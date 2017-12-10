@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorAccent">#282828</color>
+    <color name="colorNew">#282828</color>
+
+    <color name="colorBefore">#F0AD3C</color>
+
+    <!--<color name="wxColor">#F0AD3C</color>-->
+    <!--主色-->
+    <color name="wxColor">#eb4e40</color>
+    <!--辅色-->
+    <color name="wxColor_dark">#6699FF</color>
+
+    <color name="selectBg">#eb4e40</color>
+
+    <!--文本编辑框底部颜色-->
+    <color name="rich_editor_bottom">#e3e7ea</color>
+
+    <color name="puzzleBg">#EFF0F5</color>
+
+    <color name="lineColor">#cccccc</color>
+
+    <color name="editorColor">#E9E9E9</color>
+
+
+    <color name="selectDark">#707070</color>
+
+
+    <color name="colorYellow">#FFD705</color>
+    <color name="YellowPressed">#edc501</color>
+    <color name="scan_corner_color">#0effc2</color>
+
+    <!--google zxing-->
+
+    <!-- QRCode scanner color begin -->
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#B0000000</color>
+    <color name="viewfinder_frame">#90FFFFFF</color>
+    <color name="result_point_color">#C0FFFF00</color>
+    <color name="laser_color">#0F0</color>
+    <color name="corner_color">#00FF00</color>
+    <!-- QRCode scanner color end -->
+    <!--相册样式文件-->
+
+    <color name="theme_orange_primary">#FF5722</color>
+    <color name="theme_orange_dark">#E64A19</color>
+    <color name="theme_light_blue_accent">#FF4081</color>
+
+    <!-- 文字颜色 -->
+    <color name="text_dark">#333333</color>
+    <color name="text_ordinary">#444444</color>
+    <color name="text_default">#666666</color>
+    <color name="text_light">#999999</color>
+    <color name="bg_activity">#fafbfd</color>
+    <color name="bg_commit">#F0F0F0</color>
+    <color name="text_receipt">#777777</color>
+
+    <!--字体颜色设置-->
+
+    <color name="txt_red">#e3373b</color>
+    <color name="txt_black">#333333</color>
+    <color name="txt_blue">#00a0e9</color>
+
+
+    <color name="key_origin">#f6f6f8</color>
+    <color name="gold">#ef9a01</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#e3373b</color>
+    <color name="red_dark">#d84e43</color>
+    <color name="pale_yellow">#ffffcc</color>
+    <color name="blue">#00a0e9</color>
+    <color name="blueDark">#1aa1e6</color>
+    <color name="transparent">#00000000</color>
+    <color name="transparent_white">#1affffff</color>
+    <color name="partner">#56688c</color>
+
+    <color name="transparent_black">#66000000</color>
+    <!--背景色-->
+    <color name="bg_gray">#f2f2f2</color>
+    <color name="bg_homelist">#ECECEC</color>
+    <!--分割线-->
+    <color name="line_bg">#e1e1e1</color>
+    <color name="list_divider">#EAEAEA</color>
+    <color name="bigimg_divider">#EEEEEE</color>
+
+    <!--标题头背景颜色-->
+    <color name="title_bac_color">#ff6d06</color>
+    <color name="home_tv_bg">#FF9B66</color>
+    <color name="shade_color">#e0e0e0</color>
+
+    <!-- 浅灰色 -->
+    <color name="lightgray">#e8eaff</color>
+
+
+    <!-- 店铺颜色-->
+    <color name="short_color">#eeeeee</color>
+    <color name="border_color">#e8eaea</color>
+
+    <color name="see_seven_days_rule">#0e7cf8</color>
+    <color name="dark_oranger">#ff6d06</color>
+
+    <color name="wallet_above_color">#e63535</color>
+    <color name="pink">#ff6670</color>
+    <color name="yellow">#fcd04c</color>
+
+    <color name="voucher_orange">#de693d</color>
+    <color name="item_green">#01CF97</color>
+    <color name="item_tg">#A198F5</color>
+    <color name="item_hb">#F8AA02</color>
+
+    <color name="gray_font_color">#727272</color>
+    <color name="view_line">#f2f2f2</color>
+    <color name="navpage">#FFE1E8EB</color>
+
+    <!-- 红包 -->
+    <color name="pick_red_bk">#FFFAF5</color>
+    <color name="pick_red_tongji_down">#F9F9F9</color>
+    <color name="pick_red_tongji_state">#66CC99</color>
+
+    <color name="item_click_bg_color">#dddddd</color>
+    <color name="translucent_background">#60000000</color>
+
+
+    <color name="brown">#ffa627</color>
+
+    <color name="wheel_red">#be2e38</color>
+    <color name="wheel_gray">#e5e5e5</color>
+    <color name="wheel_black">#1c2020</color>
+
+    <color name="text_fer_dark">#555555</color>
+    <color name="bg_gray_title">#ebebeb</color>
+
+    <color name="order_pop_text_color">#0776ff</color>
+
+    <!-- wifi -->
+    <color name="wifi_linechart_line">#0fbd40</color>
+    <color name="wifi_linechart_point">#88dc92</color>
+
+    <color name="wifi_traffic_v0">#FCE933</color>
+    <color name="wifi_traffic_v1">#FF9012</color>
+    <color name="wifi_traffic_v2">#33D4F9</color>
+    <color name="wifi_traffic_v3">#80C346</color>
+    <color name="wifi_traffic_v4">#4184F9</color>
+
+    <!--统计-->
+    <color name="order_tongji_tab_text_color">#FFC297</color>
+    <color name="tongji_circle_green">#66cc99</color>
+    <color name="tongji_circle_blue">#9999ff</color>
+    <color name="tongji_circle_yellow">#ffcc33</color>
+    <color name="colorDivider">#dddddd</color> <!-- 分割线颜色-->
+
+    <color name="tongji_double_line_color">#ffe79e</color>
+
+    <!-- 商品描述-->
+    <color name="goods_ms_bg">#F7F7F7</color>
+    <color name="goods_button">#DFDFDF</color>
+
+    <!-- 收银明细-->
+    <color name="cashier_detial_bg">#ECECEC</color>
+
+    <color name="worker_1">#FF5722</color>
+    <color name="worker_2">#F5B316</color>
+    <color name="worker_3">#5F94FD</color>
+    <color name="worker_4">#99CC33</color>
+    <color name="worker_5">#FF8D52</color>
+    <color name="worker_6">#03D6D2</color>
+
+    <drawable name="divider">@color/colorDivider</drawable>
+
+
+</resources>

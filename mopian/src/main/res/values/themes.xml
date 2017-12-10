@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2012 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <style name="CaptureTheme" parent="android:Theme.Holo">
+    <item name="android:windowFullscreen">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowActionBarOverlay">true</item>
+    <item name="android:windowActionModeOverlay">true</item>
+  </style>
+  <style name="DefaultExplainingPermissionsTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <!-- Used for the buttons -->
+    <item name="colorAccent">@color/colorBefore</item>
+
+    <!-- Used for the title and text -->
+    <item name="android:textColorPrimary">@color/colorBefore</item>
+
+    <!-- Used for the background -->
+    <item name="android:background">@color/colorBefore</item>
+  </style>
+  <style name="Theme_Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <!--<item name="gallery_ucrop_title_text">@string/gallery_ucrop_menu_crop</item>-->
+  </style>
+  <style name="Theme_Light.Orange">
+    <item name="colorPrimary">@color/theme_orange_primary</item>
+    <item name="colorPrimaryDark">@color/theme_orange_dark</item>
+    <item name="colorAccent">@color/theme_light_blue_accent</item>
+  </style>
+</resources>
+

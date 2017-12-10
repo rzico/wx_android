@@ -1,0 +1,74 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="toolbar_title_size">18sp</dimen>
+    <!--字体大小-->
+    <!--超大字体-->
+    <dimen name="font_huge">32sp</dimen>
+    <!-- 较大字体 -->
+    <dimen name="font_large">20sp</dimen>
+    <!-- 中等字体   标题-->
+    <dimen name="font_medium">18sp</dimen>
+    <!-- 正常字体   按钮-->
+    <dimen name="font_normal">16sp</dimen>
+    <!-- 较小字体   26px  28px-->
+    <dimen name="font_small">14sp</dimen>
+    <!-- 微小字体   22px-->
+    <dimen name="font_micro">12sp</dimen>
+    <!-- 微小字体   20px-->
+    <dimen name="font_mini">8sp</dimen>
+
+
+    <!-- 微小间距 -->
+    <dimen name="margin_micro">4dp</dimen>
+    <!-- 较小间距 -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_smaller">6dp</dimen>
+    <!-- 正常间距 -->
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_default">12dp</dimen>
+    <!-- 中等间距 -->
+    <dimen name="margin_medium">24dp</dimen>
+    <!-- 较大间距 -->
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_login_large">42dp</dimen>
+    <!-- 巨大间距 -->
+    <dimen name="margin_huge">64dp</dimen>
+    <!-- 行高间距 -->
+    <dimen name="item_height">48dp</dimen>
+    <!--small 行高-->
+    <dimen name="small_item_height">36dp</dimen>
+    <!-- 行高间距 -->
+    <dimen name="item_large_height">96dp</dimen>
+
+
+    <dimen name="submit_line_width">1dp</dimen>
+
+    <!--title的高度-->
+    <dimen name="toolbar_height">45dp</dimen>
+
+
+    <dimen name="padding_row_h">16dp</dimen>
+    <dimen name="padding_row_v">10dp</dimen>
+    <dimen name="separate">10dp</dimen>
+
+    <!-- 店铺头像宽高-->
+    <dimen name="cirleview_width">60dp</dimen>
+    <dimen name="cirleview_layout_height">80dp</dimen>
+    <dimen name="stores_between_item">9dp</dimen>
+
+    <!-- 店铺列表项间隔宽度 -->
+    <dimen name="line_width">0.5dp</dimen>
+
+    <dimen name="list_image_height">80dp</dimen>
+    <dimen name="text_normal">16sp</dimen>
+    <dimen name="view_space_large">32dp</dimen>
+    <dimen name="view_space_normal">8dp</dimen>
+    <dimen name="view_space_medium">16dp</dimen>
+    <dimen name="view_space_small">4dp</dimen>
+
+    <dimen name="status_bar_height">0dp</dimen>
+
+</resources>

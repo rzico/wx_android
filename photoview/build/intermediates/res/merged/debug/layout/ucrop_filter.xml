@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout style="@style/ucrop_WrapperIconState">
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<ImageView-->
+        <!--android:id="@+id/image_view_filter"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--/>-->
+
+    <com.yalantis.ucrop.view.widget.AspectRatioTextView
+        style="@style/ucrop_TextViewCropAspectRatio"/>
+</FrameLayout>
