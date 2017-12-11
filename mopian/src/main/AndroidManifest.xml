@@ -367,6 +367,9 @@
         <activity android:name=".activity.FilterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar"></activity>
+        <activity
+            android:name="com.google.zxing.activity.CaptureActivity"
+            android:theme="@style/FullscreenTheme_haveActionBar"/>
     </application>
 
 </manifest>

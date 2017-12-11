@@ -255,7 +255,7 @@ public class ChatActivity extends FragmentActivity implements ChatView {
                     @Override
                     public void onClick(View v) {
 
-                        BarTextColorUtils.StatusBarLightMode(ChatActivity.this, !isBlack);
+//                        BarTextColorUtils.StatusBarLightMode(ChatActivity.this, !isBlack);
                     }
                 });
 //                }else{

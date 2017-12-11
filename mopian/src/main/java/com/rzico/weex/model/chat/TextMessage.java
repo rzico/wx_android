@@ -114,7 +114,7 @@ public class TextMessage extends Message {
         viewHolder.leftMessage.setPadding(Utils.dp2px(context,15),Utils.dp2px(context,5),Utils.dp2px(context,10),Utils.dp2px(context,5));
         TextView tv = new TextView(WXApplication.getContext());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        tv.setTextColor(WXApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
+        tv.setTextColor(WXApplication.getContext().getResources().getColor(isSelf() ? R.color.black : R.color.black));
         List<TIMElem> elems = new ArrayList<>();
         for (int i = 0; i < message.getElementCount(); ++i){
             elems.add(message.getElement(i));

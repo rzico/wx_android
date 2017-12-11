@@ -53,7 +53,7 @@ public class MYWXWebView implements IWebView {
     public MYWXWebView(Context context) {
         mContext = context;
         extraHeaders.put("Referer", "http://weex.rzico.com");
-        extraHeaders.put(WXHttpUtil.KEY_USER_AGENT, WXHttpUtil.assembleUserAgent(mContext, WXEnvironment.getConfig()));
+//        extraHeaders.put(WXHttpUtil.KEY_USER_AGENT, WXHttpUtil.assembleUserAgent(mContext, WXEnvironment.getConfig())+ "wexx");
         String uid= PhoneUtil.getDeviceId(mContext);
         String app= Constant.app;
         String tsp = String.valueOf(System.currentTimeMillis());
@@ -64,6 +64,7 @@ public class MYWXWebView implements IWebView {
         extraHeaders.put("x-app", app);//包名
         extraHeaders.put("x-tsp", tsp);//时间戳
         extraHeaders.put("x-tkn", tkn);//令牌
+
     }
 
     @Override
@@ -178,6 +179,9 @@ public class MYWXWebView implements IWebView {
         settings.setSupportZoom(false);
         settings.setBuiltInZoomControls(false);
 
+        // 修改ua使得web端正确判断
+        String ua = settings.getUserAgentString();
+        settings.setUserAgentString(ua+"; weex");
         wv.setWebViewClient(new WebViewClient() {
 
             @Override

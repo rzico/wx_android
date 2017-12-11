@@ -24,6 +24,7 @@ public class BarTextColorUtils {
     public static int StatusBarLightMode(Activity activity ,boolean setBlack){
         int result=0;
 
+        if(activity==null) return 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if(MIUISetStatusBarLightMode(activity.getWindow(), setBlack)){//判断是不是小米系统
                 result=1;

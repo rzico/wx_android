@@ -22,9 +22,9 @@ public class Constant {
     //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.MOPIAN" />
     public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.MOPIAN";
 
-    public static final String wxURL = "http://cdn.rzico.com/weex/app/";
+    public static final String wxURL = "http://cdnx.rzico.com/weex/app/";
 
-    public static final String resURL = "http://cdn.rzico.com/";
+    public static final String resURL = "http://cdnx.rzico.com/";
 
     //    云店wxkey
     public static final String wxAppId = "wx490857e2baff7cfd";
@@ -32,6 +32,7 @@ public class Constant {
     //    魔篇wxkey
 //    public static final String wxAppId = "wxe9044e4a3a478046";
 //    public static final String wxAppSecret = "e1a6bffb5ad1eb7ffa2f442032df2d78";
+
     //    云店shareSDK
     public static final String shareAppId = "1d927fd47d636";
     public static final String shareAppSecret = "277f7181f07499357cfa33531fe818ab";
@@ -56,8 +57,10 @@ public class Constant {
     public static final String RESVERSION = "res-version";//存入当前res版本的表示
 
     public static String app = AllConstant.PACKNAME;
-    public static final String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";
-    public static final String bucket = "rzico";
+    //    public static final String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";
+//    public static final String bucket = "rzico";
+    public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+    public static final String bucket = "rzico-weex";
 //    public static final String bucket = "mopian";
     public static final  String upLoadImages = "upload/images/";
     public static final  String upLoadVideos = "upload/videos/";
@@ -67,7 +70,7 @@ public class Constant {
     public static String updateAppUrl = "";
     public static boolean loginState = false;
     public static boolean unLinelogin = false;
-    public static String resVerison = "";
+    public static String resVerison = "1.0.0";
     public static String appVerison = "";
 
     public static Map<String, WXSDKInstance> wxsdkInstanceMap;
@@ -81,4 +84,8 @@ public class Constant {
     public static final String helperUrl = SERVER;
     public static boolean isLoginAcitivity = false;
 
+    public static boolean isSetting = true; //设置权限
+
+    public static final int REQ_QR_CODE = 11002; // // 打开扫描界面请求码
+    public static final String INTENT_EXTRA_KEY_QR_SCAN = "qr_scan_result";
 }

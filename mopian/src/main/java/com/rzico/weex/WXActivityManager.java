@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import static com.rzico.weex.Constant.resURL;
 
 /**
  * Created by Jinlesoft on 2017/9/18.

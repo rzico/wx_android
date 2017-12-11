@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.rzico.weex.R;
+import com.rzico.weex.utils.BarTextColorUtils;
 import com.tencent.qcloud.ui.TemplateTitle;
 
 import java.io.File;
@@ -28,6 +29,7 @@ public class ImagePreviewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_preview);
+        BarTextColorUtils.StatusBarLightMode(ImagePreviewActivity.this, R.color.wxColor);
         path = getIntent().getStringExtra("path");
         isOri = (CheckBox) findViewById(R.id.isOri);
         TemplateTitle title = (TemplateTitle) findViewById(R.id.imagePreviewTitle);

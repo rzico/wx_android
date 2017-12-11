@@ -21,6 +21,7 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
@@ -78,12 +79,21 @@ public class SplashActivity extends BaseActivity {
     progress.setProgress(0);
     clearNotification();
     Constant.userId = SharedUtils.readLoginId();
-    initDb();
     initIM();
+
+
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if(Constant.isSetting){
+      Constant.isSetting = false;
     Dexter.withActivity(SplashActivity.this).withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .withListener(new com.karumi.dexter.listener.single.PermissionListener() {
+            .withListener(new PermissionListener() {
               @Override
               public void onPermissionGranted(PermissionGrantedResponse response) {
+                initDb();
                 handlerFrist();
                 SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                 int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
@@ -102,32 +112,13 @@ public class SplashActivity extends BaseActivity {
                 token.continuePermissionRequest();
               }
             }).check();
-
+    }
   }
 
   private void initDb() {
-    Dexter.withActivity(this).withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .withListener(new com.karumi.dexter.listener.single.PermissionListener() {
-              @Override
-              public void onPermissionGranted(PermissionGrantedResponse response) {
-                //初始化数据库
-                org.xutils.DbManager.DaoConfig daoConfig = XDB.getDaoConfig();
-                WXApplication.setDb(x.getDb(daoConfig));
-
-              }
-
-              @Override
-              public void onPermissionDenied(PermissionDeniedResponse response) {
-                showDeniedDialog("需要存储权限");
-              }
-
-              @Override
-              public void onPermissionRationaleShouldBeShown(PermissionRequest permission,
-                                                             PermissionToken token) {
-                //用户不允许权限，向用户解释权限左右
-                token.continuePermissionRequest();
-              }
-            }).check();
+    //初始化数据库
+    org.xutils.DbManager.DaoConfig daoConfig = XDB.getDaoConfig();
+    WXApplication.setDb(x.getDb(daoConfig));
   }
 
   private void initIM() {
@@ -447,14 +438,19 @@ public class SplashActivity extends BaseActivity {
   }
   private void updateRes(){
     //这里注释掉是为了不用再校验版本
-//            String nowVersion = SharedUtils.read(RESVERSION);
+    String nowVersion = SharedUtils.read(RESVERSION);
     // == null 或者 =="" 表示第一次使用， 否者是第二次使用 就判断版本号
-//            if(nowVersion == null || nowVersion.equals("") || Utils.compareVersion(Constant.resVersion, nowVersion) > 0){
-    //下载weex资源
-    downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
 
-//            }else{
-//              toNext();
-//            }
+    try {
+      if(nowVersion == null || nowVersion.equals("") || Utils.compareVersion(Constant.resVerison, nowVersion) > 0){
+        //下载weex资源
+        downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
+      }else{
+        toNext();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      toNext();
+    }
   }
 }

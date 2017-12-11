@@ -77,10 +77,10 @@ public class RichEditorAcitivity extends AppCompatActivity {
         tvSelectAll = (TextView)findViewById(R.id.select_all);
 //        mPreview = (TextView) findViewById(R.id.preview);
         initToolBar();
+
         mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(16);
         mEditor.setEditorFontColor(getResources().getColor(R.color.txt_black));
-        mEditor.setEditorHeading(2);
         mEditor.setPadding(10, 10, 10, 10);
         mEditor.setPlaceholder("Insert text here...");
         //获取焦点并且设置内容<h2>
@@ -88,11 +88,13 @@ public class RichEditorAcitivity extends AppCompatActivity {
         String centent = getIntent().getStringExtra("data");
         if(centent != null && !centent.equals("")){
             mEditor.setHtml(centent);
+        }else {
+            mEditor.setEditorHeading(2);
+            mEditor.setHeading(firstFontSize);
         }
-        mEditor.setHeading(firstFontSize);
         mEditor.focusEditor();
 //        mEditor.setTextColor(getResources().getColor(R.color.txt_black));
-        //mEditor.setInputEnabled(false);
+//        mEditor.setInputEnabled(false);
 //        mPreview = (TextView) findViewById(R.id.preview);
         mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override

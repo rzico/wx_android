@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -25,6 +26,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
+import com.google.zxing.activity.CaptureActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.karumi.dexter.Dexter;
@@ -118,10 +120,6 @@ import static org.bouncycastle.asn1.x509.X509ObjectIdentifiers.id;
 
 public class WXEventModule extends WXModule {
 
-
-//    synchronized {
-//        private boolean openUrling = false;
-//    }
 
     @JSMethod
     public void logout(final JSCallback callback){
@@ -505,7 +503,7 @@ public class WXEventModule extends WXModule {
      */
     @JSMethod
     public void changeWindowsBar(boolean isDark) {
-        BarTextColorUtils.StatusBarLightMode(getActivity(), isDark);
+//        BarTextColorUtils.StatusBarLightMode(getActivity(), isDark);
     }
 
     /*这里是老土的接受返回信息*/
@@ -941,8 +939,10 @@ public class WXEventModule extends WXModule {
         if (stsData != null && !stsData.equals("")) {
             try {
                 JSONObject jsonObject = new JSONObject(stsData);
-                //对比查看sts有没有过期
-                error = DateUtils.isDateOneBigger(new Date(), jsonObject.getString("Expiration"), DateUtils.DATE_FORMAT_3);
+                if(jsonObject!=null){
+                    //对比查看sts有没有过期
+                    error = DateUtils.isDateOneBigger(new Date(), jsonObject.getString("Expiration"), DateUtils.DATE_FORMAT_3);
+                }
                 if (!error) {
                     //取本地缓存不用去服务器取
                     uploadFile(stsData, getActivity(), filePath, callback, progressCallback);
@@ -1004,16 +1004,19 @@ public class WXEventModule extends WXModule {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
 
-                        Toast.makeText(activity, "click",Toast.LENGTH_SHORT).show();
-                        IntentIntegrator integrator = new IntentIntegrator(activity);
-                        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                        integrator.setPrompt("Scan a barcode");
-                        //integrator.setCameraId(0);  // Use a specific camera of the device
-                        integrator.setBeepEnabled(true);
-                        integrator.setOrientationLocked(false);
-                        integrator.setBarcodeImageEnabled(true);
-                        integrator.setPrompt(activity.getString(R.string.capture_qrcode_prompt));
-                        integrator.initiateScan();
+//                        IntentIntegrator integrator = new IntentIntegrator(activity);
+//                        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+//                        integrator.setPrompt("Scan a barcode");
+//                        //integrator.setCameraId(0);  // Use a specific camera of the device
+//                        integrator.setBeepEnabled(true);
+//                        integrator.setOrientationLocked(false);
+//                        integrator.setBarcodeImageEnabled(true);
+//                        integrator.setPrompt(activity.getString(R.string.capture_qrcode_prompt));
+//                        integrator.initiateScan();
+
+                        // 二维码扫码
+                        Intent intent = new Intent(activity, CaptureActivity.class);
+                        activity.startActivityForResult(intent, Constant.REQ_QR_CODE);
                     }
 
                     @Override
@@ -1116,12 +1119,17 @@ public class WXEventModule extends WXModule {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null && rxScanfinalHolderListener!= null) {
-            if (result.getContents() != null) {
-                rxScanfinalHolderListener.userOk(result.getContents());
-            } else {
-                rxScanfinalHolderListener.userCancel();
+//        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        if(data!=null){
+            Bundle bundle = data.getExtras();
+            if (bundle != null && rxScanfinalHolderListener!= null) {
+                String scanResult = bundle.getString(Constant.INTENT_EXTRA_KEY_QR_SCAN);
+                if (scanResult != null || !scanResult.equals("")) {
+                    rxScanfinalHolderListener.userOk(scanResult);
+                } else {
+                    rxScanfinalHolderListener.userCancel();
+                }
             }
         }
     }
@@ -1217,12 +1225,12 @@ public class WXEventModule extends WXModule {
 
                 @Override
                 public void onError(Platform platform, int i, Throwable throwable) {
-                    Message message = new Message().error("error");
+                    Message message = new Message().error("分享出错");
                     callback.invoke(message);
                 }
                 @Override
                 public void onCancel(Platform platform, int i) {
-                    Message message = new Message().error("cancel");
+                    Message message = new Message().error("用户取消");
                     callback.invoke(message);
                 }
             });

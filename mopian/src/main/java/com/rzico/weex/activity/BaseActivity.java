@@ -202,19 +202,23 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
     /**
      * 用户不允许权限，向用户说明权限的重要性，并支持用户去设置中开启权限
      */
-    public void showDeniedDialog(String title) {
+    public void showDeniedDialog(final String title) {
         new android.app.AlertDialog.Builder(BaseActivity.this).setTitle(title)
                 .setMessage("请允许使用该权限,拒绝将无法使用此功能")
                 .setNegativeButton("拒绝", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        if(title.equals("需要存储权限,才能运行程序")){
+                            WXApplication.exit();
+                        }
                         //TiaohuoApplication.exit();
                     }
                 })
                 .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Constant.isSetting = true;
                         Intent intent = new Intent();
                         intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
                         intent.setData(Uri.parse("package:" + BaseActivity.this.getPackageName()));

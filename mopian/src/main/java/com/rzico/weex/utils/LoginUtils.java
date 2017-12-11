@@ -79,6 +79,8 @@ public class LoginUtils  {
                         }
                         loginError();
                     }else{
+                        Constant.userId = loginBean.getData().getUid();
+                        SharedUtils.saveLoginId(Constant.userId);
                         // identifier为用户名，userSig 为用户登录凭证
                         TIMManager.getInstance().login(loginBean.getData().getUserId(), loginBean.getData().getUserSig(), new TIMCallBack() {
                             @Override
@@ -97,7 +99,7 @@ public class LoginUtils  {
                                 // 登录成功 需要传回来登录的loginId
 //                                SharedUtils.saveLoginId(Constant.userId);
 //                                Constant.loginState = true;
-                                Constant.userId = loginBean.getData().getUid();
+//                                Constant.userId = loginBean.getData().getUid();
                                 Constant.imUserId = loginBean.getData().getUserId();
                                 DbUtils.reDoSql();
                                 Log.d("weex", "login succ");
