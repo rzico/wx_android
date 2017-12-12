@@ -95,6 +95,7 @@ public class WXPageActivity extends AbsWeexActivity implements
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_wxpage);
+
 //    if (Constant.userId == 0) {
 //      if (null != savedInstanceState) {
 //        // activity由系统打开 (是由于手机内存不够,activity在后台被系统回收,再打开时出现的现象)

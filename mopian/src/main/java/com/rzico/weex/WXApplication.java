@@ -31,6 +31,7 @@ import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
 import com.rzico.weex.utils.SharedUtils;
+import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.chat.Foreground;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
@@ -114,7 +115,7 @@ public class WXApplication extends Application {
     instance = this;
     init();
     initAlbum();
-    WXSDKEngine.addCustomOptions("appName", "魔篇");
+    WXSDKEngine.addCustomOptions("appName", getResources().getString(R.string.app_name));
     WXSDKEngine.addCustomOptions("appGroup", "WXApp");
     WXSDKEngine.initialize(this,
         new InitConfig.Builder()
