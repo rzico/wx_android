@@ -254,13 +254,12 @@ public class SplashActivity extends BaseActivity {
         try{
 
           MainUrl mainUrl = new Gson().fromJson(result, MainUrl.class);
+          Constant.index1 = handleUrl(mainUrl.getData().getTabnav().getHome());
+          Constant.index2 = handleUrl(mainUrl.getData().getTabnav().getFriend());
+          Constant.index3 = handleUrl(mainUrl.getData().getTabnav().getMessage());
+          Constant.index4 = handleUrl(mainUrl.getData().getTabnav().getMember());
 
-          Constant.index1 = mainUrl.getData().getTabnav().getHome();
-          Constant.index2 = mainUrl.getData().getTabnav().getFriend();
-          Constant.index3 = mainUrl.getData().getTabnav().getMessage();
-          Constant.index4 = mainUrl.getData().getTabnav().getMember();
-
-          Constant.center = mainUrl.getData().getTabnav().getAdd();
+          Constant.center = handleUrl(mainUrl.getData().getTabnav().getAdd());
 
         }catch (Exception e){
           Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
@@ -271,6 +270,16 @@ public class SplashActivity extends BaseActivity {
         Toast.makeText(SplashActivity.this, "网络加载失败，请检查网络", Toast.LENGTH_SHORT).show();
       }
     }).execute();
+  }
+
+  private String handleUrl(String url){
+
+    if(url != null && !url.equals("")){
+      url = url.contains("file:/") ? url.replace("file:/","") : url;
+      return  url.contains("?") ? url.substring(0 ,url.indexOf("?")) : url;
+    }else {
+      return url;
+    }
   }
 
   private boolean haveUpdate(File file){
@@ -442,15 +451,21 @@ public class SplashActivity extends BaseActivity {
     // == null 或者 =="" 表示第一次使用， 否者是第二次使用 就判断版本号
 
     try {
+      if(Utils.isApkDebugable(SplashActivity.this)){
+        downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
+      }else{
       if(nowVersion == null || nowVersion.equals("") || Utils.compareVersion(Constant.resVerison, nowVersion) > 0){
         //下载weex资源
         downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
       }else{
         toNext();
       }
+      }
+
     } catch (Exception e) {
       e.printStackTrace();
       toNext();
     }
   }
+
 }
