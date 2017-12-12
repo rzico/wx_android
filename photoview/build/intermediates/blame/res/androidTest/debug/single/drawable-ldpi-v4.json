@@ -1,7 +1,11 @@
 [
     {
-        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_cross.png",
-        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_cross.png"
+        "merged": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_cross.png",
+        "source": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_cross.png"
+    },
+    {
+        "merged": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_crop.png",
+        "source": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_crop.png"
     },
     {
         "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_reset.png",
@@ -16,8 +20,44 @@
         "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_scale.png"
     },
     {
+        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_angle.png",
+        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_angle.png"
+    },
+    {
+        "merged": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_rotate.png",
+        "source": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_rotate.png"
+    },
+    {
+        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/gallery_ic_cross.png",
+        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/gallery_ic_cross.png"
+    },
+    {
+        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_crop.png",
+        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_crop.png"
+    },
+    {
+        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_done.png",
+        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_done.png"
+    },
+    {
+        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_cross.png",
+        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_cross.png"
+    },
+    {
+        "merged": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_done.png",
+        "source": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_done.png"
+    },
+    {
         "merged": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_scale.png",
         "source": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_scale.png"
+    },
+    {
+        "merged": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_angle.png",
+        "source": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_angle.png"
+    },
+    {
+        "merged": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_reset.png",
+        "source": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_reset.png"
     },
     {
         "merged": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_angle.png",
@@ -28,12 +68,20 @@
         "source": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_crop.png"
     },
     {
-        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_angle.png",
-        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_angle.png"
-    },
-    {
         "merged": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/gallery_ic_cross.png",
         "source": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/gallery_ic_cross.png"
+    },
+    {
+        "merged": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_scale.png",
+        "source": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_scale.png"
+    },
+    {
+        "merged": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_rotate.png",
+        "source": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_rotate.png"
+    },
+    {
+        "merged": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_next.png",
+        "source": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_next.png"
     },
     {
         "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_rotate.png",
@@ -48,27 +96,15 @@
         "source": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_reset.png"
     },
     {
-        "merged": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_rotate.png",
-        "source": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_rotate.png"
-    },
-    {
         "merged": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_cross.png",
         "source": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_cross.png"
-    },
-    {
-        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/gallery_ic_cross.png",
-        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/gallery_ic_cross.png"
-    },
-    {
-        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_crop.png",
-        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_crop.png"
     },
     {
         "merged": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_next.png",
         "source": "/Users/macOS/Documents/mopian/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_next.png"
     },
     {
-        "merged": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/ucrop_ic_done.png",
-        "source": "/Users/macOS/Documents/mopian/wx-android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/ucrop_ic_done.png"
+        "merged": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/res/merged/androidTest/debug/drawable-ldpi-v4/gallery_ic_cross.png",
+        "source": "/Users/zhangsr/Documents/GitHub/weex/wx_android/photoview/build/intermediates/exploded-aar/cn.finalteam.rxgalleryfinal/library/1.1.3/res/drawable-ldpi-v4/gallery_ic_cross.png"
     }
 ]
