@@ -26,6 +26,7 @@ import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.AbsWeexActivity;
+import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.adapter.chat.ChatAdapter;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.bean.Redis;
@@ -74,7 +75,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatActivity extends FragmentActivity implements ChatView {
+public class ChatActivity extends BaseActivity implements ChatView {
     private static final String TAG = "ChatActivity";
     private List<Message> messageList = new ArrayList<>();
     private ChatAdapter adapter;
@@ -99,6 +100,7 @@ public class ChatActivity extends FragmentActivity implements ChatView {
 
     public static void navToChat(final Context context, final String identify, final TIMConversationType type){
         if(identify != null && identify.equals("")) return;
+        if(context == null)return;
         if (!Utils.checkConnection(context)) {//如果网络不通
             try {
                 Redis redis = DbUtils.find("chatInfoCache", Constant.imUserId + identify);
@@ -177,7 +179,8 @@ public class ChatActivity extends FragmentActivity implements ChatView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BarTextColorUtils.StatusBarLightMode(this, R.color.wxColor);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        BarTextColorUtils.StatusBarLightMode(this, false);
+//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 //        BarTextColorUtils.StatusBarLightMode(ChatActivity.this, true);
         setContentView(R.layout.activity_chat);
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);

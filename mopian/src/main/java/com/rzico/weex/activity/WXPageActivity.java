@@ -324,12 +324,24 @@ public class WXPageActivity extends AbsWeexActivity implements
     }
     String key = getIntent().getStringExtra("key");
     if( key != null && !key.equals("")){
-      com.rzico.weex.model.info.Message message = new com.rzico.weex.model.info.Message().success("");
+//      com.rzico.weex.model.info.Message message = new com.rzico.weex.model.info.Message().success("返回");
+      com.rzico.weex.model.info.Message message = new com.rzico.weex.model.info.Message();
+      message.setType("error");
+      message.setData("goback");
+      message.setContent("返回");
       if(JSCallBaskManager.get(key)!= null){
         JSCallBaskManager.get(key).invoke(message);
         JSCallBaskManager.remove(key);
       }
     }
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+    }
+    return super.onKeyDown(keyCode, event);
   }
 
   public void showDevOptionsDialog() {

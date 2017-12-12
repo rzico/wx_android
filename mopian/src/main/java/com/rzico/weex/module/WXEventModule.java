@@ -200,12 +200,14 @@ public class WXEventModule extends WXModule {
         String key = getActivity().getIntent().getStringExtra("key");
         if (data != null && JSCallBaskManager.get(key) != null) {
             JSCallBaskManager.get(key).invoke(data);
+            JSCallBaskManager.remove(key);
         } else if (JSCallBaskManager.get(key) != null) {
             Message message = new Message();
             message.setType("error");
             message.setContent("error");
             message.setData("");
             JSCallBaskManager.get(key).invoke(message);
+            JSCallBaskManager.remove(key);
         }
         getActivity().setResult(Activity.RESULT_OK);
         getActivity().finish();
@@ -997,6 +999,7 @@ public class WXEventModule extends WXModule {
             }
         }).scanHandler(getActivity());
     }
+
 
     public void scanHandler(final BaseActivity activity){
         Dexter.withActivity(activity).withPermission(Manifest.permission.CAMERA)
