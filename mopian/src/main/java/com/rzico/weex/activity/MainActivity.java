@@ -166,6 +166,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     }).show();
                 }else if(msg.what == RECEIVEMSG){
                     setUnRead();
+                }else if(msg.what == LOGINERROR){
+                    //被注销了
+                    destoryWeexInstance();
+                    initWeexView();
+                    setSelectTab(0);
                 }
 
             }
