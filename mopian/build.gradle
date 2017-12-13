@@ -8,11 +8,11 @@ android {
 
     defaultConfig {
 //        applicationId "com.rzico.weex"
-        applicationId "com.rzico.assistant"
+        applicationId "com.yixiang.mopian"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
-        versionName "3.2.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
@@ -33,31 +33,31 @@ android {
         jumboMode true
     }
     signingConfigs {
-        release {
-            storeFile file("tools/rzico.jks")
-            storePassword "123456"
-            keyAlias "rzico"
-            keyPassword "123456"
-        }
-        debug {
-            storeFile file("tools/rzico.jks")
-            storePassword "123456"
-            keyAlias "rzico"
-            keyPassword "123456"
-        }
-
 //        release {
-//            storeFile file("tools/mopian.jks")
+//            storeFile file("tools/rzico.jks")
 //            storePassword "123456"
-//            keyAlias "mopian"
+//            keyAlias "rzico"
 //            keyPassword "123456"
 //        }
 //        debug {
-//            storeFile file("tools/mopian.jks")
+//            storeFile file("tools/rzico.jks")
 //            storePassword "123456"
-//            keyAlias "mopian"
+//            keyAlias "rzico"
 //            keyPassword "123456"
 //        }
+
+        release {
+            storeFile file("tools/mopian.jks")
+            storePassword "123456"
+            keyAlias "mopian"
+            keyPassword "123456"
+        }
+        debug {
+            storeFile file("tools/mopian.jks")
+            storePassword "123456"
+            keyAlias "mopian"
+            keyPassword "123456"
+        }
     }
     buildTypes {
         release {

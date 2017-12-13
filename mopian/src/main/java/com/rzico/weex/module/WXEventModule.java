@@ -65,7 +65,6 @@ import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.RSAUtils;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
-import com.rzico.assistant.wxapi.WXEntryActivity;
 import com.rzico.weex.utils.chat.MessageFactory;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.annotation.JSMethod;
@@ -90,6 +89,7 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.yixiang.mopian.constant.AllConstant;
+import com.yixiang.mopian.wxapi.WXEntryActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
