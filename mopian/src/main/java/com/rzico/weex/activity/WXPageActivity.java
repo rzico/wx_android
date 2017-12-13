@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -109,7 +110,17 @@ public class WXPageActivity extends AbsWeexActivity implements
     mContainer = (ViewGroup) findViewById(R.id.container);
     mProgressBar = (ProgressBar) findViewById(R.id.progress);
     mTipView = (TextView) findViewById(R.id.index_tip);
-
+//   mContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//     @Override
+//     public void onGlobalLayout() {
+//       int heightDff = mContainer.getRootView().getHeight() - mContainer.getHeight();
+//       if(heightDff > 100){
+//         Toast.makeText(WXPageActivity.this, "有软键盘", Toast.LENGTH_SHORT).show();
+//       }else {
+//         Toast.makeText(WXPageActivity.this, "没有软键盘", Toast.LENGTH_SHORT).show();
+//       }
+//     }
+//   });
     if (mIsDevSupportEnabled && !CommonUtils.hasHardwareMenuKey()) {
       mShakeDetector = new ShakeDetector(new ShakeDetector.ShakeListener() {
 

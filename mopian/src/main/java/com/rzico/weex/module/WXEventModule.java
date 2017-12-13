@@ -184,7 +184,7 @@ public class WXEventModule extends WXModule {
 
     @JSMethod(uiThread = false)
     public long getUId(){
-        return Constant.userId;
+        return SharedUtils.readLoginId();
     }
     @JSMethod(uiThread = false)
     public String getUserId(){

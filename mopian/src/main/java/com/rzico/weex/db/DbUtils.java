@@ -11,6 +11,7 @@ import com.rzico.weex.db.notidmanager.DbCacheBean;
 import com.rzico.weex.db.notidmanager.NotIdManager;
 import com.rzico.weex.model.chat.Message;
 import com.rzico.weex.net.XRequest;
+import com.rzico.weex.utils.SharedUtils;
 import com.taobao.weex.bridge.JSCallback;
 
 import org.xutils.db.Selector;
@@ -34,7 +35,7 @@ public class DbUtils {
             if( redis == null){
             //现在是默认用userid = 1
             redis = new Redis();
-            redis.setUserId(Constant.userId);//这里要去从服务器获取
+            redis.setUserId(SharedUtils.readLoginId());//这里要去从服务器获取
             redis.setType(type);
             redis.setKey(key);
             redis.setValue(value);
@@ -42,7 +43,7 @@ public class DbUtils {
             redis.setKeyword(keyword);
             WXApplication.getDb().save(redis);
             }else{
-                redis.setUserId(Constant.userId);//这里要去从服务器获取
+                redis.setUserId(SharedUtils.readLoginId());//这里要去从服务器获取
                 redis.setType(type);
                 redis.setKey(key);
                 redis.setValue(value);
@@ -68,11 +69,11 @@ public class DbUtils {
                 if(type.equals(XRequest.HTTPCACHE)){//如果是保存缓存 则因前端要求 要去掉前缀
                     key = key.replace(Constant.helperUrl,"");
                 }
-                if(type.equals(XRequest.HTTPCACHE) && Constant.userId == 0){
+                if(type.equals(XRequest.HTTPCACHE) && SharedUtils.readLoginId() == 0){
                     //这种情况是 被注销了 或者第一次登录了 ， 还是要返回httpcache
                     return WXApplication.getDb().selector(Redis.class).where("type", "=", type).and("key", "=", key).findFirst();
                 }else {
-                    return WXApplication.getDb().selector(Redis.class).where("userId","=", Constant.userId).and("type", "=", type).and("key", "=", key).findFirst();
+                    return WXApplication.getDb().selector(Redis.class).where("userId","=", SharedUtils.readLoginId()).and("type", "=", type).and("key", "=", key).findFirst();
                 }
             }else{
                 return null;
@@ -84,9 +85,9 @@ public class DbUtils {
 //            List<Redis> data = WXApplication.getDb().selector(Redis.class).findAll();
             Selector<Redis> selector = null;
             if(!keyword.equals("")){
-                selector = WXApplication.getDb().selector(Redis.class).where("userId","=", Constant.userId).and("keyword", "like",  "%" + keyword + "%").orderBy("type", orderBy.equals("desc")).orderBy("sort", orderBy.equals("desc"));
+                selector = WXApplication.getDb().selector(Redis.class).where("userId","=", SharedUtils.readLoginId()).and("keyword", "like",  "%" + keyword + "%").orderBy("type", orderBy.equals("desc")).orderBy("sort", orderBy.equals("desc"));
             }else {
-                selector = WXApplication.getDb().selector(Redis.class).where("userId","=", Constant.userId).orderBy("type", orderBy.equals("desc")).orderBy("sort", orderBy.equals("desc"));
+                selector = WXApplication.getDb().selector(Redis.class).where("userId","=", SharedUtils.readLoginId()).orderBy("type", orderBy.equals("desc")).orderBy("sort", orderBy.equals("desc"));
             }
             if(!type.equals("")){
                 selector = selector.and("type", "=", type);
@@ -113,7 +114,7 @@ public class DbUtils {
     }
     public static boolean deleteAll(String type) throws DbException{
         if(WXApplication.getDb() != null){
-            List<Redis> redis =  WXApplication.getDb().selector(Redis.class).where("userId","=", Constant.userId).and("type","=", type).findAll();
+            List<Redis> redis =  WXApplication.getDb().selector(Redis.class).where("userId","=", SharedUtils.readLoginId()).and("type","=", type).findAll();
             if(redis != null){
                 WXApplication.getDb().delete(redis);
                 return true;
@@ -123,7 +124,7 @@ public class DbUtils {
     }
 
     public static boolean checkLogin(){
-        if(Constant.userId == 0){
+        if(SharedUtils.readLoginId() == 0){
             return false;
         }else {
             return true;
