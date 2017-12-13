@@ -162,7 +162,7 @@ public class LoginUtils  {
         Constant.userId = SharedUtils.readLoginId();
         //如果是离线登录的话
         //unLinelogin是判断是否是离线登录
-        if(Constant.userId!=0){
+        if(SharedUtils.readLoginId()!=0){
             Constant.unLinelogin = true;
         }else {
             Constant.unLinelogin = false;

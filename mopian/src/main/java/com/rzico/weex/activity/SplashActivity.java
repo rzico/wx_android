@@ -261,6 +261,12 @@ public class SplashActivity extends BaseActivity {
 
           Constant.center = handleUrl(mainUrl.getData().getTabnav().getAdd());
 
+          SharedUtils.saveIndex1(Constant.index1);
+          SharedUtils.saveIndex2(Constant.index2);
+          SharedUtils.saveIndex3(Constant.index3);
+          SharedUtils.saveIndex4(Constant.index4);
+          SharedUtils.saveCenter(Constant.center);
+
         }catch (Exception e){
           Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
         }
