@@ -89,7 +89,7 @@ public class RichEditorAcitivity extends AppCompatActivity {
         if(centent != null && !centent.equals("")){
             mEditor.setHtml(centent);
         }else {
-            mEditor.setEditorHeading(2);
+            mEditor.setEditorHeading(3);
             mEditor.setHeading(firstFontSize);
         }
         mEditor.focusEditor();
