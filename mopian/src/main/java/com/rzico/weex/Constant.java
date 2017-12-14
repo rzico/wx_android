@@ -22,9 +22,9 @@ public class Constant {
     //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.MOPIAN" />
     public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.MOPIAN";
 
-    public static final String wxURL = "http://cdnx.rzico.com/weex/app/";
+    public static final String wxURL = "http://cdnx.1xx.me/weex/app/";
 
-    public static final String resURL = "http://cdnx.rzico.com/";
+    public static final String resURL = "http://cdnx.1xx.me/";
 
     //    云店wxkey
 //    public static final String wxAppId = "wx490857e2baff7cfd";
