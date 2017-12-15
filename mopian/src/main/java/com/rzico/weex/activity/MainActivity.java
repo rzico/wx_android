@@ -266,6 +266,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if(SharedUtils.readIndex1().startsWith("http://")) {//如果是网络url
             Map<String, Object> options = new HashMap<>();
             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex1());
+
             wxsdkInstanceMap.get("home").renderByUrl("home", SharedUtils.readIndex1(), options, null, WXRenderStrategy.APPEND_ASYNC);
         }else {
             String url =  SharedUtils.readIndex1();
