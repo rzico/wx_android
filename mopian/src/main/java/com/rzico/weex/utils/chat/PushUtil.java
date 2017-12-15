@@ -85,7 +85,7 @@ public class PushUtil implements Observer {
         //获取会话扩展实例
         TIMConversation con = TIMManager.getInstance().getConversation(TIMConversationType.C2C, senderStr);
         TIMConversationExt conExt = new TIMConversationExt(con);
-        if(conExt.getUnreadMessageNum() > 1){
+        if(conExt.getUnreadMessageNum() >= 1){
             contentStr = "[" + conExt.getUnreadMessageNum()+"条]" + senderStr + ": " + contentStr;
         }else {
             //没有未读数 不推送
