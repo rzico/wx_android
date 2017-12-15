@@ -282,7 +282,8 @@ public class SplashActivity extends BaseActivity {
 
     if(url != null && !url.equals("")){
       url = url.contains("file:/") ? url.replace("file:/","") : url;
-      return  url.contains("?") ? url.substring(0 ,url.indexOf("?")) : url;
+//      return  url.contains("?") ? url.substring(0 ,url.indexOf("?")) : url;
+      return url;
     }else {
       return url;
     }
@@ -406,10 +407,10 @@ public class SplashActivity extends BaseActivity {
    * 清楚所有通知栏通知
    */
   private void clearNotification(){
-    NotificationManager notificationManager = (NotificationManager) this
-            .getSystemService(NOTIFICATION_SERVICE);
-    notificationManager.cancelAll();
-    MiPushClient.clearNotification(getApplicationContext());
+//    NotificationManager notificationManager = (NotificationManager) this
+//            .getSystemService(NOTIFICATION_SERVICE);
+//    notificationManager.cancelAll();
+//    MiPushClient.clearNotification(getApplicationContext());
   }
 
   private void showUplodeDialog(final Launch.data versionInfo) {

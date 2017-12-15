@@ -104,6 +104,9 @@ public class PathUtils {
         if(path.startsWith("file://")){
             path = path.replace("file://", "");
         }
+
+// 这是参数 要带参数 二 下面的打开本地路径 不需要带参数
+        path = path.contains("?") ? path.substring(0 ,path.indexOf("?")) : path;
         FileInputStream inputStream = null;
         BufferedReader bufferedReader = null;
         path = PathUtils.getResPath() + path;
