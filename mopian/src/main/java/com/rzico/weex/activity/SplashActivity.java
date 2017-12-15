@@ -467,7 +467,9 @@ public class SplashActivity extends BaseActivity {
       if(nowVersion == null || nowVersion.equals("") || Utils.compareVersion(Constant.resVerison, nowVersion) > 0){
         //下载weex资源
         downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
-      }else{
+      }else if (nowVersion.equals("1.0.0")){//如果是一样的话就解压当前的目录
+        copylocalfile();
+      }else {
         toNext();
       }
       }
