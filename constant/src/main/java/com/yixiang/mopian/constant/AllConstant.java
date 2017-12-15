@@ -14,7 +14,6 @@ public class AllConstant {
     public static final String PACKNAME = "com.yixiang.mopian";
 
 
-    public static final String WXAPPID = "com.rzico.assistant";
 
 
     //自己的缓存图片的路径
