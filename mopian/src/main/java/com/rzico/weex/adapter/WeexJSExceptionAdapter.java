@@ -3,6 +3,7 @@ package com.rzico.weex.adapter;
 import android.widget.Toast;
 
 import com.rzico.weex.WXApplication;
+import com.rzico.weex.utils.Utils;
 import com.taobao.weex.adapter.IWXJSExceptionAdapter;
 import com.taobao.weex.common.WXJSExceptionInfo;
 
@@ -13,6 +14,8 @@ import com.taobao.weex.common.WXJSExceptionInfo;
 public class WeexJSExceptionAdapter implements IWXJSExceptionAdapter {
     @Override
     public void onJSException(WXJSExceptionInfo exception) {
-        Toast.makeText(WXApplication.getActivity(), exception.getException().toString(), Toast.LENGTH_LONG).show();
+        if(Utils.isApkDebugable(WXApplication.getActivity())){
+            Toast.makeText(WXApplication.getActivity(), exception.getException().toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }
