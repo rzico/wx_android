@@ -454,7 +454,7 @@ public class SplashActivity extends BaseActivity {
   }
   private void updateRes(){
     //这里注释掉是为了不用再校验版本
-    String nowVersion = SharedUtils.read(RESVERSION, Constant.resVerison);
+    String nowVersion = SharedUtils.read(RESVERSION, "1.0.0");
     // == null 或者 =="" 表示第一次使用， 否者是第二次使用 就判断版本号
 //    if(nowVersion.equals("")){
 //      nowVersion = Constant.resVerison;//设置默认的值
