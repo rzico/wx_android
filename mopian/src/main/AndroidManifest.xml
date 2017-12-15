@@ -43,10 +43,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
     <permission
-        android:name="com.rzico.weex.permission.MIPUSH_RECEIVE"
+        android:name="com.yixiang.mopian.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
     <!-- 这里com.tencent.imsdk改成app的包名 -->
-    <uses-permission android:name="com.rzico.weex.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="com.yixiang.mopian.permission.MIPUSH_RECEIVE" />
     <!-- 这里com.tencent.imsdk改成app的包名 -->
 
     <uses-feature android:name="android.hardware.camera" />
