@@ -125,6 +125,12 @@ public class OssService {
         if (!file.exists()) {
             Log.w("AsyncPutImage", "FileNotExist");
             Log.w("LocalFile", localFile);
+
+            Message message = new Message();
+            message.setContent("文件已被删除");
+            message.setType("error");
+            message.setData(null);
+            callback.invoke(message);
             return;
         }
 
