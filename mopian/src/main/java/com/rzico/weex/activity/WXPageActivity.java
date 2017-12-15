@@ -36,6 +36,7 @@ import com.rzico.weex.R;
 import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.module.WXEventModule;
 import com.rzico.weex.utils.Player;
+import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.weex.CommonUtils;
 import com.rzico.weex.utils.weex.DevOptionHandler;
 import com.rzico.weex.utils.weex.ShakeDetector;
@@ -126,7 +127,9 @@ public class WXPageActivity extends AbsWeexActivity implements
 
         @Override
         public void onShake() {
-          mHandler.sendEmptyMessage(0);
+          if(Utils.isApkDebugable(WXPageActivity.this)){
+            mHandler.sendEmptyMessage(0);
+          }
         }
       });
     }

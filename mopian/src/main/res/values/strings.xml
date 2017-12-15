@@ -15,6 +15,9 @@
     <!--伪协议-->
     <string name="href_home">yundian</string>
 
+    <!--config配置-->
+    <!--高德地图key-->
+    <string name="amapkey">aa41342a5bc536c1d910187f5ada9524</string>
 
     <!-- time -->
     <string name="time_yesterday">昨天</string>
