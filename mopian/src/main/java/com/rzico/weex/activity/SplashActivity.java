@@ -454,7 +454,7 @@ public class SplashActivity extends BaseActivity {
   }
   private void updateRes(){
     //这里注释掉是为了不用再校验版本
-    String nowVersion = SharedUtils.read(RESVERSION, Constant.resVerison);
+    String nowVersion = SharedUtils.read(RESVERSION, "1.0.0");
     // == null 或者 =="" 表示第一次使用， 否者是第二次使用 就判断版本号
 //    if(nowVersion.equals("")){
 //      nowVersion = Constant.resVerison;//设置默认的值
@@ -467,7 +467,9 @@ public class SplashActivity extends BaseActivity {
       if(nowVersion == null || nowVersion.equals("") || Utils.compareVersion(Constant.resVerison, nowVersion) > 0){
         //下载weex资源
         downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
-      }else{
+      }else if (nowVersion.equals("1.0.0")){//如果是一样的话就解压当前的目录
+        copylocalfile();
+      }else {
         toNext();
       }
       }
