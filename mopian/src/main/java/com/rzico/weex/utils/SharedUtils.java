@@ -21,6 +21,14 @@ public class SharedUtils {
     public static final String INDEX3 = "weex_index_3";
     public static final String INDEX4 = "weex_index_4";
     public static final String ADD = "weex_add";
+    public static final String RESVERSION = "res_version";
+
+    public static void saveResVersion(String version){
+        save(RESVERSION, version);
+    }
+    public static String readResVersion(){
+        return read(RESVERSION, Constant.resVerison);
+    }
 
     public static void saveCenter(String url){
         save(ADD, url);
