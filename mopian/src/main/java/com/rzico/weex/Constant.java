@@ -48,7 +48,6 @@ public class Constant {
     //   im的用户id
     public static String imUserId = "";
 
-    public static final String RESVERSION = "res-version";//存入当前res版本的表示
 
     public static String app = AllConstant.PACKNAME;
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
@@ -61,7 +60,10 @@ public class Constant {
     public static String updateAppUrl = "";
     public static boolean loginState = false;
     public static boolean unLinelogin = false;
+    //当前程序的资源包版本
     public static String resVerison = "1.0.0";
+    //服务器资源包版本
+    public static String netResVerison = "1.0.0";
     public static String appVerison = "";
 
     public static Map<String, WXSDKInstance> wxsdkInstanceMap;
