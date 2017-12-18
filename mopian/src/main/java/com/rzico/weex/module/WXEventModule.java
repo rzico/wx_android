@@ -145,7 +145,6 @@ public class WXEventModule extends WXModule {
                             if(Constant.loginHandler!=null){
                                 Constant.loginHandler.sendEmptyMessage(MainActivity.LOGOUT);
                             }
-
                         }
                     });
                 }else{
@@ -1128,7 +1127,7 @@ public class WXEventModule extends WXModule {
             Bundle bundle = data.getExtras();
             if (bundle != null && rxScanfinalHolderListener!= null) {
                 String scanResult = bundle.getString(Constant.INTENT_EXTRA_KEY_QR_SCAN);
-                if (scanResult != null || !scanResult.equals("")) {
+                if (scanResult != null && !scanResult.equals("")) {
                     rxScanfinalHolderListener.userOk(scanResult);
                 } else {
                     rxScanfinalHolderListener.userCancel();
@@ -1141,13 +1140,13 @@ public class WXEventModule extends WXModule {
     /**
      *
      * @param option
-     * String title = "";   // 这个是分享的标题
+     *  String title = "";   // 这个是分享的标题
         String text = ""; //这个是分享的介绍
         String imagePath = "";//这里图片可能是路径 可能是url path 不必加file
         String imageUrl = "";
         String url = "";// 这个是分享的url
         String type = [appMessage,timeline,favorite] //分别是 微信好友、 微信朋友圈、 微信收藏
-    copyHref 复制连接 browser 打开浏览器
+        copyHref 复制连接 browser 打开浏览器
      * @param callback
      */
     @JSMethod
