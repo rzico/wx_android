@@ -17,6 +17,7 @@ import com.taobao.weex.bridge.JSCallback;
 import org.xutils.db.Selector;
 import org.xutils.db.sqlite.WhereBuilder;
 import org.xutils.ex.DbException;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +84,7 @@ public class DbUtils {
     public static List<Redis> findList(String type,  String keyword, String orderBy, int pageSize) throws DbException {
         if(WXApplication.getDb() != null){
 //            List<Redis> data = WXApplication.getDb().selector(Redis.class).findAll();
+
             Selector<Redis> selector = null;
             if(!keyword.equals("")){
                 selector = WXApplication.getDb().selector(Redis.class).where("userId","=", SharedUtils.readLoginId()).and("keyword", "like",  "%" + keyword + "%").orderBy("type", orderBy.equals("desc")).orderBy("sort", orderBy.equals("desc"));
@@ -140,6 +142,10 @@ public class DbUtils {
         com.rzico.weex.model.info.Message message = new com.rzico.weex.model.info.Message();
         Redis redis = null;
         List<Redis> rediss = null;
+
+        if(WXApplication.getDb() == null) {
+            initDb();
+        }
             switch (dbCacheBean.getDoType()) {
 //                保存
                 case SAVE:
@@ -223,5 +229,11 @@ public class DbUtils {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static void initDb() {
+        //初始化数据库
+        org.xutils.DbManager.DaoConfig daoConfig = XDB.getDaoConfig();
+        WXApplication.setDb(x.getDb(daoConfig));
     }
 }
