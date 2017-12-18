@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -87,7 +88,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                back();
             }
         });
 
@@ -103,6 +104,25 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            back();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void back(){
+
+        Intent resultIntent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.INTENT_EXTRA_KEY_QR_SCAN ,"");
+
+        resultIntent.putExtras(bundle);
+        CaptureActivity.this.setResult(RESULT_OK, resultIntent);
+        finish();
+    }
     private View.OnClickListener albumOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
