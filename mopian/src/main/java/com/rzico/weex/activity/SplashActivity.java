@@ -489,9 +489,9 @@ public class SplashActivity extends BaseActivity {
 //      nowVersion = Constant.resVerison;//设置默认的值
 //    }
         try {
-//            if (Utils.isApkDebugable(SplashActivity.this)) {
-//                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
-//            } else {
+            if (Utils.isApkDebugable(SplashActivity.this)) {
+                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
+            } else {
                 if(Utils.compareVersion(nowResVersion, appResVersion) >= 0 && Utils.compareVersion(nowResVersion, netResVersion) >= 0){
                     //如果现在的资源包版本 是最大的 就什么事情都不做 直接跳转页面
                     writeResVersion = nowResVersion;
@@ -504,7 +504,7 @@ public class SplashActivity extends BaseActivity {
                     writeResVersion = netResVersion;
                     downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
                 }
-//            }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
