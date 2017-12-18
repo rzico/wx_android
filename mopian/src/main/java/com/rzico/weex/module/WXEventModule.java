@@ -1128,7 +1128,7 @@ public class WXEventModule extends WXModule {
             Bundle bundle = data.getExtras();
             if (bundle != null && rxScanfinalHolderListener!= null) {
                 String scanResult = bundle.getString(Constant.INTENT_EXTRA_KEY_QR_SCAN);
-                if (scanResult != null || !scanResult.equals("")) {
+                if (scanResult != null && !scanResult.equals("")) {
                     rxScanfinalHolderListener.userOk(scanResult);
                 } else {
                     rxScanfinalHolderListener.userCancel();
