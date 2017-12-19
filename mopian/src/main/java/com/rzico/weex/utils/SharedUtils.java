@@ -22,7 +22,14 @@ public class SharedUtils {
     public static final String INDEX4 = "weex_index_4";
     public static final String ADD = "weex_add";
     public static final String RESVERSION = "res_version";
+    public static final String IMID = "weex_imid";
 
+    public static void saveImId(String imid){
+        save(IMID, imid);
+    }
+    public static String readImId(){
+        return read(IMID);
+    }
     public static void saveResVersion(String version){
         save(RESVERSION, version);
     }

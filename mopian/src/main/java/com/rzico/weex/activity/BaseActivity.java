@@ -41,10 +41,12 @@ import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.NetUtil;
 import com.rzico.weex.utils.NetWorkStateReceiver;
+import com.rzico.weex.utils.SystemBarTintManager;
 
 
 import java.lang.reflect.Field;
 import java.util.List;
+
 
 import static com.rzico.weex.WXApplication.removeActivity;
 
@@ -70,9 +72,22 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
         mContext = BaseActivity.this;
         evevt = this;
         initView();
-        BarTextColorUtils.StatusBarLightMode(this, 0);
+//        BarTextColorUtils.StatusBarLightMode(this, 0);
+        initSystemBar();
     }
+    public void initSystemBar(){
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        }
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);// 创建状态栏的管理实例
+        tintManager.setStatusBarTintEnabled(true);// 激活状态栏设置
+        tintManager.setNavigationBarTintEnabled(true);// 激活导航栏设置
+        tintManager.setStatusBarTintColor(getResources().getColor(R.color.transparent));//设置状态栏颜色
+        tintManager.setStatusBarDarkMode(false, this);//false 状态栏字体颜色是白色 true 颜色是黑色
+    }
     protected void setStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
             View decorView = getWindow().getDecorView();

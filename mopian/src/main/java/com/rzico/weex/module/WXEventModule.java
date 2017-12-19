@@ -140,6 +140,7 @@ public class WXEventModule extends WXModule {
                             Constant.userId = 0;
                             Constant.imUserId = "";
                             SharedUtils.saveLoginId(Constant.userId);
+                            SharedUtils.saveImId(Constant.imUserId);
                             Message message = new Message().success("登出成功");
                             callback.invoke(message);
                             if(Constant.loginHandler!=null){
@@ -153,6 +154,7 @@ public class WXEventModule extends WXModule {
                     Constant.userId = 0;
                     Constant.imUserId = "";
                     SharedUtils.saveLoginId(Constant.userId);
+                    SharedUtils.saveImId(Constant.imUserId);
                     Message message = new Message().success("登出成功");
                     callback.invoke(message);
                     if(Constant.loginHandler!=null){
@@ -187,7 +189,7 @@ public class WXEventModule extends WXModule {
     }
     @JSMethod(uiThread = false)
     public String getUserId(){
-        return Constant.imUserId;
+        return SharedUtils.readImId();
     }
     /**
      * 关闭页面并且返回值 根据key区分

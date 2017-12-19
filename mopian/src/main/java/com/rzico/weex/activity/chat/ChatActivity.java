@@ -43,6 +43,7 @@ import com.rzico.weex.model.chat.VideoMessage;
 import com.rzico.weex.model.chat.VoiceMessage;
 import com.rzico.weex.model.info.IMMessage;
 import com.rzico.weex.utils.BarTextColorUtils;
+import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.chat.FileUtil;
 import com.rzico.weex.utils.chat.MediaUtil;
@@ -103,7 +104,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
         if(context == null)return;
         if (!Utils.checkConnection(context)) {//如果网络不通
             try {
-                Redis redis = DbUtils.find("chatInfoCache", Constant.imUserId + identify);
+                Redis redis = DbUtils.find("chatInfoCache", SharedUtils.readImId() + identify);
 
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("identify", identify);
@@ -125,7 +126,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
         }
         List<String> users = new ArrayList<>();
         users.add(identify);
-        users.add(Constant.imUserId);
+        users.add(SharedUtils.readImId());
         //获取用户资料
         TIMFriendshipManager.getInstance().getUsersProfile(users, new TIMValueCallBack<List<TIMUserProfile>>(){
             @Override
@@ -159,7 +160,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
                     intent.putExtra("chatInfo", chatInfo);
                     try {
                         //保存缓存
-                        DbUtils.save("chatInfoCache",Constant.imUserId + identify, new Gson().toJson(chatInfo), identify, identify);
+                        DbUtils.save("chatInfoCache",SharedUtils.readImId() + identify, new Gson().toJson(chatInfo), identify, identify);
                     } catch (DbException e) {
                         e.printStackTrace();
                     }
@@ -488,7 +489,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
                     onMessage.setType("success");
                     onMessage.setContent("您有一条新消息");
                     IMMessage imMessage = new IMMessage();
-                        imMessage.setUnRead(conExt.getUnreadMessageNum());
+                    imMessage.setUnRead(conExt.getUnreadMessageNum());
                     imMessage.setContent(message.getSummary());
                     imMessage.setId(user.getIdentifier());
                     imMessage.setLogo(user.getFaceUrl());
