@@ -101,6 +101,7 @@ public class LoginUtils  {
 //                                Constant.loginState = true;
 //                                Constant.userId = loginBean.getData().getUid();
                                 Constant.imUserId = loginBean.getData().getUserId();
+                                SharedUtils.saveImId(Constant.imUserId);
                                 DbUtils.reDoSql();
                                 Log.d("weex", "login succ");
 //                                发起聊天
