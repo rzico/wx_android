@@ -1,4 +1,4 @@
-package com.yalantis.ucrop;
+package cn.finalteam.rxgalleryfinal;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,13 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yalantis.ucrop.model.Coordinates;
-import com.yalantis.ucrop.model.ImageItem;
-import com.yalantis.ucrop.model.Puzzle;
-import com.yalantis.ucrop.model.Type;
-import com.yalantis.ucrop.util.BarTextColorUtils;
-import com.yalantis.ucrop.view.PuzzleView;
-import com.yalantis.ucrop.view.TopView;
+import cn.finalteam.rxgalleryfinal.model.Coordinates;
+import cn.finalteam.rxgalleryfinal.model.ImageItem;
+import cn.finalteam.rxgalleryfinal.model.Puzzle;
+import cn.finalteam.rxgalleryfinal.model.Type;
+import cn.finalteam.rxgalleryfinal.utils.BarTextColorUtils;
+import cn.finalteam.rxgalleryfinal.view.PuzzleView;
+import cn.finalteam.rxgalleryfinal.view.TopView;
 import com.yixiang.mopian.constant.AllConstant;
 
 import java.io.File;
@@ -29,8 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.finalteam.rxgalleryfinal.R;
-import cn.finalteam.rxgalleryfinal.RxGalleryFinal;
 import cn.finalteam.rxgalleryfinal.bean.MediaBean;
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType;
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable;
@@ -355,7 +352,7 @@ public class PuzzleActivity extends AppCompatActivity implements View.OnClickLis
         int len = imageBeans.size();
         List<MediaBean> mediaBeens = new ArrayList<>();
         
-        if(isSelected || len > number){
+        if(isSelected){
             for (int i = 0; i < number; i++){
                 mediaBeens.add(imageBeans.get(i));
             }

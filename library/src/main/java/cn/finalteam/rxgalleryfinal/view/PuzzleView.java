@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.view;
+package cn.finalteam.rxgalleryfinal.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,16 +15,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-import com.yalantis.ucrop.model.Coordinates;
-import com.yalantis.ucrop.model.ImageItem;
-import com.yalantis.ucrop.util.DensityUtil;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -34,6 +29,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import cn.finalteam.rxgalleryfinal.bean.MediaBean;
+import cn.finalteam.rxgalleryfinal.model.Coordinates;
+import cn.finalteam.rxgalleryfinal.model.ImageItem;
+import cn.finalteam.rxgalleryfinal.utils.DensityUtil;
 
 /**
  * Created by dd on 16/1/13.
@@ -144,7 +142,7 @@ public class PuzzleView extends View {
             }
         }
     }
-    private Bitmap handleHttpImg(String url, BitmapFactory.Options options){
+    private Bitmap handleHttpImg(final String url, final BitmapFactory.Options options){
         Callable<Bitmap> callable = new Callable<Bitmap>() {
             @Override
             public Bitmap call() throws Exception {

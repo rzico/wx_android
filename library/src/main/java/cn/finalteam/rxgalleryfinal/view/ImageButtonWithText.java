@@ -1,10 +1,8 @@
-package com.yalantis.ucrop.view;
+package cn.finalteam.rxgalleryfinal.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.media.Image;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;

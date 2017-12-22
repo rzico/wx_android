@@ -76,7 +76,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatActivity extends BaseActivity implements ChatView {
+public class ChatActivity extends AppCompatActivity implements ChatView {
     private static final String TAG = "ChatActivity";
     private List<Message> messageList = new ArrayList<>();
     private ChatAdapter adapter;
@@ -240,40 +240,14 @@ public class ChatActivity extends BaseActivity implements ChatView {
         TemplateTitle title = (TemplateTitle) findViewById(R.id.chat_title);
         switch (type) {
             case C2C:
-//                title.setMoreImg(R.drawable.btn_person);
-//                if (FriendshipInfo.getInstance().isFriend(identify)){
-//                    title.setMoreImgAction(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent(ChatActivity.this, ProfileActivity.class);
-//                            intent.putExtra("identify", identify);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    FriendProfile profile = FriendshipInfo.getInstance().getProfile(identify);
-//                    title.setTitleText(titleStr = profile == null ? identify : profile.getName());
-                //待获取用户资料的用户列表
 
                 title.setTitleText(titleStr = chatInfo == null ? identify : chatInfo.getUserNikeName());
                 title.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-//                        BarTextColorUtils.StatusBarLightMode(ChatActivity.this, !isBlack);
                     }
                 });
-//                }else{
-//                    title.setMoreImgAction(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-////                            Intent person = new Intent(ChatActivity.this,AddFriendActivity.class);
-////                            person.putExtra("id",identify);
-////                            person.putExtra("name",identify);
-////                            startActivity(person);
-//                        }
-//                    });
-//                    title.setTitleText(titleStr = identify);
-//                }
                 break;
 
         }

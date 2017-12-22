@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.util;
+package cn.finalteam.rxgalleryfinal.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,21 +8,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 
-import com.yalantis.ucrop.callback.BitmapLoadCallback;
-import com.yalantis.ucrop.model.ExifInfo;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -30,57 +21,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
-import jp.co.cyberagent.android.gpuimage.GPUImage3x3ConvolutionFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImage3x3TextureSamplingFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageAddBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageAlphaBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageBilateralFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageBoxBlurFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageBrightnessFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageBulgeDistortionFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageCGAColorspaceFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageChromaKeyBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageColorBalanceFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageColorBurnBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageDissolveBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageEmbossFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageFilterGroup;
-import jp.co.cyberagent.android.gpuimage.GPUImageGammaFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageGaussianBlurFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageGlassSphereFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageGrayscaleFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageHalftoneFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageHardLightBlendFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageHazeFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageHighlightShadowFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageKuwaharaFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageLaplacianFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageMixBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageMonochromeFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageMultiplyBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageNativeLibrary;
-import jp.co.cyberagent.android.gpuimage.GPUImageNormalBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageOpacityFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageOverlayBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageSaturationFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageSharpenFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageSketchFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageSoftLightBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageSphereRefractionFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageSubtractBlendFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageSwirlFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageToonFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageTransformFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageTwoInputFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageTwoPassFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageTwoPassTextureSamplingFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageVignetteFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageWeakPixelInclusionFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageWhiteBalanceFilter;
 
 public class GPUImageUtil {
 //  滤镜介绍
@@ -401,6 +349,6 @@ public class GPUImageUtil {
   
     //调整饱和度、亮度等  
     public static void changeSaturation(int curCount){  
-        GPUImageUtil.count = curCount;  
+        GPUImageUtil.count = curCount;
     }  
 }  

@@ -19,7 +19,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yalantis.ucrop.view.TopView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,7 @@ import cn.finalteam.rxgalleryfinal.utils.Logger;
 import cn.finalteam.rxgalleryfinal.utils.OsCompat;
 import cn.finalteam.rxgalleryfinal.utils.ThemeUtils;
 import cn.finalteam.rxgalleryfinal.view.ActivityFragmentView;
+import cn.finalteam.rxgalleryfinal.view.TopView;
 import io.reactivex.disposables.Disposable;
 
 /**
