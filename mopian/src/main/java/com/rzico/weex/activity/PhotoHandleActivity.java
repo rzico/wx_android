@@ -286,7 +286,23 @@ public class PhotoHandleActivity extends AppCompatActivity {
                         protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {
                             Uri uri = Uri.parse("file://" + imageRadioResultEvent.getResult().getOriginalPath());
                             inputUri = uri;
-                            mPhotoView.setImageURI(inputUri);
+//                            mPhotoView.setImageURI(inputUri);
+                            if (inputUri != null && outputUri != null) {
+                                int maxBitmapSize = BitmapLoadUtils.calculateMaxBitmapSize(PhotoHandleActivity.this);
+                                BitmapLoadUtils.decodeBitmapInBackground(PhotoHandleActivity.this, inputUri, outputUri, maxBitmapSize, maxBitmapSize,
+                                        new BitmapLoadCallback() {
+
+                                            @Override
+                                            public void onBitmapLoaded(@NonNull Bitmap bitmap, @NonNull ExifInfo exifInfo, @NonNull String imageInputPath, @Nullable String imageOutputPath) {
+                                                mPhotoView.setImageBitmap(bitmap);
+                                            }
+                                            @Override
+                                            public void onFailure(@NonNull Exception bitmapWorkerException) {
+                                                Log.e("PhotoHandle", "onFailure: setImageUri", bitmapWorkerException);
+                                            }
+                                        });
+
+                            }
                         }
                     })
                     .openGallery();

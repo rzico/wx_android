@@ -276,7 +276,7 @@ public class AlbumModule extends WXModule {
         if(imagePath.startsWith("/")){
             imagePath = "file:/" + imagePath;
         }
-        if(!imagePath.startsWith("file://")){
+        if(imagePath.startsWith("file://")){
             uri = Uri.parse(imagePath);
         }else{
             uri = Uri.parse("file://" + imagePath);
