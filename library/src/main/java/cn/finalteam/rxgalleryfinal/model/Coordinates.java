@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.model;
+package cn.finalteam.rxgalleryfinal.model;
 
 /**
  * Created by dd on 16/1/13.

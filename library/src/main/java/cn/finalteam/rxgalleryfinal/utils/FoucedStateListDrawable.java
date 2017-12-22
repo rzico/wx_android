@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.util;
+package cn.finalteam.rxgalleryfinal.utils;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;

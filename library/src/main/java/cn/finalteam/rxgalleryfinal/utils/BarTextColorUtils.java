@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.util;
+package cn.finalteam.rxgalleryfinal.utils;
 
 import android.app.Activity;
 import android.content.Context;

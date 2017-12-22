@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.model;
+package cn.finalteam.rxgalleryfinal.model;
 
 import java.util.List;
 

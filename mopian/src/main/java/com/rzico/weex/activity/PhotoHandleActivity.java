@@ -42,9 +42,6 @@ import com.yalantis.ucrop.*;
 import com.yalantis.ucrop.callback.BitmapLoadCallback;
 import com.yalantis.ucrop.model.ExifInfo;
 import com.yalantis.ucrop.util.BitmapLoadUtils;
-import com.yalantis.ucrop.util.FoucedStateListDrawable;
-import com.yalantis.ucrop.view.ImageButtonWithText;
-import com.yalantis.ucrop.view.TopView;
 import com.yixiang.mopian.constant.AllConstant;
 
 import java.io.File;
@@ -58,6 +55,9 @@ import cn.finalteam.rxgalleryfinal.bean.MediaBean;
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType;
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
+import cn.finalteam.rxgalleryfinal.utils.FoucedStateListDrawable;
+import cn.finalteam.rxgalleryfinal.view.ImageButtonWithText;
+import cn.finalteam.rxgalleryfinal.view.TopView;
 
 public class PhotoHandleActivity extends AppCompatActivity {
 
@@ -181,7 +181,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
         mActiveWidgetColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_COLOR_WIDGET_ACTIVE, ContextCompat.getColor(this, R.color.wxColor));
         mToolbarWidgetColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, ContextCompat.getColor(this, R.color.white));
 
-        mToolbarCancelDrawable = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE, cn.finalteam.rxgalleryfinal.R.drawable.gallery_ic_cross);
+//        mToolbarCancelDrawable = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE, cn.finalteam.rxgalleryfinal.R.drawable.gallery_ic_cross);
 
         mShowBottomControls = !intent.getBooleanExtra(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, false);
         if (mShowBottomControls) {
@@ -304,7 +304,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
                 intent.putExtra("height", height);
                 intent.putExtra("width", width);
                 intent.putExtra("pics", (Serializable) mediaBeens);
-                intent.setClass(PhotoHandleActivity.this, com.yalantis.ucrop.PuzzleActivity.class);
+                intent.setClass(PhotoHandleActivity.this, cn.finalteam.rxgalleryfinal.PuzzleActivity.class);
                 startActivityForResult(intent, PUZZLE);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -331,7 +331,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
             float xPercentage = x * 100f;
             float yPercentage = y * 100f;
 
-            showToast(String.format(PHOTO_TAP_TOAST_STRING, xPercentage, yPercentage, view == null ? 0 : view.getId()));
+//            showToast(String.format(PHOTO_TAP_TOAST_STRING, xPercentage, yPercentage, view == null ? 0 : view.getId()));
         }
     }
 

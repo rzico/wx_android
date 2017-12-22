@@ -3,7 +3,7 @@ apply from: '../mavenpush.gradle'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         minSdkVersion 14
@@ -29,13 +29,9 @@ android {
 
     resourcePrefix 'ucrop_'
 
-    sourceSets.main {
-        jni.srcDirs = [];
-    }
-
 }
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
-    provided 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
 }

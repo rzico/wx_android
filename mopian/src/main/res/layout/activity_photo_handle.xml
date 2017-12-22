@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.yalantis.ucrop.view.TopView
+    <cn.finalteam.rxgalleryfinal.view.TopView
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                 android:id="@+id/state_photo_change"
                 style="@style/ucrop_WrapperIconState">
 
-                <com.yalantis.ucrop.view.ImageButtonWithText
+                <cn.finalteam.rxgalleryfinal.view.ImageButtonWithText
                     xmlns:custom="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/image_view_photo_change"
                     style="@style/ucrop_ImageViewWidgetIcon"
@@ -87,7 +87,7 @@
                 android:id="@+id/state_photo_puzzle"
                 style="@style/ucrop_WrapperIconState">
 
-                <com.yalantis.ucrop.view.ImageButtonWithText
+                <cn.finalteam.rxgalleryfinal.view.ImageButtonWithText
                     xmlns:custom="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/image_view_photo_puzzle"
                     style="@style/ucrop_ImageViewWidgetIcon"
@@ -104,7 +104,7 @@
                 android:id="@+id/state_filter"
                 style="@style/ucrop_WrapperIconState">
 
-                <com.yalantis.ucrop.view.ImageButtonWithText
+                <cn.finalteam.rxgalleryfinal.view.ImageButtonWithText
                     xmlns:custom="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/image_view_state_filter"
                     style="@style/ucrop_ImageViewWidgetIcon"
@@ -117,7 +117,7 @@
                 android:id="@+id/state_ucrop"
                 style="@style/ucrop_WrapperIconState">
 
-                <com.yalantis.ucrop.view.ImageButtonWithText
+                <cn.finalteam.rxgalleryfinal.view.ImageButtonWithText
                     xmlns:custom="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/image_view_state_ucrop"
                     style="@style/ucrop_ImageViewWidgetIcon"

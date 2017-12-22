@@ -37,7 +37,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.event.ImageMultipleResultEvent;
  * Created by dd on 16/1/13.
  * 拼图主界面
  */
-public class PuzzleActivity extends com.yalantis.ucrop.PuzzleActivity implements View.OnClickListener {
+public class PuzzleActivity extends cn.finalteam.rxgalleryfinal.PuzzleActivity implements View.OnClickListener {
 
     /**
      * 这里重装他 是为了处理一些weex用到的回调方法

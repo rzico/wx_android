@@ -1,13 +1,9 @@
-package com.yalantis.ucrop.view;
+package cn.finalteam.rxgalleryfinal.view;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 

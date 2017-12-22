@@ -1,14 +1,18 @@
 package com.yalantis.ucrop;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
@@ -17,11 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -39,16 +39,24 @@ import com.yalantis.ucrop.util.SelectedStateListDrawable;
 import com.yalantis.ucrop.view.CropImageView;
 import com.yalantis.ucrop.view.GestureCropImageView;
 import com.yalantis.ucrop.view.OverlayView;
+import com.yalantis.ucrop.view.TopView;
 import com.yalantis.ucrop.view.TransformImageView;
 import com.yalantis.ucrop.view.UCropView;
 import com.yalantis.ucrop.view.widget.AspectRatioTextView;
 import com.yalantis.ucrop.view.widget.HorizontalProgressWheelView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
+
 
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).
@@ -65,13 +73,18 @@ public class UCropActivity extends AppCompatActivity {
     public static final int ROTATE = 2;
     public static final int ALL = 3;
 
+
+    private int currentFilter = 0;
+
+    private Uri inputUri;
+    private Uri outputUri;
     @IntDef({NONE, SCALE, ROTATE, ALL})
     @Retention(RetentionPolicy.SOURCE)
     public @interface GestureTypes {
 
     }
 
-    private static final String TAG = "UCropActivity";
+    private static final String TAG = "UCropActivitybf";
 
     private static final int TABS_COUNT = 3;
     private static final int SCALE_WIDGET_SENSITIVITY_COEFFICIENT = 15000;
@@ -86,7 +99,6 @@ public class UCropActivity extends AppCompatActivity {
     private int mToolbarWidgetColor;
     @ColorInt private int mRootViewBackgroundColor;
     @DrawableRes private int mToolbarCancelDrawable;
-    @DrawableRes private int mToolbarCropDrawable;
     private int mLogoColor;
 
     private boolean mShowBottomControls;
@@ -95,16 +107,43 @@ public class UCropActivity extends AppCompatActivity {
     private UCropView mUCropView;
     private GestureCropImageView mGestureCropImageView;
     private OverlayView mOverlayView;
-    private ViewGroup mWrapperStateAspectRatio, mWrapperStateRotate, mWrapperStateScale;
-    private ViewGroup mLayoutAspectRatio, mLayoutRotate, mLayoutScale;
+
+    private InputStream inputStream;
+//  功能按钮图片
+    private ViewGroup mWrapperStateAspectRatio, mWrapperStateRotate, mWrapperPhotoChange, mWrapperStateFilter, mWrapperPhotoPuzzle;
+//  功能面板
+//  mLayoutPhotoChange 原先的放大缩小功能被改成更换图片
+    private ViewGroup mLayoutAspectRatio, mLayoutRotate, mLayoutFilter;
     private List<ViewGroup> mCropAspectRatioViews = new ArrayList<>();
+    private List<ViewGroup> mCropFilterViews = new ArrayList<>();
     private TextView mTextViewRotateAngle, mTextViewScalePercent;
     private View mBlockingView;
 
     private Bitmap.CompressFormat mCompressFormat = DEFAULT_COMPRESS_FORMAT;
     private int mCompressQuality = DEFAULT_COMPRESS_QUALITY;
-    private int[] mAllowedGestures = new int[]{SCALE, ROTATE, ALL};
-
+    private int[] mAllowedGestures = new int[]{NONE, NONE, SCALE, SCALE};//前面两个1、换图 2、拼图
+    //缩放SCALE
+    //旋转ROTATE
+//    private int[] mAllowedGestures = new int[]{SCALE, ROTATE, ALL};
+//
+//    public void reSet(){
+//        mToolbarTitle = null;
+//        mUCropView = null;
+//        mGestureCropImageView = null;
+//        mOverlayView = null;
+//        mWrapperStateAspectRatio = null;
+//        mWrapperStateRotate = null;
+//        mWrapperPhotoChange = null;
+//        mLayoutAspectRatio = null;
+//        mLayoutRotate = null;
+//        mCropAspectRatioViews = null;
+//        mCropAspectRatioViews = new ArrayList<>();
+//        mTextViewRotateAngle = null;
+//        mBlockingView = null;
+//        mTextViewScalePercent = null;
+//        mCompressFormat = DEFAULT_COMPRESS_FORMAT;
+//        mCompressQuality = DEFAULT_COMPRESS_QUALITY;
+//    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,57 +152,63 @@ public class UCropActivity extends AppCompatActivity {
         final Intent intent = getIntent();
 
         setupViews(intent);
-        setImageData(intent);
+
+        setImageData(intent, null);
+
         setInitialState();
+
         addBlockingView();
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.ucrop_menu_activity, menu);
+//    @Override
+//    public boolean onCreateOptionsMenu(final Menu menu) {
+//        getMenuInflater().inflate(R.menu.ucrop_menu_activity, menu);
+//
+//        // Change crop & loader menu icons color to match the rest of the UI colors
+//
+//        MenuItem menuItemLoader = menu.findItem(R.id.menu_loader);
+//        Drawable menuItemLoaderIcon = menuItemLoader.getIcon();
+//        if (menuItemLoaderIcon != null) {
+//            try {
+//                menuItemLoaderIcon.mutate();
+//                menuItemLoaderIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
+//                menuItemLoader.setIcon(menuItemLoaderIcon);
+//            } catch (IllegalStateException e) {
+//                Log.i(TAG, String.format("%s - %s", e.getMessage(), getString(R.string.ucrop_mutate_exception_hint)));
+//            }
+//            ((Animatable) menuItemLoader.getIcon()).start();
+//        }
 
-        // Change crop & loader menu icons color to match the rest of the UI colors
+//        MenuItem menuItemCrop = menu.findItem(R.id.menu_crop);
+//        Drawable menuItemCropIcon = ContextCompat.getDrawable(this, mToolbarCropDrawable);
+//        if (menuItemCropIcon != null) {
+//            menuItemCropIcon.mutate();
+//            menuItemCropIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
+//            menuItemCrop.setTitle("完成");
+////            menuItemCrop.setIcon(menuItemCropIcon);
+//        }
 
-        MenuItem menuItemLoader = menu.findItem(R.id.menu_loader);
-        Drawable menuItemLoaderIcon = menuItemLoader.getIcon();
-        if (menuItemLoaderIcon != null) {
-            try {
-                menuItemLoaderIcon.mutate();
-                menuItemLoaderIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
-                menuItemLoader.setIcon(menuItemLoaderIcon);
-            } catch (IllegalStateException e) {
-                Log.i(TAG, String.format("%s - %s", e.getMessage(), getString(R.string.ucrop_mutate_exception_hint)));
-            }
-            ((Animatable) menuItemLoader.getIcon()).start();
-        }
+//        return true;
+//    }
 
-        MenuItem menuItemCrop = menu.findItem(R.id.menu_crop);
-        Drawable menuItemCropIcon = ContextCompat.getDrawable(this, mToolbarCropDrawable);
-        if (menuItemCropIcon != null) {
-            menuItemCropIcon.mutate();
-            menuItemCropIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
-            menuItemCrop.setIcon(menuItemCropIcon);
-        }
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        menu.findItem(R.id.menu_crop).setVisible(!mShowLoader);
+//        menu.findItem(R.id.menu_loader).setVisible(mShowLoader);
+//        return super.onPrepareOptionsMenu(menu);
+//    }
 
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menu_crop).setVisible(!mShowLoader);
-        menu.findItem(R.id.menu_loader).setVisible(mShowLoader);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_crop) {
-            cropAndSaveImage();
-        } else if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+        //保存按钮
+//        if (item.getItemId() == R.id.menu_crop) {
+//            cropAndSaveImage();
+//        } else if (item.getItemId() == android.R.id.home) {
+//            onBackPressed();
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     protected void onStop() {
@@ -176,9 +221,14 @@ public class UCropActivity extends AppCompatActivity {
     /**
      * This method extracts all data from the incoming intent and setups views properly.
      */
-    private void setImageData(@NonNull Intent intent) {
-        Uri inputUri = intent.getParcelableExtra(UCrop.EXTRA_INPUT_URI);
-        Uri outputUri = intent.getParcelableExtra(UCrop.EXTRA_OUTPUT_URI);
+    private void setImageData(@NonNull Intent intent, Uri uri) {
+        if(uri == null){
+            inputUri = intent.getParcelableExtra(UCrop.EXTRA_INPUT_URI);
+        }else {
+            inputUri = uri;
+        }
+
+        outputUri = intent.getParcelableExtra(UCrop.EXTRA_OUTPUT_URI);
         processOptions(intent);
 
         if (inputUri != null && outputUri != null) {
@@ -195,7 +245,7 @@ public class UCropActivity extends AppCompatActivity {
     }
 
     /**
-     * This method extracts {@link com.yalantis.ucrop.UCrop.Options #optionsBundle} from incoming intent
+     * This method extracts {@link UCrop.Options #optionsBundle} from incoming intent
      * and setups Activity, {@link OverlayView} and {@link CropImageView} properly.
      */
     @SuppressWarnings("deprecation")
@@ -209,6 +259,7 @@ public class UCropActivity extends AppCompatActivity {
         mCompressFormat = (compressFormat == null) ? DEFAULT_COMPRESS_FORMAT : compressFormat;
 
         mCompressQuality = intent.getIntExtra(UCrop.Options.EXTRA_COMPRESSION_QUALITY, UCropActivity.DEFAULT_COMPRESS_QUALITY);
+
 
         // Gestures options
         int[] allowedGestures = intent.getIntArrayExtra(UCrop.Options.EXTRA_ALLOWED_GESTURES);
@@ -266,23 +317,33 @@ public class UCropActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
     private void setupViews(@NonNull Intent intent) {
-        mStatusBarColor = intent.getIntExtra(UCrop.Options.EXTRA_STATUS_BAR_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_statusbar));
-        mToolbarColor = intent.getIntExtra(UCrop.Options.EXTRA_TOOL_BAR_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_toolbar));
-        mActiveWidgetColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_COLOR_WIDGET_ACTIVE, ContextCompat.getColor(this, R.color.ucrop_color_widget_active));
+
+        mStatusBarColor = intent.getIntExtra(UCrop.Options.EXTRA_STATUS_BAR_COLOR, ContextCompat.getColor(this, R.color.wxColor));
+        mToolbarColor = intent.getIntExtra(UCrop.Options.EXTRA_TOOL_BAR_COLOR, ContextCompat.getColor(this, R.color.wxColor));
+        mActiveWidgetColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_COLOR_WIDGET_ACTIVE, ContextCompat.getColor(this, R.color.wxColor));
         mToolbarWidgetColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_COLOR_TOOLBAR, ContextCompat.getColor(this, R.color.ucrop_color_toolbar_widget));
-        mToolbarCancelDrawable = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE, R.drawable.ucrop_ic_cross);
-        mToolbarCropDrawable = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_CROP_DRAWABLE, R.drawable.ucrop_ic_done);
+
+        mToolbarCancelDrawable = R.drawable.gallery_ic_cross;
+//        mToolbarCropDrawable = R.drawable.ucrop_ic_done;
+
         mToolbarTitle = intent.getStringExtra(UCrop.Options.EXTRA_UCROP_TITLE_TEXT_TOOLBAR);
         mToolbarTitle = mToolbarTitle != null ? mToolbarTitle : getResources().getString(R.string.ucrop_label_edit_photo);
         mLogoColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_LOGO_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_default_logo));
         mShowBottomControls = !intent.getBooleanExtra(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, false);
-        mRootViewBackgroundColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_ROOT_VIEW_BACKGROUND_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_crop_background));
+        mRootViewBackgroundColor = ContextCompat.getColor(this, R.color.ucrop_color_crop_background);
 
         setupAppBar();
         initiateRootViews();
 
         if (mShowBottomControls) {
+            //功能界面
             ViewGroup photoBox = (ViewGroup) findViewById(R.id.ucrop_photobox);
             View.inflate(this, R.layout.ucrop_controls, photoBox);
 
@@ -290,16 +351,23 @@ public class UCropActivity extends AppCompatActivity {
             mWrapperStateAspectRatio.setOnClickListener(mStateClickListener);
             mWrapperStateRotate = (ViewGroup) findViewById(R.id.state_rotate);
             mWrapperStateRotate.setOnClickListener(mStateClickListener);
-            mWrapperStateScale = (ViewGroup) findViewById(R.id.state_scale);
-            mWrapperStateScale.setOnClickListener(mStateClickListener);
+//            mWrapperPhotoChange = (ViewGroup) findViewById(R.id.state_photo_change);
+//            mWrapperPhotoChange.setOnClickListener(mStateClickListener);
+//            mWrapperPhotoPuzzle = (ViewGroup) findViewById(R.id.state_photo_puzzle);
+//            mWrapperPhotoPuzzle.setOnClickListener(mStateClickListener);
+//            mWrapperStateFilter = (ViewGroup) findViewById(R.id.state_filter);
+//            mWrapperStateFilter.setOnClickListener(mStateClickListener);
 
+//            mLayoutFilter = (ViewGroup) findViewById(R.id.layout_filter);
             mLayoutAspectRatio = (ViewGroup) findViewById(R.id.layout_aspect_ratio);
             mLayoutRotate = (ViewGroup) findViewById(R.id.layout_rotate_wheel);
-            mLayoutScale = (ViewGroup) findViewById(R.id.layout_scale_wheel);
-
+//            原先是放大缩小 改成了 更换图片
+//            mLayoutScale = (ViewGroup) findViewById(R.id.layout_photo_change);
+//          这里是初始化功能页面
             setupAspectRatioWidget(intent);
+//            setupFilterWidget(intent);
             setupRotateWidget();
-            setupScaleWidget();
+//            setupScaleWidget();
             setupStatesWrapper();
         }
     }
@@ -310,22 +378,34 @@ public class UCropActivity extends AppCompatActivity {
     private void setupAppBar() {
         setStatusBarColor(mStatusBarColor);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final TopView toolbar = (TopView) findViewById(R.id.toolbar);
+
+        toolbar.setTitle("裁剪");
+        toolbar.setRightWord("完成");
+        toolbar.setLeftIcon(R.drawable.gallery_ic_cross);
+        toolbar.setOnRightClickListener(new TopView.OnRightClickListener() {
+            @Override
+            public void rightClick() {
+                cropAndSaveImage();
+            }
+        });
 
         // Set all of the Toolbar coloring
         toolbar.setBackgroundColor(mToolbarColor);
-        toolbar.setTitleTextColor(mToolbarWidgetColor);
-
-        final TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        toolbarTitle.setTextColor(mToolbarWidgetColor);
-        toolbarTitle.setText(mToolbarTitle);
+        toolbar.getLeftView().setTextColor(mToolbarWidgetColor);
+//        toolbar.getLeftView().setText(mToolbarTitle);
 
         // Color buttons inside the Toolbar
         Drawable stateButtonDrawable = ContextCompat.getDrawable(this, mToolbarCancelDrawable).mutate();
         stateButtonDrawable.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
-        toolbar.setNavigationIcon(stateButtonDrawable);
 
-        setSupportActionBar(toolbar);
+        toolbar.setOnLeftClickListener(new TopView.OnLeftClickListener() {
+            @Override
+            public void leftClick() {
+                finish();
+            }
+        });
+
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
@@ -368,26 +448,28 @@ public class UCropActivity extends AppCompatActivity {
             setResultError(e);
             finish();
         }
-
     };
 
     /**
      * Use {@link #mActiveWidgetColor} for color filter
+     * 设置选中和不选中颜色状态
      */
     private void setupStatesWrapper() {
-        ImageView stateScaleImageView = (ImageView) findViewById(R.id.image_view_state_scale);
+//        ImageView photoChangeImageView = (ImageView) findViewById(R.id.image_view_photo_change);
         ImageView stateRotateImageView = (ImageView) findViewById(R.id.image_view_state_rotate);
         ImageView stateAspectRatioImageView = (ImageView) findViewById(R.id.image_view_state_aspect_ratio);
+//        ImageView stateFilterImageView = (ImageView) findViewById(R.id.image_view_state_filter);
 
-        stateScaleImageView.setImageDrawable(new SelectedStateListDrawable(stateScaleImageView.getDrawable(), mActiveWidgetColor));
+//        photoChangeImageView.setImageDrawable(new SelectedStateListDrawable(photoChangeImageView.getDrawable(), mActiveWidgetColor));
         stateRotateImageView.setImageDrawable(new SelectedStateListDrawable(stateRotateImageView.getDrawable(), mActiveWidgetColor));
         stateAspectRatioImageView.setImageDrawable(new SelectedStateListDrawable(stateAspectRatioImageView.getDrawable(), mActiveWidgetColor));
+//        stateFilterImageView.setImageDrawable(new SelectedStateListDrawable(stateFilterImageView.getDrawable(), mActiveWidgetColor));
     }
 
 
     /**
      * Sets status-bar color for L devices.
-     *
+     * 设置状态栏颜色
      * @param color - status-bar color
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -401,6 +483,61 @@ public class UCropActivity extends AppCompatActivity {
         }
     }
 
+
+    public static int dp2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+    /**
+     * 设置滤镜小组件
+     */
+    private void setupFilterWidget(Intent intent) {
+//        LinearLayout wrapperFilterList = (LinearLayout) findViewById(R.id.layout_filter);
+//        FrameLayout wrapperFilter;
+//        AspectRatioTextView aspectRatioTextView;
+//        ArrayList<AspectRatio> filterRatioList = new ArrayList<>();
+//
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+//        lp.weight = 1;
+//
+//        List<GPUImageFilter> gpuimageFilters = GPUImageUtil.getImageFilter();
+//        for (GPUImageFilter g : gpuimageFilters){
+//
+//            wrapperFilter = (FrameLayout) getLayoutInflater().inflate(R.layout.ucrop_filter, null);
+//            wrapperFilter.setLayoutParams(lp);
+//
+//            filterRatioList.add(new AspectRatio( GPUImageUtil.gpuImageStrings.get(filterRatioList.size()).toUpperCase(),
+//                    CropImageView.SOURCE_IMAGE_ASPECT_RATIO, CropImageView.SOURCE_IMAGE_ASPECT_RATIO));
+//
+////            imageView.setImageBitmap(GPUImageUtil.getGPUImageFromUri(UCropActivitybf.this,  intent.getParcelableExtra(UCrop.EXTRA_INPUT_URI), gpuimageFilters.indexOf(g)));
+//            aspectRatioTextView = ((AspectRatioTextView) wrapperFilter.getChildAt(0));
+//            aspectRatioTextView.setActiveColor(mActiveWidgetColor);
+//            aspectRatioTextView.setAspectRatio(filterRatioList.get(filterRatioList.size() - 1));
+//            wrapperFilterList.addView(wrapperFilter);
+//
+//            mCropFilterViews.add(wrapperFilter);
+//        }
+//        mCropFilterViews.get(0).setSelected(true);
+//        for(int  i= 0; i < mCropFilterViews.size(); i++) {
+//            int j = i;
+//            mCropFilterViews.get(i).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mGestureCropImageView.setImageBitmap(GPUImageUtil.getGPUImageFromUri(UCropActivitybf.this, mGestureCropImageView.getCurrentBitmap(), j));
+//                    currentFilter = j;
+//                    if (!v.isSelected()) {
+//                        for (ViewGroup cropAspectRatioView : mCropFilterViews) {
+//                            cropAspectRatioView.setSelected(cropAspectRatioView == v);
+//                        }
+//                    }
+//                }
+//            });
+//        }
+    }
+    /**
+     * 设置裁剪的高宽比
+     * @param intent
+     */
     private void setupAspectRatioWidget(@NonNull Intent intent) {
 
         int aspectRationSelectedByDefault = intent.getIntExtra(UCrop.Options.EXTRA_ASPECT_RATIO_SELECTED_BY_DEFAULT, 0);
@@ -430,7 +567,6 @@ public class UCropActivity extends AppCompatActivity {
             aspectRatioTextView = ((AspectRatioTextView) wrapperAspectRatio.getChildAt(0));
             aspectRatioTextView.setActiveColor(mActiveWidgetColor);
             aspectRatioTextView.setAspectRatio(aspectRatio);
-
             wrapperAspectRatioList.addView(wrapperAspectRatio);
             mCropAspectRatioViews.add(wrapperAspectRatio);
         }
@@ -452,8 +588,14 @@ public class UCropActivity extends AppCompatActivity {
                 }
             });
         }
+        if(aspectRatioList.size() == 1){
+            wrapperAspectRatioList.setVisibility(View.GONE);
+        }
     }
 
+    /**
+     * 设置旋转组件
+     */
     private void setupRotateWidget() {
         mTextViewRotateAngle = ((TextView) findViewById(R.id.text_view_rotate));
         ((HorizontalProgressWheelView) findViewById(R.id.rotate_scroll_wheel))
@@ -491,6 +633,9 @@ public class UCropActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 设置放大缩小功能
+     */
     private void setupScaleWidget() {
         mTextViewScalePercent = ((TextView) findViewById(R.id.text_view_scale));
         ((HorizontalProgressWheelView) findViewById(R.id.scale_scroll_wheel))
@@ -505,7 +650,6 @@ public class UCropActivity extends AppCompatActivity {
                                     + delta * ((mGestureCropImageView.getMaxScale() - mGestureCropImageView.getMinScale()) / SCALE_WIDGET_SENSITIVITY_COEFFICIENT));
                         }
                     }
-
                     @Override
                     public void onScrollEnd() {
                         mGestureCropImageView.setImageToWrapCropBounds();
@@ -550,45 +694,100 @@ public class UCropActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * 设置最初的状态 如 设置 裁剪是默认选中功能
+     */
     private void setInitialState() {
         if (mShowBottomControls) {
             if (mWrapperStateAspectRatio.getVisibility() == View.VISIBLE) {
                 setWidgetState(R.id.state_aspect_ratio);
             } else {
-                setWidgetState(R.id.state_scale);
+//                setWidgetState(R.id.state_photo_change);
             }
         } else {
             setAllowedGestures(0);
         }
     }
 
+    /**
+     * 根据id设置小组件即底部功能组件状态 即点击切完功能试图 --- 值得学习
+     * @param stateViewId
+     */
     private void setWidgetState(@IdRes int stateViewId) {
         if (!mShowBottomControls) return;
+//
+//        if (stateViewId != R.id.state_photo_change && stateViewId != R.id.state_photo_puzzle){//因为如果是点第一个 就不改变状态 因为第一个是选择图片 单击 不是选中
+            mWrapperStateAspectRatio.setSelected(stateViewId == R.id.state_aspect_ratio);
+            mWrapperStateRotate.setSelected(stateViewId == R.id.state_rotate);
+//            mWrapperStateFilter.setSelected(stateViewId == R.id.state_filter);
+//
+//            mLayoutFilter.setVisibility(stateViewId == R.id.state_filter ? View.VISIBLE : View.GONE);
+            mLayoutAspectRatio.setVisibility(stateViewId == R.id.state_aspect_ratio ? View.VISIBLE : View.GONE);
+            mLayoutRotate.setVisibility(stateViewId == R.id.state_rotate ? View.VISIBLE : View.GONE);
+//        }
+//        mWrapperPhotoChange.setSelected(stateViewId == R.id.state_photo_change);
+//        mLayoutPhotoChange.setVisibility(stateViewId == R.id.state_photo_change ? View.VISIBLE : View.GONE);
 
-        mWrapperStateAspectRatio.setSelected(stateViewId == R.id.state_aspect_ratio);
-        mWrapperStateRotate.setSelected(stateViewId == R.id.state_rotate);
-        mWrapperStateScale.setSelected(stateViewId == R.id.state_scale);
-
-        mLayoutAspectRatio.setVisibility(stateViewId == R.id.state_aspect_ratio ? View.VISIBLE : View.GONE);
-        mLayoutRotate.setVisibility(stateViewId == R.id.state_rotate ? View.VISIBLE : View.GONE);
-        mLayoutScale.setVisibility(stateViewId == R.id.state_scale ? View.VISIBLE : View.GONE);
-
-        if (stateViewId == R.id.state_scale) {
-            setAllowedGestures(0);
-        } else if (stateViewId == R.id.state_rotate) {
-            setAllowedGestures(1);
-        } else {
+//        if (stateViewId == R.id.state_photo_change) {
+//            setAllowedGestures(0);
+//        } else if(stateViewId == R.id.state_photo_puzzle){
+//            setAllowedGestures(1);
+//        }
+//        else if(stateViewId == R.id.state_filter){
+//            setAllowedGestures(2);
+//        }
+         if (stateViewId == R.id.state_rotate) {
+            setAllowedGestures(2);
+        } else if (stateViewId == R.id.state_aspect_ratio){
             setAllowedGestures(2);
         }
     }
 
-    private void setAllowedGestures(int tab) {
-        mGestureCropImageView.setScaleEnabled(mAllowedGestures[tab] == ALL || mAllowedGestures[tab] == SCALE);
-        mGestureCropImageView.setRotateEnabled(mAllowedGestures[tab] == ALL || mAllowedGestures[tab] == ROTATE);
-    }
 
+
+    private void setAllowedGestures(int tab) {
+        //设置组件判断是裁剪还是旋转
+
+            mGestureCropImageView.setScaleEnabled(mAllowedGestures[tab] == ALL || mAllowedGestures[tab] == SCALE);
+            mGestureCropImageView.setRotateEnabled(mAllowedGestures[tab] == ALL || mAllowedGestures[tab] == ROTATE);
+    }
+    Handler myHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0:
+                    //调整更换图片完的位置
+                    postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mGestureCropImageView.zoomOutImage(0.5f);
+                            mGestureCropImageView.setImageToWrapCropBounds(true);
+                        }
+                    }, 200);
+                    break;
+                case 1://这里弄设置完图片后执行  因为 设置图片是异步的  这里是裁剪图片
+                    //裁剪和保存图片
+                    mGestureCropImageView.cropAndSaveImage(mCompressFormat, mCompressQuality, new BitmapCropCallback() {
+
+                        @Override
+                        public void onBitmapCropped(@NonNull Uri resultUri, int offsetX, int offsetY, int imageWidth, int imageHeight) {
+                            setResultUri(resultUri, mGestureCropImageView.getTargetAspectRatio(), offsetX, offsetY, imageWidth, imageHeight);
+                            finish();
+                        }
+
+                        @Override
+                        public void onCropFailure(@NonNull Throwable t) {
+                            setResultError(t);
+                            finish();
+                        }
+                    });
+                    break;
+            }
+        }
+    };
     /**
-     * Adds view that covers everything below the Toolbar.
+     * Adds view that covers everything below the Toolbar.添加视图涵盖下面的工具栏。
      * When it's clickable - user won't be able to click/touch anything below the Toolbar.
      * Need to block user input while loading and cropping an image.
      */
@@ -600,32 +799,59 @@ public class UCropActivity extends AppCompatActivity {
             mBlockingView.setLayoutParams(lp);
             mBlockingView.setClickable(true);
         }
-
         ((RelativeLayout) findViewById(R.id.ucrop_photobox)).addView(mBlockingView);
     }
-
+   private String cacheUrl =  Environment.getExternalStorageDirectory().getPath() + "/" + "com.rzico.weex" + "/";
+    private Uri saveImage(Bitmap bitmap) {
+        try {
+        //保存的缓存路径
+            String path = cacheUrl + "cache/img/"+ UUID.randomUUID().toString() + ".jpg";
+        File filePic = new File(path);
+        if (!filePic.exists()) {
+            filePic.getParentFile().mkdirs();
+                filePic.createNewFile();
+        }
+            FileOutputStream fos = new FileOutputStream(filePic);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            return Uri.parse("file://" + path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+ private Dialog progressDialog;
     protected void cropAndSaveImage() {
         mBlockingView.setClickable(true);
         mShowLoader = true;
-        supportInvalidateOptionsMenu();
+        try {
+            progressDialog = new Dialog(UCropActivity.this,R.style.progress_dialog);
+            progressDialog.setContentView(R.layout.dialog);
+            progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            TextView msg = (TextView) progressDialog.findViewById(R.id.id_tv_loadingmsg);
+            msg.setText("卖力加载中");
+            progressDialog.show();
+            mGestureCropImageView.setImageUri(inputUri, outputUri, myHandler);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        mGestureCropImageView.cropAndSaveImage(mCompressFormat, mCompressQuality, new BitmapCropCallback() {
-
-            @Override
-            public void onBitmapCropped(@NonNull Uri resultUri, int offsetX, int offsetY, int imageWidth, int imageHeight) {
-                setResultUri(resultUri, mGestureCropImageView.getTargetAspectRatio(), offsetX, offsetY, imageWidth, imageHeight);
-                finish();
-            }
-
-            @Override
-            public void onCropFailure(@NonNull Throwable t) {
-                setResultError(t);
-                finish();
-            }
-        });
     }
 
+    /**
+     * 设置返回uri
+     * @param uri
+     * @param resultAspectRatio
+     * @param offsetX
+     * @param offsetY
+     * @param imageWidth
+     * @param imageHeight
+     */
     protected void setResultUri(Uri uri, float resultAspectRatio, int offsetX, int offsetY, int imageWidth, int imageHeight) {
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+        }
         setResult(RESULT_OK, new Intent()
                 .putExtra(UCrop.EXTRA_OUTPUT_URI, uri)
                 .putExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, resultAspectRatio)
