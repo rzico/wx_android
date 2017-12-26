@@ -274,13 +274,14 @@ public class AlbumModule extends WXModule {
         Uri uri = null;
         //这里要处理传入的path 因为weex前端没有传入 file://
         if(imagePath.startsWith("/")){
-            imagePath = "file:/" + imagePath;
+            imagePath = "file://" + imagePath;
         }
-        if(imagePath.startsWith("file://")){
-            uri = Uri.parse(imagePath);
-        }else{
-            uri = Uri.parse("file://" + imagePath);
-        }
+        uri = Uri.parse(imagePath);
+//        if(imagePath.startsWith("file:///")){
+//            uri = Uri.parse(imagePath);
+//        }else{
+//            uri = Uri.parse(imagePath);
+//        }
         PhotoHandle of = PhotoHandle.of(uri, Uri.fromFile(PathUtils.getDiskCacheDir(listener.getSimpleActivity())));
         of.start(listener.getSimpleActivity());
     }
