@@ -140,12 +140,12 @@ public class WXEventModule extends WXModule {
                             Constant.userId = 0;
                             Constant.imUserId = "";
                             SharedUtils.saveLoginId(Constant.userId);
+                            SharedUtils.saveImId(Constant.imUserId);
                             Message message = new Message().success("登出成功");
                             callback.invoke(message);
                             if(Constant.loginHandler!=null){
                                 Constant.loginHandler.sendEmptyMessage(MainActivity.LOGOUT);
                             }
-
                         }
                     });
                 }else{
@@ -154,6 +154,7 @@ public class WXEventModule extends WXModule {
                     Constant.userId = 0;
                     Constant.imUserId = "";
                     SharedUtils.saveLoginId(Constant.userId);
+                    SharedUtils.saveImId(Constant.imUserId);
                     Message message = new Message().success("登出成功");
                     callback.invoke(message);
                     if(Constant.loginHandler!=null){
@@ -188,7 +189,7 @@ public class WXEventModule extends WXModule {
     }
     @JSMethod(uiThread = false)
     public String getUserId(){
-        return Constant.imUserId;
+        return SharedUtils.readImId();
     }
     /**
      * 关闭页面并且返回值 根据key区分
@@ -1141,13 +1142,13 @@ public class WXEventModule extends WXModule {
     /**
      *
      * @param option
-     * String title = "";   // 这个是分享的标题
+     *  String title = "";   // 这个是分享的标题
         String text = ""; //这个是分享的介绍
         String imagePath = "";//这里图片可能是路径 可能是url path 不必加file
         String imageUrl = "";
         String url = "";// 这个是分享的url
         String type = [appMessage,timeline,favorite] //分别是 微信好友、 微信朋友圈、 微信收藏
-    copyHref 复制连接 browser 打开浏览器
+        copyHref 复制连接 browser 打开浏览器
      * @param callback
      */
     @JSMethod

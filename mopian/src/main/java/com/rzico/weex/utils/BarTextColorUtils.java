@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 
+import com.rzico.weex.R;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -47,6 +49,18 @@ public class BarTextColorUtils {
             }
         }
         return result;
+    }
+    public static void initSystemBar(Activity activity){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        }
+        SystemBarTintManager tintManager = new SystemBarTintManager(activity);// 创建状态栏的管理实例
+        tintManager.setStatusBarTintEnabled(true);// 激活状态栏设置
+        tintManager.setNavigationBarTintEnabled(true);// 激活导航栏设置
+        tintManager.setStatusBarTintColor(activity.getResources().getColor(R.color.transparent));//设置状态栏颜色
+        tintManager.setStatusBarDarkMode(true, activity);//false 状态栏字体颜色是白色 true 颜色是黑色
     }
     public static void StatusBarLightMode(Activity activity, int color){
         Window window = activity.getWindow();

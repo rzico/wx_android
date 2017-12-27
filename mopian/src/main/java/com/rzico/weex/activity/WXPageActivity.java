@@ -81,7 +81,7 @@ public class WXPageActivity extends AbsWeexActivity implements
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
       if(Build.VERSION.SDK_INT >= 23){
-        if (! Settings.canDrawOverlays(WXPageActivity.this)) {
+        if (!Settings.canDrawOverlays(WXPageActivity.this)) {
           Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                   Uri.parse("package:" + getPackageName()));
           startActivityForResult(intent,10);

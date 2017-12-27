@@ -43,6 +43,7 @@ import com.rzico.weex.model.chat.VideoMessage;
 import com.rzico.weex.model.chat.VoiceMessage;
 import com.rzico.weex.model.info.IMMessage;
 import com.rzico.weex.utils.BarTextColorUtils;
+import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.chat.FileUtil;
 import com.rzico.weex.utils.chat.MediaUtil;
@@ -75,7 +76,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatActivity extends BaseActivity implements ChatView {
+public class ChatActivity extends AppCompatActivity implements ChatView {
     private static final String TAG = "ChatActivity";
     private List<Message> messageList = new ArrayList<>();
     private ChatAdapter adapter;
@@ -103,7 +104,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
         if(context == null)return;
         if (!Utils.checkConnection(context)) {//如果网络不通
             try {
-                Redis redis = DbUtils.find("chatInfoCache", Constant.imUserId + identify);
+                Redis redis = DbUtils.find("chatInfoCache", SharedUtils.readImId() + identify);
 
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("identify", identify);
@@ -125,7 +126,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
         }
         List<String> users = new ArrayList<>();
         users.add(identify);
-        users.add(Constant.imUserId);
+        users.add(SharedUtils.readImId());
         //获取用户资料
         TIMFriendshipManager.getInstance().getUsersProfile(users, new TIMValueCallBack<List<TIMUserProfile>>(){
             @Override
@@ -159,7 +160,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
                     intent.putExtra("chatInfo", chatInfo);
                     try {
                         //保存缓存
-                        DbUtils.save("chatInfoCache",Constant.imUserId + identify, new Gson().toJson(chatInfo), identify, identify);
+                        DbUtils.save("chatInfoCache",SharedUtils.readImId() + identify, new Gson().toJson(chatInfo), identify, identify);
                     } catch (DbException e) {
                         e.printStackTrace();
                     }
@@ -239,40 +240,14 @@ public class ChatActivity extends BaseActivity implements ChatView {
         TemplateTitle title = (TemplateTitle) findViewById(R.id.chat_title);
         switch (type) {
             case C2C:
-//                title.setMoreImg(R.drawable.btn_person);
-//                if (FriendshipInfo.getInstance().isFriend(identify)){
-//                    title.setMoreImgAction(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent(ChatActivity.this, ProfileActivity.class);
-//                            intent.putExtra("identify", identify);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    FriendProfile profile = FriendshipInfo.getInstance().getProfile(identify);
-//                    title.setTitleText(titleStr = profile == null ? identify : profile.getName());
-                //待获取用户资料的用户列表
 
                 title.setTitleText(titleStr = chatInfo == null ? identify : chatInfo.getUserNikeName());
                 title.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-//                        BarTextColorUtils.StatusBarLightMode(ChatActivity.this, !isBlack);
                     }
                 });
-//                }else{
-//                    title.setMoreImgAction(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-////                            Intent person = new Intent(ChatActivity.this,AddFriendActivity.class);
-////                            person.putExtra("id",identify);
-////                            person.putExtra("name",identify);
-////                            startActivity(person);
-//                        }
-//                    });
-//                    title.setTitleText(titleStr = identify);
-//                }
                 break;
 
         }
@@ -488,7 +463,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
                     onMessage.setType("success");
                     onMessage.setContent("您有一条新消息");
                     IMMessage imMessage = new IMMessage();
-                        imMessage.setUnRead(conExt.getUnreadMessageNum());
+                    imMessage.setUnRead(conExt.getUnreadMessageNum());
                     imMessage.setContent(message.getSummary());
                     imMessage.setId(user.getIdentifier());
                     imMessage.setLogo(user.getFaceUrl());

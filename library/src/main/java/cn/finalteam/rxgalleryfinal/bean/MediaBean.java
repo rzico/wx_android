@@ -167,10 +167,10 @@ public class MediaBean implements Serializable, Parcelable  {
     }
 
     public String getThumbnailBigPath() {
-        if (new File(thumbnailBigPath).exists()) {
+//        if (new File(thumbnailBigPath).exists()) {
             return thumbnailBigPath;
-        }
-        return "";
+//        }
+//        return "";
     }
 
     public void setThumbnailBigPath(String thumbnailBigPath) {
@@ -178,10 +178,10 @@ public class MediaBean implements Serializable, Parcelable  {
     }
 
     public String getThumbnailSmallPath() {
-        if (new File(thumbnailSmallPath).exists()) {
+//        if (new File(thumbnailSmallPath).exists()) {
             return thumbnailSmallPath;
-        }
-        return "";
+//        }
+//        return "";
     }
 
     public void setThumbnailSmallPath(String thumbnailSmallPath) {
