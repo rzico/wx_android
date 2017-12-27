@@ -16,7 +16,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import com.yalantis.ucrop.R;
+import cn.finalteam.rxgalleryfinal.R;
 import com.yalantis.ucrop.model.AspectRatio;
 import com.yalantis.ucrop.view.CropImageView;
 

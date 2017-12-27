@@ -42,10 +42,10 @@ import com.yalantis.ucrop.callback.BitmapLoadCallback;
 import com.yalantis.ucrop.model.AspectRatio;
 import com.yalantis.ucrop.model.ExifInfo;
 import com.yalantis.ucrop.util.BitmapLoadUtils;
-import com.yalantis.ucrop.util.FoucedStateListDrawable;
-import com.yalantis.ucrop.util.GPUImageUtil;
+import cn.finalteam.rxgalleryfinal.utils.FoucedStateListDrawable;
+import cn.finalteam.rxgalleryfinal.utils.GPUImageUtil;
 import com.yalantis.ucrop.view.CropImageView;
-import com.yalantis.ucrop.view.ImageButtonWithText;
+import cn.finalteam.rxgalleryfinal.view.ImageButtonWithText;
 import com.yalantis.ucrop.view.TopView;
 import com.yalantis.ucrop.view.widget.AspectRatioTextView;
 import com.yixiang.mopian.constant.AllConstant;
@@ -71,9 +71,9 @@ public class FilterActivity extends AppCompatActivity {
     public static final int ERROR = 0;
 
     private PhotoView mPhotoView;
-    static final String PHOTO_TAP_TOAST_STRING = "Photo Tap! X: %.2f %% Y:%.2f %% ID: %d";
+//    static final String PHOTO_TAP_TOAST_STRING = "Photo Tap! X: %.2f %% Y:%.2f %% ID: %d";
     static final String SCALE_TOAST_STRING = "Scaled to: %.2ff";
-    static final String FLING_LOG_STRING = "Fling velocityX: %.2f, velocityY: %.2f";
+//    static final String FLING_LOG_STRING = "Fling velocityX: %.2f, velocityY: %.2f";
     private Toast mCurrentToast;
     private static final int PUZZLE = 101;
 
@@ -148,7 +148,7 @@ public class FilterActivity extends AppCompatActivity {
         mPhotoView.setOnSingleFlingListener(new SingleFlingListener());
         topView = (TopView)findViewById(R.id.toolbar);
 
-        mToolbarCancelDrawable = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE, cn.finalteam.rxgalleryfinal.R.drawable.gallery_ic_cross);
+//        mToolbarCancelDrawable = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE, cn.finalteam.rxgalleryfinal.R.drawable.gallery_ic_cross);
 
         mShowBottomControls = !intent.getBooleanExtra(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, false);
         if (mShowBottomControls) {
@@ -202,7 +202,7 @@ public class FilterActivity extends AppCompatActivity {
         public void onPhotoTap(ImageView view, float x, float y) {
             float xPercentage = x * 100f;
             float yPercentage = y * 100f;
-            showToast(String.format(PHOTO_TAP_TOAST_STRING, xPercentage, yPercentage, view == null ? 0 : view.getId()));
+//            showToast(String.format(PHOTO_TAP_TOAST_STRING, xPercentage, yPercentage, view == null ? 0 : view.getId()));
         }
     }
 
@@ -275,7 +275,7 @@ public class FilterActivity extends AppCompatActivity {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.d("PhotoView", String.format(FLING_LOG_STRING, velocityX, velocityY));
+//            Log.d("PhotoView", String.format(FLING_LOG_STRING, velocityX, velocityY));
             return true;
         }
     }

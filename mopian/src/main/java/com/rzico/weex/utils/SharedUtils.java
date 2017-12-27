@@ -34,7 +34,7 @@ public class SharedUtils {
         save(RESVERSION, version);
     }
     public static String readResVersion(){
-        return read(RESVERSION, Constant.resVerison);
+        return read(RESVERSION, "0.0.0");
     }
 
     public static void saveCenter(String url){
