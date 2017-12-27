@@ -71,9 +71,9 @@ public class FilterActivity extends AppCompatActivity {
     public static final int ERROR = 0;
 
     private PhotoView mPhotoView;
-    static final String PHOTO_TAP_TOAST_STRING = "Photo Tap! X: %.2f %% Y:%.2f %% ID: %d";
+//    static final String PHOTO_TAP_TOAST_STRING = "Photo Tap! X: %.2f %% Y:%.2f %% ID: %d";
     static final String SCALE_TOAST_STRING = "Scaled to: %.2ff";
-    static final String FLING_LOG_STRING = "Fling velocityX: %.2f, velocityY: %.2f";
+//    static final String FLING_LOG_STRING = "Fling velocityX: %.2f, velocityY: %.2f";
     private Toast mCurrentToast;
     private static final int PUZZLE = 101;
 
@@ -202,7 +202,7 @@ public class FilterActivity extends AppCompatActivity {
         public void onPhotoTap(ImageView view, float x, float y) {
             float xPercentage = x * 100f;
             float yPercentage = y * 100f;
-            showToast(String.format(PHOTO_TAP_TOAST_STRING, xPercentage, yPercentage, view == null ? 0 : view.getId()));
+//            showToast(String.format(PHOTO_TAP_TOAST_STRING, xPercentage, yPercentage, view == null ? 0 : view.getId()));
         }
     }
 
@@ -275,7 +275,7 @@ public class FilterActivity extends AppCompatActivity {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.d("PhotoView", String.format(FLING_LOG_STRING, velocityX, velocityY));
+//            Log.d("PhotoView", String.format(FLING_LOG_STRING, velocityX, velocityY));
             return true;
         }
     }

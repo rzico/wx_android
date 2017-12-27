@@ -352,7 +352,7 @@ public class PuzzleActivity extends AppCompatActivity implements View.OnClickLis
         int len = imageBeans.size();
         List<MediaBean> mediaBeens = new ArrayList<>();
         
-        if(isSelected || len > number){
+        if(isSelected){
             for (int i = 0; i < number; i++){
                 mediaBeens.add(imageBeans.get(i));
             }

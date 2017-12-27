@@ -164,7 +164,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
-            android:name="com.yalantis.ucrop.PuzzleActivity"
+            android:name="cn.finalteam.rxgalleryfinal.PuzzleActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar" />
 
