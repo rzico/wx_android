@@ -492,17 +492,17 @@ public class SplashActivity extends BaseActivity {
             if (Utils.isApkDebugable(SplashActivity.this)) {
                 downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
             } else {
-                if(Utils.compareVersion(nowResVersion, appResVersion) >= 0 && Utils.compareVersion(nowResVersion, netResVersion) >= 0){
+               if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
+                    writeResVersion = netResVersion;
+                    downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
+                }else  if(Utils.compareVersion(appResVersion, nowResVersion) > 0 && Utils.compareVersion(appResVersion, netResVersion) > 0){
+                   //如果是app自带的版本好 是最大的 就压缩本地的
+                   writeResVersion = appResVersion;
+                   copylocalfile();
+               } else {
                     //如果现在的资源包版本 是最大的 就什么事情都不做 直接跳转页面
                     writeResVersion = nowResVersion;
                     toNext();
-                }else if(Utils.compareVersion(appResVersion, nowResVersion) >= 0 && Utils.compareVersion(appResVersion, netResVersion) >= 0){
-                    //如果是app自带的版本好 是最大的 就压缩本地的
-                    writeResVersion = appResVersion;
-                    copylocalfile();
-                }else if(Utils.compareVersion(netResVersion, appResVersion) >= 0 && Utils.compareVersion(netResVersion, nowResVersion) >= 0){
-                    writeResVersion = netResVersion;
-                    downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
                 }
             }
 

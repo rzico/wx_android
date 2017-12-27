@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,12 +20,6 @@ import com.yalantis.ucrop.util.BitmapLoadUtils;
 import com.yalantis.ucrop.util.FastBitmapDrawable;
 import com.yalantis.ucrop.util.RectUtils;
 
-/**
- * Created by Oleksii Shliama (https://github.com/shliama).
- * <p/>
- * This class provides base logic to setup the image, transform it with matrix (move, scale, rotate),
- * and methods to get current matrix state.
- */
 public class TransformImageView extends ImageView {
 
     private static final String TAG = "TransformImageView";
@@ -40,6 +35,7 @@ public class TransformImageView extends ImageView {
 
     protected Matrix mCurrentImageMatrix = new Matrix();
     protected int mThisWidth, mThisHeight;
+    private Bitmap initBitmap;
 
     protected TransformImageListener mTransformImageListener;
 
@@ -54,6 +50,10 @@ public class TransformImageView extends ImageView {
     private String mImageInputPath, mImageOutputPath;
     private ExifInfo mExifInfo;
 
+    //获取最初的bitmap
+    public Bitmap getCurrentBitmap(){
+        return initBitmap;
+    }
     /**
      * Interface for rotation and scale change notifying.
      */
@@ -129,13 +129,16 @@ public class TransformImageView extends ImageView {
         return mExifInfo;
     }
 
+    public void setImageUri(@NonNull Uri imageUri, @Nullable Uri outputUri) throws Exception {
+        setImageUri(imageUri, outputUri, null);
+    }
     /**
      * This method takes an Uri as a parameter, then calls method to decode it into Bitmap with specified size.
      *
      * @param imageUri - image Uri
      * @throws Exception - can throw exception if having problems with decoding Uri or OOM.
      */
-    public void setImageUri(@NonNull Uri imageUri, @Nullable Uri outputUri) throws Exception {
+    public void setImageUri(@NonNull Uri imageUri, @Nullable Uri outputUri,final Handler handler) throws Exception {
         int maxBitmapSize = getMaxBitmapSize();
 
         BitmapLoadUtils.decodeBitmapInBackground(getContext(), imageUri, outputUri, maxBitmapSize, maxBitmapSize,
@@ -148,7 +151,11 @@ public class TransformImageView extends ImageView {
                         mExifInfo = exifInfo;
 
                         mBitmapDecoded = true;
+                        initBitmap = bitmap;
                         setImageBitmap(bitmap);
+                        if(handler!=null){
+                            handler.sendEmptyMessage(1);//表示 设置完成
+                        }
                     }
 
                     @Override
@@ -164,6 +171,7 @@ public class TransformImageView extends ImageView {
     /**
      * @return - current image scale value.
      * [1.0f - for original image, 2.0f - for 200% scaled image, etc.]
+     * 当前图像比例值
      */
     public float getCurrentScale() {
         return getMatrixScale(mCurrentImageMatrix);
@@ -258,6 +266,8 @@ public class TransformImageView extends ImageView {
     protected void init() {
         setScaleType(ScaleType.MATRIX);
     }
+
+
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {

@@ -42,11 +42,11 @@ import com.yalantis.ucrop.callback.BitmapLoadCallback;
 import com.yalantis.ucrop.model.AspectRatio;
 import com.yalantis.ucrop.model.ExifInfo;
 import com.yalantis.ucrop.util.BitmapLoadUtils;
-import com.yalantis.ucrop.util.FoucedStateListDrawable;
-import com.yalantis.ucrop.util.GPUImageUtil;
+import cn.finalteam.rxgalleryfinal.utils.FoucedStateListDrawable;
+import cn.finalteam.rxgalleryfinal.utils.GPUImageUtil;
 import com.yalantis.ucrop.view.CropImageView;
-import com.yalantis.ucrop.view.ImageButtonWithText;
-import com.yalantis.ucrop.view.TopView;
+import cn.finalteam.rxgalleryfinal.view.ImageButtonWithText;
+import cn.finalteam.rxgalleryfinal.view.TopView;
 import com.yalantis.ucrop.view.widget.AspectRatioTextView;
 import com.yixiang.mopian.constant.AllConstant;
 
@@ -148,7 +148,7 @@ public class FilterActivity extends AppCompatActivity {
         mPhotoView.setOnSingleFlingListener(new SingleFlingListener());
         topView = (TopView)findViewById(R.id.toolbar);
 
-        mToolbarCancelDrawable = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE, cn.finalteam.rxgalleryfinal.R.drawable.gallery_ic_cross);
+//        mToolbarCancelDrawable = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_WIDGET_CANCEL_DRAWABLE, cn.finalteam.rxgalleryfinal.R.drawable.gallery_ic_cross);
 
         mShowBottomControls = !intent.getBooleanExtra(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, false);
         if (mShowBottomControls) {

@@ -4,24 +4,32 @@
     <FrameLayout
         android:id="@+id/wrapper_controls"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ucrop_height_wrapper_controls"
+        android:layout_height="49dp"
         android:layout_above="@+id/wrapper_states"
         android:background="@color/ucrop_color_widget_background">
 
+        <!--裁剪功能组件-->
+        <!--<LinearLayout-->
+        <!--android:id="@+id/layout_filter"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="horizontal"/>-->
+        <!--裁剪功能组件-->
         <LinearLayout
             android:id="@+id/layout_aspect_ratio"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="horizontal"/>
-
+        <!--旋转功能组件-->
         <include
             android:id="@+id/layout_rotate_wheel"
             layout="@layout/ucrop_layout_rotate_wheel"/>
-
-        <include
-            android:id="@+id/layout_scale_wheel"
-            layout="@layout/ucrop_layout_scale_wheel"/>
+        <!--原来是缩放组件现改了-->
+        <!--<include-->
+        <!--android:id="@+id/layout_scale_wheel"-->
+        <!--layout="@layout/ucrop_layout_scale_wheel"/>-->
 
     </FrameLayout>
 
@@ -34,23 +42,45 @@
     <LinearLayout
         android:id="@+id/wrapper_states"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ucrop_height_wrapper_states"
+        android:layout_height="49dp"
         android:layout_alignParentBottom="true"
         android:background="@color/ucrop_color_widget_background"
         android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:id="@+id/state_scale"
-            style="@style/ucrop_WrapperIconState">
+        <!--<FrameLayout-->
+        <!--android:id="@+id/state_photo_change"-->
+        <!--style="@style/ucrop_WrapperIconState">-->
 
-            <ImageView
-                android:id="@+id/image_view_state_scale"
-                style="@style/ucrop_ImageViewWidgetIcon"
-                android:src="@drawable/ucrop_ic_scale"/>
+        <!--<ImageView-->
+        <!--android:id="@+id/image_view_photo_change"-->
+        <!--style="@style/ucrop_ImageViewWidgetIcon"-->
+        <!--android:src="@drawable/ucrop_ic_scale"/>-->
 
-        </FrameLayout>
+        <!--</FrameLayout>-->
+
+        <!--<FrameLayout-->
+        <!--android:id="@+id/state_photo_puzzle"-->
+        <!--style="@style/ucrop_WrapperIconState">-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/image_view_photo_puzzle"-->
+        <!--style="@style/ucrop_ImageViewWidgetIcon"-->
+        <!--android:src="@drawable/ucrop_ic_scale"/>-->
+
+        <!--</FrameLayout>-->
+
+        <!--<FrameLayout-->
+        <!--android:id="@+id/state_filter"-->
+        <!--style="@style/ucrop_WrapperIconState">-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/image_view_state_filter"-->
+        <!--style="@style/ucrop_ImageViewWidgetIcon"-->
+        <!--android:src="@drawable/ucrop_ic_scale"/>-->
+
+        <!--</FrameLayout>-->
 
         <FrameLayout
             android:id="@+id/state_aspect_ratio"

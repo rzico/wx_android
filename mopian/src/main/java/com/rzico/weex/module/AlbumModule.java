@@ -250,10 +250,18 @@ public class AlbumModule extends WXModule {
                 message.setType("success");
                 message.setContent("裁剪成功");
                 MediaBean mediaBean = new MediaBean();
+//                Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_SHORT).show();
+                if(uri.toString().startsWith("http://")){
+                    String url = uri.toString();
+                    mediaBean.setOriginalPath(url);
+                    mediaBean.setThumbnailBigPath(url);
+                    mediaBean.setThumbnailSmallPath(url);
+                }else {
+                    mediaBean.setThumbnailBigPath(uri.getPath());
+                    mediaBean.setThumbnailSmallPath(uri.getPath());
+                    mediaBean.setOriginalPath(uri.getPath());
+                }
 //                以下是要经过处理的 目前暂时传一样的
-                mediaBean.setThumbnailBigPath(uri.getPath());
-                mediaBean.setThumbnailSmallPath(uri.getPath());
-                mediaBean.setOriginalPath(uri.getPath());
                 message.setData(mediaBean);
                 callback.invoke(message);
             }
@@ -274,13 +282,14 @@ public class AlbumModule extends WXModule {
         Uri uri = null;
         //这里要处理传入的path 因为weex前端没有传入 file://
         if(imagePath.startsWith("/")){
-            imagePath = "file:/" + imagePath;
+            imagePath = "file://" + imagePath;
         }
-        if(!imagePath.startsWith("file://")){
-            uri = Uri.parse(imagePath);
-        }else{
-            uri = Uri.parse("file://" + imagePath);
-        }
+//        if(!imagePath.startsWith("file://")){
+//            uri = Uri.parse(imagePath);
+//        }else{
+//            uri = Uri.parse("file://" + imagePath);
+//        }
+        uri = Uri.parse(imagePath);
         PhotoHandle of = PhotoHandle.of(uri, Uri.fromFile(PathUtils.getDiskCacheDir(listener.getSimpleActivity())));
         of.start(listener.getSimpleActivity());
     }
@@ -288,14 +297,15 @@ public class AlbumModule extends WXModule {
     public void openCrapActivity(String imagePath, AspectRatio... aspectRatio){
         Uri uri = null;
         if(imagePath.startsWith("/")){
-            imagePath = "file:/" + imagePath;
+            imagePath = "file://" + imagePath;
         }
+        uri = Uri.parse(imagePath);
         //这里要处理传入的path 因为weex前端没有传入 file://
-        if(!imagePath.startsWith("file://")){
-            uri = Uri.parse(imagePath);
-        }else{
-            uri = Uri.parse("file://" + imagePath);
-        }
+//        if(!imagePath.startsWith("file://")){
+//            uri = Uri.parse(imagePath);
+//        }else{
+//            uri = Uri.parse("file://" + imagePath);
+//        }
         UCrop of = UCrop.of(uri, Uri.fromFile(PathUtils.getDiskCacheDir(listener.getSimpleActivity())));
 //        for (AspectRatio item: aspectRatios) {
 //            of.withAspectRatio(item.getAspectRatioX(),item.getAspectRatioY());//裁剪头像
