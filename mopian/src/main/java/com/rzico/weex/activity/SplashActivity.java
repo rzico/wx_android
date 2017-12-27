@@ -495,7 +495,7 @@ public class SplashActivity extends BaseActivity {
                if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
                     writeResVersion = netResVersion;
                     downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
-                }else  if(Utils.compareVersion(appResVersion, nowResVersion) > 0 && Utils.compareVersion(appResVersion, netResVersion) > 0){
+                }else  if(nowResVersion.equals("0.0.0") || (Utils.compareVersion(appResVersion, nowResVersion) > 0 && Utils.compareVersion(appResVersion, netResVersion) > 0)){
                    //如果是app自带的版本好 是最大的 就压缩本地的
                    writeResVersion = appResVersion;
                    copylocalfile();
