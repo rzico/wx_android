@@ -20,7 +20,7 @@ import com.rzico.weex.R;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.utils.BarTextColorUtils;
-import cn.finalteam.rxgalleryfinal.view.TopView;
+import com.yalantis.ucrop.view.TopView;
 
 import java.io.Console;
 import java.util.List;

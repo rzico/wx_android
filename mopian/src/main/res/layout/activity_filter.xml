@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cn.finalteam.rxgalleryfinal.view.TopView
+    <com.yalantis.ucrop.view.TopView
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

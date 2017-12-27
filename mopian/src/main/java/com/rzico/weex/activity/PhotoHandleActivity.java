@@ -57,7 +57,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
 import cn.finalteam.rxgalleryfinal.utils.FoucedStateListDrawable;
 import cn.finalteam.rxgalleryfinal.view.ImageButtonWithText;
-import cn.finalteam.rxgalleryfinal.view.TopView;
+import com.yalantis.ucrop.view.TopView;
 
 public class PhotoHandleActivity extends AppCompatActivity {
 

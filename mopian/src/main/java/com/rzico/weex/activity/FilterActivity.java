@@ -46,7 +46,7 @@ import cn.finalteam.rxgalleryfinal.utils.FoucedStateListDrawable;
 import cn.finalteam.rxgalleryfinal.utils.GPUImageUtil;
 import com.yalantis.ucrop.view.CropImageView;
 import cn.finalteam.rxgalleryfinal.view.ImageButtonWithText;
-import cn.finalteam.rxgalleryfinal.view.TopView;
+import com.yalantis.ucrop.view.TopView;
 import com.yalantis.ucrop.view.widget.AspectRatioTextView;
 import com.yixiang.mopian.constant.AllConstant;
 

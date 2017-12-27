@@ -19,7 +19,7 @@ import cn.finalteam.rxgalleryfinal.model.Puzzle;
 import cn.finalteam.rxgalleryfinal.model.Type;
 import cn.finalteam.rxgalleryfinal.utils.BarTextColorUtils;
 import cn.finalteam.rxgalleryfinal.view.PuzzleView;
-import cn.finalteam.rxgalleryfinal.view.TopView;
+import com.yalantis.ucrop.view.TopView;
 import com.yixiang.mopian.constant.AllConstant;
 
 import java.io.File;

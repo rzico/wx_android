@@ -36,7 +36,7 @@
         android:textColor="#ffffff"
         android:textSize="18sp" />
 
-    <cn.finalteam.rxgalleryfinal.view.TopView
+    <com.yalantis.ucrop.view.TopView
         android:id="@+id/top_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

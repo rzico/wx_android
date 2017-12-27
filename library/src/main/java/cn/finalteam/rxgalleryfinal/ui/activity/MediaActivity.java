@@ -43,7 +43,7 @@ import cn.finalteam.rxgalleryfinal.utils.Logger;
 import cn.finalteam.rxgalleryfinal.utils.OsCompat;
 import cn.finalteam.rxgalleryfinal.utils.ThemeUtils;
 import cn.finalteam.rxgalleryfinal.view.ActivityFragmentView;
-import cn.finalteam.rxgalleryfinal.view.TopView;
+import com.yalantis.ucrop.view.TopView;
 import io.reactivex.disposables.Disposable;
 
 /**
