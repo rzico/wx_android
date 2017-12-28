@@ -47,10 +47,15 @@ public class RichEditorAcitivity extends AppCompatActivity {
 
 
     private boolean boldsOpen =  false;//底部弹窗 是否弹出
+
+
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +105,7 @@ public class RichEditorAcitivity extends AppCompatActivity {
             @Override
             public void onTextChange(String text) {
                 //如果删到空的话 要默认加上h3了 这里面每次是空的话 只能执行一次
+                if(mEditor == null) return;
                 if(text.equals("")){
                     mEditor.setHeading(firstFontSize);
                     mEditor.focusEditor();
@@ -153,7 +159,7 @@ public class RichEditorAcitivity extends AppCompatActivity {
         mEditor.setOnDecorationChangeListener(new RichEditor.OnDecorationStateListener() {
             @Override
             public void onStateChangeListener(String text, List<RichEditor.Type> types) {
-                changeState(text, types);
+//                changeState(text, types);
             }
         });
 
@@ -624,5 +630,24 @@ public class RichEditorAcitivity extends AppCompatActivity {
             }
 
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destroyWebView();
+    }
+    public void destroyWebView() {
+
+//        mWebContainer.removeAllViews();
+
+        if(mEditor != null) {
+            mEditor.clearHistory();
+            mEditor.clearCache(true);
+            mEditor.loadUrl("about:blank"); // clearView() should be changed to loadUrl("about:blank"), since clearView() is deprecated now
+            mEditor.freeMemory();
+            mEditor.pauseTimers();
+            mEditor = null; // Note that mWebView.destroy() and mWebView = null do the exact same thing
+        }
+
     }
 }
