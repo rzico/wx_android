@@ -97,7 +97,7 @@ public class PathUtils {
      * @param path 绝对路径
      * @return
      */
-    public static String loadLocal(String path) {
+    public static String loadLocal(String path, Activity activity) {
         if (TextUtils.isEmpty(path)) {
             return null;
         }
@@ -109,7 +109,7 @@ public class PathUtils {
         path = path.contains("?") ? path.substring(0 ,path.indexOf("?")) : path;
         FileInputStream inputStream = null;
         BufferedReader bufferedReader = null;
-        path = PathUtils.getResPath() + path;
+        path = PathUtils.getResPath(activity) + path;
         try {
             inputStream = new FileInputStream(path);
             StringBuilder builder = new StringBuilder(inputStream.available() + 10);
@@ -145,8 +145,12 @@ public class PathUtils {
      * 获取当前项目的weex资源路径
      * @return
      */
-    public static String getResPath(){
-        return Environment.getExternalStorageDirectory().getPath() + "/" + Constant.app + "/res/";
+    public static String getResPath(Activity activity){
+        String cacheDir = AllConstant.getDiskCachePath(activity);
+        if(cacheDir.contains("/cache")){
+            cacheDir = cacheDir.replace("/cache", "");
+        }
+        return cacheDir + "/res/";
     }
 
     public static String getCachePath(){

@@ -43,7 +43,7 @@ public class EditActivity extends BaseActivity implements IWXRenderListener {
          */
         Map<String,Object> options=new HashMap<>();
         options.put(WXSDKInstance.BUNDLE_URL,"file://" + Constant.center);
-        mWXSDKInstance.render("edit", PathUtils.loadLocal(Constant.center), options, null, WXRenderStrategy.APPEND_ASYNC);
+        mWXSDKInstance.render("edit", PathUtils.loadLocal(Constant.center, EditActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
 //      mWXSDKInstance.renderByUrl("edit", "http://192.168.1.107:8081/editor.weex.js?hot-reload_controller=1&_wx_tpl=http://192.168.1.107:8081/editor.weex.js", null, null, WXRenderStrategy.APPEND_ASYNC);
 
     }

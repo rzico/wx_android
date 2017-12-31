@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
@@ -158,6 +159,7 @@ public class PushUtil implements Observer {
                     TIMFriendshipManager.getInstance().getUsersProfile(users, new TIMValueCallBack<List<TIMUserProfile>>(){
                         @Override
                         public void onError(int code, String desc){
+                            Toast.makeText(WXApplication.getContext(), desc, Toast.LENGTH_SHORT).show();
                             if(!msg.isSelf()){
                                 handleToWeex(message, null);
                             }
@@ -166,10 +168,11 @@ public class PushUtil implements Observer {
 
                         @Override
                         public void onSuccess(List<TIMUserProfile> result){
-
                             if(!msg.isSelf()){
+                                Toast.makeText(WXApplication.getContext(), "comon", Toast.LENGTH_SHORT).show();
                                 handleToWeex(message, result);
                             }
+                            Toast.makeText(WXApplication.getContext(), "qingqiule", Toast.LENGTH_SHORT).show();
                             PushNotify(msg, result);
 
                         }
@@ -179,13 +182,17 @@ public class PushUtil implements Observer {
     }
 
     private void handleToWeex(com.rzico.weex.model.chat.Message message, List<TIMUserProfile> result) {
+        Toast.makeText(WXApplication.getContext(), "0", Toast.LENGTH_SHORT).show();
         if(!(message instanceof CustomMessage)){//如果不是自定义消息则提示
+            Toast.makeText(WXApplication.getContext(), "1", Toast.LENGTH_SHORT).show();
             if(message == null) return;
             TIMConversation con = TIMManager.getInstance().getConversation(TIMConversationType.C2C, message.getSender());
             final TIMConversationExt conExt = new TIMConversationExt(con);
             System.out.println("unRead:" + conExt.getUnreadMessageNum());
 
+            Toast.makeText(WXApplication.getContext(), "2", Toast.LENGTH_SHORT).show();
             if(result!=null && result.size() > 0) {
+                Toast.makeText(WXApplication.getContext(), "3", Toast.LENGTH_SHORT).show();
                 TIMUserProfile user = result.get(0);
                 com.rzico.weex.model.info.Message onMessage = new com.rzico.weex.model.info.Message();
                 onMessage.setType("success");
@@ -206,12 +213,16 @@ public class PushUtil implements Observer {
                 onMessage.setData(imMessage);
                 Map<String, Object> params = new HashMap<>();
                 params.put("data", onMessage);
+                Toast.makeText(WXApplication.getContext(), "4", Toast.LENGTH_SHORT).show();
                 if (Constant.wxsdkInstanceMap != null) {
+                    Toast.makeText(WXApplication.getContext(), "5", Toast.LENGTH_SHORT).show();
                     for (String key: Constant.wxsdkInstanceMap.keySet()){
                         Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback("onMessage", params);
                     }
                 }
+                Toast.makeText(WXApplication.getContext(), "6", Toast.LENGTH_SHORT).show();
                 //判断当前页面是不是weex页面
+                Toast.makeText(WXApplication.getContext(), "WXApplcation.getActivity()==" + WXApplication.getActivity() == null ? "null" : "nonull", Toast.LENGTH_SHORT).show();
                 if(WXApplication.getActivity() instanceof AbsWeexActivity){
                     ((AbsWeexActivity) WXApplication.getActivity()).getWXSDKInstance().fireGlobalEventCallback("onMessage", params);
                 }

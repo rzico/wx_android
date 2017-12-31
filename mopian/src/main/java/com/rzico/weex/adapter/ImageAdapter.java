@@ -204,10 +204,12 @@
  */
 package com.rzico.weex.adapter;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.utils.PathUtils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -245,7 +247,7 @@ public class ImageAdapter implements IWXImgLoaderAdapter {
         if (url.startsWith("file://")) {//如果是斜杠开头的则是加载本地图片
           isLocalImg = true;
           if(url.startsWith("file://resource")){
-            temp =  temp.replace("file://", PathUtils.getResPath());//读取资源路径
+            temp =  temp.replace("file://", PathUtils.getResPath(WXApplication.getActivity()));//读取资源路径
           }else{
             temp =  temp.replace("file:/", "");//读取本地相册路径
           }

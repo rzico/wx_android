@@ -273,7 +273,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             Map<String, Object> options = new HashMap<>();
             options.put(WXSDKInstance.BUNDLE_URL, url);
-            wxsdkInstanceMap.get("home").render("home", PathUtils.loadLocal(url), options, null, WXRenderStrategy.APPEND_ASYNC);
+            wxsdkInstanceMap.get("home").render("home", PathUtils.loadLocal(url, MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
         }
 
 
@@ -292,7 +292,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     }else {
                         Map<String, Object> options = new HashMap<>();
                         options.put(WXSDKInstance.BUNDLE_URL,SharedUtils.readIndex2());
-                        wxsdkInstanceMap.get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                        wxsdkInstanceMap.get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                         if(SharedUtils.readIndex3().startsWith("http://")) {//如果是网络url
 
@@ -302,7 +302,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         }else{
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-                            wxsdkInstanceMap.get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxsdkInstanceMap.get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                         if(SharedUtils.readIndex4().startsWith("http://")) {//如果是网络url
 
@@ -312,7 +312,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         }else{
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-                            wxsdkInstanceMap.get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxsdkInstanceMap.get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                     }
                     isfirst = false;
@@ -330,7 +330,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         }else {
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL,SharedUtils.readIndex2());
-                            wxsdkInstanceMap.get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxsdkInstanceMap.get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                         if(SharedUtils.readIndex3().startsWith("http://")) {//如果是网络url
 
@@ -340,7 +340,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         }else{
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-                            wxsdkInstanceMap.get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxsdkInstanceMap.get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                         if(SharedUtils.readIndex4().startsWith("http://")) {//如果是网络url
 
@@ -350,7 +350,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         }else{
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-                            wxsdkInstanceMap.get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxsdkInstanceMap.get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                     }
                     //登录失败 等其他原因登录失败   则跳转登录 页面
@@ -371,7 +371,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }else {
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL,SharedUtils.readIndex2());
-                    wxsdkInstanceMap.get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    wxsdkInstanceMap.get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                 }
                 if(SharedUtils.readIndex3().startsWith("http://")) {//如果是网络url
 
@@ -381,7 +381,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }else{
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-                    wxsdkInstanceMap.get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    wxsdkInstanceMap.get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                 }
                 if(SharedUtils.readIndex4().startsWith("http://")) {//如果是网络url
 
@@ -391,7 +391,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }else{
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-                    wxsdkInstanceMap.get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    wxsdkInstanceMap.get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                 }
             }
 //            }
