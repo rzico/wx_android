@@ -111,19 +111,25 @@ public class WXApplication extends Application {
         }
       });
     }
+
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
     instance = this;
     init();
     initAlbum();
-    WXSDKEngine.addCustomOptions("appName", getResources().getString(R.string.app_name));
+    initWeex();
+//    initIM();
+  }
+
+  public static void initWeex(){
+    WXSDKEngine.addCustomOptions("appName", WXApplication.getInstance().getResources().getString(R.string.app_name));
     WXSDKEngine.addCustomOptions("appGroup", "WXApp");
-    WXSDKEngine.initialize(this,
-        new InitConfig.Builder()
-            .setImgAdapter(new ImageAdapter())
-            .setHttpAdapter(new WeexHttpAdapter())
-            .setURIAdapter(new WeexUriAdapter())
-            .setJSExceptionAdapter(new WeexJSExceptionAdapter())
-            .build()
+    WXSDKEngine.initialize(WXApplication.getInstance(),
+            new InitConfig.Builder()
+                    .setImgAdapter(new ImageAdapter())
+                    .setHttpAdapter(new WeexHttpAdapter())
+                    .setURIAdapter(new WeexUriAdapter())
+                    .setJSExceptionAdapter(new WeexJSExceptionAdapter())
+                    .build()
     );
     try {
       WXSDKEngine.registerComponent(WXBasicComponentType.WEB, MYWXWeb.class);
@@ -141,9 +147,7 @@ public class WXApplication extends Application {
       e.printStackTrace();
     }
 
-//    initIM();
   }
-
   private void initIM() {
     //初始化SDK基本配置
     TIMSdkConfig config = new TIMSdkConfig(SDK_APPID)
