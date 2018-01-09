@@ -13,7 +13,7 @@ import java.util.UUID;
 public class AllConstant {
     public static final String PACKNAME = "com.rzico.assistant";
 
-
+    public static int isClearAll = 1;
 
 
     //自己的缓存图片的路径

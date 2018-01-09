@@ -219,7 +219,7 @@ public class OssService {
     }
 
     //断点上传，返回的task可以用来暂停任务
-    public PauseableUploadTask asyncMultiPartUpload(String object, String localFile) {
+    public PauseableUploadTask asyncMultiPartUpload(String object, String localFile, final JSCallback callback, final JSCallback progressCallback) {
         if (object.equals("")) {
             Log.w("AsyncMultiPartUpload", "ObjectNull");
             return null;
@@ -233,7 +233,7 @@ public class OssService {
         }
 
         Log.d("MultiPartUpload", localFile);
-        PauseableUploadTask task = multiPartUploadManager.asyncUpload(object, localFile);
+        PauseableUploadTask task = multiPartUploadManager.asyncUpload(object, localFile, callback, progressCallback);
         return task;
     }
 

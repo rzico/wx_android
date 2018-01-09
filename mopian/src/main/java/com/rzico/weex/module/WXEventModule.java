@@ -16,6 +16,7 @@ import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -56,6 +57,7 @@ import com.rzico.weex.model.info.WxConfig;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
 import com.rzico.weex.oos.OssService;
+import com.rzico.weex.oos.PauseableUploadTask;
 import com.rzico.weex.oos.STSGetter;
 import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.ContactUtils;
@@ -95,6 +97,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
@@ -1037,6 +1040,7 @@ public class WXEventModule extends WXModule {
                 }).check();
 
     }
+    private WeakReference<PauseableUploadTask> task;
     //上传文件
     public void uploadFile(String stsData, BaseActivity activity, String filePath, JSCallback callback, JSCallback progressCallback) {
         OSSCredentialProvider credentialProvider = new STSGetter(stsData);
@@ -1045,7 +1049,13 @@ public class WXEventModule extends WXModule {
         Date nowTime = new Date();
         SimpleDateFormat time = new SimpleDateFormat("yyyy/MM/dd");
         String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + ".jpg";
-        ossService.asyncPutImage(imagePath, filePath, callback, progressCallback);
+//        ossService.asyncPutImage(imagePath, filePath, callback, progressCallback);
+//        if ((task == null) || (task.get() == null)){
+//            Log.d("MultiPartUpload", "Start");
+            task = new WeakReference<>(ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback));
+//        }
+//        else {
+//        }
     }    /**获取库Phon表字段**/
     private static final String[] PHONES_PROJECTION = new String[] {
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY, ContactsContract.CommonDataKinds.Photo.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.DATA1 };

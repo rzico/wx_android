@@ -8,6 +8,9 @@ import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
 import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
 import com.alibaba.sdk.android.oss.common.utils.BinaryUtil;
+import com.rzico.weex.Constant;
+import com.rzico.weex.model.info.Message;
+import com.taobao.weex.bridge.JSCallback;
 
 import java.io.IOException;
 import java.util.Map;
@@ -32,7 +35,7 @@ public class MultiPartUploadManager {
         this.partSize = partSize;
     }
 
-    public PauseableUploadTask asyncUpload(String objectName, String localFileName) {
+    public PauseableUploadTask asyncUpload(String objectName, String localFileName, final JSCallback callback, final JSCallback progressCallback) {
 
         final String object = new String(objectName);
         final String localFile = new String(localFileName);
@@ -45,6 +48,13 @@ public class MultiPartUploadManager {
                 int progress = (int) (100 * currentSize / totalSize);
 //                UIDisplayer.updateProgress(progress);
 //                UIDisplayer.displayInfo("上传进度: " + String.valueOf(progress) + "%");
+                if(progressCallback != null){
+                    Message message = new Message();
+                    message.setContent("success");
+                    message.setType("success");
+                    message.setData(progress);
+                    progressCallback.invokeAndKeepAlive(message);
+                }
             }
         });
 
@@ -56,7 +66,13 @@ public class MultiPartUploadManager {
 
                 Log.d("ETag", result.getETag());
                 Log.d("RequestId", result.getRequestId());
-
+                if(callback!=null){
+                    Message message = new Message();
+                    message.setContent("success");
+                    message.setType("success");
+                    message.setData(Constant.resURL + result.getObjectKey());
+                    callback.invoke(message);
+                }
 //                UIDisplayer.uploadComplete();
 //                UIDisplayer.displayInfo("Bucket: " + bucket + "\nObject: " + request.getObject() + "\nETag: " + result.getETag() +  "\nRequestId: " + result.getRequestId());
             }
@@ -78,6 +94,13 @@ public class MultiPartUploadManager {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                     info = serviceException.toString();
+                }
+                Message message = new Message();
+                message.setContent("上传失败");
+                message.setType("error");
+                message.setData(null);
+                if(callback!=null){
+                    callback.invoke(message);
                 }
 //                UIDisplayer.uploadFail(info);
 //                UIDisplayer.displayInfo(info);
