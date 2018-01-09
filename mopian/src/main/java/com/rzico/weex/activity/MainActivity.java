@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,6 +47,8 @@ import com.rzico.weex.model.info.LoginBean;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.module.WXEventModule;
+import com.rzico.weex.net.HttpRequest;
+import com.rzico.weex.net.XRequest;
 import com.rzico.weex.oos.OssService;
 import com.rzico.weex.pageview.NoScrollPageView;
 import com.rzico.weex.utils.AntiShake;
@@ -64,12 +67,22 @@ import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXRenderStrategy;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
+import com.tencent.imsdk.TIMLogLevel;
+import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMMessage;
+import com.tencent.imsdk.TIMUserConfig;
+import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.imsdk.ext.message.TIMManagerExt;
+import com.tencent.qcloud.presentation.business.InitBusiness;
+import com.tencent.qcloud.presentation.event.FriendshipEvent;
+import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.presentation.event.RefreshEvent;
 
 import org.xutils.x;
 
@@ -85,6 +98,7 @@ import java.util.Observer;
 import static com.rzico.weex.Constant.imUserId;
 import static com.rzico.weex.Constant.wxsdkInstanceMap;
 import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
+import static com.yixiang.mopian.constant.AllConstant.isClearAll;
 
 
 /**
@@ -97,6 +111,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView rgGroupHomeTv, rgGroupFriendTv, rgGroupMsgTv, rgGroupMyTv;
     private TextView ivMessageDot;
     private LinearLayout rgGroupHome, rgGroupFriend, rgGroupMsg, rgGroupMy, rgGroupAdd;
+
+    private final String TAG = "MainActivity";
 
     private boolean canReload = true;
     //打开扫描界面请求码
@@ -131,6 +147,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void handleMessage(android.os.Message msg) {
                 super.handleMessage(msg);
+//                Toast.makeText(MainActivity.this, "请求登录结果：" + msg.what , Toast.LENGTH_SHORT).show();
                 //预防屏幕抖屏
                 if(isfirstHandle) {
                     isfirstHandle = false;
@@ -178,9 +195,108 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //设置高亮标题
         initWeexView();
         initView();
+        if(isClearAll == 1){//说明 被清理掉内存了、 一些初始值 需要重新初始值
+            isfirstHandle = false;
+//            Toast.makeText(MainActivity.this, "1", Toast.LENGTH_SHORT).show();
+            initIM();
+            Dexter.withActivity(MainActivity.this).withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+                            //初始化数据库
+                            org.xutils.DbManager.DaoConfig daoConfig = XDB.getDaoConfig();
+                            WXApplication.setDb(x.getDb(daoConfig));
+                            SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+                            int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
+                            InitBusiness.start(getApplicationContext(), loglvl);
+                        }
 
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                            showDeniedDialog("需要存储权限,才能运行程序");
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission,
+                                                                       PermissionToken token) {
+                            //用户不允许权限，向用户解释权限左右
+                            token.continuePermissionRequest();
+                        }
+                    }).check();
+        }else{
+//            Toast.makeText(MainActivity.this, "0", Toast.LENGTH_SHORT).show();
+        }
     }
+    private void initIM() {
+        //登录之前要初始化群和好友关系链缓存
+        TIMUserConfig userConfig = new TIMUserConfig();
+        userConfig.setUserStatusListener(new TIMUserStatusListener() {
+            @Override
+            public void onForceOffline() {
+                //登出
+                new XRequest(MainActivity.this, "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    @Override
+                    public void onSuccess(BaseActivity activity, String result, String type) {
+                        TIMManager.getInstance().logout(new TIMCallBack() {
+                            @Override
+                            public void onError(int code, String desc) {
+                                offlineLoginOut();
+                            }
+                            @Override
+                            public void onSuccess() {
+                                offlineLoginOut();
+                            }
+                        });
+                    }
+                    @Override
+                    public void onFail(BaseActivity activity, String cacheData, int code) {
+                        offlineLoginOut();
+                    }
+                }).execute();
+            }
 
+            //被踢了
+            private void offlineLoginOut() {
+                //登出成功
+                Constant.loginState = false;
+                Constant.userId = 0;
+                Constant.imUserId = "";
+                SharedUtils.saveLoginId(Constant.userId);
+                if (Constant.loginHandler != null) {
+                    Constant.loginHandler.sendEmptyMessage(MainActivity.FORCEOFFLINE);
+                }
+            }
+
+            @Override
+            public void onUserSigExpired() {
+                //票据过期，需要重新登录
+                LoginUtils.checkLogin(MainActivity.this, null, null);
+            }
+        })
+                .setConnectionListener(new TIMConnListener() {
+                    @Override
+                    public void onConnected() {
+                        android.util.Log.i(TAG, "onConnected");
+                    }
+
+                    @Override
+                    public void onDisconnected(int code, String desc) {
+                        android.util.Log.i(TAG, "onDisconnected");
+                    }
+
+                    @Override
+                    public void onWifiNeedAuth(String name) {
+                        android.util.Log.i(TAG, "onWifiNeedAuth");
+                    }
+                });
+
+        //设置刷新监听
+        RefreshEvent.getInstance().init(userConfig);
+        userConfig = FriendshipEvent.getInstance().init(userConfig);
+        userConfig = GroupEvent.getInstance().init(userConfig);
+        userConfig = MessageEvent.getInstance().init(userConfig);
+        TIMManager.getInstance().setUserConfig(userConfig);
+    }
     @Override
     public void onNetChange(int netMobile) {
         super.onNetChange(netMobile);

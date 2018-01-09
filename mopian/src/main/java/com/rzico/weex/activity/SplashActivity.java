@@ -62,6 +62,7 @@ import java.util.Map;
 import static com.rzico.weex.Constant.imUserId;
 import static com.rzico.weex.utils.task.ZipExtractorTask.ZIPSUCCESS;
 import static com.tencent.open.utils.Global.getVersionCode;
+import static com.yixiang.mopian.constant.AllConstant.isClearAll;
 
 public class SplashActivity extends BaseActivity {
 
@@ -75,6 +76,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        isClearAll = 0;
         progress = (ProgressBar) findViewById(R.id.progress);
         progress.setVisibility(View.GONE);
         progress.setProgress(0);
@@ -107,7 +109,6 @@ public class SplashActivity extends BaseActivity {
                         public void onPermissionGranted(PermissionGrantedResponse response) {
                             //初始化数据库
                             initDb();
-
                             handlerFrist();
                             SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                             int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
