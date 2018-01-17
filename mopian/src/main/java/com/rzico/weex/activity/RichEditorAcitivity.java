@@ -88,7 +88,9 @@ public class RichEditorAcitivity extends AppCompatActivity {
         String centent = getIntent().getStringExtra("data");
         if(centent != null && !centent.equals("")){
             mEditor.setHtml(centent);
+            htmlContent = centent;
         }else {
+            //这里不用设置 因为浏览器会触发下面的事件
             mEditor.setEditorHeading(3);
             mEditor.setHeading(firstFontSize);
         }
