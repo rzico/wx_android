@@ -93,6 +93,14 @@ public class AlbumModule extends WXModule {
                 .subscribe(new RxBusResultDisposable<ImageRadioResultEvent>() {
                     @Override
                     protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {
+                        if (imageRadioResultEvent.getResult() == null){
+                            Message message = new Message();
+                            message.setType("cancel");
+                            message.setContent("用户取消");
+                            message.setData(null);
+                            callback.invoke(message);
+                            return;
+                        }
                         if(!isCrop){
                             Message message = new Message();
                             message.setType("success");
@@ -142,6 +150,7 @@ public class AlbumModule extends WXModule {
     }
     @JSMethod
     public void openAlbumMuti(final JSCallback callback){
+//        回调不使用全局变量
         RxGalleryFinal rxGalleryFinal = RxGalleryFinal
                 .with(WXApplication.getActivity())
                 .image()
@@ -246,11 +255,11 @@ public class AlbumModule extends WXModule {
 
             @Override
             public void onCropSuccess(@Nullable Uri uri) {
-                Message message = new Message();
-                message.setType("success");
-                message.setContent("裁剪成功");
-                MediaBean mediaBean = new MediaBean();
-//                Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_SHORT).show();
+                    Message message = new Message();
+                    message.setType("success");
+                    message.setContent("裁剪成功");
+                    MediaBean mediaBean = new MediaBean();
+//                  Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_SHORT).show();
                 if(uri.toString().startsWith("http://")){
                     String url = uri.toString();
                     mediaBean.setOriginalPath(url);
@@ -262,18 +271,18 @@ public class AlbumModule extends WXModule {
                     mediaBean.setOriginalPath(uri.getPath());
                 }
 //                以下是要经过处理的 目前暂时传一样的
-                message.setData(mediaBean);
-                callback.invoke(message);
+                    message.setData(mediaBean);
+                    callback.invoke(message);
             }
 
             @Override
             public void onCropError(@NonNull String errorMessage) {
 
-                Message message = new Message();
-                message.setType("error");
-                message.setContent("用户取消");
-                message.setData(errorMessage);
-                callback.invoke(message);
+                    Message message = new Message();
+                    message.setType("error");
+                    message.setContent("用户取消");
+                    message.setData(errorMessage);
+                    callback.invoke(message);
             }
         }).openPhotoHandleActivity(imagePath);
     }

@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -248,9 +247,6 @@ public class RecyclerViewFinal extends RecyclerView {
                 throw new RuntimeException(
                         "Unsupported LayoutManager used. Valid ones are LinearLayoutManager, GridLayoutManager and StaggeredGridLayoutManager");
             }
-            int totalItemCount = layoutManager.getItemCount();
-//            if(totalItemCount - lastVisibleItemPosition)
-            Log.e("cjl", "lastVisibleItemPosition:" + lastVisibleItemPosition + "totalItemCount" + totalItemCount);
         }
 
         @Override
@@ -260,8 +256,7 @@ public class RecyclerViewFinal extends RecyclerView {
             LayoutManager layoutManager = recyclerView.getLayoutManager();
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
-            if ((visibleItemCount > 0 && currentScrollState != RecyclerView.SCROLL_STATE_IDLE  && (lastVisibleItemPosition) >= totalItemCount - 25)) {
-//                if ((visibleItemCount > 0 && currentScrollState == RecyclerView.SCROLL_STATE_IDLE && (lastVisibleItemPosition) >= totalItemCount - 1)) {
+            if ((visibleItemCount > 0 && currentScrollState == RecyclerView.SCROLL_STATE_IDLE && (lastVisibleItemPosition) >= totalItemCount - 1)) {
                 if (mHasLoadMore) {
                     executeLoadMore();
                 }

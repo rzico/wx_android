@@ -482,10 +482,6 @@ public class RxGalleryFinalApi {
         return MediaGridFragment.getImageStoreDirByFile();
     }
 
-    public RxGalleryFinalApi setVideoPreview(boolean isPreview){
-        rxGalleryFinal.setVideoPreview(isPreview);
-        return mRxApi;
-    }
     /**
      * 设置打开的类型和方式--多选默认9张图
      * setType(SelectRXType.TYPE_IMAGE,SelectRXType.TYPE_SELECT_RADIO);

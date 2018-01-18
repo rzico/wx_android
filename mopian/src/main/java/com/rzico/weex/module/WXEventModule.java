@@ -568,7 +568,6 @@ public class WXEventModule extends WXModule {
                         message.setType("success");
                         message.setContent("加密成功");
                         message.setData(safeBase64Str);
-
                         callback.invoke(message);
                     }
                 } catch (Exception e) {
