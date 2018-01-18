@@ -392,8 +392,8 @@ public class MediaGridFragment extends BaseFragment implements MediaGridView, Re
     @Override
     public void setTheme() {
         super.setTheme();
-        uCropStatusColor = ThemeUtils.resolveColor(getActivity(), R.attr.gallery_ucrop_status_bar_color, R.color.gallery_default_toolbar_bg);
-        uCropToolbarColor = ThemeUtils.resolveColor(getActivity(), R.attr.gallery_ucrop_toolbar_color, R.color.gallery_default_toolbar_bg);
+        uCropStatusColor = ThemeUtils.resolveColor(getActivity(), R.attr.gallery_ucrop_status_bar_color, R.color.gallery_default_ucrop_color_widget_active);
+        uCropToolbarColor = ThemeUtils.resolveColor(getActivity(), R.attr.gallery_ucrop_toolbar_color, R.color.gallery_default_ucrop_color_widget_active);
         uCropActivityWidgetColor = ThemeUtils.resolveColor(getActivity(), R.attr.gallery_ucrop_activity_widget_color, R.color.gallery_default_ucrop_color_widget);
         uCropToolbarWidgetColor = ThemeUtils.resolveColor(getActivity(), R.attr.gallery_ucrop_toolbar_widget_color, R.color.gallery_default_toolbar_widget_color);
         uCropTitle = ThemeUtils.resolveString(getActivity(), R.attr.gallery_ucrop_toolbar_title, R.string.gallery_edit_phote);

@@ -30,6 +30,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.RxBusDisposable;
 import cn.finalteam.rxgalleryfinal.rxbus.event.BaseResultEvent;
 import cn.finalteam.rxgalleryfinal.rxbus.event.CloseRxMediaGridPageEvent;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageMultipleResultEvent;
+import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
 import cn.finalteam.rxgalleryfinal.rxbus.event.MediaCheckChangeEvent;
 import cn.finalteam.rxgalleryfinal.rxbus.event.MediaViewPagerChangedEvent;
 import cn.finalteam.rxgalleryfinal.rxbus.event.OpenMediaPageFragmentEvent;
@@ -91,6 +92,10 @@ public class MediaActivity extends BaseActivity implements ActivityFragmentView 
         topView.setOnLeftClickListener(new TopView.OnLeftClickListener() {
             @Override
             public void leftClick() {
+
+                if(mConfiguration.isRadio()){
+                    RxBus.getDefault().post(new ImageRadioResultEvent(null));
+                }
                 backAction();
             }
         });
@@ -362,6 +367,9 @@ public class MediaActivity extends BaseActivity implements ActivityFragmentView 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             backAction();
+            if(mConfiguration.isRadio()){
+                RxBus.getDefault().post(new ImageRadioResultEvent(null));
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);

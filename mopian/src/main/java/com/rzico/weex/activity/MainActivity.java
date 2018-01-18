@@ -188,7 +188,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     initWeexView();
                     setSelectTab(0);
                 }
-
             }
         };
         setContentView(R.layout.activity_main);

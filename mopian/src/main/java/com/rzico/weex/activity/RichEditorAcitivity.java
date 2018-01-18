@@ -629,6 +629,24 @@ public class RichEditorAcitivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //如果是返回 就添加事件
+            String key = getIntent().getStringExtra("key");
+            if(key != null && !key.equals("") && JSCallBaskManager.get(key) != null){
+
+                Message message = new Message();
+                message.setError("用户取消");
+                JSCallBaskManager.get(key).invoke(message);
+                JSCallBaskManager.remove(key);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
