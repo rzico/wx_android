@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -92,6 +93,8 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.yixiang.mopian.constant.AllConstant;
+
+import net.bither.util.NativeUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -939,6 +942,11 @@ public class WXEventModule extends WXModule {
     @JSMethod
     public void upload(final String filePath, final JSCallback callback, final JSCallback progressCallback) {
 
+
+        //在这里压缩 把压缩完的地址 放 filepath 里面
+        final String cacheFileName = AllConstant.getDiskCachePath(getActivity()) +"/"+ System.currentTimeMillis() + ".jpg";
+
+        NativeUtil.compressBitmap(filePath, cacheFileName);
         final String stsData = SharedUtils.read("stsData");
         boolean error = true;//解析出错 或者 超时就失败 就请求sts
         if (stsData != null && !stsData.equals("")) {
@@ -950,7 +958,7 @@ public class WXEventModule extends WXModule {
                 }
                 if (!error) {
                     //取本地缓存不用去服务器取
-                    uploadFile(stsData, getActivity(), filePath, callback, progressCallback);
+                    uploadFile(stsData, getActivity(), cacheFileName, callback, progressCallback);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -965,7 +973,7 @@ public class WXEventModule extends WXModule {
                     Message entity = new Gson().fromJson(result, Message.class);
                     String data = new Gson().toJson(entity.getData());
                     SharedUtils.save("stsData", data);
-                    uploadFile(data, getActivity(), filePath, callback, progressCallback);
+                    uploadFile(data, getActivity(), cacheFileName, callback, progressCallback);
                 }
 
                 @Override

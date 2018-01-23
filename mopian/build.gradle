@@ -72,6 +72,7 @@ android {
     }
     sourceSets {
         main {
+            jniLibs.srcDir(['libs'])
             java {
                 srcDirs = ["src/main/java", "src/main/java_zxing"];
             }
