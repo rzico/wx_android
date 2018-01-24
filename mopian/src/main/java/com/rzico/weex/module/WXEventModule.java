@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -93,6 +94,8 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.yixiang.mopian.constant.AllConstant;
 
+import net.bither.util.NativeUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -126,6 +129,7 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void logout(final JSCallback callback){
+        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         new XRequest(getActivity(), "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
@@ -146,8 +150,8 @@ public class WXEventModule extends WXModule {
                             SharedUtils.saveImId(Constant.imUserId);
                             Message message = new Message().success("登出成功");
                             callback.invoke(message);
-                            if(Constant.loginHandler!=null){
-                                Constant.loginHandler.sendEmptyMessage(MainActivity.LOGOUT);
+                            if(wxApplication.getLoginHandler() !=null){
+                                wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGOUT);
                             }
                         }
                     });
@@ -160,8 +164,8 @@ public class WXEventModule extends WXModule {
                     SharedUtils.saveImId(Constant.imUserId);
                     Message message = new Message().success("登出成功");
                     callback.invoke(message);
-                    if(Constant.loginHandler!=null){
-                        Constant.loginHandler.sendEmptyMessage(MainActivity.LOGOUT);
+                    if(wxApplication.getLoginHandler()!=null){
+                        wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGOUT);
                     }
                 }
 
@@ -221,16 +225,16 @@ public class WXEventModule extends WXModule {
     @JSMethod
     public void openURL(String url, JSCallback jsCallback) {
         try {
-
+//            Toast.makeText(getContext(), "url:" + url , Toast.LENGTH_SHORT).show();
             //为了判断不触发两次
-            if(oldDate == 0){
-                oldDate = System.currentTimeMillis();
-            }else{
-                if(System.currentTimeMillis() - oldDate < 1000){
-                    oldDate = 0;
-                    return;
-                }
-            }
+//            if(oldDate == 0){
+//                oldDate = System.currentTimeMillis();
+//            }else{
+//                if(System.currentTimeMillis() - oldDate < 1000){
+//                    oldDate = 0;
+//                    return;
+//                }
+//            }
             String key = String.valueOf(System.currentTimeMillis());
             if (jsCallback != null) {//如果有传入回调的话
                 JSCallBaskManager.put(key, jsCallback);
@@ -839,8 +843,11 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void getUnReadMessage(){
-        if(Constant.loginHandler!=null){
-            Constant.loginHandler.sendEmptyMessage(MainActivity.RECEIVEMSG);//刷新未读数
+
+
+        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
+        if(wxApplication.getLoginHandler()!=null){
+            wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.RECEIVEMSG);//刷新未读数
         }
         List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
         List<String> userIds = new ArrayList<>();
@@ -891,9 +898,9 @@ public class WXEventModule extends WXModule {
                             onMessage.setData(imMessage);
                             Map<String, Object> params = new HashMap<>();
                             params.put("data", onMessage);
-                            if (Constant.wxsdkInstanceMap != null) {
-                                for (String key: Constant.wxsdkInstanceMap.keySet()){
-                                    Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback("onMessage", params);
+                            if (wxApplication.getWxsdkInstanceMap() != null) {
+                                for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
+                                    wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
                                 }
                             }
                             //判断当前页面是不是weex页面
@@ -939,6 +946,11 @@ public class WXEventModule extends WXModule {
     @JSMethod
     public void upload(final String filePath, final JSCallback callback, final JSCallback progressCallback) {
 
+
+        //在这里压缩 把压缩完的地址 放 filepath 里面
+        final String cacheFileName = AllConstant.getDiskCachePath(getActivity()) +"/"+ System.currentTimeMillis() + ".jpg";
+
+        NativeUtil.compressBitmap(filePath, cacheFileName);
         final String stsData = SharedUtils.read("stsData");
         boolean error = true;//解析出错 或者 超时就失败 就请求sts
         if (stsData != null && !stsData.equals("")) {
@@ -950,7 +962,7 @@ public class WXEventModule extends WXModule {
                 }
                 if (!error) {
                     //取本地缓存不用去服务器取
-                    uploadFile(stsData, getActivity(), filePath, callback, progressCallback);
+                    uploadFile(stsData, getActivity(), cacheFileName, callback, progressCallback);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -965,7 +977,7 @@ public class WXEventModule extends WXModule {
                     Message entity = new Gson().fromJson(result, Message.class);
                     String data = new Gson().toJson(entity.getData());
                     SharedUtils.save("stsData", data);
-                    uploadFile(data, getActivity(), filePath, callback, progressCallback);
+                    uploadFile(data, getActivity(), cacheFileName, callback, progressCallback);
                 }
 
                 @Override
@@ -1430,12 +1442,13 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void sendGlobalEvent(String eventKey, Message data){
+        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
         //推送前面4个页面
-        if (Constant.wxsdkInstanceMap != null) {
-            for (String key: Constant.wxsdkInstanceMap.keySet()){
-                Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback(eventKey, params);
+        if (wxApplication.getWxsdkInstanceMap() != null) {
+            for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
+                wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback(eventKey, params);
             }
         }
         //判断当前页面是不是weex页面

@@ -10,6 +10,7 @@ import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
 import com.alibaba.sdk.android.oss.common.utils.BinaryUtil;
 import com.rzico.weex.Constant;
 import com.rzico.weex.model.info.Message;
+import com.rzico.weex.utils.DeleteFileUtil;
 import com.taobao.weex.bridge.JSCallback;
 
 import java.io.IOException;
@@ -65,6 +66,8 @@ public class MultiPartUploadManager {
                 Log.d("PutObject", "UploadSuccess");
 
                 Log.d("ETag", result.getETag());
+                //删除本地图片
+                DeleteFileUtil.delete(request.getLocalFile());
                 Log.d("RequestId", result.getRequestId());
                 if(callback!=null){
                     Message message = new Message();

@@ -34,7 +34,7 @@ public class Constant {
     public static final String shareAppId = "1d927fd47d636";
     public static final String shareAppSecret = "277f7181f07499357cfa33531fe818ab";
 
-    public static Handler loginHandler = null;
+//    public static Handler loginHandler = null;
 
     //菜单路径
     public static  String index1 = "view/home/index.js";
@@ -66,7 +66,7 @@ public class Constant {
     public static String netResVerison = "1.0.4";
     public static String appVerison = "";
 
-    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
+//    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
     public static final String SERVER = "http://weex.rzico.com/";
