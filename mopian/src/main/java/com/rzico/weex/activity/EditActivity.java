@@ -91,7 +91,7 @@ public class EditActivity extends BaseActivity implements IWXRenderListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_PHOTOHANDLER) {//而代表请求裁剪
+        if(requestCode == REQUEST_PHOTOHANDLER || requestCode == REQUEST_CROP) {//而代表请求裁剪
             AlbumModule.get().onActivityResult(requestCode, resultCode, data);
         }
     }
