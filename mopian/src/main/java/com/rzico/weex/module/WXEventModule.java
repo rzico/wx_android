@@ -129,6 +129,7 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void logout(final JSCallback callback){
+        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         new XRequest(getActivity(), "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
@@ -149,8 +150,8 @@ public class WXEventModule extends WXModule {
                             SharedUtils.saveImId(Constant.imUserId);
                             Message message = new Message().success("登出成功");
                             callback.invoke(message);
-                            if(Constant.loginHandler!=null){
-                                Constant.loginHandler.sendEmptyMessage(MainActivity.LOGOUT);
+                            if(wxApplication.getLoginHandler() !=null){
+                                wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGOUT);
                             }
                         }
                     });
@@ -163,8 +164,8 @@ public class WXEventModule extends WXModule {
                     SharedUtils.saveImId(Constant.imUserId);
                     Message message = new Message().success("登出成功");
                     callback.invoke(message);
-                    if(Constant.loginHandler!=null){
-                        Constant.loginHandler.sendEmptyMessage(MainActivity.LOGOUT);
+                    if(wxApplication.getLoginHandler()!=null){
+                        wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGOUT);
                     }
                 }
 
@@ -224,16 +225,16 @@ public class WXEventModule extends WXModule {
     @JSMethod
     public void openURL(String url, JSCallback jsCallback) {
         try {
-
+//            Toast.makeText(getContext(), "url:" + url , Toast.LENGTH_SHORT).show();
             //为了判断不触发两次
-            if(oldDate == 0){
-                oldDate = System.currentTimeMillis();
-            }else{
-                if(System.currentTimeMillis() - oldDate < 1000){
-                    oldDate = 0;
-                    return;
-                }
-            }
+//            if(oldDate == 0){
+//                oldDate = System.currentTimeMillis();
+//            }else{
+//                if(System.currentTimeMillis() - oldDate < 1000){
+//                    oldDate = 0;
+//                    return;
+//                }
+//            }
             String key = String.valueOf(System.currentTimeMillis());
             if (jsCallback != null) {//如果有传入回调的话
                 JSCallBaskManager.put(key, jsCallback);
@@ -842,8 +843,11 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void getUnReadMessage(){
-        if(Constant.loginHandler!=null){
-            Constant.loginHandler.sendEmptyMessage(MainActivity.RECEIVEMSG);//刷新未读数
+
+
+        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
+        if(wxApplication.getLoginHandler()!=null){
+            wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.RECEIVEMSG);//刷新未读数
         }
         List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
         List<String> userIds = new ArrayList<>();
@@ -894,9 +898,9 @@ public class WXEventModule extends WXModule {
                             onMessage.setData(imMessage);
                             Map<String, Object> params = new HashMap<>();
                             params.put("data", onMessage);
-                            if (Constant.wxsdkInstanceMap != null) {
-                                for (String key: Constant.wxsdkInstanceMap.keySet()){
-                                    Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback("onMessage", params);
+                            if (wxApplication.getWxsdkInstanceMap() != null) {
+                                for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
+                                    wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
                                 }
                             }
                             //判断当前页面是不是weex页面
@@ -1438,12 +1442,13 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void sendGlobalEvent(String eventKey, Message data){
+        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
         //推送前面4个页面
-        if (Constant.wxsdkInstanceMap != null) {
-            for (String key: Constant.wxsdkInstanceMap.keySet()){
-                Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback(eventKey, params);
+        if (wxApplication.getWxsdkInstanceMap() != null) {
+            for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
+                wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback(eventKey, params);
             }
         }
         //判断当前页面是不是weex页面

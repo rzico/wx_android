@@ -124,7 +124,6 @@ public class WXPageActivity extends AbsWeexActivity implements
 //   });
     if (mIsDevSupportEnabled && !CommonUtils.hasHardwareMenuKey()) {
       mShakeDetector = new ShakeDetector(new ShakeDetector.ShakeListener() {
-
         @Override
         public void onShake() {
           if(Utils.isApkDebugable(WXPageActivity.this)){

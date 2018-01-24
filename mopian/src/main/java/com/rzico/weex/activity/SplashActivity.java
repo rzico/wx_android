@@ -72,9 +72,12 @@ public class SplashActivity extends BaseActivity {
 
     private String writeResVersion = Constant.resVerison;//默认是 app的资源包
 
+    private WXApplication wxApplication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        wxApplication = (WXApplication) this.getApplicationContext();
         setContentView(R.layout.activity_splash);
         isClearAll = 0;
         progress = (ProgressBar) findViewById(R.id.progress);
@@ -173,8 +176,8 @@ public class SplashActivity extends BaseActivity {
                 Constant.userId = 0;
                 Constant.imUserId = "";
                 SharedUtils.saveLoginId(Constant.userId);
-                if (Constant.loginHandler != null) {
-                    Constant.loginHandler.sendEmptyMessage(MainActivity.FORCEOFFLINE);
+                if ( wxApplication.getLoginHandler() != null) {
+                    wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.FORCEOFFLINE);
                 }
             }
 
@@ -492,6 +495,7 @@ public class SplashActivity extends BaseActivity {
         try {
             if (Utils.isApkDebugable(SplashActivity.this)) {
                 downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+//                toNext();
             } else {
                if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
                     writeResVersion = netResVersion;

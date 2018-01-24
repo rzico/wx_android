@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -42,6 +43,7 @@ import com.rzico.weex.utils.chat.Foreground;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKEngine;
+import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.common.WXException;
 import com.taobao.weex.ui.component.WXBasicComponentType;
 
@@ -74,6 +76,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
 
@@ -92,6 +95,26 @@ public class WXApplication extends Application {
 
   private static WXApplication instance;
 
+
+  private Map<String, WXSDKInstance> wxsdkInstanceMap;
+
+  private Handler loginHandler = null;
+
+  public Map<String, WXSDKInstance> getWxsdkInstanceMap() {
+    return wxsdkInstanceMap;
+  }
+
+  public void setWxsdkInstanceMap(Map<String, WXSDKInstance> wxsdkInstanceMap) {
+    this.wxsdkInstanceMap = wxsdkInstanceMap;
+  }
+
+  public Handler getLoginHandler() {
+    return loginHandler;
+  }
+
+  public void setLoginHandler(Handler loginHandler) {
+    this.loginHandler = loginHandler;
+  }
 
   public static WXApplication getInstance() {
     return instance;

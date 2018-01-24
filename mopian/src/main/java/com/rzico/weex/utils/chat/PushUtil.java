@@ -150,6 +150,8 @@ public class PushUtil implements Observer {
      */
     @Override
     public void update(Observable observable, Object data) {
+        WXApplication wxApplication = (WXApplication) WXApplication.getContext();
+        if(wxApplication == null) return;
         if (observable instanceof MessageEvent) {
             if (data instanceof TIMMessage) {
                 final TIMMessage msg = (TIMMessage) data;
@@ -158,8 +160,8 @@ public class PushUtil implements Observer {
                 if (message != null && message.getSender() != null && !message.getSender().equals("")) {
                     users.add(message.getSender());
                     //推送主页更新消息
-                    if (Constant.loginHandler != null) {
-                        Constant.loginHandler.sendEmptyMessage(MainActivity.RECEIVEMSG);
+                    if ( wxApplication.getLoginHandler()!= null) {
+                        wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.RECEIVEMSG);
                     }
                 }
                 //获取好友资料
@@ -190,6 +192,8 @@ public class PushUtil implements Observer {
 
     private void handleToWeex(com.rzico.weex.model.chat.Message message, List<TIMUserProfile> result) {
 //        Toast.makeText(WXApplication.getContext(), "0", Toast.LENGTH_SHORT).show();
+        WXApplication wxApplication = (WXApplication) WXApplication.getContext();
+        if(wxApplication == null) return;
         if (!(message instanceof CustomMessage)) {//如果不是自定义消息则提示
 //            Toast.makeText(WXApplication.getContext(), "1", Toast.LENGTH_SHORT).show();
             if (message == null) return;
@@ -221,10 +225,10 @@ public class PushUtil implements Observer {
                 Map<String, Object> params = new HashMap<>();
                 params.put("data", onMessage);
 //                Toast.makeText(WXApplication.getContext(), "4", Toast.LENGTH_SHORT).show();
-                if (Constant.wxsdkInstanceMap != null) {
+                if (wxApplication.getWxsdkInstanceMap() != null) {
 //                    Toast.makeText(WXApplication.getContext(), "5", Toast.LENGTH_SHORT).show();
-                    for (String key : Constant.wxsdkInstanceMap.keySet()) {
-                        Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback("onMessage", params);
+                    for (String key : wxApplication.getWxsdkInstanceMap().keySet()) {
+                        wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
                     }
                 }
 //                Toast.makeText(WXApplication.getContext(), "6", Toast.LENGTH_SHORT).show();
@@ -249,9 +253,9 @@ public class PushUtil implements Observer {
                 onMessage.setData(imMessage);
                 Map<String, Object> params = new HashMap<>();
                 params.put("data", onMessage);
-                if (Constant.wxsdkInstanceMap != null) {
-                    for (String key : Constant.wxsdkInstanceMap.keySet()) {
-                        Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback("onMessage", params);
+                if (wxApplication.getWxsdkInstanceMap() != null) {
+                    for (String key : wxApplication.getWxsdkInstanceMap().keySet()) {
+                        wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
                     }
                 }
 
