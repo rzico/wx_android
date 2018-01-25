@@ -661,7 +661,7 @@ public class RichEditorAcitivity extends AppCompatActivity {
             mEditor.clearCache(true);
             mEditor.loadUrl("about:blank"); // clearView() should be changed to loadUrl("about:blank"), since clearView() is deprecated now
             mEditor.freeMemory();
-            mEditor.pauseTimers();
+//            mEditor.pauseTimers();
             mEditor = null; // Note that mWebView.destroy() and mWebView = null do the exact same thing
         }
 
