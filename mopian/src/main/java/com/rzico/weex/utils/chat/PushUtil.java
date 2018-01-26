@@ -168,7 +168,7 @@ public class PushUtil implements Observer {
                 TIMFriendshipManager.getInstance().getUsersProfile(users, new TIMValueCallBack<List<TIMUserProfile>>() {
                     @Override
                     public void onError(int code, String desc) {
-                        Toast.makeText(WXApplication.getContext(), desc, Toast.LENGTH_SHORT).show();
+//                      Toast.makeText(WXApplication.getContext(), desc, Toast.LENGTH_SHORT).show();  invalid param.
                         if (!msg.isSelf()) {
                             handleToWeex(message, null);
                         }
