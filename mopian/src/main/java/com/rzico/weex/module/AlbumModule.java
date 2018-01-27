@@ -31,6 +31,7 @@ import org.xutils.common.util.FileUtil;
 
 import java.io.File;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,17 +83,44 @@ public class AlbumModule extends WXModule {
     }
 
     @JSMethod
-    public void openAlbumSingle(final boolean isCrop, final JSCallback callback){
+    public void openAlbumSingle(String option, final JSCallback callback){
+        boolean getCrop = false;
+        int width = 1;
+        int height = 1;
+        try {
+            option = URLDecoder.decode("utf-8", option);
+            com.alibaba.fastjson.JSONObject jsObj = JSON.parseObject(option);
+            if(jsObj.containsKey("isCrop")){
+                getCrop = jsObj.getBoolean("isCrop");
+            }
+            if(jsObj.containsKey("width")){
+                width = jsObj.getInteger("width");
+            }
+            if(jsObj.containsKey("height")){
+                height = jsObj.getInteger("height");
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        final boolean isCrop = getCrop;
         RxGalleryFinal
                 .with(WXApplication.getActivity())
                 .image()
                 .radio()
-                .cropAspectRatioOptions(0, new AspectRatio("1:1", 1, 1))
+                .cropAspectRatioOptions(0, new AspectRatio(width + ":" + height, width, height))
 //                .crop()
                 .imageLoader(ImageLoaderType.PICASSO)
                 .subscribe(new RxBusResultDisposable<ImageRadioResultEvent>() {
                     @Override
                     protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {
+                        if (imageRadioResultEvent.getResult() == null){
+                            Message message = new Message();
+                            message.setType("cancel");
+                            message.setContent("用户取消");
+                            message.setData(null);
+                            callback.invoke(message);
+                            return;
+                        }
                         if(!isCrop){
                             Message message = new Message();
                             message.setType("success");
@@ -142,6 +170,7 @@ public class AlbumModule extends WXModule {
     }
     @JSMethod
     public void openAlbumMuti(final JSCallback callback){
+//        回调不使用全局变量
         RxGalleryFinal rxGalleryFinal = RxGalleryFinal
                 .with(WXApplication.getActivity())
                 .image()
@@ -246,11 +275,11 @@ public class AlbumModule extends WXModule {
 
             @Override
             public void onCropSuccess(@Nullable Uri uri) {
-                Message message = new Message();
-                message.setType("success");
-                message.setContent("裁剪成功");
-                MediaBean mediaBean = new MediaBean();
-//                Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_SHORT).show();
+                    Message message = new Message();
+                    message.setType("success");
+                    message.setContent("裁剪成功");
+                    MediaBean mediaBean = new MediaBean();
+//                  Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_SHORT).show();
                 if(uri.toString().startsWith("http://")){
                     String url = uri.toString();
                     mediaBean.setOriginalPath(url);
@@ -262,18 +291,18 @@ public class AlbumModule extends WXModule {
                     mediaBean.setOriginalPath(uri.getPath());
                 }
 //                以下是要经过处理的 目前暂时传一样的
-                message.setData(mediaBean);
-                callback.invoke(message);
+                    message.setData(mediaBean);
+                    callback.invoke(message);
             }
 
             @Override
             public void onCropError(@NonNull String errorMessage) {
 
-                Message message = new Message();
-                message.setType("error");
-                message.setContent("用户取消");
-                message.setData(errorMessage);
-                callback.invoke(message);
+                    Message message = new Message();
+                    message.setType("error");
+                    message.setContent("用户取消");
+                    message.setData(errorMessage);
+                    callback.invoke(message);
             }
         }).openPhotoHandleActivity(imagePath);
     }

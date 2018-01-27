@@ -99,7 +99,7 @@ public class ZipExtractorTask extends AsyncTask<Void, Integer, Long> {
                 }
                 File destination = new File(mOutput, entry.getName());
                 if(!destination.getParentFile().exists()){
-                    Log.e(TAG, "make="+destination.getParentFile().getAbsolutePath());
+//                    Log.e(TAG, "make="+destination.getParentFile().getAbsolutePath());
                     destination.getParentFile().mkdirs();
                 }
                 if(destination.exists()&&mContext!=null&&!mReplaceAll){

@@ -10,12 +10,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -56,6 +58,7 @@ import com.rzico.weex.model.info.WxConfig;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
 import com.rzico.weex.oos.OssService;
+import com.rzico.weex.oos.PauseableUploadTask;
 import com.rzico.weex.oos.STSGetter;
 import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.ContactUtils;
@@ -91,10 +94,13 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.yixiang.mopian.constant.AllConstant;
 import com.yixiang.mopian.wxapi.WXEntryActivity;
 
+import net.bither.util.NativeUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
@@ -123,6 +129,7 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void logout(final JSCallback callback){
+        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         new XRequest(getActivity(), "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
@@ -143,8 +150,8 @@ public class WXEventModule extends WXModule {
                             SharedUtils.saveImId(Constant.imUserId);
                             Message message = new Message().success("登出成功");
                             callback.invoke(message);
-                            if(Constant.loginHandler!=null){
-                                Constant.loginHandler.sendEmptyMessage(MainActivity.LOGOUT);
+                            if(wxApplication.getLoginHandler() !=null){
+                                wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGOUT);
                             }
                         }
                     });
@@ -157,8 +164,8 @@ public class WXEventModule extends WXModule {
                     SharedUtils.saveImId(Constant.imUserId);
                     Message message = new Message().success("登出成功");
                     callback.invoke(message);
-                    if(Constant.loginHandler!=null){
-                        Constant.loginHandler.sendEmptyMessage(MainActivity.LOGOUT);
+                    if(wxApplication.getLoginHandler()!=null){
+                        wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGOUT);
                     }
                 }
 
@@ -218,16 +225,16 @@ public class WXEventModule extends WXModule {
     @JSMethod
     public void openURL(String url, JSCallback jsCallback) {
         try {
-
+//            Toast.makeText(getContext(), "url:" + url , Toast.LENGTH_SHORT).show();
             //为了判断不触发两次
-            if(oldDate == 0){
-                oldDate = System.currentTimeMillis();
-            }else{
-                if(System.currentTimeMillis() - oldDate < 1000){
-                    oldDate = 0;
-                    return;
-                }
-            }
+//            if(oldDate == 0){
+//                oldDate = System.currentTimeMillis();
+//            }else{
+//                if(System.currentTimeMillis() - oldDate < 1000){
+//                    oldDate = 0;
+//                    return;
+//                }
+//            }
             String key = String.valueOf(System.currentTimeMillis());
             if (jsCallback != null) {//如果有传入回调的话
                 JSCallBaskManager.put(key, jsCallback);
@@ -565,7 +572,6 @@ public class WXEventModule extends WXModule {
                         message.setType("success");
                         message.setContent("加密成功");
                         message.setData(safeBase64Str);
-
                         callback.invoke(message);
                     }
                 } catch (Exception e) {
@@ -837,8 +843,11 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void getUnReadMessage(){
-        if(Constant.loginHandler!=null){
-            Constant.loginHandler.sendEmptyMessage(MainActivity.RECEIVEMSG);//刷新未读数
+
+
+        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
+        if(wxApplication.getLoginHandler()!=null){
+            wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.RECEIVEMSG);//刷新未读数
         }
         List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
         List<String> userIds = new ArrayList<>();
@@ -889,9 +898,9 @@ public class WXEventModule extends WXModule {
                             onMessage.setData(imMessage);
                             Map<String, Object> params = new HashMap<>();
                             params.put("data", onMessage);
-                            if (Constant.wxsdkInstanceMap != null) {
-                                for (String key: Constant.wxsdkInstanceMap.keySet()){
-                                    Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback("onMessage", params);
+                            if (wxApplication.getWxsdkInstanceMap() != null) {
+                                for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
+                                    wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
                                 }
                             }
                             //判断当前页面是不是weex页面
@@ -937,6 +946,11 @@ public class WXEventModule extends WXModule {
     @JSMethod
     public void upload(final String filePath, final JSCallback callback, final JSCallback progressCallback) {
 
+
+        //在这里压缩 把压缩完的地址 放 filepath 里面
+        final String cacheFileName = AllConstant.getDiskCachePath(getActivity()) +"/"+ System.currentTimeMillis() + ".jpg";
+
+        NativeUtil.compressBitmap(filePath, cacheFileName);
         final String stsData = SharedUtils.read("stsData");
         boolean error = true;//解析出错 或者 超时就失败 就请求sts
         if (stsData != null && !stsData.equals("")) {
@@ -948,7 +962,7 @@ public class WXEventModule extends WXModule {
                 }
                 if (!error) {
                     //取本地缓存不用去服务器取
-                    uploadFile(stsData, getActivity(), filePath, callback, progressCallback);
+                    uploadFile(stsData, getActivity(), cacheFileName, callback, progressCallback);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -963,7 +977,7 @@ public class WXEventModule extends WXModule {
                     Message entity = new Gson().fromJson(result, Message.class);
                     String data = new Gson().toJson(entity.getData());
                     SharedUtils.save("stsData", data);
-                    uploadFile(data, getActivity(), filePath, callback, progressCallback);
+                    uploadFile(data, getActivity(), cacheFileName, callback, progressCallback);
                 }
 
                 @Override
@@ -1037,6 +1051,7 @@ public class WXEventModule extends WXModule {
                 }).check();
 
     }
+    private WeakReference<PauseableUploadTask> task;
     //上传文件
     public void uploadFile(String stsData, BaseActivity activity, String filePath, JSCallback callback, JSCallback progressCallback) {
         OSSCredentialProvider credentialProvider = new STSGetter(stsData);
@@ -1045,7 +1060,13 @@ public class WXEventModule extends WXModule {
         Date nowTime = new Date();
         SimpleDateFormat time = new SimpleDateFormat("yyyy/MM/dd");
         String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + ".jpg";
-        ossService.asyncPutImage(imagePath, filePath, callback, progressCallback);
+//        ossService.asyncPutImage(imagePath, filePath, callback, progressCallback);
+//        if ((task == null) || (task.get() == null)){
+//            Log.d("MultiPartUpload", "Start");
+            task = new WeakReference<>(ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback));
+//        }
+//        else {
+//        }
     }    /**获取库Phon表字段**/
     private static final String[] PHONES_PROJECTION = new String[] {
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY, ContactsContract.CommonDataKinds.Photo.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.DATA1 };
@@ -1421,12 +1442,13 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void sendGlobalEvent(String eventKey, Message data){
+        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
         //推送前面4个页面
-        if (Constant.wxsdkInstanceMap != null) {
-            for (String key: Constant.wxsdkInstanceMap.keySet()){
-                Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback(eventKey, params);
+        if (wxApplication.getWxsdkInstanceMap() != null) {
+            for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
+                wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback(eventKey, params);
             }
         }
         //判断当前页面是不是weex页面

@@ -48,10 +48,9 @@ public class MediaPreviewAdapter extends RecyclingPagerAdapter {
         }
         PhotoView ivImage = (PhotoView) convertView.findViewById(R.id.iv_media_image);
         String path = null;
-        //这里应该显示原图
-//        if (mediaBean.getWidth() > 1200 || mediaBean.getHeight() > 1200) {
-//            path = mediaBean.getThumbnailBigPath();
-//        }
+        if (mediaBean.getWidth() > 1200 || mediaBean.getHeight() > 1200) {
+            path = mediaBean.getThumbnailBigPath();
+        }
         if (TextUtils.isEmpty(path)) {
             path = mediaBean.getOriginalPath();
         }

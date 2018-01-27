@@ -97,6 +97,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
     private ChatInfo chatInfo;
     private Handler handler = new Handler();
 
+    private WXApplication wxApplication;
     private boolean isBlack = true;
 
     public static void navToChat(final Context context, final String identify, final TIMConversationType type){
@@ -179,6 +180,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        wxApplication = (WXApplication) this.getApplicationContext();
         BarTextColorUtils.StatusBarLightMode(this, R.color.wxColor);
 //        BarTextColorUtils.StatusBarLightMode(this, false);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -445,9 +447,9 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
                     onMessage.setData(imMessage);
                     Map<String, Object> params = new HashMap<>();
                     params.put("data", onMessage);
-                    if (Constant.wxsdkInstanceMap != null) {
-                        for (String key: Constant.wxsdkInstanceMap.keySet()){
-                            Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback("onMessage", params);
+                    if (wxApplication.getWxsdkInstanceMap() != null) {
+                        for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
+                            wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
                         }
                     }
                     //判断当前页面是不是weex页面
@@ -473,9 +475,9 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
                     onMessage.setData(imMessage);
                     Map<String, Object> params = new HashMap<>();
                     params.put("data", onMessage);
-                    if (Constant.wxsdkInstanceMap != null) {
-                        for (String key: Constant.wxsdkInstanceMap.keySet()){
-                            Constant.wxsdkInstanceMap.get(key).fireGlobalEventCallback("onMessage", params);
+                    if (wxApplication.getWxsdkInstanceMap() != null) {
+                        for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
+                            wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
                         }
                     }
                     //判断当前页面是不是weex页面

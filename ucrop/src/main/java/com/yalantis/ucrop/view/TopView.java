@@ -140,14 +140,11 @@ public class TopView extends RelativeLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-
         int i = view.getId();
         if (i == R.id.tv_left) {
             onLeftClickListener.leftClick();
-
         } else if (i == R.id.tv_right) {
             onRightClickListener.rightClick();
-
         }
     }
 

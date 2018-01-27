@@ -62,6 +62,14 @@ public class PuzzleActivity extends cn.finalteam.rxgalleryfinal.PuzzleActivity i
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            back();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     protected void savePuzzle() {
         buildDrawingCache(puzzleLL);
         puzzleLL.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);

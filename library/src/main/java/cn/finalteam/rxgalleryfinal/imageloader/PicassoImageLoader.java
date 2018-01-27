@@ -12,9 +12,6 @@ import java.io.File;
 
 import cn.finalteam.rxgalleryfinal.ui.widget.FixImageView;
 
-import static com.squareup.picasso.MemoryPolicy.NO_CACHE;
-import static com.squareup.picasso.MemoryPolicy.NO_STORE;
-
 /**
  * Desction:
  * .centerCrop() 预览大图

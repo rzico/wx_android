@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.huawei.android.pushagent.PushManager;
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LoginActivity;
 import com.rzico.weex.activity.MainActivity;
@@ -150,8 +151,10 @@ public class LoginUtils  {
     public static void loginSuccess(){
         Constant.loginState = true;
         SharedUtils.saveLoginId(Constant.userId);
-        if(Constant.loginHandler!=null){
-            Constant.loginHandler.sendEmptyMessage(MainActivity.LOGINSUCCESS);
+        WXApplication wxApplication = (WXApplication) WXApplication.getContext();
+        if(wxApplication == null) return;
+        if(wxApplication.getLoginHandler()!=null){
+            wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGINSUCCESS);
         }
 
         //测试
@@ -168,8 +171,10 @@ public class LoginUtils  {
         }else {
             Constant.unLinelogin = false;
         }
-        if(Constant.loginHandler!=null){
-            Constant.loginHandler.sendEmptyMessage(MainActivity.LOGINERROR);
+        WXApplication wxApplication = (WXApplication) WXApplication.getContext();
+        if(wxApplication == null) return;
+        if(wxApplication.getLoginHandler()!=null){
+            wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGINERROR);
         }
     }
 //    public static void logout(){

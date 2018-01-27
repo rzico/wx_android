@@ -104,7 +104,7 @@ public class UpdateDialog extends Dialog {
                 try {
                     File file = getFileFromServer(URL, bar);
                     if(file!=null){
-                        size.setText("版本大小："+ FileSizeUtil.FormetFileSize(FileSizeUtil.getFileSize(file)));
+//                        size.setText("版本大小："+ FileSizeUtil.FormetFileSize(FileSizeUtil.getFileSize(file)));
                     }
                     sleep(1000);
                     installApk(file);

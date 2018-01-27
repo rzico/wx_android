@@ -300,7 +300,7 @@ public abstract class AbsWeexActivity extends BaseActivity implements IWXRenderL
         url = url.contains("file:/") ? url.replace("file:/","") : url;
          url = url.contains("?") ? url.substring(0 ,url.indexOf("?")) : url;
       }
-      mInstance.render(getPageName(), PathUtils.loadLocal(url), options, jsonInitData, WXRenderStrategy.APPEND_ASYNC);
+      mInstance.render(getPageName(), PathUtils.loadLocal(url, AbsWeexActivity.this), options, jsonInitData, WXRenderStrategy.APPEND_ASYNC);
     }
   }
 

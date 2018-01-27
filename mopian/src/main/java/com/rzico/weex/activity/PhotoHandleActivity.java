@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,6 +58,9 @@ import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
 import cn.finalteam.rxgalleryfinal.utils.FoucedStateListDrawable;
 import cn.finalteam.rxgalleryfinal.view.ImageButtonWithText;
+import cn.hzw.graffiti.GraffitiActivity;
+import cn.hzw.graffiti.GraffitiParams;
+
 import com.yalantis.ucrop.view.TopView;
 
 public class PhotoHandleActivity extends AppCompatActivity {
@@ -68,6 +72,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
     private Toast mCurrentToast;
     private static final int PUZZLE = 101;
     private static final int FILTER = 102;
+    public static final int GRAFFITI = 103;
 
 
     private AntiShake antiShake = new AntiShake();
@@ -84,7 +89,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
     private int mToolbarCancelDrawable;
 
     //  功能按钮图片
-    private ViewGroup mWrapperStateAspectRatio, mWrapperPhotoChange, mWrapperStateFilter, mWrapperPhotoPuzzle;
+    private ViewGroup mWrapperStateAspectRatio, mWrapperPhotoChange, mWrapperStateFilter, mWrapperDoodle;
     //  mLayoutPhotoChange 原先的放大缩小功能被改成更换图片
     private ViewGroup mLayoutAspectRatio, mLayoutRotate, mLayoutFilter;
 
@@ -197,8 +202,8 @@ public class PhotoHandleActivity extends AppCompatActivity {
             mWrapperStateAspectRatio.setOnClickListener(mStateClickListener);
             mWrapperPhotoChange = (ViewGroup) findViewById(R.id.state_photo_change);
             mWrapperPhotoChange.setOnClickListener(mStateClickListener);
-            mWrapperPhotoPuzzle = (ViewGroup) findViewById(R.id.state_photo_puzzle);
-            mWrapperPhotoPuzzle.setOnClickListener(mStateClickListener);
+            mWrapperDoodle = (ViewGroup) findViewById(R.id.state_photo_doodle);
+            mWrapperDoodle.setOnClickListener(mStateClickListener);
             mWrapperStateFilter = (ViewGroup) findViewById(R.id.state_filter);
             mWrapperStateFilter.setOnClickListener(mStateClickListener);
 
@@ -242,7 +247,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
         ImageButtonWithText photoChangeImageView = (ImageButtonWithText) findViewById(R.id.image_view_photo_change);
         ImageButtonWithText stateFilterImageView = (ImageButtonWithText) findViewById(R.id.image_view_state_filter);
         ImageButtonWithText stateUcropImageView = (ImageButtonWithText) findViewById(R.id.image_view_state_ucrop);
-        ImageButtonWithText photoPuzzleImageView = (ImageButtonWithText) findViewById(R.id.image_view_photo_puzzle);
+        ImageButtonWithText photoPuzzleImageView = (ImageButtonWithText) findViewById(R.id.image_view_photo_doodle);
 //        photoPuzzleImageView.setFocusable(false);
 //      photoPuzzleImageView.setClickable(false);
         photoChangeImageView.getImageView().setImageDrawable(new FoucedStateListDrawable(photoChangeImageView.getImageView().getDrawable(), photoChangeImageView.getTextView(), mActiveWidgetColor));
@@ -270,7 +275,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
 
         if (stateViewId == R.id.state_photo_change) {
             setAllowedGestures(0);
-        } else if (stateViewId == R.id.state_photo_puzzle) {
+        } else if (stateViewId == R.id.state_photo_doodle) {
             setAllowedGestures(1);
         } else if (stateViewId == R.id.state_filter) {
             setAllowedGestures(2);//滤镜
@@ -309,24 +314,35 @@ public class PhotoHandleActivity extends AppCompatActivity {
                     })
                     .openGallery();
         } else if (tab == 1) {
-            //则是拼图
-            int height = 500;
-            int width = 1000;
+            //则是拼图 原先是拼图 现在变成涂鸦了
+//            int height = 500;
+//            int width = 1000;
+//
+//            List<MediaBean> mediaBeens = new ArrayList<>();
+//            try {
+//                MediaBean mediaBean = new MediaBean();
+//                mediaBean.setOriginalPath(inputUri.getPath());
+//                mediaBeens.add(mediaBean);
+//                Intent intent = new Intent();
+//                intent.putExtra("height", height);
+//                intent.putExtra("width", width);
+//                intent.putExtra("pics", (Serializable) mediaBeens);
+//                intent.setClass(PhotoHandleActivity.this, cn.finalteam.rxgalleryfinal.PuzzleActivity.class);
+//                startActivityForResult(intent, PUZZLE);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
 
-            List<MediaBean> mediaBeens = new ArrayList<>();
-            try {
-                MediaBean mediaBean = new MediaBean();
-                mediaBean.setOriginalPath(inputUri.getPath());
-                mediaBeens.add(mediaBean);
-                Intent intent = new Intent();
-                intent.putExtra("height", height);
-                intent.putExtra("width", width);
-                intent.putExtra("pics", (Serializable) mediaBeens);
-                intent.setClass(PhotoHandleActivity.this, cn.finalteam.rxgalleryfinal.PuzzleActivity.class);
-                startActivityForResult(intent, PUZZLE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            涂鸦代码GRAFFITI
+            // 涂鸦参数
+            GraffitiParams params = new GraffitiParams();
+            // 图片路径
+            params.mImagePath = inputUri.getPath();
+
+            params.mPaintSize = 20;
+
+            GraffitiActivity.startActivityForResult(PhotoHandleActivity.this, params, GRAFFITI);
+
         } else if (tab == 2) {
             //裁剪
             Intent intent = new Intent();
@@ -349,7 +365,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
             float xPercentage = x * 100f;
             float yPercentage = y * 100f;
 
-            showToast(String.format(PHOTO_TAP_TOAST_STRING, xPercentage, yPercentage, view == null ? 0 : view.getId()));
+//            showToast(String.format(PHOTO_TAP_TOAST_STRING, xPercentage, yPercentage, view == null ? 0 : view.getId()));
         }
     }
 
@@ -420,6 +436,16 @@ public class PhotoHandleActivity extends AppCompatActivity {
                         String path = data.getStringExtra("path");
                         if (path != null && !path.equals("")) {
                             Uri uri = Uri.parse("file://" + path);
+                            inputUri = uri;
+                            mPhotoView.setImageURI(inputUri);
+                        }
+                        break;
+                    case GRAFFITI:
+                        String graffitiPath = data.getStringExtra(GraffitiActivity.KEY_IMAGE_PATH);
+                        if (TextUtils.isEmpty(graffitiPath)) {
+                            return;
+                        }else {
+                            Uri uri = Uri.parse("file://" + graffitiPath);
                             inputUri = uri;
                             mPhotoView.setImageURI(inputUri);
                         }

@@ -1,31 +1,25 @@
 package com.rzico.weex.activity;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rzico.weex.R;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.utils.BarTextColorUtils;
 import com.yalantis.ucrop.view.TopView;
-
-import java.io.Console;
 import java.util.List;
 
-import cn.finalteam.rxgalleryfinal.utils.OsCompat;
+
 import cn.finalteam.rxgalleryfinal.utils.ThemeUtils;
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -35,6 +29,7 @@ public class RichEditorAcitivity extends AppCompatActivity {
     private RichEditor mEditor;
     private TextView mPreview;
     private final int firstFontSize = 3;
+    private int nowFontSize = firstFontSize;
 
     private TopView topView;
 
@@ -47,10 +42,15 @@ public class RichEditorAcitivity extends AppCompatActivity {
 
 
     private boolean boldsOpen =  false;//底部弹窗 是否弹出
+
+
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,9 @@ public class RichEditorAcitivity extends AppCompatActivity {
         String centent = getIntent().getStringExtra("data");
         if(centent != null && !centent.equals("")){
             mEditor.setHtml(centent);
+            htmlContent = centent;
         }else {
+            //这里不用设置 因为浏览器会触发下面的事件
             mEditor.setEditorHeading(3);
             mEditor.setHeading(firstFontSize);
         }
@@ -99,36 +101,38 @@ public class RichEditorAcitivity extends AppCompatActivity {
         mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
+//                Toast.makeText(getApplicationContext(), text.substring(text.length()-8, text.length()), Toast.LENGTH_SHORT).show();
                 //如果删到空的话 要默认加上h3了 这里面每次是空的话 只能执行一次
+                if(mEditor == null) return;
                 if(text.equals("")){
                     mEditor.setHeading(firstFontSize);
                     mEditor.focusEditor();
                     //把所有状态都设置成初始化
                     initBtnState();
                 }
-                //这是换行
-                if (text.endsWith("</div>")) {
-                        mEditor.setHeading(firstFontSize);
-                        mEditor.focusEditor();
-                        //这里要判断当前的状态初始化输入状态
-                        if(blBold){
-                            mEditor.setBold();
-                        }
-                        if(blItalic){
-                            mEditor.setItalic();
-                        }
-                        if(blUnderline){
-                            mEditor.setUnderline();
-                        }
-                        if(blRed){
-                            mEditor.setTextColor(getResources().getColor(R.color.txt_red));
-                        }
-                        if(blBlack){
-                            mEditor.setTextColor(getResources().getColor(R.color.txt_black));
-                        }
-                        if(blBlue){
-                            mEditor.setTextColor(getResources().getColor(R.color.txt_blue));
-                        }
+                 if (text.endsWith("></div>")) {// 那段会出错的文字是因为 被认为换行了 所以 多加了<   主要的解决 还是要 粘贴的时候 存字符串粘贴 就是过滤掉标签 ===============
+                    //这是换行
+                    mEditor.setHeading(nowFontSize);
+//                    mEditor.focusEditor();
+                    //这里要判断当前的状态初始化输入状态
+                    if(blBold){
+                        mEditor.setBold();
+                    }
+                    if(blItalic){
+                        mEditor.setItalic();
+                    }
+                    if(blUnderline){
+                        mEditor.setUnderline();
+                    }
+                    if(blRed){
+                        mEditor.setTextColor(getResources().getColor(R.color.txt_red));
+                    }
+                    if(blBlack){
+                        mEditor.setTextColor(getResources().getColor(R.color.txt_black));
+                    }
+                    if(blBlue){
+                        mEditor.setTextColor(getResources().getColor(R.color.txt_blue));
+                    }
                 }
                 //
                 htmlContent = text;
@@ -153,9 +157,10 @@ public class RichEditorAcitivity extends AppCompatActivity {
         mEditor.setOnDecorationChangeListener(new RichEditor.OnDecorationStateListener() {
             @Override
             public void onStateChangeListener(String text, List<RichEditor.Type> types) {
-                changeState(text, types);
+//                changeState(text, types);
             }
         });
+
 
         tvSelectAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,7 +282,7 @@ public class RichEditorAcitivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mEditor.setHeading(2);
-
+                nowFontSize = 2;
                 btnH2.setImageResource(R.drawable.ico_h1_focus);
                 btnH2.setBackgroundResource(R.drawable.corner_button_bg);
                 btnH3.setImageResource(R.drawable.ico_h2);
@@ -291,7 +296,7 @@ public class RichEditorAcitivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mEditor.setHeading(3);
-
+                nowFontSize = 3;
                 btnH2.setImageResource(R.drawable.ico_h1);
                 btnH2.setBackgroundResource(R.color.rich_editor_bottom);
                 btnH3.setImageResource(R.drawable.ico_h2_focus);
@@ -305,7 +310,7 @@ public class RichEditorAcitivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mEditor.setHeading(4);
-
+                nowFontSize = 4;
                 btnH2.setImageResource(R.drawable.ico_h1);
                 btnH2.setBackgroundResource(R.color.rich_editor_bottom);
                 btnH3.setImageResource(R.drawable.ico_h2);
@@ -622,7 +627,45 @@ public class RichEditorAcitivity extends AppCompatActivity {
             }catch (Exception e){
                 e.printStackTrace();
             }
-
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //如果是返回 就添加事件
+            String key = getIntent().getStringExtra("key");
+            if(key != null && !key.equals("") && JSCallBaskManager.get(key) != null){
+
+                Message message = new Message();
+                message.setError("用户取消");
+                JSCallBaskManager.get(key).invoke(message);
+                JSCallBaskManager.remove(key);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destroyWebView();
+    }
+    public void destroyWebView() {
+
+//        mWebContainer.removeAllViews();
+
+        if(mEditor != null) {
+            mEditor.clearHistory();
+            mEditor.clearCache(true);
+            mEditor.loadUrl("about:blank"); // clearView() should be changed to loadUrl("about:blank"), since clearView() is deprecated now
+            mEditor.freeMemory();
+//            mEditor.pauseTimers();
+            mEditor = null; // Note that mWebView.destroy() and mWebView = null do the exact same thing
+        }
+
+    }
+
+
 }

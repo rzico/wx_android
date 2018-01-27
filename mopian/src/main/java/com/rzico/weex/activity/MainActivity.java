@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,6 +47,8 @@ import com.rzico.weex.model.info.LoginBean;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.module.WXEventModule;
+import com.rzico.weex.net.HttpRequest;
+import com.rzico.weex.net.XRequest;
 import com.rzico.weex.oos.OssService;
 import com.rzico.weex.pageview.NoScrollPageView;
 import com.rzico.weex.utils.AntiShake;
@@ -64,12 +67,22 @@ import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXRenderStrategy;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
+import com.tencent.imsdk.TIMLogLevel;
+import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMMessage;
+import com.tencent.imsdk.TIMUserConfig;
+import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.imsdk.ext.message.TIMManagerExt;
+import com.tencent.qcloud.presentation.business.InitBusiness;
+import com.tencent.qcloud.presentation.event.FriendshipEvent;
+import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.presentation.event.RefreshEvent;
 
 import org.xutils.x;
 
@@ -83,8 +96,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import static com.rzico.weex.Constant.imUserId;
-import static com.rzico.weex.Constant.wxsdkInstanceMap;
 import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
+import static com.yixiang.mopian.constant.AllConstant.isClearAll;
 
 
 /**
@@ -98,6 +111,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView ivMessageDot;
     private LinearLayout rgGroupHome, rgGroupFriend, rgGroupMsg, rgGroupMy, rgGroupAdd;
 
+    private final String TAG = "MainActivity";
+
     private boolean canReload = true;
     //打开扫描界面请求码
     private int REQUEST_CODE = 0x01;
@@ -105,7 +120,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private int RESULT_OK = 0xA1;
     private PagerAdapter mWeexPageAdapter;
 
-
+    private WXApplication wxApplication;
     private boolean isfirst = true;
     private boolean isfirstHandle = true;
     private int tab;
@@ -127,10 +142,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Constant.loginHandler = new Handler(){
+        wxApplication  = (WXApplication)this.getApplicationContext();
+        Handler mHandler = new Handler(){
             @Override
             public void handleMessage(android.os.Message msg) {
                 super.handleMessage(msg);
+//                Toast.makeText(MainActivity.this, "请求登录结果：" + msg.what , Toast.LENGTH_SHORT).show();
                 //预防屏幕抖屏
                 if(isfirstHandle) {
                     isfirstHandle = false;
@@ -171,16 +188,116 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     initWeexView();
                     setSelectTab(0);
                 }
-
             }
         };
+        wxApplication.setLoginHandler(mHandler);
+
         setContentView(R.layout.activity_main);
         //设置高亮标题
         initWeexView();
         initView();
+        if(isClearAll == 1){//说明 被清理掉内存了、 一些初始值 需要重新初始值
+            isfirstHandle = false;
+//            Toast.makeText(MainActivity.this, "1", Toast.LENGTH_SHORT).show();
+            initIM();
+            Dexter.withActivity(MainActivity.this).withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+                            //初始化数据库
+                            org.xutils.DbManager.DaoConfig daoConfig = XDB.getDaoConfig();
+                            WXApplication.setDb(x.getDb(daoConfig));
+                            SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+                            int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
+                            InitBusiness.start(getApplicationContext(), loglvl);
+                        }
 
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                            showDeniedDialog("需要存储权限,才能运行程序");
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission,
+                                                                       PermissionToken token) {
+                            //用户不允许权限，向用户解释权限左右
+                            token.continuePermissionRequest();
+                        }
+                    }).check();
+        }else{
+//            Toast.makeText(MainActivity.this, "0", Toast.LENGTH_SHORT).show();
+        }
     }
+    private void initIM() {
+        //登录之前要初始化群和好友关系链缓存
+        TIMUserConfig userConfig = new TIMUserConfig();
+        userConfig.setUserStatusListener(new TIMUserStatusListener() {
+            @Override
+            public void onForceOffline() {
+                //登出
+                new XRequest(MainActivity.this, "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    @Override
+                    public void onSuccess(BaseActivity activity, String result, String type) {
+                        TIMManager.getInstance().logout(new TIMCallBack() {
+                            @Override
+                            public void onError(int code, String desc) {
+                                offlineLoginOut();
+                            }
+                            @Override
+                            public void onSuccess() {
+                                offlineLoginOut();
+                            }
+                        });
+                    }
+                    @Override
+                    public void onFail(BaseActivity activity, String cacheData, int code) {
+                        offlineLoginOut();
+                    }
+                }).execute();
+            }
 
+            //被踢了
+            private void offlineLoginOut() {
+                //登出成功
+                Constant.loginState = false;
+                Constant.userId = 0;
+                Constant.imUserId = "";
+                SharedUtils.saveLoginId(Constant.userId);
+                if (wxApplication.getLoginHandler() != null) {
+                    wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.FORCEOFFLINE);
+                }
+            }
+
+            @Override
+            public void onUserSigExpired() {
+                //票据过期，需要重新登录
+                LoginUtils.checkLogin(MainActivity.this, null, null);
+            }
+        })
+                .setConnectionListener(new TIMConnListener() {
+                    @Override
+                    public void onConnected() {
+                        android.util.Log.i(TAG, "onConnected");
+                    }
+
+                    @Override
+                    public void onDisconnected(int code, String desc) {
+                        android.util.Log.i(TAG, "onDisconnected");
+                    }
+
+                    @Override
+                    public void onWifiNeedAuth(String name) {
+                        android.util.Log.i(TAG, "onWifiNeedAuth");
+                    }
+                });
+
+        //设置刷新监听
+        RefreshEvent.getInstance().init(userConfig);
+        userConfig = FriendshipEvent.getInstance().init(userConfig);
+        userConfig = GroupEvent.getInstance().init(userConfig);
+        userConfig = MessageEvent.getInstance().init(userConfig);
+        TIMManager.getInstance().setUserConfig(userConfig);
+    }
     @Override
     public void onNetChange(int netMobile) {
         super.onNetChange(netMobile);
@@ -198,13 +315,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     protected void destoryWeexInstance() {
-        if (wxsdkInstanceMap != null) {
-            for (String key :wxsdkInstanceMap.keySet()){
-                wxsdkInstanceMap.get(key).registerRenderListener(null);
-                wxsdkInstanceMap.get(key).destroy();
+        if (wxApplication.getWxsdkInstanceMap() != null) {
+            for (String key :wxApplication.getWxsdkInstanceMap().keySet()){
+                wxApplication.getWxsdkInstanceMap().get(key).registerRenderListener(null);
+                wxApplication.getWxsdkInstanceMap().get(key).destroy();
             }
-            wxsdkInstanceMap.clear();
-            wxsdkInstanceMap = null;
+            wxApplication.getWxsdkInstanceMap().clear();
+            wxApplication.setWxsdkInstanceMap(null);
         }
     }
 
@@ -247,7 +364,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /*初始化weexview*/
     private void initWeexView() {
         mContainer = (NoScrollPageView) findViewById(R.id.viewpager_content);
-        wxsdkInstanceMap = new HashMap<>();
+        final Map<String, WXSDKInstance> nowWxsdkInstanceMap = new HashMap<>();
         viewLists = new ArrayList<>();
         WXSDKInstance mWeexInstanceHome = new WXSDKInstance(this);
         mWeexInstanceHome.registerRenderListener(this);
@@ -258,22 +375,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         WXSDKInstance mWeexInstanceMy = new WXSDKInstance(this);
         mWeexInstanceMy.registerRenderListener(this);
 
-        wxsdkInstanceMap.put("home", mWeexInstanceHome);
-        wxsdkInstanceMap.put("friends", mWeexInstanceFriend);
-        wxsdkInstanceMap.put("msg", mWeexInstanceMsg);
-        wxsdkInstanceMap.put("my", mWeexInstanceMy);
+        nowWxsdkInstanceMap.put("home", mWeexInstanceHome);
+        nowWxsdkInstanceMap.put("friends", mWeexInstanceFriend);
+        nowWxsdkInstanceMap.put("msg", mWeexInstanceMsg);
+        nowWxsdkInstanceMap.put("my", mWeexInstanceMy);
+        wxApplication.setWxsdkInstanceMap(nowWxsdkInstanceMap);
 
         if(SharedUtils.readIndex1().startsWith("http://")) {//如果是网络url
             Map<String, Object> options = new HashMap<>();
             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex1());
 
-            wxsdkInstanceMap.get("home").renderByUrl("home", SharedUtils.readIndex1(), options, null, WXRenderStrategy.APPEND_ASYNC);
+            wxApplication.getWxsdkInstanceMap().get("home").renderByUrl("home", SharedUtils.readIndex1(), options, null, WXRenderStrategy.APPEND_ASYNC);
         }else {
             String url =  SharedUtils.readIndex1();
 
             Map<String, Object> options = new HashMap<>();
             options.put(WXSDKInstance.BUNDLE_URL, url);
-            wxsdkInstanceMap.get("home").render("home", PathUtils.loadLocal(url), options, null, WXRenderStrategy.APPEND_ASYNC);
+            wxApplication.getWxsdkInstanceMap().get("home").render("home", PathUtils.loadLocal(url, MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
         }
 
 
@@ -288,31 +406,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                         Map<String, Object> options = new HashMap<>();
                         options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex2());
-                        wxsdkInstanceMap.get("friends").renderByUrl("friends", SharedUtils.readIndex2(), options, null, WXRenderStrategy.APPEND_ASYNC);
+                        wxApplication.getWxsdkInstanceMap().get("friends").renderByUrl("friends", SharedUtils.readIndex2(), options, null, WXRenderStrategy.APPEND_ASYNC);
                     }else {
                         Map<String, Object> options = new HashMap<>();
                         options.put(WXSDKInstance.BUNDLE_URL,SharedUtils.readIndex2());
-                        wxsdkInstanceMap.get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                        wxApplication.getWxsdkInstanceMap().get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                         if(SharedUtils.readIndex3().startsWith("http://")) {//如果是网络url
 
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-                            wxsdkInstanceMap.get("msg").renderByUrl("msg", SharedUtils.readIndex3(), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("msg").renderByUrl("msg", SharedUtils.readIndex3(), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }else{
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-                            wxsdkInstanceMap.get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                         if(SharedUtils.readIndex4().startsWith("http://")) {//如果是网络url
 
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-                            wxsdkInstanceMap.get("my").renderByUrl("my", SharedUtils.readIndex4(), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("my").renderByUrl("my", SharedUtils.readIndex4(), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }else{
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-                            wxsdkInstanceMap.get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                     }
                     isfirst = false;
@@ -326,31 +444,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex2());
-                            wxsdkInstanceMap.get("friends").renderByUrl("friends", SharedUtils.readIndex2(), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("friends").renderByUrl("friends", SharedUtils.readIndex2(), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }else {
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL,SharedUtils.readIndex2());
-                            wxsdkInstanceMap.get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                         if(SharedUtils.readIndex3().startsWith("http://")) {//如果是网络url
 
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-                            wxsdkInstanceMap.get("msg").renderByUrl("msg", SharedUtils.readIndex3(), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("msg").renderByUrl("msg", SharedUtils.readIndex3(), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }else{
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-                            wxsdkInstanceMap.get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                         if(SharedUtils.readIndex4().startsWith("http://")) {//如果是网络url
 
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-                            wxsdkInstanceMap.get("my").renderByUrl("my", SharedUtils.readIndex4(), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("my").renderByUrl("my", SharedUtils.readIndex4(), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }else{
                             Map<String, Object> options = new HashMap<>();
                             options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-                            wxsdkInstanceMap.get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                            wxApplication.getWxsdkInstanceMap().get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                         }
                     }
                     //登录失败 等其他原因登录失败   则跳转登录 页面
@@ -367,31 +485,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex2());
-                    wxsdkInstanceMap.get("friends").renderByUrl("friends", SharedUtils.readIndex2(), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    wxApplication.getWxsdkInstanceMap().get("friends").renderByUrl("friends", SharedUtils.readIndex2(), options, null, WXRenderStrategy.APPEND_ASYNC);
                 }else {
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL,SharedUtils.readIndex2());
-                    wxsdkInstanceMap.get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    wxApplication.getWxsdkInstanceMap().get("friends").render("friends", PathUtils.loadLocal(SharedUtils.readIndex2(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                 }
                 if(SharedUtils.readIndex3().startsWith("http://")) {//如果是网络url
 
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-                    wxsdkInstanceMap.get("msg").renderByUrl("msg", SharedUtils.readIndex3(), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    wxApplication.getWxsdkInstanceMap().get("msg").renderByUrl("msg", SharedUtils.readIndex3(), options, null, WXRenderStrategy.APPEND_ASYNC);
                 }else{
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-                    wxsdkInstanceMap.get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    wxApplication.getWxsdkInstanceMap().get("msg").render("msg", PathUtils.loadLocal(SharedUtils.readIndex3(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                 }
                 if(SharedUtils.readIndex4().startsWith("http://")) {//如果是网络url
 
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-                    wxsdkInstanceMap.get("my").renderByUrl("my", SharedUtils.readIndex4(), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    wxApplication.getWxsdkInstanceMap().get("my").renderByUrl("my", SharedUtils.readIndex4(), options, null, WXRenderStrategy.APPEND_ASYNC);
                 }else{
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-                    wxsdkInstanceMap.get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4()), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    wxApplication.getWxsdkInstanceMap().get("my").render("my", PathUtils.loadLocal(SharedUtils.readIndex4(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
                 }
             }
 //            }

@@ -62,6 +62,7 @@ import java.util.Map;
 import static com.rzico.weex.Constant.imUserId;
 import static com.rzico.weex.utils.task.ZipExtractorTask.ZIPSUCCESS;
 import static com.tencent.open.utils.Global.getVersionCode;
+import static com.yixiang.mopian.constant.AllConstant.isClearAll;
 
 public class SplashActivity extends BaseActivity {
 
@@ -71,10 +72,14 @@ public class SplashActivity extends BaseActivity {
 
     private String writeResVersion = Constant.resVerison;//默认是 app的资源包
 
+    private WXApplication wxApplication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        wxApplication = (WXApplication) this.getApplicationContext();
         setContentView(R.layout.activity_splash);
+        isClearAll = 0;
         progress = (ProgressBar) findViewById(R.id.progress);
         progress.setVisibility(View.GONE);
         progress.setProgress(0);
@@ -107,7 +112,6 @@ public class SplashActivity extends BaseActivity {
                         public void onPermissionGranted(PermissionGrantedResponse response) {
                             //初始化数据库
                             initDb();
-
                             handlerFrist();
                             SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                             int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
@@ -172,8 +176,8 @@ public class SplashActivity extends BaseActivity {
                 Constant.userId = 0;
                 Constant.imUserId = "";
                 SharedUtils.saveLoginId(Constant.userId);
-                if (Constant.loginHandler != null) {
-                    Constant.loginHandler.sendEmptyMessage(MainActivity.FORCEOFFLINE);
+                if ( wxApplication.getLoginHandler() != null) {
+                    wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.FORCEOFFLINE);
                 }
             }
 
@@ -301,7 +305,7 @@ public class SplashActivity extends BaseActivity {
 
         if (url != null && !url.equals("")) {
             url = url.contains("file:/") ? url.replace("file:/", "") : url;
-//      return  url.contains("?") ? url.substring(0 ,url.indexOf("?")) : url;
+//          return  url.contains("?") ? url.substring(0 ,url.indexOf("?")) : url;
             return url;
         } else {
             return url;
@@ -320,7 +324,7 @@ public class SplashActivity extends BaseActivity {
      * 如果网路请求或下载失败 就讲assets的东西拷贝到项目目录下
      */
     private void copylocalfile() {
-        File file = new File(PathUtils.getResPath());//检查有没有资源文件
+        File file = new File(PathUtils.getResPath(SplashActivity.this));//检查有没有资源文件
         if (file.exists() && file.isDirectory()) {
             if (file.list().length > 0 && haveUpdate(file)) {
                 //如果有文件 就判断 本地的版本 和  app的版本号
@@ -330,9 +334,9 @@ public class SplashActivity extends BaseActivity {
                     }else {
                         //如果app的版本号大 就再做解压
 
-                        AssetsCopyer.releaseAssets(SplashActivity.this, "update.zip", PathUtils.getResPath());
+                        AssetsCopyer.releaseAssets(SplashActivity.this, "update.zip", PathUtils.getResPath(SplashActivity.this));
                         //将其解压
-                        ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath() + "update.zip", PathUtils.getResPath(), mContext, true, mHandler);
+                        ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath(SplashActivity.this) + "update.zip", PathUtils.getResPath(SplashActivity.this), mContext, true, mHandler);
                         task.execute();
                     }
                 } catch (Exception e) {
@@ -341,18 +345,18 @@ public class SplashActivity extends BaseActivity {
                 }
             } else {
                 //没文件夹就将asstes的项目拷贝
-                AssetsCopyer.releaseAssets(SplashActivity.this, "update.zip", PathUtils.getResPath());
+                AssetsCopyer.releaseAssets(SplashActivity.this, "update.zip", PathUtils.getResPath(SplashActivity.this));
                 //将其解压
-                ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath() + "update.zip", PathUtils.getResPath(), mContext, true, mHandler);
+                ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath(SplashActivity.this) + "update.zip", PathUtils.getResPath(SplashActivity.this), mContext, true, mHandler);
                 task.execute();
             }
         } else {
             //创建目录
             file.mkdirs();
             //没文件夹就将asstes的项目拷贝
-            AssetsCopyer.releaseAssets(SplashActivity.this, "update.zip", PathUtils.getResPath());
+            AssetsCopyer.releaseAssets(SplashActivity.this, "update.zip", PathUtils.getResPath(SplashActivity.this));
             //将其解压
-            ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath() + "update.zip", PathUtils.getResPath(), mContext, true, mHandler);
+            ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath(SplashActivity.this) + "update.zip", PathUtils.getResPath(SplashActivity.this), mContext, true, mHandler);
             task.execute();
         }
     }
@@ -366,7 +370,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onSuccess(File result) {
                 //解压zip
-                ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath() + "update.zip", PathUtils.getResPath(), mContext, true, mHandler);
+                ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath(SplashActivity.this) + "update.zip", PathUtils.getResPath(SplashActivity.this), mContext, true, mHandler);
                 task.execute();
             }
 
@@ -490,11 +494,12 @@ public class SplashActivity extends BaseActivity {
 //    }
         try {
             if (Utils.isApkDebugable(SplashActivity.this)) {
-                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
+                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+//                toNext();
             } else {
                if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
                     writeResVersion = netResVersion;
-                    downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath() + "update.zip");
+                    downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
                 }else  if(nowResVersion.equals("0.0.0") || (Utils.compareVersion(appResVersion, nowResVersion) > 0 && Utils.compareVersion(appResVersion, netResVersion) > 0)){
                    //如果是app自带的版本好 是最大的 就压缩本地的
                    writeResVersion = appResVersion;

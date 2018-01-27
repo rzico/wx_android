@@ -39,8 +39,8 @@ public class LoginActivity extends BaseActivity implements IWXRenderListener {
 
         Map<String,Object> options=new HashMap<>();
         options.put(WXSDKInstance.BUNDLE_URL,"file://"+ "view/index.js");
-        String data = PathUtils.loadLocal("view/index.js");
-        mWXSDKInstance.render("login", PathUtils.loadLocal("view/index.js"), null, null, WXRenderStrategy.APPEND_ASYNC);
+        String data = PathUtils.loadLocal("view/index.js", LoginActivity.this);
+        mWXSDKInstance.render("login", PathUtils.loadLocal("view/index.js", LoginActivity.this), null, null, WXRenderStrategy.APPEND_ASYNC);
     }
 
     @Override

@@ -3,13 +3,20 @@ package com.rzico.weex;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.huawei.android.pushagent.PushManager;
 import com.mob.MobSDK;
@@ -36,12 +43,14 @@ import com.rzico.weex.utils.chat.Foreground;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKEngine;
+import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.common.WXException;
 import com.taobao.weex.ui.component.WXBasicComponentType;
 
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
+import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMGroupEventListener;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
 import com.tencent.imsdk.TIMGroupTipsElem;
@@ -56,6 +65,7 @@ import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.imsdk.TIMValueCallBack;
+import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
@@ -66,6 +76,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
 
@@ -84,6 +95,26 @@ public class WXApplication extends Application {
 
   private static WXApplication instance;
 
+
+  private Map<String, WXSDKInstance> wxsdkInstanceMap;
+
+  private Handler loginHandler = null;
+
+  public Map<String, WXSDKInstance> getWxsdkInstanceMap() {
+    return wxsdkInstanceMap;
+  }
+
+  public void setWxsdkInstanceMap(Map<String, WXSDKInstance> wxsdkInstanceMap) {
+    this.wxsdkInstanceMap = wxsdkInstanceMap;
+  }
+
+  public Handler getLoginHandler() {
+    return loginHandler;
+  }
+
+  public void setLoginHandler(Handler loginHandler) {
+    this.loginHandler = loginHandler;
+  }
 
   public static WXApplication getInstance() {
     return instance;
@@ -111,19 +142,25 @@ public class WXApplication extends Application {
         }
       });
     }
+
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
     instance = this;
     init();
     initAlbum();
-    WXSDKEngine.addCustomOptions("appName", getResources().getString(R.string.app_name));
+    initWeex();
+//    initIM();
+  }
+
+  public static void initWeex(){
+    WXSDKEngine.addCustomOptions("appName", WXApplication.getInstance().getResources().getString(R.string.app_name));
     WXSDKEngine.addCustomOptions("appGroup", "WXApp");
-    WXSDKEngine.initialize(this,
-        new InitConfig.Builder()
-            .setImgAdapter(new ImageAdapter())
-            .setHttpAdapter(new WeexHttpAdapter())
-            .setURIAdapter(new WeexUriAdapter())
-            .setJSExceptionAdapter(new WeexJSExceptionAdapter())
-            .build()
+    WXSDKEngine.initialize(WXApplication.getInstance(),
+            new InitConfig.Builder()
+                    .setImgAdapter(new ImageAdapter())
+                    .setHttpAdapter(new WeexHttpAdapter())
+                    .setURIAdapter(new WeexUriAdapter())
+                    .setJSExceptionAdapter(new WeexJSExceptionAdapter())
+                    .build()
     );
     try {
       WXSDKEngine.registerComponent(WXBasicComponentType.WEB, MYWXWeb.class);
@@ -141,9 +178,7 @@ public class WXApplication extends Application {
       e.printStackTrace();
     }
 
-//    initIM();
   }
-
   private void initIM() {
     //初始化SDK基本配置
     TIMSdkConfig config = new TIMSdkConfig(SDK_APPID)

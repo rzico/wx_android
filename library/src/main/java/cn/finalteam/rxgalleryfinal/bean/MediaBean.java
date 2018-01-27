@@ -4,14 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.File;
-import java.io.Serializable;
 
 /**
  * Desction:Media Bean
  * Author:pengjianbo  Dujinyang
  * Date:16/5/4 下午4:14
  */
-public class MediaBean implements Serializable, Parcelable  {
+public class MediaBean implements Parcelable {
 
     public static final Creator<MediaBean> CREATOR = new Creator<MediaBean>() {
         @Override
@@ -167,10 +166,10 @@ public class MediaBean implements Serializable, Parcelable  {
     }
 
     public String getThumbnailBigPath() {
-//        if (new File(thumbnailBigPath).exists()) {
+        if (new File(thumbnailBigPath).exists()) {
             return thumbnailBigPath;
-//        }
-//        return "";
+        }
+        return "";
     }
 
     public void setThumbnailBigPath(String thumbnailBigPath) {
@@ -178,10 +177,10 @@ public class MediaBean implements Serializable, Parcelable  {
     }
 
     public String getThumbnailSmallPath() {
-//        if (new File(thumbnailSmallPath).exists()) {
+        if (new File(thumbnailSmallPath).exists()) {
             return thumbnailSmallPath;
-//        }
-//        return "";
+        }
+        return "";
     }
 
     public void setThumbnailSmallPath(String thumbnailSmallPath) {

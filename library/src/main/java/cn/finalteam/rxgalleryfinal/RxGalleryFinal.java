@@ -56,9 +56,6 @@ public class RxGalleryFinal {
         return this;
     }
 
-    public void setVideoPreview(boolean isPreview){
-        configuration.setVideoPreview(isPreview);
-    }
 //    public RxGalleryFinal filterMime(MediaType ...mediaTypes) {
 //        configuration.setFilterMimes(mediaTypes);
 //        return this;

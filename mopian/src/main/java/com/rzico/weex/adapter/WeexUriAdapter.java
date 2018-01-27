@@ -3,6 +3,7 @@ package com.rzico.weex.adapter;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.utils.PathUtils;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.adapter.URIAdapter;
@@ -18,7 +19,7 @@ public class WeexUriAdapter implements URIAdapter {
         //file://resources/fonts/iconfont.ttf
         String path = uri.toString();
         if(path.startsWith("file://") && path.endsWith(".ttf")){//这里处理了字体路径
-            path = "file://" + path.replace( "file://", PathUtils.getResPath());
+            path = "file://" + path.replace( "file://", PathUtils.getResPath(WXApplication.getActivity()));
             uri = Uri.parse(path);
         }
 
