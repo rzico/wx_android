@@ -65,7 +65,8 @@ public class VoiceMessage extends Message {
 
         TextView tv = new TextView(WXApplication.getContext());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        tv.setTextColor(WXApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
+//        tv.setTextColor(WXApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
+        tv.setTextColor(WXApplication.getContext().getResources().getColor(R.color.black));
         tv.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, context.getResources().getDisplayMetrics());
         int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, context.getResources().getDisplayMetrics());
@@ -115,13 +116,15 @@ public class VoiceMessage extends Message {
 
     }
 
+//    播放im语音
     private void playAudio(final AnimationDrawable frameAnimatio) {
         TIMSoundElem elem = (TIMSoundElem) message.getElement(0);
         final File tempAudio = FileUtil.getTempFile(FileUtil.FileType.AUDIO);
         elem.getSoundToFile(tempAudio.getAbsolutePath(), new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
-
+                    String sd = s;
+                String dd = sd;
             }
 
             @Override
@@ -140,7 +143,6 @@ public class VoiceMessage extends Message {
                 }catch (Exception e) {
 
                 }
-
             }
         });
 

@@ -45,19 +45,6 @@ android {
             keyAlias "rzico"
             keyPassword "123456"
         }
-
-//        release {
-//            storeFile file("tools/mopian.jks")
-//            storePassword "123456"
-//            keyAlias "mopian"
-//            keyPassword "123456"
-//        }
-//        debug {
-//            storeFile file("tools/mopian.jks")
-//            storePassword "123456"
-//            keyAlias "mopian"
-//            keyPassword "123456"
-//        }
     }
     buildTypes {
         release {
@@ -81,7 +68,6 @@ android {
     lintOptions {
         abortOnError false
     }
-
     packagingOptions {
         exclude 'LICENSE.txt'
     }
@@ -150,4 +136,5 @@ dependencies {
     compile project(path: ':alertview')
     compile files('libs/AMap_Location_V3.6.1_20171012.jar')
     compile project(path: ':graffiti')
+    compile files('libs/liteavsdk.jar')
 }
