@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.PuzzleActivity;
 import com.rzico.weex.activity.TestActivity;
@@ -83,25 +84,42 @@ public class AlbumModule extends WXModule {
     }
 
     @JSMethod
+    public void openAlbumSingle(boolean isCrop, JSCallback callback){
+        com.alibaba.fastjson.JSONObject jsonObject = new JSONObject();
+        jsonObject.put("isCrop", isCrop);
+        jsonObject.put("width", 1);
+        jsonObject.put("height",1);
+        openAlbumSingle(jsonObject.toJSONString(), callback);
+    }
+    @JSMethod
     public void openAlbumSingle(String option, final JSCallback callback){
         boolean getCrop = false;
         int width = 1;
         int height = 1;
-        try {
-            option = URLDecoder.decode("utf-8", option);
-            com.alibaba.fastjson.JSONObject jsObj = JSON.parseObject(option);
-            if(jsObj.containsKey("isCrop")){
-                getCrop = jsObj.getBoolean("isCrop");
+        if(!(option.startsWith("\"") && option.endsWith("\""))){
+            if(option.equals("true")){
+                getCrop = true;
+            }else if(option.equals("false")){
+                getCrop = false;
             }
-            if(jsObj.containsKey("width")){
-                width = jsObj.getInteger("width");
+        }else{
+            try {
+                option = URLDecoder.decode("utf-8", option);
+                com.alibaba.fastjson.JSONObject jsObj = JSON.parseObject(option);
+                if(jsObj.containsKey("isCrop")){
+                    getCrop = jsObj.getBoolean("isCrop");
+                }
+                if(jsObj.containsKey("width")){
+                    width = jsObj.getInteger("width");
+                }
+                if(jsObj.containsKey("height")){
+                    height = jsObj.getInteger("height");
+                }
+            }catch (Exception ex){
+                ex.printStackTrace();
             }
-            if(jsObj.containsKey("height")){
-                height = jsObj.getInteger("height");
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
+
         final boolean isCrop = getCrop;
         RxGalleryFinal
                 .with(WXApplication.getActivity())

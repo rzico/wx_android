@@ -24,7 +24,6 @@ dependencies {
     compile files('libs/imsdk_group_ext.jar')
     compile files('libs/imsdk_msg_ext.jar')
     compile files('libs/imsdk_sns_ext.jar')
-    compile files('libs/txrtmpsdk.jar')
     compile files('libs/imsdk_ugc_ext.jar')
     compile files('libs/imsdk.jar')
 }
