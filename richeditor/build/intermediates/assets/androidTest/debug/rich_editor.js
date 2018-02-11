@@ -15,13 +15,13 @@
  */
 
 var RE = {};
-
+RE.oldCallback = "";
 RE.currentSelection = {
     "startContainer": 0,
     "startOffset": 0,
     "endContainer": 0,
-    "endOffset": 0};
-
+    "endOffset": 0
+    };
 RE.editor = document.getElementById('editor');
 
 document.addEventListener("selectionchange", function() { RE.backuprange();RE.getSelection(); });
@@ -74,8 +74,14 @@ var items = [];
     }
     var textColor = document.queryCommandValue("ForeColor");
     items.push(textColor);
+    var nowCallback = "re-callback://" + encodeURI(RE.getHtml() + "re-state://" + encodeURI(items.join(',')) + "re-selection://" + encodeURI(window.getSelection()));
+    if(RE.oldCallback != "" && RE.oldCallback == nowCallback ){//预防重复返回
 
-    window.location.href = "re-callback://" + encodeURI(RE.getHtml() + "re-state://" + encodeURI(items.join(',')) + "re-selection://" + encodeURI(window.getSelection()) );
+    }else{
+        window.location.href = "re-callback://" + encodeURI(RE.getHtml() + "re-state://" + encodeURI(items.join(',')) + "re-selection://" + encodeURI(window.getSelection()) );
+    }
+    RE.oldCallback = nowCallback;
+//    window.location.href = "re-callback://" + encodeURI(RE.getHtml() + "re-state://" + encodeURI(items.join(',')) + "re-selection://" + encodeURI(window.getSelection()) );
 }
 
 RE.setHtml = function(contents) {
