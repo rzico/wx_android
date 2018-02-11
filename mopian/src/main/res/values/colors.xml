@@ -9,11 +9,11 @@
 
     <!--<color name="wxColor">#F0AD3C</color>-->
     <!--主色-->
-    <color name="wxColor">#eb4e40</color>
+    <color name="wxColor">#99CCFF</color>
     <!--辅色-->
     <color name="wxColor_dark">#6699FF</color>
 
-    <color name="selectBg">#eb4e40</color>
+    <color name="selectBg">#99CCFF</color>
 
     <!--文本编辑框底部颜色-->
     <color name="rich_editor_bottom">#e3e7ea</color>
@@ -27,6 +27,8 @@
 
     <color name="selectDark">#707070</color>
 
+    <!--gray4-->
+    <color name="colorGray4">#787878</color>
 
     <color name="colorYellow">#FFD705</color>
     <color name="YellowPressed">#edc501</color>

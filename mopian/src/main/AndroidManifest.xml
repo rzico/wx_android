@@ -43,10 +43,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
     <permission
-        android:name="com.rzico.weex.permission.MIPUSH_RECEIVE"
+        android:name="com.yixiang.mopian.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
     <!-- 这里com.tencent.imsdk改成app的包名 -->
-    <uses-permission android:name="com.rzico.weex.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="com.yixiang.mopian.permission.MIPUSH_RECEIVE" />
     <!-- 这里com.tencent.imsdk改成app的包名 -->
 
     <uses-feature android:name="android.hardware.camera" />
@@ -96,6 +96,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/FullscreenTheme_haveActionBar"
             >
             <intent-filter>
@@ -135,7 +136,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
-            android:name="com.rzico.assistant.wxapi.WXEntryActivity"
+            android:name="com.yixiang.mopian.wxapi.WXEntryActivity"
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -258,8 +259,8 @@
             <!--android:screenOrientation="portrait" />-->
 
         <!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
-        <meta-data android:name="Mob-AppKey" android:value="1d927fd47d636"/>
-        <meta-data android:name="Mob-AppSecret" android:value="277f7181f07499357cfa33531fe818ab"/>
+        <!--<meta-data android:name="Mob-AppKey" android:value="22a31844e236a"/>-->
+        <!--<meta-data android:name="Mob-AppSecret" android:value="1b8e2c508eac21106cc6cc2025acda29"/>-->
 
 
         <!-- push -->
@@ -374,6 +375,13 @@
         <activity
             android:name="com.google.zxing.activity.CaptureActivity"
             android:theme="@style/FullscreenTheme_haveActionBar"/>
+        <activity
+            android:name=".activity.LivePlayerActivity"
+            android:configChanges="orientation"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

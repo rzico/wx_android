@@ -9,6 +9,8 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.huawei.android.pushagent.PushManager;
@@ -42,16 +45,20 @@ import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.WeexPageAdapter;
 import com.rzico.weex.db.XDB;
+import com.rzico.weex.model.LivePlayer2;
+import com.rzico.weex.model.LivePlayerBean;
 import com.rzico.weex.model.info.Location;
 import com.rzico.weex.model.info.LoginBean;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.AlbumModule;
+import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.module.WXEventModule;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
 import com.rzico.weex.oos.OssService;
 import com.rzico.weex.pageview.NoScrollPageView;
 import com.rzico.weex.utils.AntiShake;
+import com.rzico.weex.utils.AudioUtil;
 import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.BluetoothUtil;
 import com.rzico.weex.utils.ESCUtil;
@@ -476,6 +483,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);       //强制为横屏
         setUnRead();
         PushUtil.getInstance().reset();
 
@@ -579,14 +587,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.wxColor));
                 break;
         }
+
     }
 
     @Override
     public void onClick(View view) {
-
         if (antiShake.check(view.getId())) return;//防抖动
         switch (view.getId()) {
             case R.id.rg_group_home:
+                new XRequest(MainActivity.this, "weex/member/nihtan/view.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    @Override
+                    public void onSuccess(BaseActivity activity, String result, String type) {
+
+                        LivePlayer2 entity= new Gson().fromJson(result, LivePlayer2.class);
+                        String url = entity.getData().getUrl();
+//                String url = "";
+                        String video = entity.getData().getVideo();
+                        String method = "POST";
+                        LivePlayerBean livePlayerBean = new LivePlayerBean();
+                        livePlayerBean.setUrl(url);
+                        livePlayerBean.setVideo(video);
+                        livePlayerBean.setMethod(method);
+                        String key = System.currentTimeMillis() + "";
+
+                        Intent intent2 = new Intent(MainActivity.this, LivePlayerActivity.class);
+                        intent2.putExtra("livePlayerParam",  livePlayerBean);
+                        intent2.putExtra("key", key);
+                        startActivity(intent2);
+                    }
+
+                    @Override
+                    public void onFail(BaseActivity activity, String cacheData, int code) {
+
+                    }
+                }).execute();
+
+
                 setSelectTab(0);
                 break;
             case R.id.rg_group_vip:

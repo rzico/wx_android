@@ -8,11 +8,11 @@ android {
 
     defaultConfig {
 //        applicationId "com.rzico.weex"
-        applicationId "com.rzico.assistant"
+        applicationId "com.yixiang.mopian"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
-        versionName "3.2.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
@@ -33,24 +33,37 @@ android {
         jumboMode true
     }
     signingConfigs {
+//        release {
+//            storeFile file("tools/rzico.jks")
+//            storePassword "123456"
+//            keyAlias "rzico"
+//            keyPassword "123456"
+//        }
+//        debug {
+//            storeFile file("tools/rzico.jks")
+//            storePassword "123456"
+//            keyAlias "rzico"
+//            keyPassword "123456"
+//        }
+
         release {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/mopian.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "mopian"
             keyPassword "123456"
         }
         debug {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/mopian.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "mopian"
             keyPassword "123456"
         }
     }
     buildTypes {
         release {
-//            signingConfig signingConfigs.release
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             testCoverageEnabled false
@@ -68,6 +81,7 @@ android {
     lintOptions {
         abortOnError false
     }
+
     packagingOptions {
         exclude 'LICENSE.txt'
     }
@@ -136,5 +150,4 @@ dependencies {
     compile project(path: ':alertview')
     compile files('libs/AMap_Location_V3.6.1_20171012.jar')
     compile project(path: ':graffiti')
-    compile files('libs/liteavsdk.jar')
 }
