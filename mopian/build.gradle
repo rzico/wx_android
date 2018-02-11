@@ -7,7 +7,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.assistant"
+        applicationId "com.nihtan.game"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 47
