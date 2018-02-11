@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.rzico.weex.R;
 import com.rzico.weex.db.DbUtils;
+import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.module.WXEventModule;
 import com.rzico.weex.net.session.SessionOutManager;
 import com.rzico.weex.utils.PathUtils;
@@ -26,6 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.rzico.weex.Constant.isLoginAcitivity;
+import static com.rzico.weex.utils.photo.PhotoHandle.REQUEST_PHOTOHANDLER;
+import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
 
 /**
  * Created by Jinlesoft on 2018/1/30.
@@ -117,7 +120,11 @@ public class RouterActivity extends AbsWeexActivity{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        WXEventModule.get().onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_PHOTOHANDLER || requestCode == REQUEST_CROP) {//而代表请求裁剪
+            AlbumModule.get().onActivityResult(requestCode, resultCode, data);
+        }else {
+            WXEventModule.get().onActivityResult(requestCode, resultCode, data);
+        }
     }
 
 //    @Override

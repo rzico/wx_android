@@ -69,7 +69,6 @@ import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.RSAUtils;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
-import com.rzico.assistant.wxapi.WXEntryActivity;
 import com.rzico.weex.utils.chat.MessageFactory;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.annotation.JSMethod;
@@ -94,6 +93,7 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.yixiang.mopian.constant.AllConstant;
+import com.yixiang.mopian.wxapi.WXEntryActivity;
 
 import net.bither.util.NativeUtil;
 
@@ -311,11 +311,19 @@ public class WXEventModule extends WXModule {
 
 
     public Context getContext() {
-        return mWXSDKInstance.getContext();
+        if(mWXSDKInstance == null){
+            return WXApplication.getContext();
+        }else{
+            return mWXSDKInstance.getContext();
+        }
     }
 
     public com.rzico.weex.activity.BaseActivity getActivity() {
-        return (com.rzico.weex.activity.BaseActivity) mWXSDKInstance.getContext();
+        if(mWXSDKInstance == null){
+            return WXApplication.getActivity();
+        }else{
+            return (com.rzico.weex.activity.BaseActivity) mWXSDKInstance.getContext();
+        }
     }
 
     //    微信验证登录回调方法
@@ -876,8 +884,6 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void getUnReadMessage(){
-
-
         final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         if(wxApplication.getLoginHandler()!=null){
             wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.RECEIVEMSG);//刷新未读数

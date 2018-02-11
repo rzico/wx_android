@@ -24,8 +24,10 @@ import com.rzico.weex.activity.MainActivity;
 import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
+import com.rzico.weex.model.LivePlayerBean;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.AudioModule;
+import com.rzico.weex.module.LivePlayerModule;
 import com.rzico.weex.module.MYModalUIModule;
 import com.rzico.weex.module.PhoneModule;
 import com.rzico.weex.module.PrintModule;
@@ -172,6 +174,7 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("modal", MYModalUIModule.class);
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
+      WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
 
 
     } catch (WXException e) {

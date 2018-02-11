@@ -96,7 +96,7 @@ public class AlbumModule extends WXModule {
         boolean getCrop = false;
         int width = 1;
         int height = 1;
-        if(!(option.startsWith("\"") && option.endsWith("\""))){
+        if(!(option.startsWith("{") && option.endsWith("}"))){
             if(option.equals("true")){
                 getCrop = true;
             }else if(option.equals("false")){
@@ -104,7 +104,6 @@ public class AlbumModule extends WXModule {
             }
         }else{
             try {
-                option = URLDecoder.decode("utf-8", option);
                 com.alibaba.fastjson.JSONObject jsObj = JSON.parseObject(option);
                 if(jsObj.containsKey("isCrop")){
                     getCrop = jsObj.getBoolean("isCrop");
@@ -121,6 +120,8 @@ public class AlbumModule extends WXModule {
         }
 
         final boolean isCrop = getCrop;
+        final  int finalwidth = width;
+        final  int finalheight = height;
         RxGalleryFinal
                 .with(WXApplication.getActivity())
                 .image()
@@ -150,7 +151,7 @@ public class AlbumModule extends WXModule {
                             message.setData(item);
                             callback.invoke(message);
                         }else{
-                            cropHeadImg(imageRadioResultEvent.getResult().getOriginalPath(), callback);
+                            cropHeadImg(imageRadioResultEvent.getResult().getOriginalPath(), finalwidth, finalheight, callback);
                         }
 //                        Toast.makeText(getContext(), "选中了图片路径：" + imageRadioResultEvent.getResult().getOriginalPath(), Toast.LENGTH_SHORT).show();
                     }
@@ -227,11 +228,10 @@ public class AlbumModule extends WXModule {
                 }).openGallery();
     }
 
-
     @JSMethod
-    public void cropHeadImg(String imagePath, final JSCallback callback){
+    public void cropHeadImg(String imagePath,int width, int height, final JSCallback callback){
         //调用当前文件下的接口 并且实现它回调给 callback
-        AspectRatio aspectRatio = new AspectRatio("1:1", 1,1);
+        AspectRatio aspectRatio = new AspectRatio(width + ":" + height, width,height);
         AlbumModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
@@ -271,6 +271,11 @@ public class AlbumModule extends WXModule {
                 callback.invoke(message);
             }
         }).openCrapActivity(imagePath, aspectRatio);
+    }
+
+    @JSMethod
+    public void cropHeadImg(String imagePath, final JSCallback callback){
+       cropHeadImg(imagePath, 1, 1, callback);
     }
     @JSMethod
     public void openCrop(String imagePath, final JSCallback callback){
