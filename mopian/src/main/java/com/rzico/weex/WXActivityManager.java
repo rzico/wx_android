@@ -37,7 +37,7 @@ public class WXActivityManager {
 
             Uri uri = Uri.parse(builder.toString());
             intent.setData(uri);
-            intent.addCategory("com.taobao.android.intent.category.WEEX");
+            intent.addCategory("com.taobao.android.intent.category.NIHTAN");
             intent.setPackage(activity.getPackageName());
             activity.startActivity(intent);
         }
