@@ -125,7 +125,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                 if(livePlayerBean.getMethod().toUpperCase().equals("POST")){
                     mWebView.postUrl(livePlayerBean.getUrl(), null);
                 }else {
-                    mWebView.loadUrl("https://www.baidu.com/");
+                    mWebView.loadUrl(livePlayerBean.getUrl());
                 }
             }
 
