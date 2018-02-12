@@ -28,8 +28,8 @@ public class Constant {
     public static final String wxAppSecret = "1221";
 
     //    云店shareSDK
-    public static final String shareAppId = "1d927fd47d636";
-    public static final String shareAppSecret = "277f7181f07499357cfa33531fe818ab";
+    public static final String shareAppId = "1221";
+    public static final String shareAppSecret = "12122";
 
 //    public static Handler loginHandler = null;
 
