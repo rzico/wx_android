@@ -56,8 +56,8 @@ public class Constant {
 
 
     public static String app = AllConstant.PACKNAME;
-    //    public static final String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";
-//    public static final String bucket = "rzico";
+//  public static final String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";
+//  public static final String bucket = "rzico";
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
 //    public static final String bucket = "rzico-weex";
     public static final String bucket = "mopian";
