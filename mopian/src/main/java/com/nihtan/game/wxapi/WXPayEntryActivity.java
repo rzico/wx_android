@@ -1,4 +1,4 @@
-package com.yixiang.mopian.wxapi;
+package com.nihtan.game.wxapi;
 
 import android.app.Activity;
 import android.content.Intent;

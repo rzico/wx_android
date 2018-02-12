@@ -1,4 +1,4 @@
-package com.rzico.assistant.wxapi;
+package com.nihtan.game.wxapi;
 
 import android.content.Intent;
 import android.os.Bundle;
