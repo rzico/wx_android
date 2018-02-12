@@ -210,8 +210,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 try{
                     boolean canHerf = true;
-                    int count = url.split("/").length;
-                    if(count < 7){
+                    if(url.endsWith("game=true")){
                         //关闭当前页面
                         finish();
                         canHerf = false;
