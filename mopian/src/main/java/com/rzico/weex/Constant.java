@@ -13,9 +13,6 @@ import java.util.Map;
 
 /**
  * Created by shiweiwei on 2015/11/2.
- * http://helper.tiaohuo.com
- * http://www.ruishangquan.com/
- * http://192.168.0.63:8080/tiaohuo/
  */
 public class Constant {
 
@@ -27,8 +24,8 @@ public class Constant {
     public static final String resURL = "http://cdnx.rzico.com/";
 
     //    云店wxkey
-    public static final String wxAppId = "wx490857e2baff7cfd";
-    public static final String wxAppSecret = "46acecbfa148ca89d443d38b0ce7c865";
+    public static final String wxAppId = "122";
+    public static final String wxAppSecret = "1221";
 
     //    云店shareSDK
     public static final String shareAppId = "1d927fd47d636";
