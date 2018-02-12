@@ -69,8 +69,9 @@ public class Constant {
     public static String updateAppUrl = "";
     public static boolean loginState = false;
     public static boolean unLinelogin = false;
+
     //当前程序的资源包版本
-    public static String resVerison = "1.0.0";
+    public static String resVerison = "0.0.0";
     //服务器资源包版本
     public static String netResVerison = "1.0.0";
     public static String appVerison = "";
@@ -79,9 +80,9 @@ public class Constant {
 
     //生产环境服务器地址
 //    public static final String SERVER = "http://weex.rzico.com:8088/";
-    public static final String SERVER = "http://mopian.1xx.me/";
+//    public static final String SERVER = "http://mopian.1xx.me/";
 //    public static final String SERVER = "http://weex.rzico.com/";
-//    public static final String SERVER = "http://dev.rzico.com/nihtan/";
+    public static final String SERVER = "http://dev.rzico.com/nihtan/";
 //    public static final String SERVER = "http://192.168.2.110:8088/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
