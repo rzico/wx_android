@@ -595,32 +595,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (antiShake.check(view.getId())) return;//防抖动
         switch (view.getId()) {
             case R.id.rg_group_home:
-                new XRequest(MainActivity.this, "weex/member/nihtan/view.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
-                    @Override
-                    public void onSuccess(BaseActivity activity, String result, String type) {
-
-                        LivePlayer2 entity= new Gson().fromJson(result, LivePlayer2.class);
-                        String url = entity.getData().getUrl();
-//                String url = "";
-                        String video = entity.getData().getVideo();
-                        String method = "POST";
-                        LivePlayerBean livePlayerBean = new LivePlayerBean();
-                        livePlayerBean.setUrl(url);
-                        livePlayerBean.setVideo(video);
-                        livePlayerBean.setMethod(method);
-                        String key = System.currentTimeMillis() + "";
-
-                        Intent intent2 = new Intent(MainActivity.this, LivePlayerActivity.class);
-                        intent2.putExtra("livePlayerParam",  livePlayerBean);
-                        intent2.putExtra("key", key);
-                        startActivity(intent2);
-                    }
-
-                    @Override
-                    public void onFail(BaseActivity activity, String cacheData, int code) {
-
-                    }
-                }).execute();
+//                new XRequest(MainActivity.this, "weex/member/nihtan/view.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+//                    @Override
+//                    public void onSuccess(BaseActivity activity, String result, String type) {
+//
+//                        LivePlayer2 entity= new Gson().fromJson(result, LivePlayer2.class);
+//                        String url = entity.getData().getUrl();
+////                String url = "";
+//                        String video = entity.getData().getVideo();
+//                        String method = "POST";
+//                        LivePlayerBean livePlayerBean = new LivePlayerBean();
+//                        livePlayerBean.setUrl(url);
+//                        livePlayerBean.setVideo(video);
+//                        livePlayerBean.setMethod(method);
+//                        String key = System.currentTimeMillis() + "";
+//
+//                        Intent intent2 = new Intent(MainActivity.this, LivePlayerActivity.class);
+//                        intent2.putExtra("livePlayerParam",  livePlayerBean);
+//                        intent2.putExtra("key", key);
+//                        startActivity(intent2);
+//                    }
+//
+//                    @Override
+//                    public void onFail(BaseActivity activity, String cacheData, int code) {
+//
+//                    }
+//                }).execute();
 
 
                 setSelectTab(0);
