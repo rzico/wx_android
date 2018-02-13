@@ -106,6 +106,7 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Constant.isSetting = true;
 //        HttpRequest.getInstance().unRegisterTasks(this);
     }
 
