@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 
 public class AllConstant {
-    public static final String PACKNAME = "com.yixiang.mopian";
+    public static final String PACKNAME = "com.nihtan.game";
 
     public static int isClearAll = 1;
 

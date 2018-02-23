@@ -139,7 +139,12 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 //            mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
 //            mLivePlayer.setRenderRotation(mCurrentRenderRotation);
             //开始播放
-            mIsPlaying = startPlay(livePlayerBean.getVideo());
+            if (livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
+                mIsPlaying = startPlay(livePlayerBean.getVideo());
+            } else {
+                mIsPlaying = false;
+            }
+
         }
 
     }
