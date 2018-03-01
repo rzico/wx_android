@@ -60,7 +60,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
     private boolean mIsPlaying;
     private TXCloudVideoView mPlayerView;
     private ImageView mLoadingView;
-    private boolean          mHWDecode   = false;
+    private boolean  mHWDecode   = false;
     private LinearLayout mRootView;
     private WebView mWebView;
 
@@ -145,6 +145,8 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                 mIsPlaying = false;
             }
 
+            mWebView.bringToFront();
+
         }
 
     }
@@ -173,7 +175,13 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 //            mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
 //            mLivePlayer.setRenderRotation(mCurrentRenderRotation);
             //开始播放
-            mIsPlaying = startPlay(livePlayerBean.getVideo());
+            if (livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
+                mIsPlaying = startPlay(livePlayerBean.getVideo());
+            } else {
+                mIsPlaying = false;
+            }
+
+            mWebView.bringToFront();
         }
     }
 
@@ -218,6 +226,8 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     boolean canHerf = true;
+                    System.out.print(url);
+
                     if(url.endsWith("home=true")){
                         //关闭当前页面
                         finish();
@@ -260,16 +270,13 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 //        mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setDefaultTextEncodingName("utf-8");
         mWebView.setBackgroundColor(0); // 设置背景色
-        mWebView.getBackground().setAlpha(255); // 设置填充透明度 范围：0-255
+        mWebView.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
         mWebView.loadDataWithBaseURL(null, "加载中。。", "text/html", "utf-8",null);
         mWebView.setVisibility(View.VISIBLE); // 加载完之后进行设置显示，以免加载时初始化效果不好看
         mIsPlaying = false;
 
 
-
-
         this.setCacheStrategy(CACHE_STRATEGY_AUTO);
-
 
         View view = mPlayerView.getRootView();
         view.setOnClickListener(this);
@@ -289,6 +296,8 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             mPlayerView = null;
         }
         mPlayConfig = null;
+        mWebView.removeAllViews();
+        mWebView.destroy();
         stopPlay();
         String key = getIntent().getStringExtra("key");
         if( key != null && !key.equals("")){
@@ -593,6 +602,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             }
         }
     };
+
     private TXFechPushUrlCall mFechCallback = null;
     //获取推流地址
     private OkHttpClient mOkHttpClient = null;
