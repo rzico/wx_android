@@ -218,7 +218,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     boolean canHerf = true;
-                    if(url.endsWith("game=true")){
+                    if(url.endsWith("home=true")){
                         //关闭当前页面
                         finish();
                         canHerf = false;
@@ -260,7 +260,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 //        mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setDefaultTextEncodingName("utf-8");
         mWebView.setBackgroundColor(0); // 设置背景色
-        mWebView.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
+        mWebView.getBackground().setAlpha(255); // 设置填充透明度 范围：0-255
         mWebView.loadDataWithBaseURL(null, "加载中。。", "text/html", "utf-8",null);
         mWebView.setVisibility(View.VISIBLE); // 加载完之后进行设置显示，以免加载时初始化效果不好看
         mIsPlaying = false;
