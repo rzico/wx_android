@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -13,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -64,7 +67,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
     private LinearLayout mRootView;
     private WebView mWebView;
 
-
     private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
     private static final int  CACHE_STRATEGY_SMOOTH = 2;  //流畅
     private static final int  CACHE_STRATEGY_AUTO = 3;  //自动
@@ -91,6 +93,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
     private boolean mRecordFlag = false;
     private boolean mCancelRecordFlag = false;
     private boolean mIsLogShow = false;
+    private boolean loaded = false;
 
 
 
@@ -222,13 +225,19 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         mWebView.setWebChromeClient(new WebChromeClient());
 //        mWebView.setWebViewClient(new WebViewClient());
         mWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view,String url) {
+                mWebView.setBackgroundColor(Color.TRANSPARENT); // 设置背景色
+                Paint p = new Paint();
+                mWebView.setLayerType(WebView.LAYER_TYPE_SOFTWARE,p);
+            }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     boolean canHerf = true;
                     System.out.print(url);
 
-                    if(url.endsWith("home=true")){
+                    if(url.startsWith("http://weex.udzyw.com/?home")){
                         //关闭当前页面
                         finish();
                         canHerf = false;
@@ -260,18 +269,52 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
                     return canHerf;
             }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                String[] urlSringarray = view.getUrl().split("/");
+
+                if(urlSringarray[2] != null && !urlSringarray[2].equals("gmtestcdn.kga8.com")) {
+                    if (loaded== false) {
+                        loaded = true;
+                        LivePlayerBean livePlayerBean = (LivePlayerBean) getIntent().getSerializableExtra("livePlayerParam");
+                        mWebView.loadUrl(livePlayerBean.getUrl());
+                    }
+
+//                    if (UserDefineConstant.internetBox == false) {
+//                        UserDefineConstant.internetBox = true;
+//                        DisplayMetrics dm = new DisplayMetrics();
+//                        getWindowManager().getDefaultDisplay().getMetrics(dm);
+//                        int width = dm.widthPixels;
+//                        int height = dm.heightPixels;
+//
+//                        rl = (RelativeLayout) findViewById(R.id.webView);
+//
+//                        iv = new ImageView(mContext);
+//
+//                        iv.setBackgroundColor(Color.BLACK);
+//                        iv.setImageResource(R.drawable.errorpage);
+//
+//                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
+//
+//                        rl.addView(iv, params);
+//                        internetDialog();
+//                    }
+                }
+            }
         });
 
         mWebView.getSettings().setJavaScriptEnabled(true);
-//        mWebView.getSettings().setAppCacheEnabled(true);
+        mWebView.getSettings().setAppCacheEnabled(true);
 //        //设置 缓存模式
-//        mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
 //        // 开启 DOM storage API 功能
 //        mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setDefaultTextEncodingName("utf-8");
-        mWebView.setBackgroundColor(0); // 设置背景色
-        mWebView.getBackground().setAlpha(1); // 设置填充透明度 范围：0-255
         mWebView.loadDataWithBaseURL(null, "加载中。。", "text/html", "utf-8",null);
+        mWebView.setBackgroundColor(Color.TRANSPARENT); // 设置背景色
+        Paint p = new Paint();
+        mWebView.setLayerType(WebView.LAYER_TYPE_SOFTWARE,p);
         mWebView.setVisibility(View.VISIBLE); // 加载完之后进行设置显示，以免加载时初始化效果不好看
         mIsPlaying = false;
 
