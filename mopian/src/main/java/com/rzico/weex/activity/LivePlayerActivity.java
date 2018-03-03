@@ -227,9 +227,9 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view,String url) {
-                mWebView.setBackgroundColor(Color.TRANSPARENT); // 设置背景色
-                Paint p = new Paint();
-                mWebView.setLayerType(WebView.LAYER_TYPE_SOFTWARE,p);
+//                mWebView.setBackgroundColor(Color.TRANSPARENT); // 设置背景色
+//                Paint p = new Paint();
+//                mWebView.setLayerType(WebView.LAYER_TYPE_SOFTWARE,p);
             }
 
             @Override
@@ -274,11 +274,12 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 String[] urlSringarray = view.getUrl().split("/");
 
-                if(urlSringarray[2] != null && !urlSringarray[2].equals("gmtestcdn.kga8.com")) {
+                Toast.makeText(getApplicationContext(),view.getUrl(), Toast.LENGTH_SHORT).show();
+                if(urlSringarray.length>2 && urlSringarray[2] != null && !urlSringarray[2].equals("gmtestcdn.kga8.com")) {
                     if (loaded== false) {
                         loaded = true;
                         LivePlayerBean livePlayerBean = (LivePlayerBean) getIntent().getSerializableExtra("livePlayerParam");
-                        mWebView.loadUrl(livePlayerBean.getUrl());
+                        mWebView.loadUrl(view.getUrl());
                     }
 
 //                    if (UserDefineConstant.internetBox == false) {
@@ -313,8 +314,9 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         mWebView.getSettings().setDefaultTextEncodingName("utf-8");
         mWebView.loadDataWithBaseURL(null, "加载中。。", "text/html", "utf-8",null);
         mWebView.setBackgroundColor(Color.TRANSPARENT); // 设置背景色
-        Paint p = new Paint();
-        mWebView.setLayerType(WebView.LAYER_TYPE_SOFTWARE,p);
+//        mWebView.setBackgroundDrawable();
+//        Paint p = new Paint();
+//        mWebView.setLayerType(WebView.LAYER_TYPE_SOFTWARE,p);
         mWebView.setVisibility(View.VISIBLE); // 加载完之后进行设置显示，以免加载时初始化效果不好看
         mIsPlaying = false;
 
