@@ -16,7 +16,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -125,6 +127,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                 if(livePlayerBean.getMethod().toUpperCase().equals("POST")){
                     mWebView.postUrl(livePlayerBean.getUrl(), null);
                 }else {
+//                    mWebView.loadUrl("http://dev.rzico.com/nihtan/api/play.jhtml?game=Dragon-Tiger&table=1&range=5-150");
                     mWebView.loadUrl(livePlayerBean.getUrl());
                 }
             }
@@ -154,6 +157,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                     mWebView.postUrl(livePlayerBean.getUrl(), null);
                 }else {
                     mWebView.loadUrl(livePlayerBean.getUrl());
+//                    mWebView.postUrl(livePlayerBean.getUrl(), null);
                 }
             }
 
@@ -202,19 +206,20 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         mPlayerView.showLog(false);
         mLoadingView = (ImageView) findViewById(R.id.loadingImageView);
         mWebView = (WebView) findViewById(R.id.webView);
-        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setWebChromeClient(new WebChromeClient());
 //        mWebView.setWebViewClient(new WebViewClient());
         mWebView.setWebViewClient(new WebViewClient(){
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                try{
                     boolean canHerf = true;
-                    int count = url.split("/").length;
-                    if(count < 7){
+                    if(url.endsWith("game=true")){
                         //关闭当前页面
                         finish();
                         canHerf = false;
+                    }else if(url.startsWith("http")){
+                        view.loadUrl(url);
+                        canHerf = true;
                     }
                     if(url.startsWith("nihvolbutton://bluefrog")){
 
@@ -239,11 +244,15 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                     }
 
                     return canHerf;
-                }catch (Exception e){
-                    return false;
-                }
             }
         });
+
+        mWebView.getSettings().setJavaScriptEnabled(true);
+//        mWebView.getSettings().setAppCacheEnabled(true);
+//        //设置 缓存模式
+//        mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+//        // 开启 DOM storage API 功能
+//        mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setDefaultTextEncodingName("utf-8");
         mWebView.setBackgroundColor(0); // 设置背景色
         mWebView.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255

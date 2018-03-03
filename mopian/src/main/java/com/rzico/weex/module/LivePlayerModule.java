@@ -25,11 +25,9 @@ public class LivePlayerModule extends WXModule {
         livePlayerBean.setMethod(method);
         String key = System.currentTimeMillis() + "";
         JSCallBaskManager.put(key, callback);
-
         Intent intent = new Intent(mWXSDKInstance.getContext(), LivePlayerActivity.class);
         intent.putExtra("livePlayerParam",  livePlayerBean);
         intent.putExtra("key", key);
         mWXSDKInstance.getContext().startActivity(intent);
     }
-
 }
