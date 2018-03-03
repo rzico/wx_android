@@ -141,13 +141,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
 //            mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
 //            mLivePlayer.setRenderRotation(mCurrentRenderRotation);
-
-            //开始播放
-            if (livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
-                mIsPlaying = startPlay(livePlayerBean.getVideo());
-            } else {
-                mIsPlaying = false;
-            }
 //
 //            mWebView.bringToFront();
 //
@@ -178,12 +171,12 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
 //            mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
 //            mLivePlayer.setRenderRotation(mCurrentRenderRotation);
-            //开始播放
-            if (livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
-                mIsPlaying = startPlay(livePlayerBean.getVideo());
-            } else {
-                mIsPlaying = false;
-            }
+//            //开始播放
+//            if (livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
+//                mIsPlaying = startPlay(livePlayerBean.getVideo());
+//            } else {
+//                mIsPlaying = false;
+//            }
 //
 //            mWebView.bringToFront();
         }
@@ -253,6 +246,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         } else { mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         mWebView.setBackgroundColor(Color.TRANSPARENT);
+
         WebSettings set = mWebView.getSettings();
         set.setLoadWithOverviewMode(true);
         set.setUseWideViewPort(true);
@@ -262,8 +256,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.clearCache(true);
 
-//        mWebView.setWebChromeClient(new WebChromeClient());
-//        mWebView.setWebViewClient(new WebViewClient());
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view,String url) {
@@ -272,6 +264,17 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                 } else { mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                 }
                 mWebView.setBackgroundColor(Color.TRANSPARENT);
+
+                LivePlayerBean livePlayerBean = (LivePlayerBean) getIntent().getSerializableExtra("livePlayerParam");
+
+
+                //开始播放
+                if (livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
+                    mIsPlaying = startPlay(livePlayerBean.getVideo());
+                } else {
+                    mIsPlaying = false;
+                }
+
             }
 
             @Override
@@ -288,25 +291,25 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                         canHerf = true;
                     }
                     if(url.startsWith("nihvolbutton://bluefrog")){
-
-                        String allUrl = url;
-                        String deleteScheme = allUrl.replace("nihvolbutton://","");
-
-                        if(!deleteScheme.equals("") && deleteScheme.length() > 0 && deleteScheme.contains("?") && deleteScheme.contains("=")){
-                            String[] one = deleteScheme.split("\\?");//问号需要加双传意符
-                            if(one.equals("bluefrog")){//如果是这个方法
-                                String[] two = one[1].split("=");
-                                AudioUtil audioUtil = AudioUtil.getInstance(LivePlayerActivity.this);
-                                if(two[0].equals("volume")){//调整音量
-                                    audioUtil.setMediaVolume(Integer.valueOf(two[1]));
-                                }else if(two[0].equals("mute")){//控制有声音无声音
-                                    audioUtil.setSpeakerStatus(two[1].equals("0")); //等于0则关闭无声 就是 开启扩音器
-                                }
-                                canHerf = false;
-                            }
-
-                        }
-
+                        canHerf = false;
+//                        String allUrl = url;
+//                        String deleteScheme = allUrl.replace("nihvolbutton://","");
+//
+//                        if(!deleteScheme.equals("") && deleteScheme.length() > 0 && deleteScheme.contains("?") && deleteScheme.contains("=")){
+//                            String[] one = deleteScheme.split("\\?");//问号需要加双传意符
+//                            if(one.equals("bluefrog")){//如果是这个方法
+//                                String[] two = one[1].split("=");
+//                                AudioUtil audioUtil = AudioUtil.getInstance(LivePlayerActivity.this);
+//                                if(two[0].equals("volume")){//调整音量
+//                                    audioUtil.setMediaVolume(Integer.valueOf(two[1]));
+//                                }else if(two[0].equals("mute")){//控制有声音无声音
+//                                    audioUtil.setSpeakerStatus(two[1].equals("0")); //等于0则关闭无声 就是 开启扩音器
+//                                }
+//                                canHerf = false;
+//                            }
+//
+//                        }
+//
                     }
 
                     return canHerf;
