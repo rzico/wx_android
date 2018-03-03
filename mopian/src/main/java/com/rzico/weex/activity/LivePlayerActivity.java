@@ -141,15 +141,16 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
 //            mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
 //            mLivePlayer.setRenderRotation(mCurrentRenderRotation);
+
             //开始播放
             if (livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
                 mIsPlaying = startPlay(livePlayerBean.getVideo());
             } else {
                 mIsPlaying = false;
             }
-
-            mWebView.bringToFront();
-
+//
+//            mWebView.bringToFront();
+//
         }
 
     }
@@ -183,8 +184,8 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             } else {
                 mIsPlaying = false;
             }
-
-            mWebView.bringToFront();
+//
+//            mWebView.bringToFront();
         }
     }
 
@@ -210,6 +211,30 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
 
     public void setContentView() {
+//
+//
+//        mWebView.setOnTouchListener(
+//         new View.OnTouchListener() {
+//             @Override
+//             public boolean onTouch(View v, MotionEvent event)
+//        // {//Touch false (enable touch) true (disable touch)
+//        // if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+//        // mainWebview.scrollTo(0, 0); } return false; } });
+//        mWebView.setFadingEdgeLength(0);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            mainWebview.setOnScrollChangeListener(
+//                    new View.OnScrollChangeListener() {
+//                        @Override public void onScrollChange(View view, int i, int i1, int i2, int i3)
+//                        { DisplayMetrics displayMetrics = new DisplayMetrics();
+//                            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//                            int height = displayMetrics.heightPixels;
+//                            int width = displayMetrics.widthPixels;
+//                            mainWebview.scrollTo(0, 0); } });
+//        }
+//        mWebView.addJavascriptInterface(new WepviewAppinterface(this), "Android");
+//
+
+
         super.setContentView(R.layout.activity_play);
 
         mRootView = (LinearLayout) findViewById(R.id.root);
@@ -220,16 +245,33 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         mPlayerView = (TXCloudVideoView) findViewById(R.id.video_view);
         mPlayerView.setLogMargin(12, 12, 110, 60);
         mPlayerView.showLog(false);
-        mLoadingView = (ImageView) findViewById(R.id.loadingImageView);
+//        mLoadingView = (ImageView) findViewById(R.id.loadingImageView);
+
         mWebView = (WebView) findViewById(R.id.webView);
-        mWebView.setWebChromeClient(new WebChromeClient());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        } else { mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+        mWebView.setBackgroundColor(Color.TRANSPARENT);
+        WebSettings set = mWebView.getSettings();
+        set.setLoadWithOverviewMode(true);
+        set.setUseWideViewPort(true);
+        set.setDomStorageEnabled(true);
+        set.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        set.setTextZoom(100);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.clearCache(true);
+
+//        mWebView.setWebChromeClient(new WebChromeClient());
 //        mWebView.setWebViewClient(new WebViewClient());
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view,String url) {
-//                mWebView.setBackgroundColor(Color.TRANSPARENT); // 设置背景色
-//                Paint p = new Paint();
-//                mWebView.setLayerType(WebView.LAYER_TYPE_SOFTWARE,p);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                } else { mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                }
+                mWebView.setBackgroundColor(Color.TRANSPARENT);
             }
 
             @Override
@@ -272,16 +314,16 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                String[] urlSringarray = view.getUrl().split("/");
-
-                Toast.makeText(getApplicationContext(),view.getUrl(), Toast.LENGTH_SHORT).show();
-                if(urlSringarray.length>2 && urlSringarray[2] != null && !urlSringarray[2].equals("gmtestcdn.kga8.com")) {
-                    if (loaded== false) {
-                        loaded = true;
-                        LivePlayerBean livePlayerBean = (LivePlayerBean) getIntent().getSerializableExtra("livePlayerParam");
-                        mWebView.loadUrl(view.getUrl());
-                    }
-
+//                String[] urlSringarray = view.getUrl().split("/");
+//
+//                Toast.makeText(getApplicationContext(),view.getUrl(), Toast.LENGTH_SHORT).show();
+//                if(urlSringarray.length>2 && urlSringarray[2] != null && !urlSringarray[2].equals("gmtestcdn.kga8.com")) {
+//                    if (loaded== false) {
+//                        loaded = true;
+//                        LivePlayerBean livePlayerBean = (LivePlayerBean) getIntent().getSerializableExtra("livePlayerParam");
+//                        mWebView.loadUrl(view.getUrl());
+//                    }
+//
 //                    if (UserDefineConstant.internetBox == false) {
 //                        UserDefineConstant.internetBox = true;
 //                        DisplayMetrics dm = new DisplayMetrics();
@@ -301,19 +343,19 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 //                        rl.addView(iv, params);
 //                        internetDialog();
 //                    }
-                }
+//                }
             }
         });
 
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.getSettings().setAppCacheEnabled(true);
-//        //设置 缓存模式
-        mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+//        mWebView.getSettings().setJavaScriptEnabled(true);
+//        mWebView.getSettings().setAppCacheEnabled(true);
+////        //设置 缓存模式
+//        mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
 //        // 开启 DOM storage API 功能
 //        mWebView.getSettings().setDomStorageEnabled(true);
-        mWebView.getSettings().setDefaultTextEncodingName("utf-8");
+//        mWebView.getSettings().setDefaultTextEncodingName("utf-8");
         mWebView.loadDataWithBaseURL(null, "加载中。。", "text/html", "utf-8",null);
-        mWebView.setBackgroundColor(Color.TRANSPARENT); // 设置背景色
+//        mWebView.setBackgroundColor(Color.TRANSPARENT); // 设置背景色
 //        mWebView.setBackgroundDrawable();
 //        Paint p = new Paint();
 //        mWebView.setLayerType(WebView.LAYER_TYPE_SOFTWARE,p);
