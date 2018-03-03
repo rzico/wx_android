@@ -5,11 +5,13 @@
       <module fileurl="file://$PROJECT_DIR$/alertview/alertview.iml" filepath="$PROJECT_DIR$/alertview/alertview.iml" />
       <module fileurl="file://$PROJECT_DIR$/chat_ui/chat_ui.iml" filepath="$PROJECT_DIR$/chat_ui/chat_ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/constant/constant.iml" filepath="$PROJECT_DIR$/constant/constant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graffiti/graffiti.iml" filepath="$PROJECT_DIR$/graffiti/graffiti.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/mopian/mopian.iml" filepath="$PROJECT_DIR$/mopian/mopian.iml" />
       <module fileurl="file://$PROJECT_DIR$/photoview/photoview.iml" filepath="$PROJECT_DIR$/photoview/photoview.iml" />
       <module fileurl="file://$PROJECT_DIR$/presentation/presentation.iml" filepath="$PROJECT_DIR$/presentation/presentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/richeditor/richeditor.iml" filepath="$PROJECT_DIR$/richeditor/richeditor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ucrop/ucrop.iml" filepath="$PROJECT_DIR$/ucrop/ucrop.iml" />
       <module fileurl="file://$PROJECT_DIR$/weex-project.iml" filepath="$PROJECT_DIR$/weex-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/weex_debug/weex_debug.iml" filepath="$PROJECT_DIR$/weex_debug/weex_debug.iml" />
       <module fileurl="file://$PROJECT_DIR$/weex_sdk/weex_sdk.iml" filepath="$PROJECT_DIR$/weex_sdk/weex_sdk.iml" />
