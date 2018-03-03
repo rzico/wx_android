@@ -10,8 +10,8 @@ android {
         applicationId "com.rzico.assistant"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 47
-        versionName "3.2.3"
+        versionCode 48
+        versionName "3.2.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
