@@ -6,9 +6,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -255,7 +259,9 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         set.setTextZoom(100);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.clearCache(true);
-
+        mWebView.getBackground().setAlpha(0);
+//        ColorDrawable colorDrawable = new ColorDrawable(Color.argb(0, 0, 0, 0));
+//        mWebView.setBackgroundDrawable(colorDrawable);
         mWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view,String url) {
