@@ -98,7 +98,7 @@ public class SplashActivity extends BaseActivity {
         NotificationManager notificationManager = (NotificationManager) this
                 .getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
-        MiPushClient.clearNotification(getApplicationContext());
+//        MiPushClient.clearNotification(getApplicationContext());
     }
 
     @Override
