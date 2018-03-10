@@ -35,13 +35,13 @@ android {
         release {
             storeFile file("tools/nihtan.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "nihtan"
             keyPassword "123456"
         }
         debug {
             storeFile file("tools/nihtan.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "nihtan"
             keyPassword "123456"
         }
 //

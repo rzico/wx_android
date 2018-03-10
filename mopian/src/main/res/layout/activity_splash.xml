@@ -19,6 +19,15 @@
         android:progressDrawable="@drawable/progressbar_color"
         style="?android:attr/progressBarStyleHorizontal"/>
 
+    <TextView
+        android:text="正在更新数据，请稍后..."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/progress"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView"/>
+
     <!--<TextView android:id="@+id/fullscreen_content"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
