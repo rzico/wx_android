@@ -96,6 +96,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/FullscreenTheme_haveActionBar"
             >
             <intent-filter>
@@ -114,6 +115,10 @@
             tools:replace="screenOrientation" />
         <activity
             android:name=".activity.TestActivity"
+            android:theme="@style/FullscreenTheme_haveActionBar" />
+        <activity
+            android:name=".activity.RouterActivity"
+            android:launchMode="singleTask"
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
             android:name=".activity.LoginActivity"
@@ -370,6 +375,13 @@
         <activity
             android:name="com.google.zxing.activity.CaptureActivity"
             android:theme="@style/FullscreenTheme_haveActionBar"/>
+        <activity
+            android:name=".activity.LivePlayerActivity"
+            android:configChanges="orientation"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

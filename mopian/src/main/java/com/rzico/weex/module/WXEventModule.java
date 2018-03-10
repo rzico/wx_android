@@ -44,6 +44,7 @@ import com.rzico.weex.activity.AbsWeexActivity;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.MainActivity;
 import com.rzico.weex.activity.RichEditorAcitivity;
+import com.rzico.weex.activity.RouterActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.bean.Redis;
@@ -223,6 +224,38 @@ public class WXEventModule extends WXModule {
     }
 
     @JSMethod
+    public void router(String url) {
+        Intent intent = new Intent();
+        Uri uri = Uri.parse(url);
+        String scheme = uri.getScheme();
+        if (TextUtils.equals("tel", scheme)) {
+
+        } else if (TextUtils.equals("sms", scheme)) {
+
+        } else if (TextUtils.equals("mailto", scheme)) {
+
+        } else if (TextUtils.equals("http", scheme) ||
+                TextUtils.equals("https",
+                        scheme)) {
+            intent.putExtra("isLocal", "false");
+            intent.setClass(getActivity(), RouterActivity.class);
+        } else if (TextUtils.equals("file", scheme)) {
+            intent.putExtra("isLocal", "true");
+            intent.setClass(getActivity(), RouterActivity.class);
+        } else {
+            intent.setClass(getActivity(), RouterActivity.class);
+            uri = Uri.parse(new StringBuilder("http:").append(url).toString());
+        }
+        intent.setData(uri);
+        mWXSDKInstance.getContext().startActivity(intent);
+    }
+    @JSMethod
+    public void closeRouter(){
+            getActivity().finish();
+    }
+
+
+    @JSMethod
     public void openURL(String url, JSCallback jsCallback) {
         try {
 //            Toast.makeText(getContext(), "url:" + url , Toast.LENGTH_SHORT).show();
@@ -278,11 +311,19 @@ public class WXEventModule extends WXModule {
 
 
     public Context getContext() {
-        return mWXSDKInstance.getContext();
+        if(mWXSDKInstance == null){
+            return WXApplication.getContext();
+        }else{
+            return mWXSDKInstance.getContext();
+        }
     }
 
     public com.rzico.weex.activity.BaseActivity getActivity() {
-        return (com.rzico.weex.activity.BaseActivity) mWXSDKInstance.getContext();
+        if(mWXSDKInstance == null){
+            return WXApplication.getActivity();
+        }else{
+            return (com.rzico.weex.activity.BaseActivity) mWXSDKInstance.getContext();
+        }
     }
 
     //    微信验证登录回调方法
@@ -843,8 +884,6 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void getUnReadMessage(){
-
-
         final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         if(wxApplication.getLoginHandler()!=null){
             wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.RECEIVEMSG);//刷新未读数

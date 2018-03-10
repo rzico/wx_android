@@ -84,7 +84,7 @@ public class HttpRequest {
     }
     public void execute(XRequest task) {
 
-        if (!Utils.checkConnection(task.activity)) {
+        if (!Utils.checkConnection(task.activity) && !Utils.isApkDebugable(task.activity)) {
             if (task.requestListener != null) {
                 task.requestListener.onFail(task.activity, task.cacheData,OnRequestListener.ERR_NO_NETWORK);
             }

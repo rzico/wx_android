@@ -24,8 +24,10 @@ import com.rzico.weex.activity.MainActivity;
 import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
+import com.rzico.weex.model.LivePlayerBean;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.AudioModule;
+import com.rzico.weex.module.LivePlayerModule;
 import com.rzico.weex.module.MYModalUIModule;
 import com.rzico.weex.module.PhoneModule;
 import com.rzico.weex.module.PrintModule;
@@ -131,17 +133,17 @@ public class WXApplication extends Application {
     MultiDex.install(this);
     Foreground.init(this);
     context = getApplicationContext();
-    if(MsfSdkUtils.isMainProcess(this)) {
-      TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
-        @Override
-        public void handleNotification(TIMOfflinePushNotification notification) {
-          if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify){
-            //消息被设置为需要提醒
-              notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
-          }
-        }
-      });
-    }
+//    if(MsfSdkUtils.isMainProcess(this)) {
+//      TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
+//        @Override
+//        public void handleNotification(TIMOfflinePushNotification notification) {
+//          if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify){
+//            //消息被设置为需要提醒
+//              notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
+//          }
+//        }
+//      });
+//    }
 
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
     instance = this;
@@ -172,6 +174,7 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("modal", MYModalUIModule.class);
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
+      WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
 
 
     } catch (WXException e) {

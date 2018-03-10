@@ -493,23 +493,25 @@ public class SplashActivity extends BaseActivity {
 //      nowVersion = Constant.resVerison;//设置默认的值
 //    }
         try {
-            if (Utils.isApkDebugable(SplashActivity.this)) {
-                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
-//                toNext();
-            } else {
-               if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
-                    writeResVersion = netResVersion;
-                    downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
-                }else  if(nowResVersion.equals("0.0.0") || (Utils.compareVersion(appResVersion, nowResVersion) > 0 && Utils.compareVersion(appResVersion, netResVersion) > 0)){
-                   //如果是app自带的版本好 是最大的 就压缩本地的
-                   writeResVersion = appResVersion;
-                   copylocalfile();
-               } else {
-                    //如果现在的资源包版本 是最大的 就什么事情都不做 直接跳转页面
-                    writeResVersion = nowResVersion;
-                    toNext();
-                }
-            }
+            downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+//            为了阿轲测试注释
+//            if (Utils.isApkDebugable(SplashActivity.this)) {
+//                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+////                toNext();
+//            } else {
+//               if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
+//                    writeResVersion = netResVersion;
+//                    downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+//                }else  if(nowResVersion.equals("0.0.0") || (Utils.compareVersion(appResVersion, nowResVersion) > 0 && Utils.compareVersion(appResVersion, netResVersion) > 0)){
+//                   //如果是app自带的版本好 是最大的 就压缩本地的
+//                   writeResVersion = appResVersion;
+//                   copylocalfile();
+//               } else {
+//                    //如果现在的资源包版本 是最大的 就什么事情都不做 直接跳转页面
+//                    writeResVersion = nowResVersion;
+//                    toNext();
+//                }
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
