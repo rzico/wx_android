@@ -240,6 +240,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         }
 
         mPlayerView = (TXCloudVideoView) findViewById(R.id.video_view);
+        mPlayerView.setBackgroundColor(getResources().getColor(R.color.black));
         mPlayerView.setLogMargin(12, 12, 110, 60);
         mPlayerView.showLog(false);
 //        mLoadingView = (ImageView) findViewById(R.id.loadingImageView);
@@ -293,8 +294,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                         finish();
                         canHerf = false;
                     }else if(url.startsWith("http")){
-                        view.loadUrl(url);
-                        canHerf = true;
+                        return super.shouldOverrideUrlLoading(view,url);
                     }
                     if(url.startsWith("nihvolbutton://bluefrog")){
                         canHerf = false;
