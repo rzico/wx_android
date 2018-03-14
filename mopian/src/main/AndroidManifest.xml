@@ -133,10 +133,6 @@
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/FullscreenTheme_haveActionBar" />
-        <activity
             android:name="com.yixiang.mopian.wxapi.WXEntryActivity"
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar"
