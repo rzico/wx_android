@@ -30,8 +30,8 @@ public class Constant {
 //    public static final String wxAppId = "wx490857e2baff7cfd";
 //    public static final String wxAppSecret = "46acecbfa148ca89d443d38b0ce7c865";
     //    魔篇wxkey
-    public static final String wxAppId = "wxe9044e4a3a478046";
-    public static final String wxAppSecret = "e1a6bffb5ad1eb7ffa2f442032df2d78";
+    public static final String wxAppId = "wxa3851ebdcfc050e1";
+    public static final String wxAppSecret = "1cdb76cfb393d5a1c391985e833a451d";
 
     //    云店shareSDK
 //    public static final String shareAppId = "1d927fd47d636";
