@@ -1287,7 +1287,7 @@ public class WXEventModule extends WXModule {
             platform.setPlatformActionListener(new PlatformActionListener() {
                 @Override
                 public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-                    Message message = new Message().success("");
+                    Message message = new Message().success("分享成功");
                     callback.invoke(message);
                 }
 
