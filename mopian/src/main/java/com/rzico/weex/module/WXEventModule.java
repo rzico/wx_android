@@ -251,7 +251,7 @@ public class WXEventModule extends WXModule {
     }
     @JSMethod
     public void closeRouter(){
-            getActivity().finish();
+        getActivity().finish();
     }
 
 
@@ -727,7 +727,7 @@ public class WXEventModule extends WXModule {
             if (jsObj.containsKey("key")) {
                 key = jsObj.getString("key");
             }
-           DbCacheBean dbCacheBean = new DbCacheBean();
+            DbCacheBean dbCacheBean = new DbCacheBean();
             dbCacheBean.setDoType(DbCacheBean.Type.FIND);
             dbCacheBean.setJsCallback(callback);
             dbCacheBean.setType(type);
@@ -1102,11 +1102,13 @@ public class WXEventModule extends WXModule {
         OssService ossService = new OssService(oss, Constant.bucket);
         Date nowTime = new Date();
         SimpleDateFormat time = new SimpleDateFormat("yyyy/MM/dd");
-        String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + ".jpg";
+        String [] text = filePath.split("/");
+        String [] houzui = text[text.length - 1].split("\\.");
+        String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + "." + houzui[houzui.length - 1];
 //        ossService.asyncPutImage(imagePath, filePath, callback, progressCallback);
 //        if ((task == null) || (task.get() == null)){
 //            Log.d("MultiPartUpload", "Start");
-            task = new WeakReference<>(ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback));
+        task = new WeakReference<>(ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback));
 //        }
 //        else {
 //        }
@@ -1146,42 +1148,42 @@ public class WXEventModule extends WXModule {
             ex.printStackTrace();
         }
 
-            final int finalCurrent = current;
-            final int finalPageSize = pageSize;
-            Dexter.withActivity(getActivity()).withPermission(Manifest.permission.READ_CONTACTS)
-                    .withListener(new PermissionListener() {
-                        @Override
-                        public void onPermissionGranted(PermissionGrantedResponse response) {
-                            List<Contact> contacts = ContactUtils.getContact(getContext());
-                            int length = contacts.size();
-                            if( length > 0 ){
-                                List<Contact> orderFinshlist = new ArrayList<>();
-                                int i;
-                                int sCurrent = finalCurrent > length ? length : finalCurrent;
-                                int sPageSize= (finalCurrent + finalPageSize) > length ? length : (finalCurrent + finalPageSize);
+        final int finalCurrent = current;
+        final int finalPageSize = pageSize;
+        Dexter.withActivity(getActivity()).withPermission(Manifest.permission.READ_CONTACTS)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        List<Contact> contacts = ContactUtils.getContact(getContext());
+                        int length = contacts.size();
+                        if( length > 0 ){
+                            List<Contact> orderFinshlist = new ArrayList<>();
+                            int i;
+                            int sCurrent = finalCurrent > length ? length : finalCurrent;
+                            int sPageSize= (finalCurrent + finalPageSize) > length ? length : (finalCurrent + finalPageSize);
 
-                                for (i = sCurrent; i < sPageSize; i++){
-                                    orderFinshlist.add(contacts.get(i));
-                                }
-                                Message message = new Message().success(orderFinshlist);
-                                callback.invoke(message);
+                            for (i = sCurrent; i < sPageSize; i++){
+                                orderFinshlist.add(contacts.get(i));
                             }
-                        }
-                        @Override
-                        public void onPermissionDenied(PermissionDeniedResponse response) {
-                            getActivity().showDeniedDialog("此功能需要通讯录权限");
-                        }
-
-                        @Override
-                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission,
-                                                                       PermissionToken token) {
-
-                            //用户不允许权限，向用户解释权限左右
-                            Message message = new Message().error("用户拒绝通讯录权限");
+                            Message message = new Message().success(orderFinshlist);
                             callback.invoke(message);
-                            token.continuePermissionRequest();
                         }
-                    }).check();
+                    }
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        getActivity().showDeniedDialog("此功能需要通讯录权限");
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission,
+                                                                   PermissionToken token) {
+
+                        //用户不允许权限，向用户解释权限左右
+                        Message message = new Message().error("用户拒绝通讯录权限");
+                        callback.invoke(message);
+                        token.continuePermissionRequest();
+                    }
+                }).check();
 
     }
     @Override
@@ -1207,12 +1209,12 @@ public class WXEventModule extends WXModule {
      *
      * @param option
      *  String title = "";   // 这个是分享的标题
-        String text = ""; //这个是分享的介绍
-        String imagePath = "";//这里图片可能是路径 可能是url path 不必加file
-        String imageUrl = "";
-        String url = "";// 这个是分享的url
-        String type = [appMessage,timeline,favorite] //分别是 微信好友、 微信朋友圈、 微信收藏
-        copyHref 复制连接 browser 打开浏览器
+    String text = ""; //这个是分享的介绍
+    String imagePath = "";//这里图片可能是路径 可能是url path 不必加file
+    String imageUrl = "";
+    String url = "";// 这个是分享的url
+    String type = [appMessage,timeline,favorite] //分别是 微信好友、 微信朋友圈、 微信收藏
+    copyHref 复制连接 browser 打开浏览器
      * @param callback
      */
     @JSMethod
@@ -1287,7 +1289,7 @@ public class WXEventModule extends WXModule {
             platform.setPlatformActionListener(new PlatformActionListener() {
                 @Override
                 public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-                    Message message = new Message().success("");
+                    Message message = new Message().success("分享成功");
                     callback.invoke(message);
                 }
 
@@ -1439,7 +1441,7 @@ public class WXEventModule extends WXModule {
     }
 
 
-//    IWXStorageAdapter mStorageAdapter;
+    //    IWXStorageAdapter mStorageAdapter;
 //
 //    private IWXStorageAdapter ability() {
 //        if (mStorageAdapter != null) {
