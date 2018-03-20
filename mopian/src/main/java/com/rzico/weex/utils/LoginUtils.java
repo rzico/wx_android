@@ -37,8 +37,6 @@ import com.tencent.imsdk.TIMUserProfile;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt;
 import com.tencent.qcloud.presentation.event.MessageEvent;
-import com.xiaomi.mipush.sdk.MiPushClient;
-
 import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
@@ -121,11 +119,11 @@ public class LoginUtils  {
                                 MessageEvent.getInstance();
                                 String deviceMan = android.os.Build.MANUFACTURER;
                                 //注册小米和华为推送
-                                if (deviceMan.equals("Xiaomi") && shouldMiInit(activity)){
-                                    MiPushClient.registerPush(activity, "2882303761517628612", "UrZo3a7sRVny1YqoUS7m4A==");
-                                }else if (deviceMan.equals("HUAWEI")){
-                                    PushManager.requestToken(activity);
-                                }
+//                                if (deviceMan.equals("Xiaomi") && shouldMiInit(activity)){
+//                                    MiPushClient.registerPush(activity, "2882303761517628612", "UrZo3a7sRVny1YqoUS7m4A==");
+//                                }else if (deviceMan.equals("HUAWEI")){
+//                                    PushManager.requestToken(activity);
+//                                }
                                 if(listener!=null){
                                     listener.onSuccess(loginBean);
                                 }
