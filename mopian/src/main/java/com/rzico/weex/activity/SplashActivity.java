@@ -49,7 +49,6 @@ import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;

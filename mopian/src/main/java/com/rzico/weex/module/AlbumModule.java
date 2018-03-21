@@ -330,6 +330,10 @@ public class AlbumModule extends WXModule {
         }).openPhotoHandleActivity(imagePath);
     }
 
+    /**
+     * 处理图片
+     * @param imagePath
+     */
     public void openPhotoHandleActivity(String imagePath){
         Uri uri = null;
         //这里要处理传入的path 因为weex前端没有传入 file://

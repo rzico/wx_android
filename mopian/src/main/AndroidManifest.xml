@@ -60,6 +60,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:overrideLibrary="com.taobao.android.dexposed"
+        android:resizeableActivity="true"
         tools:replace="android:icon, android:theme">
         <uses-library android:name="android.test.runner" />
 
@@ -131,6 +132,7 @@
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar" />
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
