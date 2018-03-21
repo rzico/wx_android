@@ -45,6 +45,7 @@ import com.yalantis.ucrop.model.ExifInfo;
 import com.yalantis.ucrop.util.BitmapLoadUtils;
 import com.yixiang.mopian.constant.AllConstant;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -74,6 +75,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
     private static final int FILTER = 102;
     public static final int GRAFFITI = 103;
 
+    private Bitmap nowBitmap = null;
 
     private AntiShake antiShake = new AntiShake();
     private boolean mShowBottomControls;
@@ -117,6 +119,7 @@ public class PhotoHandleActivity extends AppCompatActivity {
 
                         @Override
                         public void onBitmapLoaded(@NonNull Bitmap bitmap, @NonNull ExifInfo exifInfo, @NonNull String imageInputPath, @Nullable String imageOutputPath) {
+                            nowBitmap = bitmap;
                             mPhotoView.setImageBitmap(bitmap);
                         }
                         @Override
@@ -334,14 +337,18 @@ public class PhotoHandleActivity extends AppCompatActivity {
 //            }
 
 //            涂鸦代码GRAFFITI
-            // 涂鸦参数
-            GraffitiParams params = new GraffitiParams();
-            // 图片路径
-            params.mImagePath = inputUri.getPath();
 
-            params.mPaintSize = 20;
 
-            GraffitiActivity.startActivityForResult(PhotoHandleActivity.this, params, GRAFFITI);
+            if(nowBitmap != null){
+                // 涂鸦参数
+                GraffitiParams params = new GraffitiParams();
+                ByteArrayOutputStream baos=new ByteArrayOutputStream();
+                nowBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte [] bitmapByte =baos.toByteArray();
+
+                params.mPaintSize = 20;
+                GraffitiActivity.startActivityForResult(PhotoHandleActivity.this, params,bitmapByte, GRAFFITI);
+            }
 
         } else if (tab == 2) {
             //裁剪
