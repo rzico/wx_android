@@ -248,7 +248,7 @@ public class HttpRequest {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("======================" + task.url + "|error|请求耗时:" + (System.currentTimeMillis() - requestTime));
+                System.out.println("======================" + task.url + "|error|请求耗时:" + (System.currentTimeMillis() - requestTime) + "：：：" + ex.toString());
                 if (ex instanceof HttpException) { // 网络错误
                     if (task.requestListener != null) {
                         task.requestListener.onFail(task.activity, task.cacheData,  XRequest.GET.equals(task.params) ? 1 : 2);

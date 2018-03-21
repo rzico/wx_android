@@ -158,7 +158,8 @@ public class PhotoHandleActivity extends AppCompatActivity {
             bitmap = ((BitmapDrawable)mPhotoView.getDrawable()).getBitmap();
         }
         try {
-            if(isHandle && bitmap!=null){
+            String scheme = inputUri.getScheme();
+            if((isHandle || scheme.startsWith("http")) && bitmap!=null){
                 File file = PathUtils.saveBitmapJPG("MOPIAN" + System.currentTimeMillis(), bitmap);
                 // 最后通知图库更新
                 Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
