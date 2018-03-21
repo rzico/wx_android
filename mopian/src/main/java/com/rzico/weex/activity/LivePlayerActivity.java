@@ -259,6 +259,9 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         set.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         set.setTextZoom(100);
         mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        mWebView.getSettings().setSupportMultipleWindows(true);
+        mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.clearCache(true);
         mWebView.getBackground().setAlpha(0);
 //        ColorDrawable colorDrawable = new ColorDrawable(Color.argb(0, 0, 0, 0));
@@ -294,7 +297,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                         finish();
                         canHerf = false;
                     }else if(url.startsWith("http")){
-                        return super.shouldOverrideUrlLoading(view,url);
+                        return false;
                     }
                     if(url.startsWith("nihvolbutton://bluefrog")){
                         canHerf = false;
