@@ -920,7 +920,7 @@ public class WXEventModule extends WXModule {
                     int len = result.size();
                     for (int i = 0; i < len; i++){
                         if(result!=null && result.size() > 0) {
-                            TIMUserProfile user = result.get(0);
+                            TIMUserProfile user = result.get(i);
                             com.rzico.weex.model.chat.Message message = unReadUserMessages.get(i);
                             com.rzico.weex.model.info.Message onMessage = new com.rzico.weex.model.info.Message();
                             onMessage.setType("success");
@@ -1487,6 +1487,7 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void sendGlobalEvent(String eventKey, Message data){
+        //这里要整改成广播推送的
         final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
