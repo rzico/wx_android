@@ -55,7 +55,7 @@ class MaterialProgressDrawable extends Drawable implements Animatable {
 
   private static final float FULL_ROTATION = 1080.0f;
 
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @IntDef({LARGE, DEFAULT})
   public @interface ProgressDrawableSize {
 

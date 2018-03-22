@@ -243,11 +243,8 @@ public class WXPageActivity extends AbsWeexActivity implements
   public void onException(WXSDKInstance instance, String errCode, String msg) {
     mProgressBar.setVisibility(View.GONE);
     mTipView.setVisibility(View.VISIBLE);
-    if (TextUtils.equals(errCode, WXRenderErrorCode.WX_NETWORK_ERROR)) {
       mTipView.setText(R.string.index_tip);
-    } else {
-      mTipView.setText("render error:" + errCode);
-    }
+
   }
 
   @Override
@@ -330,7 +327,6 @@ public class WXPageActivity extends AbsWeexActivity implements
       } else if (code.contains("_wx_debug")) {
         uri = Uri.parse(code);
         String debug_url = uri.getQueryParameter("_wx_debug");
-        WXSDKEngine.switchDebugModel(true, debug_url);
         finish();
       } else {
         Toast.makeText(this, code, Toast.LENGTH_SHORT).show();

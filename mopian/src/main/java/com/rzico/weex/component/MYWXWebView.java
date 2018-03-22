@@ -52,7 +52,7 @@ public class MYWXWebView implements IWebView {
     private Map extraHeaders = new HashMap();
     public MYWXWebView(Context context) {
         mContext = context;
-        extraHeaders.put("Referer", "http://weex.rzico.com");
+        extraHeaders.put("Referer", "http://mopian.1xx.me");
 //        extraHeaders.put(WXHttpUtil.KEY_USER_AGENT, WXHttpUtil.assembleUserAgent(mContext, WXEnvironment.getConfig())+ "wexx");
         String uid= PhoneUtil.getDeviceId(mContext);
         String app= Constant.app;

@@ -789,11 +789,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 WXSDKEngine.reload();
                 Toast.makeText(this, "devtool", Toast.LENGTH_SHORT).show();
                 return;
-            } else if (code.contains("_wx_debug")) {
-                uri = Uri.parse(code);
-                String debug_url = uri.getQueryParameter("_wx_debug");
-                WXSDKEngine.switchDebugModel(true, debug_url);
-                finish();
             } else {
                 Toast.makeText(this, code, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Constants.ACTION_OPEN_URL);

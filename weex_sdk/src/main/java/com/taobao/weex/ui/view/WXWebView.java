@@ -19,10 +19,8 @@
 package com.taobao.weex.ui.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.net.http.SslError;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -38,11 +36,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import com.taobao.weex.common.Constants;
 import com.taobao.weex.utils.WXLogUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class WXWebView implements IWebView {
 
@@ -54,11 +48,9 @@ public class WXWebView implements IWebView {
     private OnErrorListener mOnErrorListener;
     private OnPageListener mOnPageListener;
 
-    private Map extraHeaders = new HashMap();
+
     public WXWebView(Context context) {
         mContext = context;
-
-        extraHeaders.put("Referer", "http://weex.rzico.com");
     }
 
     @Override
@@ -99,7 +91,7 @@ public class WXWebView implements IWebView {
     public void loadUrl(String url) {
         if(getWebView() == null)
             return;
-        getWebView().loadUrl(url, extraHeaders);
+        getWebView().loadUrl(url);
     }
 
     @Override
@@ -155,9 +147,9 @@ public class WXWebView implements IWebView {
         mWebView.setVisibility(shown ? View.VISIBLE : View.INVISIBLE);
     }
 
-    public @Nullable WebView getWebView() {
-        //TODO: remove this, duplicate with getView semantically.
-        return mWebView;
+    @Override
+    public WebView getWebView() {
+       return mWebView;
     }
 
     private void initWebView(WebView wv) {
@@ -172,17 +164,7 @@ public class WXWebView implements IWebView {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url, extraHeaders);
-                // 如下方案可在非微信内部WebView的H5页面中调出微信支付
-                if(url.startsWith("weixin://wap/pay?")) {
-
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url));
-                    mContext.startActivity(intent);
-
-                    return false;
-                }
+                view.loadUrl(url);
                 WXLogUtils.v("tag", "onPageOverride " + url);
                 return true;
             }

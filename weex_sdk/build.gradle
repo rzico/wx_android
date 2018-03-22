@@ -40,7 +40,7 @@ checkstyle {
     toolVersion = '6.9'
 }
 
-version = "0.9.4"
+version = "0.18.0"
 
 android {
     compileSdkVersion project.compileSdkVersion
@@ -127,6 +127,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     testOptions {
+        unitTests.returnDefaultValues = true
         unitTests.all {
             maxHeapSize = "1024m"
             jvmArgs += ['-XX:-UseSplitVerifier', '-noverify','-Xverify:none']/* fix VerifyError  */
