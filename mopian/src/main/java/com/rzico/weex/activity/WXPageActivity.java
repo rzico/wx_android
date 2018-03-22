@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.rzico.weex.Constant;
 import com.rzico.weex.WXApplication;
+import com.rzico.weex.model.event.MessageEvent;
 import com.rzico.weex.module.JSCallBaskManager;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -47,6 +48,10 @@ import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.ui.component.NestedContainer;
 import com.taobao.weex.utils.WXSoInstallMgrSdk;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -93,11 +98,19 @@ public class WXPageActivity extends AbsWeexActivity implements
       }
     }
   };
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void handleEvent(MessageEvent messageEvent){
+    if(messageEvent.getMessageType() == MessageEvent.Type.GLOBAL){
+      getWXSDKInstance().fireGlobalEventCallback(messageEvent.getEventKey(), messageEvent.getParams());
+    }
+
+  }
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_wxpage);
-
+    EventBus.getDefault().register(this);
 //    if (Constant.userId == 0) {
 //      if (null != savedInstanceState) {
 //        // activity由系统打开 (是由于手机内存不够,activity在后台被系统回收,再打开时出现的现象)
@@ -333,6 +346,7 @@ public class WXPageActivity extends AbsWeexActivity implements
   public void onDestroy() {
     super.onDestroy();
     Player.getInstance().stop();
+    EventBus.getDefault().unregister(this);
     if (mShakeDetector != null) {
       mShakeDetector.stop();
     }

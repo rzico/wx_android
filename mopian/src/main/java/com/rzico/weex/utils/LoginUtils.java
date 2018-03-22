@@ -37,6 +37,8 @@ import com.tencent.imsdk.TIMUserProfile;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt;
 import com.tencent.qcloud.presentation.event.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
@@ -149,11 +151,7 @@ public class LoginUtils  {
     public static void loginSuccess(){
         Constant.loginState = true;
         SharedUtils.saveLoginId(Constant.userId);
-        WXApplication wxApplication = (WXApplication) WXApplication.getContext();
-        if(wxApplication == null) return;
-        if(wxApplication.getLoginHandler()!=null){
-            wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGINSUCCESS);
-        }
+        EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.LOGINSUCCESS));
 
         //测试
 
@@ -169,28 +167,7 @@ public class LoginUtils  {
         }else {
             Constant.unLinelogin = false;
         }
-        WXApplication wxApplication = (WXApplication) WXApplication.getContext();
-        if(wxApplication == null) return;
-        if(wxApplication.getLoginHandler()!=null){
-            wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGINERROR);
-        }
-    }
-//    public static void logout(){
-//
-//    }
-    /**
-     * 判断小米推送是否已经初始化
-     */
-    public static boolean shouldMiInit(BaseActivity activity) {
-        ActivityManager am = ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE));
-        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
-        String mainProcessName = getPackageName();
-        int myPid = android.os.Process.myPid();
-        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
-            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
-                return true;
-            }
-        }
-        return false;
+
+        EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.LOGINERROR));
     }
 }

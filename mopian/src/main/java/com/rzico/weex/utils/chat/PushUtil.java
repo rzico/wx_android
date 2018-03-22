@@ -30,6 +30,8 @@ import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -159,10 +161,8 @@ public class PushUtil implements Observer {
                 final com.rzico.weex.model.chat.Message message = MessageFactory.getMessage(msg);
                 if (message != null && message.getSender() != null && !message.getSender().equals("")) {
                     users.add(message.getSender());
-                    //推送主页更新消息
-                    if ( wxApplication.getLoginHandler()!= null) {
-                        wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.RECEIVEMSG);
-                    }
+
+                    EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.RECEIVEMSG));
                 }
                 //获取好友资料
                 TIMFriendshipManager.getInstance().getUsersProfile(users, new TIMValueCallBack<List<TIMUserProfile>>() {
@@ -224,19 +224,9 @@ public class PushUtil implements Observer {
                 onMessage.setData(imMessage);
                 Map<String, Object> params = new HashMap<>();
                 params.put("data", onMessage);
-//                Toast.makeText(WXApplication.getContext(), "4", Toast.LENGTH_SHORT).show();
-                if (wxApplication.getWxsdkInstanceMap() != null) {
-//                    Toast.makeText(WXApplication.getContext(), "5", Toast.LENGTH_SHORT).show();
-                    for (String key : wxApplication.getWxsdkInstanceMap().keySet()) {
-                        wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
-                    }
-                }
-//                Toast.makeText(WXApplication.getContext(), "6", Toast.LENGTH_SHORT).show();
-                //判断当前页面是不是weex页面
-//                Toast.makeText(WXApplication.getContext(), "WXApplcation.getActivity()==" + WXApplication.getActivity() == null ? "null" : "nonull", Toast.LENGTH_SHORT).show();
-                if (WXApplication.getActivity() instanceof AbsWeexActivity) {
-                    ((AbsWeexActivity) WXApplication.getActivity()).getWXSDKInstance().fireGlobalEventCallback("onMessage", params);
-                }
+
+                EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.GLOBAL, "onMessage", params));
+
             } else {
                 //错误码code和错误描述desc，可用于定位请求失败原因
                 //错误码code列表请参见错误码表
@@ -253,16 +243,9 @@ public class PushUtil implements Observer {
                 onMessage.setData(imMessage);
                 Map<String, Object> params = new HashMap<>();
                 params.put("data", onMessage);
-                if (wxApplication.getWxsdkInstanceMap() != null) {
-                    for (String key : wxApplication.getWxsdkInstanceMap().keySet()) {
-                        wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
-                    }
-                }
 
-                //判断当前页面是不是weex页面
-                if (WXApplication.getActivity() instanceof AbsWeexActivity) {
-                    ((AbsWeexActivity) WXApplication.getActivity()).getWXSDKInstance().fireGlobalEventCallback("onMessage", params);
-                }
+                EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.GLOBAL, "onMessage", params));
+
             }
         }
     }

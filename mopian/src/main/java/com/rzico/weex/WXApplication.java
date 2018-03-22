@@ -69,7 +69,6 @@ import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
 
@@ -98,25 +97,9 @@ public class WXApplication extends Application {
   private static WXApplication instance;
 
 
-  private Map<String, WXSDKInstance> wxsdkInstanceMap;
 
-  private Handler loginHandler = null;
 
-  public Map<String, WXSDKInstance> getWxsdkInstanceMap() {
-    return wxsdkInstanceMap;
-  }
 
-  public void setWxsdkInstanceMap(Map<String, WXSDKInstance> wxsdkInstanceMap) {
-    this.wxsdkInstanceMap = wxsdkInstanceMap;
-  }
-
-  public Handler getLoginHandler() {
-    return loginHandler;
-  }
-
-  public void setLoginHandler(Handler loginHandler) {
-    this.loginHandler = loginHandler;
-  }
 
   public static WXApplication getInstance() {
     return instance;

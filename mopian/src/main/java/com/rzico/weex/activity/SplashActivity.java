@@ -50,6 +50,7 @@ import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -175,9 +176,7 @@ public class SplashActivity extends BaseActivity {
                 Constant.userId = 0;
                 Constant.imUserId = "";
                 SharedUtils.saveLoginId(Constant.userId);
-                if ( wxApplication.getLoginHandler() != null) {
-                    wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.FORCEOFFLINE);
-                }
+                EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.FORCEOFFLINE));
             }
 
             @Override
