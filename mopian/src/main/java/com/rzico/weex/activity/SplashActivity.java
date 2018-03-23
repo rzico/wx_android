@@ -56,6 +56,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,6 +70,7 @@ public class SplashActivity extends BaseActivity {
     private ProgressBar progress;
     private TextView textview;
     private static final String TAG = "SplashActivity";
+    private Handler mHandler = null;
 
     private String writeResVersion = Constant.resVerison;//默认是 app的资源包
 
@@ -79,6 +81,7 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         wxApplication = (WXApplication) this.getApplicationContext();
         setContentView(R.layout.activity_splash);
+        mHandler = new MyHandler(this);
         isClearAll = 0;
         progress = (ProgressBar) findViewById(R.id.progress);
         progress.setVisibility(View.GONE);
@@ -381,6 +384,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onCancelled(CancelledException cex) {
                 System.out.println("下载取消");
+                copylocalfile();
             }
 
             @Override
@@ -420,19 +424,24 @@ public class SplashActivity extends BaseActivity {
         finish();
 
     }
-
-    Handler mHandler = new Handler() {
+    static class MyHandler extends Handler{
+        WeakReference<SplashActivity> mActivity;
+        public MyHandler(SplashActivity activity) {
+            mActivity = new WeakReference<SplashActivity>(activity);
+        }
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+            SplashActivity mainActivity = mActivity.get();
             if (msg.what == ZIPSUCCESS) {
-                toNext();
+                mainActivity.toNext();
             } else {
-                Toast.makeText(SplashActivity.this, "解压资源包失败", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(mainActivity, "解压资源包失败", Toast.LENGTH_SHORT).show();
+                mainActivity.finish();
             }
+
         }
-    };
+
+    }
 
 
     @Override
@@ -468,9 +477,10 @@ public class SplashActivity extends BaseActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (VersionManagementUtil.VersionComparison(minVersion, currentVersion) == 1) {//如果低于最低版本 则不让登录
                         WXApplication.exit();
+                    }else{
+                        updateRes();
+                        dialogInterface.dismiss();
                     }
-                    updateRes();
-                    dialogInterface.dismiss();
 
                 }
             });
@@ -491,18 +501,19 @@ public class SplashActivity extends BaseActivity {
 //      nowVersion = Constant.resVerison;//设置默认的值
 //    }
         try {
+//            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
                 downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
 //                toNext();
             } else {
-               if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
+                if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
                     writeResVersion = netResVersion;
                     downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
                 }else  if(nowResVersion.equals("0.0.0") || (Utils.compareVersion(appResVersion, nowResVersion) > 0 && Utils.compareVersion(appResVersion, netResVersion) > 0)){
-                   //如果是app自带的版本好 是最大的 就压缩本地的
-                   writeResVersion = appResVersion;
-                   copylocalfile();
-               } else {
+                    //如果是app自带的版本好 是最大的 就压缩本地的
+                    writeResVersion = appResVersion;
+                    copylocalfile();
+                } else {
                     //如果现在的资源包版本 是最大的 就什么事情都不做 直接跳转页面
                     writeResVersion = nowResVersion;
                     toNext();

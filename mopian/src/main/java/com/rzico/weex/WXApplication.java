@@ -58,7 +58,6 @@ public class WXApplication extends Application {
 
   private static Context context;
 
-  private SharedPreferences SharedPre;
 
   private  static List<BaseActivity> activityList = new LinkedList<BaseActivity>();
 
@@ -279,16 +278,6 @@ public class WXApplication extends Application {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  // 保存字符串
-  public void save(String name, String content) {
-    SharedPre.edit().putString(name, content).commit();
-  }
-
-  // 读取字符串
-  public String get(String name, String defaultName) {
-    return SharedPre.getString(name, defaultName);
   }
 
   private String getAppName(int pID) {
