@@ -61,15 +61,15 @@ public class Constant {
     public static boolean loginState = false;
     public static boolean unLinelogin = false;
     //当前程序的资源包版本
-    public static String resVerison = "1.1.7";
+    public static String resVerison = "0.0.0";
     //服务器资源包版本
-    public static String netResVerison = "1.1.7";
+    public static String netResVerison = "0.0.0";
     public static String appVerison = "";
 
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://weex.rzico.com/";
+    public static final String SERVER = "http://dev.rzico.com/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
 

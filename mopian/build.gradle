@@ -7,7 +7,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.weex"
+        applicationId "com.rzico.assistant"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 3
