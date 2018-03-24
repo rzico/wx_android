@@ -18,14 +18,17 @@
  */
 package com.taobao.weex.dom;
 
-import static com.taobao.weex.dom.WXStyle.UNSET;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
@@ -39,7 +42,9 @@ import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
 import android.text.style.ForegroundColorSpan;
+
 import com.taobao.weex.WXEnvironment;
+import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.flex.CSSConstants;
 import com.taobao.weex.dom.flex.CSSNode;
@@ -47,14 +52,19 @@ import com.taobao.weex.dom.flex.FloatUtil;
 import com.taobao.weex.dom.flex.MeasureOutput;
 import com.taobao.weex.ui.component.WXText;
 import com.taobao.weex.ui.component.WXTextDecoration;
+import com.taobao.weex.utils.StaticLayoutProxy;
+import com.taobao.weex.utils.TypefaceUtil;
 import com.taobao.weex.utils.WXDomUtils;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXResourceUtils;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.taobao.weex.dom.WXStyle.UNSET;
 
 /**
  * Class for calculating a given text's height and width. The calculating of width and height of
@@ -97,9 +107,16 @@ public class WXTextDomObject extends WXDomObject {
       if (CSSConstants.isUndefined(width)) {
         width = node.cssstyle.maxWidth;
       }
-      if(textDomObject.getTextWidth(textDomObject.mTextPaint,width,false)>0) {
-        textDomObject.layout = textDomObject.createLayout(width, false, null);
-        textDomObject.hasBeenMeasured = true;
+      boolean forceWidth = false;
+      if(width > 0){
+         if(node.getParent() != null && textDomObject.mAlignment == Layout.Alignment.ALIGN_CENTER){
+            forceWidth = FloatUtil.floatsEqual(width, node.getParent().getLayoutWidth());
+         }
+      }
+      textDomObject.hasBeenMeasured = true;
+      width = textDomObject.getTextWidth(textDomObject.mTextPaint,width, forceWidth);
+      if(width > 0 && textDomObject.mText != null) {
+        textDomObject.layout = textDomObject.createLayout(width, true, null);
         textDomObject.previousWidth = textDomObject.layout.getWidth();
         measureOutput.height = textDomObject.layout.getHeight();
         measureOutput.width = textDomObject.previousWidth;
@@ -128,7 +145,7 @@ public class WXTextDomObject extends WXDomObject {
   private int mFontSize = UNSET;
   private int mLineHeight = UNSET;
   private float previousWidth = Float.NaN;
-  private String mFontFamily = null;
+  private String mFontFamily = WXEnvironment.getGlobalFontFamilyName();
   private String mText = null;
   private TextUtils.TruncateAt textOverflow;
   private Layout.Alignment mAlignment;
@@ -137,6 +154,8 @@ public class WXTextDomObject extends WXDomObject {
   private @Nullable Spanned spanned;
   private @Nullable Layout layout;
   private AtomicReference<Layout> atomicReference = new AtomicReference<>();
+
+  private BroadcastReceiver mTypefaceObserver;
 
   /**
    * Create an instance of current class, and set {@link #TEXT_MEASURE_FUNCTION} as the
@@ -147,6 +166,7 @@ public class WXTextDomObject extends WXDomObject {
     super();
     mTextPaint.setFlags(TextPaint.ANTI_ALIAS_FLAG);
     setMeasureFunction(TEXT_MEASURE_FUNCTION);
+    registerTypefaceObserverIfNeed(WXStyle.getFontFamily(getStyles()));
   }
 
   public TextPaint getTextPaint() {
@@ -164,7 +184,9 @@ public class WXTextDomObject extends WXDomObject {
     updateStyleAndText();
     spanned = createSpanned(mText);
     if(hasNewLayout()){
-        WXLogUtils.e("TextDom", new IllegalStateException("Previous csslayout was ignored! markLayoutSeen() never called"));
+        if(WXEnvironment.isApkDebugable()) {
+          WXLogUtils.d("Previous csslayout was ignored! markLayoutSeen() never called");
+        }
         markUpdateSeen();
     }
     super.dirty();
@@ -185,7 +207,7 @@ public class WXTextDomObject extends WXDomObject {
     hasBeenMeasured = false;
     if (layout != null && !layout.equals(atomicReference.get()) &&
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      if(Looper.getMainLooper().getThread().getId() != Thread.currentThread().getId()){
+      if(Thread.currentThread() != Looper.getMainLooper().getThread()){
           warmUpTextLayoutCache(layout);
       }
     }
@@ -216,6 +238,9 @@ public class WXTextDomObject extends WXDomObject {
 
   @Override
   public WXTextDomObject clone() {
+    if(isCloneThis()){
+      return  this;
+    }
     WXTextDomObject dom = null;
     try {
       dom = new WXTextDomObject();
@@ -240,8 +265,12 @@ public class WXTextDomObject extends WXDomObject {
     float contentWidth = WXDomUtils.getContentWidth(this);
     if (contentWidth > 0) {
       spanned = createSpanned(mText);
-      layout = createLayout(contentWidth, true, layout);
-      previousWidth = layout.getWidth();
+      if(mText != null){
+         layout = createLayout(contentWidth, true, layout);
+         previousWidth = layout.getWidth();
+      }else{
+         previousWidth = 0;
+      }
     }
   }
 
@@ -288,6 +317,7 @@ public class WXTextDomObject extends WXDomObject {
       if (lineHeight != UNSET) {
         mLineHeight = lineHeight;
       }
+      registerTypefaceObserverIfNeed(mFontFamily);
     }
   }
 
@@ -305,8 +335,13 @@ public class WXTextDomObject extends WXDomObject {
     textWidth = getTextWidth(mTextPaint, width, forceWidth);
     Layout layout;
     if (!FloatUtil.floatsEqual(previousWidth, textWidth) || previousLayout == null) {
-      layout = new StaticLayout(spanned, mTextPaint, (int) Math.ceil(textWidth),
-          Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
+      boolean forceRtl = false;
+      Object direction = getStyles().get(Constants.Name.DIRECTION);
+      if (direction != null && "text".equals(mType)) {
+        forceRtl = direction.equals(Constants.Name.RTL);
+      }
+      layout = StaticLayoutProxy.create(spanned, mTextPaint, (int) Math.ceil(textWidth),
+          Layout.Alignment.ALIGN_NORMAL, 1, 0, false, forceRtl);
     } else {
       layout = previousLayout;
     }
@@ -315,9 +350,14 @@ public class WXTextDomObject extends WXDomObject {
       lastLineStart = layout.getLineStart(mNumberOfLines - 1);
       lastLineEnd = layout.getLineEnd(mNumberOfLines - 1);
       if (lastLineStart < lastLineEnd) {
-        SpannableStringBuilder builder = new SpannableStringBuilder(spanned.subSequence(0, lastLineStart));
+        SpannableStringBuilder builder = null;
+        if(lastLineStart > 0) {
+          builder = new SpannableStringBuilder(spanned.subSequence(0, lastLineStart));
+        }else{
+          builder = new SpannableStringBuilder();
+        }
         Editable lastLine = new SpannableStringBuilder(spanned.subSequence(lastLineStart, lastLineEnd));
-        builder.append(truncate(lastLine, mTextPaint, layout.getWidth(), textOverflow));
+        builder.append(truncate(lastLine, mTextPaint, (int) Math.ceil(textWidth), textOverflow));
         adjustSpansRange(spanned, builder);
         spanned = builder;
         return new StaticLayout(spanned, mTextPaint, (int) Math.ceil(textWidth),
@@ -345,6 +385,15 @@ public class WXTextDomObject extends WXDomObject {
     if (!TextUtils.isEmpty(source) && source.length() > 0) {
       if (truncateAt != null) {
         source.append(ELLIPSIS);
+        Object[] spans = source.getSpans(0, source.length(), Object.class);
+        for(Object span:spans){
+          int start = source.getSpanStart(span);
+          int end = source.getSpanEnd(span);
+          if(start == 0 && end == source.length()-1){
+             source.removeSpan(span);
+             source.setSpan(span, 0, source.length(), source.getSpanFlags(span));
+          }
+        }
       }
 
       StaticLayout layout;
@@ -356,7 +405,7 @@ public class WXTextDomObject extends WXDomObject {
           startOffset -= 1;
         }
         source.delete(startOffset, startOffset+1);
-        layout = new StaticLayout(source, paint, desired, Layout.Alignment.ALIGN_NORMAL, 1, 0, true);
+        layout = new StaticLayout(source, paint, desired, Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
         if (layout.getLineCount() <= 1) {
           ret = source;
           break;
@@ -393,6 +442,12 @@ public class WXTextDomObject extends WXDomObject {
    * outerWidth in case of outerWidth is defined, in other case, it will be outer width.
    */
    float getTextWidth(TextPaint textPaint,float outerWidth, boolean forceToDesired) {
+     if(mText == null){
+       if(forceToDesired){
+         return  outerWidth;
+       }
+        return  0;
+     }
     float textWidth;
     if (forceToDesired) {
       textWidth = outerWidth;
@@ -499,5 +554,61 @@ public class WXTextDomObject extends WXDomObject {
       result = false;
     }
     return result;
+  }
+
+  @Override
+  public void destroy() {
+    if (WXEnvironment.getApplication() != null && mTypefaceObserver != null) {
+      WXLogUtils.d("WXText", "Unregister the typeface observer");
+      LocalBroadcastManager.getInstance(WXEnvironment.getApplication()).unregisterReceiver(mTypefaceObserver);
+      mTypefaceObserver = null;
+    }
+    super.destroy();
+  }
+
+  private void registerTypefaceObserverIfNeed(String desiredFontFamily) {
+    if(TextUtils.isEmpty(desiredFontFamily)){
+      return;
+    }
+    if (WXEnvironment.getApplication() == null) {
+      WXLogUtils.w("WXText", "ApplicationContent is null on register typeface observer");
+      return;
+    }
+    mFontFamily = desiredFontFamily;
+    if (mTypefaceObserver != null) {
+      return;
+    }
+
+    mTypefaceObserver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        String fontFamily = intent.getStringExtra("fontFamily");
+        if (!mFontFamily.equals(fontFamily)) {
+          return;
+        }
+        if(isDestroy() || getDomContext() == null){
+          return;
+        }
+
+        DOMActionContext domActionContext = WXSDKManager.getInstance().getWXDomManager().getDomContext(getDomContext().getInstanceId());
+        if(domActionContext == null){
+          return;
+        }
+        WXDomObject domObject = domActionContext.getDomByRef(getRef());
+        if(domObject == null){
+          return;
+        }
+        domObject.markDirty();
+        domActionContext.markDirty();
+        WXSDKManager.getInstance().getWXDomManager().sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_START_BATCH, 2);
+        if(WXEnvironment.isApkDebugable()) {
+          WXLogUtils.d("WXText", "Font family " + fontFamily + " is available");
+        }
+      }
+    };
+    if(WXEnvironment.isApkDebugable()) {
+         WXLogUtils.d("WXText", "Font family register " + desiredFontFamily + " is available" + getRef());
+    }
+    LocalBroadcastManager.getInstance(WXEnvironment.getApplication()).registerReceiver(mTypefaceObserver, new IntentFilter(TypefaceUtil.ACTION_TYPE_FACE_AVAILABLE));
   }
 }

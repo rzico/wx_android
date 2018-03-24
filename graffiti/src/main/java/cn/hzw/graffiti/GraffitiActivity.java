@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -49,6 +50,8 @@ public class GraffitiActivity extends Activity {
 
     public static final String TAG = "Graffiti";
 
+    public static final String bitmapBytes = "bitmapBytes";
+
     public static final int RESULT_ERROR = -111; // 出现错误
 
     /**
@@ -59,9 +62,14 @@ public class GraffitiActivity extends Activity {
      * @param requestCode startActivityForResult的请求码
      * @see GraffitiParams
      */
-    public static void startActivityForResult(Activity activity, GraffitiParams params, int requestCode) {
+
+
+    public static void startActivityForResult(Activity activity, GraffitiParams params,byte[] bytes, int requestCode) {
         Intent intent = new Intent(activity, GraffitiActivity.class);
         intent.putExtra(GraffitiActivity.KEY_PARAMS, params);
+        if(bytes!=null){
+            intent.putExtra(bitmapBytes, bytes);
+        }
         activity.startActivityForResult(intent, requestCode);
     }
 
@@ -80,7 +88,7 @@ public class GraffitiActivity extends Activity {
         params.mImagePath = imagePath;
         params.mSavePath = savePath;
         params.mSavePathIsDir = isDir;
-        startActivityForResult(activity, params, requestCode);
+        startActivityForResult(activity, params,null, requestCode);
     }
 
     /**
@@ -90,7 +98,7 @@ public class GraffitiActivity extends Activity {
     public static void startActivityForResult(Activity activity, String imagePath, int requestCode) {
         GraffitiParams params = new GraffitiParams();
         params.mImagePath = imagePath;
-        startActivityForResult(activity, params, requestCode);
+        startActivityForResult(activity, params, null, requestCode);
     }
 
     public static final String KEY_PARAMS = "key_graffiti_params";
@@ -158,19 +166,26 @@ public class GraffitiActivity extends Activity {
             this.finish();
             return;
         }
+        byte[] bytes = getIntent().getByteArrayExtra(bitmapBytes);
+        if(bytes == null){
 
-        mImagePath = mGraffitiParams.mImagePath;
-        if (mImagePath == null) {
-            LogUtil.e("TAG", "mImagePath is null!");
-            this.finish();
-            return;
-        }
+            mImagePath = mGraffitiParams.mImagePath;
+            if (mImagePath == null) {
+                LogUtil.e("TAG", "mImagePath is null!");
+                this.finish();
+                return;
+            }
         LogUtil.d("TAG", mImagePath);
         if (mGraffitiParams.mIsFullScreen) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mBitmap = ImageUtils.createBitmapFromPath(mImagePath, this);
+
+        }else {
+            mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+
         if (mBitmap == null) {
             LogUtil.e("TAG", "bitmap is null!");
             this.finish();

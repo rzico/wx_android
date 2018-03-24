@@ -37,6 +37,7 @@ import com.taobao.weex.ui.component.WXComponentFactory;
 import com.taobao.weex.ui.component.WXDiv;
 import com.taobao.weex.ui.component.WXText;
 import com.taobao.weex.ui.component.list.WXCell;
+import com.taobao.weex.ui.component.list.template.CellRenderContext;
 
 import junit.framework.Assert;
 
@@ -57,7 +58,6 @@ import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Created by furture on 2017/8/18.
@@ -76,7 +76,7 @@ public class StatementTest {
     public void testVFor() throws Exception {
         WXCell cell = createVForNode();
         int count = 3;
-        Statements.doRenderComponent(cell, createContext(count));
+        Statements.doRender(cell, createContext(count));
         Assert.assertTrue(cell.getChildCount() == 1);
         WXDiv div = (WXDiv) cell.getChild(0);
         Assert.assertEquals(div.getChildCount(), count);
@@ -88,7 +88,7 @@ public class StatementTest {
         WXComponent childThree = div.getChild(2);
 
         count = 4;
-        Statements.doRenderComponent(cell, createContext(count));
+        Statements.doRender(cell, createContext(count));
         Assert.assertTrue(cell.getChildCount() == 1);
         div = (WXDiv) cell.getChild(0);
         Assert.assertTrue(div.getChildCount() == count);
@@ -98,7 +98,7 @@ public class StatementTest {
         WXComponent childFour = div.getChild(3);
 
         count = 5;
-        Statements.doRenderComponent(cell, createContext(count));
+        Statements.doRender(cell, createContext(count));
         Assert.assertTrue(cell.getChildCount() == 1);
         div = (WXDiv) cell.getChild(0);
         Assert.assertTrue(div.getChildCount() == count);
@@ -109,7 +109,7 @@ public class StatementTest {
 
 
         count = 3;
-        Statements.doRenderComponent(cell, createContext(count));
+        Statements.doRender(cell, createContext(count));
         Assert.assertTrue(cell.getChildCount() == 1);
         div = (WXDiv) cell.getChild(0);
         Assert.assertTrue(div.getChildCount() == 5);
@@ -166,7 +166,7 @@ public class StatementTest {
         return cell;
     }
 
-    private ArrayStack createContext(int count){
+    private CellRenderContext createContext(int count){
         JSONObject data = new JSONObject();
         data.put("item", new JSONObject());
         data.getJSONObject("item").put("name", "hello world");
@@ -178,7 +178,9 @@ public class StatementTest {
         data.put("dataList", datas);
         ArrayStack context = new ArrayStack();
         context.push(data);
-        return context;
+        CellRenderContext cellRenderContext = new CellRenderContext();
+        cellRenderContext.stack = context;
+        return cellRenderContext;
     }
 
 }

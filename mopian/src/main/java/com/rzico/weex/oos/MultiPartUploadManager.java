@@ -67,7 +67,9 @@ public class MultiPartUploadManager {
 
                 Log.d("ETag", result.getETag());
                 //删除本地图片
-                DeleteFileUtil.delete(request.getLocalFile());
+                if(request.getLocalFile().contains("com.yixiang.mopian/cache")){
+                    DeleteFileUtil.delete(request.getLocalFile());
+                }
                 Log.d("RequestId", result.getRequestId());
                 if(callback!=null){
                     Message message = new Message();
