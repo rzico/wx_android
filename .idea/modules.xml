@@ -13,7 +13,6 @@
       <module fileurl="file://$PROJECT_DIR$/richeditor/richeditor.iml" filepath="$PROJECT_DIR$/richeditor/richeditor.iml" />
       <module fileurl="file://$PROJECT_DIR$/ucrop/ucrop.iml" filepath="$PROJECT_DIR$/ucrop/ucrop.iml" />
       <module fileurl="file://$PROJECT_DIR$/weex-project.iml" filepath="$PROJECT_DIR$/weex-project.iml" />
-      <module fileurl="file://$PROJECT_DIR$/weex_debug/weex_debug.iml" filepath="$PROJECT_DIR$/weex_debug/weex_debug.iml" />
       <module fileurl="file://$PROJECT_DIR$/weex_sdk/weex_sdk.iml" filepath="$PROJECT_DIR$/weex_sdk/weex_sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/wx_sdk/wx_sdk.iml" filepath="$PROJECT_DIR$/wx_sdk/wx_sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/xutils/xutils.iml" filepath="$PROJECT_DIR$/xutils/xutils.iml" />

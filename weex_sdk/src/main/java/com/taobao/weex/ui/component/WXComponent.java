@@ -126,7 +126,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
 
   private int mFixedProp = 0;
   public static volatile int mComponentNum = 0;
-  /** package **/ T mHost;
+  /** package **/public T mHost;
 
   private volatile WXVContainer mParent;
   private volatile ImmutableDomObject mDomObj;

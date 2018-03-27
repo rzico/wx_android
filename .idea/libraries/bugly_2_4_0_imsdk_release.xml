@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="bugly_2.4.0_imsdk_release">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/wx_sdk/libs/bugly_2.4.0_imsdk_release.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

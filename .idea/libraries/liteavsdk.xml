@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="liteavsdk">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/mopian/libs/liteavsdk.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
