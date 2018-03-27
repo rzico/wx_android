@@ -64,6 +64,5 @@ public interface IWXHttpAdapter {
      * @param response
      */
     void onHttpFinish(WXResponse response);
-
   }
 }

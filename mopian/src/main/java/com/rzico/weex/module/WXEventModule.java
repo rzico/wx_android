@@ -10,14 +10,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -29,8 +27,6 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
 import com.google.zxing.activity.CaptureActivity;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -40,15 +36,13 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
-import com.rzico.weex.activity.AbsWeexActivity;
 import com.rzico.weex.activity.BaseActivity;
-import com.rzico.weex.activity.MainActivity;
 import com.rzico.weex.activity.RichEditorAcitivity;
 import com.rzico.weex.activity.RouterActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.db.DbUtils;
-import com.rzico.weex.db.bean.Redis;
 import com.rzico.weex.db.notidmanager.DbCacheBean;
+import com.rzico.weex.model.event.MessageEvent;
 import com.rzico.weex.model.info.CacheSize;
 import com.rzico.weex.model.info.Contact;
 import com.rzico.weex.model.info.IMMessage;
@@ -61,7 +55,6 @@ import com.rzico.weex.net.XRequest;
 import com.rzico.weex.oos.OssService;
 import com.rzico.weex.oos.PauseableUploadTask;
 import com.rzico.weex.oos.STSGetter;
-import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.ContactUtils;
 import com.rzico.weex.utils.DateUtils;
 import com.rzico.weex.utils.DeleteFileUtil;
@@ -70,10 +63,7 @@ import com.rzico.weex.utils.RSAUtils;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.chat.MessageFactory;
-import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.annotation.JSMethod;
-import com.taobao.weex.appfram.storage.IWXStorageAdapter;
-import com.taobao.weex.appfram.storage.StorageResultHandler;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
 import com.taobao.weex.common.WXModuleAnno;
@@ -97,10 +87,10 @@ import com.yixiang.mopian.wxapi.WXEntryActivity;
 
 import net.bither.util.NativeUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
 import java.security.PublicKey;
@@ -112,7 +102,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import cn.finalteam.rxgalleryfinal.bean.MediaBean;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -120,17 +109,12 @@ import cn.sharesdk.wechat.favorite.WechatFavorite;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
-import static com.rzico.HandleConstant.oldDate;
-import static com.rzico.HandleConstant.openUrling;
-import static org.bouncycastle.asn1.x509.X509ObjectIdentifiers.id;
-
 
 public class WXEventModule extends WXModule {
 
 
     @JSMethod
     public void logout(final JSCallback callback){
-        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         new XRequest(getActivity(), "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
@@ -151,9 +135,7 @@ public class WXEventModule extends WXModule {
                             SharedUtils.saveImId(Constant.imUserId);
                             Message message = new Message().success("登出成功");
                             callback.invoke(message);
-                            if(wxApplication.getLoginHandler() !=null){
-                                wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGOUT);
-                            }
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.LOGOUT));
                         }
                     });
                 }else{
@@ -165,9 +147,7 @@ public class WXEventModule extends WXModule {
                     SharedUtils.saveImId(Constant.imUserId);
                     Message message = new Message().success("登出成功");
                     callback.invoke(message);
-                    if(wxApplication.getLoginHandler()!=null){
-                        wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.LOGOUT);
-                    }
+                    EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.LOGOUT));
                 }
 
             }
@@ -884,10 +864,8 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void getUnReadMessage(){
-        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
-        if(wxApplication.getLoginHandler()!=null){
-            wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.RECEIVEMSG);//刷新未读数
-        }
+        EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.RECEIVEMSG));
+
         List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
         List<String> userIds = new ArrayList<>();
 
@@ -920,11 +898,10 @@ public class WXEventModule extends WXModule {
                     int len = result.size();
                     for (int i = 0; i < len; i++){
                         if(result!=null && result.size() > 0) {
-                            TIMUserProfile user = result.get(0);
+                            TIMUserProfile user = result.get(i);
                             com.rzico.weex.model.chat.Message message = unReadUserMessages.get(i);
                             com.rzico.weex.model.info.Message onMessage = new com.rzico.weex.model.info.Message();
                             onMessage.setType("success");
-//                MainActivity.getUnRead();
                             onMessage.setContent("您有一条新消息");
                             IMMessage imMessage = new IMMessage();
 //
@@ -937,15 +914,8 @@ public class WXEventModule extends WXModule {
                             onMessage.setData(imMessage);
                             Map<String, Object> params = new HashMap<>();
                             params.put("data", onMessage);
-                            if (wxApplication.getWxsdkInstanceMap() != null) {
-                                for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
-                                    wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
-                                }
-                            }
-                            //判断当前页面是不是weex页面
-                            if(WXApplication.getActivity() instanceof AbsWeexActivity){
-                                ((AbsWeexActivity) WXApplication.getActivity()).getWXSDKInstance().fireGlobalEventCallback("onMessage", params);
-                            }
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, "onMessage", params));
+
                         }
                     }
                 }
@@ -1487,19 +1457,12 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void sendGlobalEvent(String eventKey, Message data){
-        final WXApplication wxApplication = (WXApplication) getActivity().getApplicationContext();
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
         //推送前面4个页面
-        if (wxApplication.getWxsdkInstanceMap() != null) {
-            for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
-                wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback(eventKey, params);
-            }
-        }
+
+        EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, eventKey, params));
         //判断当前页面是不是weex页面
-        if(getActivity() instanceof AbsWeexActivity){
-            ((AbsWeexActivity) WXApplication.getActivity()).getWXSDKInstance().fireGlobalEventCallback(eventKey, params);
-        }
     }
 
     @JSMethod

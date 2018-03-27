@@ -42,7 +42,6 @@ public class WXWeb extends WXComponent {
     public static final String GO_BACK = "goBack";
     public static final String GO_FORWARD = "goForward";
     public static final String RELOAD = "reload";
-    private Map extraHeaders = new HashMap();
     protected IWebView mWebView;
 
     @Deprecated
@@ -53,8 +52,6 @@ public class WXWeb extends WXComponent {
     public WXWeb(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
         super(instance, dom, parent, isLazy);
         createWebView();
-
-        extraHeaders.put("Referer", "http://weex.rizco.com");
     }
 
     protected void  createWebView(){

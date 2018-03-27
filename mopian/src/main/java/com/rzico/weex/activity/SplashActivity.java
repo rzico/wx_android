@@ -49,13 +49,14 @@ import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,6 +70,7 @@ public class SplashActivity extends BaseActivity {
     private ProgressBar progress;
     private TextView textview;
     private static final String TAG = "SplashActivity";
+    private Handler mHandler = null;
 
     private String writeResVersion = Constant.resVerison;//默认是 app的资源包
 
@@ -79,6 +81,7 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         wxApplication = (WXApplication) this.getApplicationContext();
         setContentView(R.layout.activity_splash);
+        mHandler = new MyHandler(this);
         isClearAll = 0;
         progress = (ProgressBar) findViewById(R.id.progress);
         progress.setVisibility(View.GONE);
@@ -176,9 +179,7 @@ public class SplashActivity extends BaseActivity {
                 Constant.userId = 0;
                 Constant.imUserId = "";
                 SharedUtils.saveLoginId(Constant.userId);
-                if ( wxApplication.getLoginHandler() != null) {
-                    wxApplication.getLoginHandler().sendEmptyMessage(MainActivity.FORCEOFFLINE);
-                }
+                EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.FORCEOFFLINE));
             }
 
             @Override
@@ -260,6 +261,36 @@ public class SplashActivity extends BaseActivity {
                     Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
                     toNext();
                 }
+                //获取主页导航路由的路径
+                new XRequest(SplashActivity.this, "weex/common/router.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    @Override
+                    public void onSuccess(BaseActivity activity, String result, String type) {
+                        try {
+
+                            MainUrl mainUrl = new Gson().fromJson(result, MainUrl.class);
+                            Constant.index1 = handleUrl(mainUrl.getData().getTabnav().getHome());
+                            Constant.index2 = handleUrl(mainUrl.getData().getTabnav().getFriend());
+                            Constant.index3 = handleUrl(mainUrl.getData().getTabnav().getMessage());
+                            Constant.index4 = handleUrl(mainUrl.getData().getTabnav().getMember());
+
+                            Constant.center = handleUrl(mainUrl.getData().getTabnav().getAdd());
+
+                            SharedUtils.saveIndex1(Constant.index1);
+                            SharedUtils.saveIndex2(Constant.index2);
+                            SharedUtils.saveIndex3(Constant.index3);
+                            SharedUtils.saveIndex4(Constant.index4);
+                            SharedUtils.saveCenter(Constant.center);
+
+                        } catch (Exception e) {
+                            Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFail(BaseActivity activity, String cacheData, int code) {
+                        Toast.makeText(SplashActivity.this, "网络加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                    }
+                }).execute();
             }
 
             @Override
@@ -269,36 +300,7 @@ public class SplashActivity extends BaseActivity {
             }
         }).execute();
 
-        //获取主页导航路由的路径
-        new XRequest(SplashActivity.this, "weex/common/router.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
-            @Override
-            public void onSuccess(BaseActivity activity, String result, String type) {
-                try {
 
-                    MainUrl mainUrl = new Gson().fromJson(result, MainUrl.class);
-                    Constant.index1 = handleUrl(mainUrl.getData().getTabnav().getHome());
-                    Constant.index2 = handleUrl(mainUrl.getData().getTabnav().getFriend());
-                    Constant.index3 = handleUrl(mainUrl.getData().getTabnav().getMessage());
-                    Constant.index4 = handleUrl(mainUrl.getData().getTabnav().getMember());
-
-                    Constant.center = handleUrl(mainUrl.getData().getTabnav().getAdd());
-
-                    SharedUtils.saveIndex1(Constant.index1);
-                    SharedUtils.saveIndex2(Constant.index2);
-                    SharedUtils.saveIndex3(Constant.index3);
-                    SharedUtils.saveIndex4(Constant.index4);
-                    SharedUtils.saveCenter(Constant.center);
-
-                } catch (Exception e) {
-                    Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFail(BaseActivity activity, String cacheData, int code) {
-                Toast.makeText(SplashActivity.this, "网络加载失败，请检查网络", Toast.LENGTH_SHORT).show();
-            }
-        }).execute();
     }
 
     private String handleUrl(String url) {
@@ -383,6 +385,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onCancelled(CancelledException cex) {
                 System.out.println("下载取消");
+                copylocalfile();
             }
 
             @Override
@@ -422,19 +425,24 @@ public class SplashActivity extends BaseActivity {
         finish();
 
     }
-
-    Handler mHandler = new Handler() {
+    static class MyHandler extends Handler{
+        WeakReference<SplashActivity> mActivity;
+        public MyHandler(SplashActivity activity) {
+            mActivity = new WeakReference<SplashActivity>(activity);
+        }
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+            SplashActivity mainActivity = mActivity.get();
             if (msg.what == ZIPSUCCESS) {
-                toNext();
+                mainActivity.toNext();
             } else {
-                Toast.makeText(SplashActivity.this, "解压资源包失败", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(mainActivity, "解压资源包失败", Toast.LENGTH_SHORT).show();
+                mainActivity.finish();
             }
+
         }
-    };
+
+    }
 
 
     @Override
@@ -470,9 +478,10 @@ public class SplashActivity extends BaseActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (VersionManagementUtil.VersionComparison(minVersion, currentVersion) == 1) {//如果低于最低版本 则不让登录
                         WXApplication.exit();
+                    }else{
+                        updateRes();
+                        dialogInterface.dismiss();
                     }
-                    updateRes();
-                    dialogInterface.dismiss();
 
                 }
             });
@@ -493,20 +502,19 @@ public class SplashActivity extends BaseActivity {
 //      nowVersion = Constant.resVerison;//设置默认的值
 //    }
         try {
-            downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
                 downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
 //                toNext();
             } else {
-               if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
+                if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
                     writeResVersion = netResVersion;
                     downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
                 }else  if(nowResVersion.equals("0.0.0") || (Utils.compareVersion(appResVersion, nowResVersion) > 0 && Utils.compareVersion(appResVersion, netResVersion) > 0)){
-                   //如果是app自带的版本好 是最大的 就压缩本地的
-                   writeResVersion = appResVersion;
-                   copylocalfile();
-               } else {
+                    //如果是app自带的版本好 是最大的 就压缩本地的
+                    writeResVersion = appResVersion;
+                    copylocalfile();
+                } else {
                     //如果现在的资源包版本 是最大的 就什么事情都不做 直接跳转页面
                     writeResVersion = nowResVersion;
                     toNext();

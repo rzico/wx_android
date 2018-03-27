@@ -3,32 +3,18 @@ package com.rzico.weex;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.multidex.MultiDex;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.huawei.android.pushagent.PushManager;
 import com.mob.MobSDK;
-import com.rzico.weex.activity.MainActivity;
 import com.rzico.weex.adapter.ImageAdapter;
-import com.rzico.weex.component.MYWXWeb;
+import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
-import com.rzico.weex.model.LivePlayerBean;
-import com.rzico.weex.model.info.Message;
+import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.module.AudioModule;
 import com.rzico.weex.module.LivePlayerModule;
-import com.rzico.weex.module.MYModalUIModule;
 import com.rzico.weex.module.PhoneModule;
 import com.rzico.weex.module.PrintModule;
 import com.rzico.weex.module.WXEventModule;
@@ -37,48 +23,34 @@ import com.rzico.weex.adapter.WeexHttpAdapter;
 import com.rzico.weex.adapter.WeexJSExceptionAdapter;
 import com.rzico.weex.adapter.WeexUriAdapter;
 import com.rzico.weex.module.AlbumModule;
-import com.rzico.weex.net.HttpRequest;
-import com.rzico.weex.net.XRequest;
-import com.rzico.weex.utils.SharedUtils;
-import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.chat.Foreground;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKEngine;
-import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.common.WXException;
+import com.taobao.weex.ui.SimpleComponentHolder;
 import com.taobao.weex.ui.component.WXBasicComponentType;
 
-import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
-import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMGroupEventListener;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
 import com.tencent.imsdk.TIMGroupTipsElem;
 import com.tencent.imsdk.TIMLogLevel;
-import com.tencent.imsdk.TIMLogListener;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMOfflinePushListener;
 import com.tencent.imsdk.TIMOfflinePushNotification;
-import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.imsdk.TIMRefreshListener;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
-import com.tencent.imsdk.TIMValueCallBack;
-import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
 
@@ -87,7 +59,6 @@ public class WXApplication extends Application {
 
   private static Context context;
 
-  private SharedPreferences SharedPre;
 
   private  static List<BaseActivity> activityList = new LinkedList<BaseActivity>();
 
@@ -98,25 +69,9 @@ public class WXApplication extends Application {
   private static WXApplication instance;
 
 
-  private Map<String, WXSDKInstance> wxsdkInstanceMap;
 
-  private Handler loginHandler = null;
 
-  public Map<String, WXSDKInstance> getWxsdkInstanceMap() {
-    return wxsdkInstanceMap;
-  }
 
-  public void setWxsdkInstanceMap(Map<String, WXSDKInstance> wxsdkInstanceMap) {
-    this.wxsdkInstanceMap = wxsdkInstanceMap;
-  }
-
-  public Handler getLoginHandler() {
-    return loginHandler;
-  }
-
-  public void setLoginHandler(Handler loginHandler) {
-    this.loginHandler = loginHandler;
-  }
 
   public static WXApplication getInstance() {
     return instance;
@@ -166,12 +121,20 @@ public class WXApplication extends Application {
     );
     try {
       WXSDKEngine.registerComponent(WXBasicComponentType.WEB, MYWXWeb.class);
+      WXSDKEngine.registerComponent(
+              new SimpleComponentHolder(
+                      WXImage.class,
+                      new WXImage.Ceator()
+              ),
+              false,
+              WXBasicComponentType.IMAGE,
+              WXBasicComponentType.IMG
+      );
 
       WXSDKEngine.registerModule("webview", MYWXWebViewModule.class, true);
       WXSDKEngine.registerModule("event", WXEventModule.class);
       WXSDKEngine.registerModule("audio", AudioModule.class);
       WXSDKEngine.registerModule("album", AlbumModule.class);
-      WXSDKEngine.registerModule("modal", MYModalUIModule.class);
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
@@ -325,16 +288,6 @@ public class WXApplication extends Application {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  // 保存字符串
-  public void save(String name, String content) {
-    SharedPre.edit().putString(name, content).commit();
-  }
-
-  // 读取字符串
-  public String get(String name, String defaultName) {
-    return SharedPre.getString(name, defaultName);
   }
 
   private String getAppName(int pID) {

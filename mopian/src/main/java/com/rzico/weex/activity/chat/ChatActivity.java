@@ -41,6 +41,7 @@ import com.rzico.weex.model.chat.TextMessage;
 import com.rzico.weex.model.chat.UGCMessage;
 import com.rzico.weex.model.chat.VideoMessage;
 import com.rzico.weex.model.chat.VoiceMessage;
+import com.rzico.weex.model.event.MessageEvent;
 import com.rzico.weex.model.info.IMMessage;
 import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.SharedUtils;
@@ -68,6 +69,7 @@ import com.tencent.qcloud.ui.ChatInput;
 import com.tencent.qcloud.ui.TemplateTitle;
 import com.tencent.qcloud.ui.VoiceSendingView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.ex.DbException;
 
 import java.io.File;
@@ -447,15 +449,9 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
                     onMessage.setData(imMessage);
                     Map<String, Object> params = new HashMap<>();
                     params.put("data", onMessage);
-                    if (wxApplication.getWxsdkInstanceMap() != null) {
-                        for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
-                            wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
-                        }
-                    }
-                    //判断当前页面是不是weex页面
-                    if(WXApplication.getActivity() instanceof AbsWeexActivity){
-                        ((AbsWeexActivity) WXApplication.getActivity()).getWXSDKInstance().fireGlobalEventCallback("onMessage", params);
-                    }
+
+                    EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, "onMessage", params));
+
                 }
 
                 @Override
@@ -475,15 +471,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
                     onMessage.setData(imMessage);
                     Map<String, Object> params = new HashMap<>();
                     params.put("data", onMessage);
-                    if (wxApplication.getWxsdkInstanceMap() != null) {
-                        for (String key: wxApplication.getWxsdkInstanceMap().keySet()){
-                            wxApplication.getWxsdkInstanceMap().get(key).fireGlobalEventCallback("onMessage", params);
-                        }
-                    }
-                    //判断当前页面是不是weex页面
-                    if(WXApplication.getActivity() instanceof AbsWeexActivity){
-                        ((AbsWeexActivity) WXApplication.getActivity()).getWXSDKInstance().fireGlobalEventCallback("onMessage", params);
-                    }
+                    EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, "onMessage", params));
+
                 }
             });
 

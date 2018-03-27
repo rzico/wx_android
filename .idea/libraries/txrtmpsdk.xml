@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="txrtmpsdk">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/wx_sdk/libs/txrtmpsdk.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -43,6 +43,7 @@ public class WXHttpUtil {
           .append(config.get(WXConfig.sysVersion))
           .append(")")
           .append(" ")
+
           .append(TextUtils.isEmpty(config.get(WXConfig.appGroup)) ? "" : config.get(WXConfig.appGroup))
           .append("(")
           .append(TextUtils.isEmpty(config.get(WXConfig.appName)) ? "" : config.get(WXConfig.appName))
