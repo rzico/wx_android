@@ -1,4 +1,4 @@
-package com.rzico.weex.component;
+package com.rzico.weex.component.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,13 +8,9 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.rzico.weex.model.info.Message;
@@ -28,7 +24,6 @@ import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.view.IWebView;
-import com.taobao.weex.ui.view.WXWebView;
 import com.taobao.weex.utils.WXUtils;
 
 import java.io.File;

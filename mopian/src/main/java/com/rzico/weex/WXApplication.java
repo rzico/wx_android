@@ -4,15 +4,15 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 import com.mob.MobSDK;
 import com.rzico.weex.adapter.ImageAdapter;
-import com.rzico.weex.component.MYWXWeb;
+import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
+import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.module.AudioModule;
 import com.rzico.weex.module.LivePlayerModule;
 import com.rzico.weex.module.PhoneModule;
@@ -28,6 +28,7 @@ import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.common.WXException;
+import com.taobao.weex.ui.SimpleComponentHolder;
 import com.taobao.weex.ui.component.WXBasicComponentType;
 
 import com.tencent.imsdk.TIMConnListener;
@@ -120,6 +121,15 @@ public class WXApplication extends Application {
     );
     try {
       WXSDKEngine.registerComponent(WXBasicComponentType.WEB, MYWXWeb.class);
+      WXSDKEngine.registerComponent(
+              new SimpleComponentHolder(
+                      WXImage.class,
+                      new WXImage.Ceator()
+              ),
+              false,
+              WXBasicComponentType.IMAGE,
+              WXBasicComponentType.IMG
+      );
 
       WXSDKEngine.registerModule("webview", MYWXWebViewModule.class, true);
       WXSDKEngine.registerModule("event", WXEventModule.class);

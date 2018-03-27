@@ -1,4 +1,4 @@
-package com.rzico.weex.component;
+package com.rzico.weex.component.view;
 
 import android.content.Context;
 import android.content.Intent;

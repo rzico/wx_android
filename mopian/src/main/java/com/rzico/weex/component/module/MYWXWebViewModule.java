@@ -7,22 +7,14 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
-import com.rzico.weex.component.MYWXWeb;
-import com.rzico.weex.db.XDB;
-import com.rzico.weex.db.bean.Redis;
+import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.model.info.Message;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
 import com.taobao.weex.ui.component.WXComponent;
-import com.taobao.weex.ui.component.WXWeb;
-import com.taobao.weex.ui.module.WXWebViewModule;
-
-import org.xutils.ex.DbException;
-import org.xutils.x;
 
 /**
  * Created by Jinlesoft on 2017/10/11.
