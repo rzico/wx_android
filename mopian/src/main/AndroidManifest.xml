@@ -119,7 +119,6 @@
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
             android:name=".activity.RouterActivity"
-            android:launchMode="singleTask"
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
             android:name=".activity.LoginActivity"

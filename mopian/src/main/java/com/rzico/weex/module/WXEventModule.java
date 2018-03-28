@@ -228,6 +228,10 @@ public class WXEventModule extends WXModule {
         }
         intent.setData(uri);
         mWXSDKInstance.getContext().startActivity(intent);
+        String date = getActivity().getClass().getSimpleName();
+        if(getActivity().getClass().getSimpleName().equals("RouterActivity")){
+            getActivity().finish();
+        }
     }
     @JSMethod
     public void closeRouter(){
@@ -956,6 +960,11 @@ public class WXEventModule extends WXModule {
     public void upload(final String filePath, final JSCallback callback, final JSCallback progressCallback) {
 
         String cachefileName = "";
+        if(filePath == null || filePath.equals("")){
+            Message message = new Message().error("获取图片路径出错");
+            callback.invoke(message);
+            return;
+        }
         if(filePath.endsWith("jpg") || filePath.endsWith("bmp") || filePath.endsWith("png") || filePath.endsWith("jpeg")){
             //在这里压缩 把压缩完的地址 放 filepath 里面
             cachefileName = AllConstant.getDiskCachePath(getActivity()) +"/"+ System.currentTimeMillis() + ".jpg";
@@ -999,7 +1008,6 @@ public class WXEventModule extends WXModule {
                     callback.invoke(message);
                 }
             }).execute();
-
         }
     }
     @JSMethod

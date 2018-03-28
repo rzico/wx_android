@@ -504,7 +504,7 @@ public class SplashActivity extends BaseActivity {
         try {
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
-                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+                downloadFile("http://cdnx.1xx.me/weex/release/res-1.0.0.zip" + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
 //                toNext();
             } else {
                 if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){

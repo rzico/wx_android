@@ -74,31 +74,31 @@ public class RouterActivity extends AbsWeexActivity{
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Uri uri = intent.getData();
-        Bundle bundle = getIntent().getExtras();
-        if (uri != null) {
-            mUri = uri;
-        }
-        if(getIntent().getStringExtra("isLocal") != null){
-            isLocalUrl = getIntent().getStringExtra("isLocal").equals("true");
-        }
-
-        if (bundle != null) {
-            String bundleUrl = bundle.getString(Constants.PARAM_BUNDLE_URL);
-            if (!TextUtils.isEmpty(bundleUrl)) {
-                mUri = Uri.parse(bundleUrl);
-            }
-        }
-
-        if (mUri == null) {
-            Toast.makeText(this, "the uri is empty!", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+//        Uri uri = intent.getData();
+//        Bundle bundle = getIntent().getExtras();
+//        if (uri != null) {
+//            mUri = uri;
+//        }
+//        if(getIntent().getStringExtra("isLocal") != null){
+//            isLocalUrl = getIntent().getStringExtra("isLocal").equals("true");
+//        }
+//
+//        if (bundle != null) {
+//            String bundleUrl = bundle.getString(Constants.PARAM_BUNDLE_URL);
+//            if (!TextUtils.isEmpty(bundleUrl)) {
+//                mUri = Uri.parse(bundleUrl);
+//            }
+//        }
+//
+//        if (mUri == null) {
+//            Toast.makeText(this, "the uri is empty!", Toast.LENGTH_SHORT).show();
+//            finish();
+//            return;
+//        }
+////        renderPage();
+//        createWeexInstance();
+//        setUrl(getUrl(mUri));
 //        renderPage();
-        createWeexInstance();
-        setUrl(getUrl(mUri));
-        renderPage();
     }
 
     private String getUrl(Uri uri) {
