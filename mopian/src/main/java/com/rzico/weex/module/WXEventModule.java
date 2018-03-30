@@ -1067,21 +1067,28 @@ public class WXEventModule extends WXModule {
     private WeakReference<PauseableUploadTask> task;
     //上传文件
     public void uploadFile(String stsData, BaseActivity activity, String filePath, JSCallback callback, JSCallback progressCallback) {
-        OSSCredentialProvider credentialProvider = new STSGetter(stsData);
-        OSS oss = new OSSClient(activity, Constant.endpoint, credentialProvider);
-        OssService ossService = new OssService(oss, Constant.bucket);
-        Date nowTime = new Date();
-        SimpleDateFormat time = new SimpleDateFormat("yyyy/MM/dd");
-        String [] text = filePath.split("/");
-        String [] houzui = text[text.length - 1].split("\\.");
-        String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + "." + houzui[houzui.length - 1];
+        try{
+            OSSCredentialProvider credentialProvider = new STSGetter(stsData);
+            OSS oss = new OSSClient(activity, Constant.endpoint, credentialProvider);
+            OssService ossService = new OssService(oss, Constant.bucket);
+            Date nowTime = new Date();
+            SimpleDateFormat time = new SimpleDateFormat("yyyy/MM/dd");
+            String [] text = filePath.split("/");
+            String [] houzui = text[text.length - 1].split("\\.");
+            String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + "." + houzui[houzui.length - 1];
 //        ossService.asyncPutImage(imagePath, filePath, callback, progressCallback);
 //        if ((task == null) || (task.get() == null)){
 //            Log.d("MultiPartUpload", "Start");
-        task = new WeakReference<>(ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback));
-//        }
-//        else {
-//        }
+            PauseableUploadTask pauseableUploadTask = ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback);
+            if(pauseableUploadTask != null){
+                task = new WeakReference<>(pauseableUploadTask);
+            }else {
+                callback.invoke(new Message().error("图片地址不合法"));
+            }
+        } catch (Exception e){
+            callback.invoke(new Message().error("图片地址不合法"));
+        }
+
     }    /**获取库Phon表字段**/
     private static final String[] PHONES_PROJECTION = new String[] {
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY, ContactsContract.CommonDataKinds.Photo.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.DATA1 };
