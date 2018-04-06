@@ -296,9 +296,11 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                         //关闭当前页面
                         finish();
                         canHerf = false;
-                    }else if(url.startsWith("http")){
+                    } else if(url.startsWith("http")){
                         return false;
-                    }
+                    } else if(url.startsWith("https")){
+                        return false;
+                    } else
                     if(url.startsWith("nihvolbutton://bluefrog")){
                         canHerf = false;
 //                        String allUrl = url;
