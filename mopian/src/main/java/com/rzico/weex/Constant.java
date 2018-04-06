@@ -19,9 +19,9 @@ public class Constant {
     //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
     public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.NIHTAN";
 
-    public static final String wxURL = "http://cdnx.udzyw.com/weex/app/";
+    public static final String wxURL = "http://cdnx.yzwap.com/weex/app/";
 
-    public static final String resURL = "http://cdnx.udzyw.com/";
+    public static final String resURL = "http://cdnx.yzwap.com/";
 
     //    云店wxkey
     public static final String wxAppId = "122";
@@ -66,7 +66,7 @@ public class Constant {
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://weex.udzyw.com/";
+    public static final String SERVER = "https://weex.yzwap.com/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
 
