@@ -1,22 +1,11 @@
 package com.rzico.weex.activity;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -28,43 +17,28 @@ import android.widget.Toast;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
-import com.google.gson.Gson;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-import com.huawei.android.pushagent.PushManager;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
-import com.mob.MobSDK;
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.WeexPageAdapter;
 import com.rzico.weex.db.XDB;
-import com.rzico.weex.model.LivePlayer2;
-import com.rzico.weex.model.LivePlayerBean;
-import com.rzico.weex.model.info.Location;
 import com.rzico.weex.model.info.LoginBean;
-import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.AlbumModule;
-import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.module.WXEventModule;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
-import com.rzico.weex.oos.OssService;
 import com.rzico.weex.pageview.NoScrollPageView;
 import com.rzico.weex.utils.AntiShake;
-import com.rzico.weex.utils.AudioUtil;
 import com.rzico.weex.utils.BarTextColorUtils;
-import com.rzico.weex.utils.BluetoothUtil;
-import com.rzico.weex.utils.ESCUtil;
 import com.rzico.weex.utils.LoginUtils;
 import com.rzico.weex.utils.PathUtils;
-import com.rzico.weex.utils.Player;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.chat.PushUtil;
 import com.rzico.weex.utils.weex.constants.Constants;
@@ -72,15 +46,14 @@ import com.taobao.weex.IWXRenderListener;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXRenderStrategy;
+import com.taobao.weex.ui.component.WXA;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
-import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.imsdk.ext.message.TIMConversationExt;
@@ -88,7 +61,7 @@ import com.tencent.imsdk.ext.message.TIMManagerExt;
 import com.tencent.qcloud.presentation.business.InitBusiness;
 import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
-import com.rzico.weex.model.event.MessageEvent;
+import com.rzico.weex.model.event.MessageBus;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -96,14 +69,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.x;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
 import static com.rzico.weex.Constant.imUserId;
 import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
@@ -151,12 +120,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void handleEvent(com.rzico.weex.model.event.MessageEvent messageEvent){
+    public void handleEvent(MessageBus messageBus){
         if (isfirstHandle) {
             isfirstHandle = false;
             return;
         }
-        if (messageEvent.getMessageType() == MessageEvent.Type.LOGINSUCCESS) {
+        if (messageBus.getMessageType() == MessageBus.Type.LOGINSUCCESS) {
 
             if (canReload) {
                 destoryWeexInstance();
@@ -164,19 +133,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 setSelectTab(0);
             }
             canReload = true;//恢复默认
-        } else if (messageEvent.getMessageType() == MessageEvent.Type.LOGOUT) {
+        } else if (messageBus.getMessageType() == MessageBus.Type.LOGOUT) {
 //                    //注销登录
 //                    //跳转到首页
             destoryWeexInstance();
             initWeexView();
             setSelectTab(0);
-        } else if (messageEvent.getMessageType() == MessageEvent.Type.FORCEOFFLINE) {
+        } else if (messageBus.getMessageType() == MessageBus.Type.FORCEOFFLINE) {
             //被注销了
             destoryWeexInstance();
             initWeexView();
             setSelectTab(0);
             //弹窗
-            new AlertView("账号异常", "您的账号再另一台设备登录！", null, new String[]{"确定"}, null, MainActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+            new AlertView("账号异常", "您的账号再另一台设备登录！", null, new String[]{"确定"}, null, WXApplication.getActivity(), AlertView.Style.Alert, new OnItemClickListener() {
                 @Override
                 public void onItemClick(Object o, int position) {
                     Intent intent = new Intent();
@@ -184,16 +153,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     startActivity(intent);
                 }
             }).show();
-        } else if (messageEvent.getMessageType() == MessageEvent.Type.RECEIVEMSG) {
+        } else if (messageBus.getMessageType() == MessageBus.Type.RECEIVEMSG) {
             setUnRead();
-        } else if (messageEvent.getMessageType() == MessageEvent.Type.LOGINERROR) {
+        } else if (messageBus.getMessageType() == MessageBus.Type.LOGINERROR) {
             //被注销了
             destoryWeexInstance();
             initWeexView();
             setSelectTab(0);
-        } else if (messageEvent.getMessageType() == MessageEvent.Type.GLOBAL){
+        } else if (messageBus.getMessageType() == MessageBus.Type.GLOBAL){
             for (String key : wxsdkInstanceMap.keySet()) {
-                wxsdkInstanceMap.get(key).fireGlobalEventCallback(messageEvent.getEventKey(), messageEvent.getParams());
+                wxsdkInstanceMap.get(key).fireGlobalEventCallback(messageBus.getEventKey(), messageBus.getParams());
             }
         }
 
@@ -282,7 +251,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Constant.userId = 0;
                 Constant.imUserId = "";
                 SharedUtils.saveLoginId(Constant.userId);
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.FORCEOFFLINE));
+                EventBus.getDefault().post(new MessageBus(MessageBus.Type.FORCEOFFLINE));
             }
 
             @Override
@@ -644,7 +613,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void setSelectTab(int page) {
-        if (page > 0 && SharedUtils.readLoginId() == 0) {//没有登录过
+        if (page > 0 && (SharedUtils.readLoginId() == 0 ||!Constant.loginState )) {//没有登录过
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, LoginActivity.LOGINCODE);

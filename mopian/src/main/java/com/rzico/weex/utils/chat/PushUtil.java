@@ -4,21 +4,16 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
-import com.rzico.weex.activity.AbsWeexActivity;
 import com.rzico.weex.activity.MainActivity;
-import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.model.chat.CustomMessage;
 import com.rzico.weex.model.chat.Message;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.IMMessage;
-import com.taobao.weex.WXSDKInstance;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMFriendshipManager;
@@ -157,12 +152,17 @@ public class PushUtil implements Observer {
         if (observable instanceof MessageEvent) {
             if (data instanceof TIMMessage) {
                 final TIMMessage msg = (TIMMessage) data;
+                if(msg.getConversation().getType() == TIMConversationType.Group || msg.getConversation().getType() == TIMConversationType.System){
+                    //如果是群消息 //这里群组类型待优化 目前一个用户只会在一个群 所以这样写
+                    EventBus.getDefault().post(new MessageBus(MessageBus.Type.ZHIBOCHAT, msg));
+//                    return;
+                }
                 List<String> users = new ArrayList<>();
                 final com.rzico.weex.model.chat.Message message = MessageFactory.getMessage(msg);
                 if (message != null && message.getSender() != null && !message.getSender().equals("")) {
                     users.add(message.getSender());
 
-                    EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.RECEIVEMSG));
+                    EventBus.getDefault().post(new MessageBus(MessageBus.Type.RECEIVEMSG));
                 }
                 //获取好友资料
                 TIMFriendshipManager.getInstance().getUsersProfile(users, new TIMValueCallBack<List<TIMUserProfile>>() {
@@ -225,7 +225,7 @@ public class PushUtil implements Observer {
                 Map<String, Object> params = new HashMap<>();
                 params.put("data", onMessage);
 
-                EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.GLOBAL, "onMessage", params));
+                EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "onMessage", params));
 
             } else {
                 //错误码code和错误描述desc，可用于定位请求失败原因
@@ -244,7 +244,7 @@ public class PushUtil implements Observer {
                 Map<String, Object> params = new HashMap<>();
                 params.put("data", onMessage);
 
-                EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.GLOBAL, "onMessage", params));
+                EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "onMessage", params));
 
             }
         }

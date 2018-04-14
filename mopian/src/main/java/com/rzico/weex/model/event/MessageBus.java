@@ -6,7 +6,7 @@ import java.util.Map;
  * Created by Jinlesoft on 2018/3/22.
  */
 
-public class MessageEvent {
+public class MessageBus {
 
     public enum Type{
         GLOBAL,//全局事件
@@ -15,19 +15,21 @@ public class MessageEvent {
         FORCEOFFLINE,//登录账号被顶登录了
         RECEIVEMSG,//刷新未读数
         LOGINERROR,//登录失败
+        ZHIBOCHAT,//直播消息
+        ZHIBOCLOSE,//直播房间被关闭
     }
 
     //向weex推送全局消息
-    public MessageEvent(Type type, String eventKey, Map<String, Object> params){
+    public MessageBus(Type type, String eventKey, Map<String, Object> params){
         this.messageType = type;
         this.eventKey = eventKey;
         this.params = params;
     }
-    public  MessageEvent(Type type, Object message){
+    public MessageBus(Type type, Object message){
         this.messageType = type;
         this.message=message;
     }
-    public MessageEvent(Type type){
+    public MessageBus(Type type){
         this.message = null;
         this.messageType = type;
     }

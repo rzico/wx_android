@@ -24,7 +24,8 @@ public class Constant {
 
     public static final String wxURL = "http://cdnx.1xx.me/weex/app/";
 
-    public static final String resURL = "http://cdnx.1xx.me/";
+//    public static final String resURL = "http://cdnx.1xx.me/";
+    public static final String resURL = "http://cdnx.rzico.com/";
 
     //    云店wxkey
 //    public static final String wxAppId = "wx490857e2baff7cfd";
@@ -59,8 +60,8 @@ public class Constant {
 //  public static final String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";
 //  public static final String bucket = "rzico";
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-//    public static final String bucket = "rzico-weex";
-    public static final String bucket = "mopian";
+    public static final String bucket = "rzico-weex";
+//    public static final String bucket = "mopian";
     public static final  String upLoadImages = "upload/images/";
     public static final  String upLoadVideos = "upload/videos/";
 
@@ -80,8 +81,8 @@ public class Constant {
 
     //生产环境服务器地址
 //    public static final String SERVER = "http://weex.rzico.com:8088/";
-    public static final String SERVER = "http://mopian.1xx.me/";
-//    public static final String SERVER = "http://weex.rzico.com/";
+//    public static final String SERVER = "http://mopian.1xx.me/";
+    public static final String SERVER = "http://dev.rzico.com/";
 //    public static final String SERVER = "http://dev.rzico.com/nihtan/";
 //    public static final String SERVER = "http://192.168.2.110:8088/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
@@ -92,4 +93,14 @@ public class Constant {
 
     public static final int REQ_QR_CODE = 11002; // // 打开扫描界面请求码
     public static final String INTENT_EXTRA_KEY_QR_SCAN = "qr_scan_result";
+
+
+//    public static String pushUrl = "rtmp://10714.livepush.myqcloud.com/live/10714_jinle?bizid=10714&txSecret=c1edb88add2b8cd00a758699ef71527a&txTime=5AE73D7F";
+
+//    public static String playUrl_rtmp = "rtmp://10714.liveplay.myqcloud.com/live/10714_jinle";
+//    public static String playUrl_flv = "http://10714.liveplay.myqcloud.com/live/10714_7b3ccbf5f9.flv";
+//    public static String playUrl_hls = "http://10714.liveplay.myqcloud.com/live/10714_7b3ccbf5f9.m3u8";
+
+//    public static String groupId = "10000001";
+
 }

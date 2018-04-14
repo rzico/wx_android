@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:imagecontrol="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:fitsSystemWindows="false"
+    android:clipToPadding="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff000000">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+
+        <!--<com.aiyaapp.camera.sdk.widget.CameraView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/camera_preview"/>-->
+        <!--<android.opengl.GLSurfaceView-->
+            <!--android:id="@+id/camera_preview1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="7dp"
+            android:visibility="gone"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:background="@drawable/zblogo"
+            />
+
+
+        <com.tencent.rtmp.ui.TXCloudVideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true" />
+
+        <com.rzico.weex.zhibo.view.VerticalSeekBar
+            android:id="@+id/exposure_seekBar"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="100dp"
+            android:progressBackgroundTint="#9b9b9b"
+            android:progressTint="@color/font_color_35"
+            android:thumbTint="#C0303030"
+
+            android:visibility="gone"/>
+
+        <com.lht.paintview.PaintView
+            android:id="@+id/view_paint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/live_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:textColor="@color/dd42"
+            android:text="00:00" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/tobuy_ll"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom|left"
+            android:layout_above="@+id/chat_listview"
+            android:visibility="gone"
+            android:background="@drawable/tobuy1"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/shop_who"
+                android:layout_marginLeft="10dp"
+                android:text="何先生正在购买1号商品"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:gravity="center"
+                />
+        </LinearLayout>
+        <com.rzico.weex.zhibo.view.ChatListView
+            android:id="@+id/chat_listview"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:divider="@null"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="58dp"
+            android:layout_marginLeft="5dp"
+            android:listSelector="@android:color/transparent"
+            android:scrollbars="none"
+            android:transcriptMode="alwaysScroll"/>
+        <com.rzico.weex.zhibo.view.HeartLayout
+            android:id="@+id/heart_layout"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="55dp"
+            android:focusable="true" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="40dp"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/controll_ui"
+                android:background="@drawable/beiing01"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content">
+                <!--头像-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+                    <!-- 头像-->
+                    <com.rzico.weex.zhibo.view.CircleImageView
+                        android:id="@+id/head_icon"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/defaltshop"
+                        android:layout_gravity="center_vertical"
+                        imagecontrol:border_outside_color="@color/blue_FF8EC7F9"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginRight="15dp"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/fs_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="top|left"
+                                android:gravity="center"
+                                android:layout_marginLeft="10dp"
+                                android:textColor="@color/white"
+                                android:text="0" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="粉丝"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="top|left"
+                                android:layout_marginLeft="10dp"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:text="关注" />
+
+                            <TextView
+                                android:id="@+id/gz_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textColor="@color/white"
+                                android:text="0" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_gravity="right|center"
+                android:gravity="right|center"
+                android:layout_marginLeft="40dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginRight="4dp"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/hlvaudience"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/room_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:visibility="gone"
+                android:background="@drawable/dd02"
+                android:layout_marginRight="20dp"
+                android:textColor="@color/white"
+                android:text="0人"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/close"
+                android:layout_gravity="center"
+                android:layout_marginRight="0dp"
+                android:background="@drawable/l01" />
+        </LinearLayout>
+        <!--美颜类型-->
+        <include
+            android:id="@+id/beauty_choose"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="260dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            layout="@layout/beauty_choose" />
+
+        <!--美颜-->
+        <include
+            android:id="@+id/bar_bottom"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="100dp"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            layout="@layout/camera_bottombar" />
+
+        <!--底部-->
+        <include
+            layout="@layout/zhibo_bottom_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="9dp" />
+        <master.flame.danmaku.ui.widget.DanmakuView
+            android:id="@+id/danmaku_view"
+            android:layout_marginTop="120dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+        <!--启动-->
+        <LinearLayout
+            android:layout_width="279dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"
+            android:orientation="vertical"
+            android:id="@+id/zhibo_ll"
+            android:visibility="visible"
+            android:background="@drawable/icon_bg1"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="43dp"
+                android:layout_marginRight="43dp"
+                android:layout_marginLeft="43dp"
+                android:orientation="vertical"
+                android:layout_height="108dp"
+                android:background="@drawable/ring01"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="108dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:id="@+id/fengmian_ll01"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/fengmian_ll02"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+                    <TextView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/add01"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="11dp"
+                        android:text="设置封面图"
+                        android:textSize="17sp"
+                        android:textColor="@color/tv_back"
+                        />
+
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:id="@+id/fengmian_ll02"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"
+                        android:id="@+id/img_fengmian"
+                        android:layout_centerInParent="true"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_alignParentBottom="true"
+                        android:alpha="0.7"
+                        android:text="更改封面图"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:textColor="@color/tv_back"
+                        android:background="@color/backgroud"
+                        />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="43dp"
+                android:layout_marginRight="43dp"
+                android:hint="请输入直播标题..."
+                android:textSize="13sp"
+                android:id="@+id/title_zhibo"
+                android:layout_marginTop="27dp"
+                android:background="@null"
+                android:textColorHint="@color/tv_back3"
+                android:textColor="@color/tv_back"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/gray_E6E6E6"
+                android:layout_marginLeft="43dp"
+                android:layout_marginRight="43dp"
+                android:layout_marginTop="9dp"
+                android:layout_height="1px" />
+
+
+
+
+            <TextView
+                android:id="@+id/zhibo_tv"
+                android:layout_width="192dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:text="下一步"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:textColor="@color/tv_back"
+                android:background="@drawable/icon_bg17" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="14dp"
+                android:layout_gravity="center">
+
+                <CheckBox
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/checkbox"
+                    android:background="@drawable/radio_shape1"
+                    android:button="@null"
+                    android:layout_marginRight="4dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="同意"
+                    android:textSize="11sp"
+                    android:textColor="@color/tv_back"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="《nihtan直播管理条例》"
+                    android:id="@+id/tiaoli_tv"
+                    android:layout_marginLeft="2dp"
+                    android:textSize="11sp"
+                    android:textColor="@color/dd42"
+                    />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/zhibo_start"
+            android:layout_width="279dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:text="开始直播"
+            android:visibility="gone"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="80dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/icon_bgf_r4_dd42" />
+
+
+        <!--刷礼物-->
+        <LinearLayout
+            android:id="@+id/llgiftcontent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="40dp"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:animateLayoutChanges="true"
+            android:gravity="top"
+            android:orientation="vertical" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            >
+            <com.rzico.weex.zhibo.view.GifView
+                android:id="@+id/bigivgift"
+                android:visibility="gone"
+                android:layout_marginBottom="80dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!--退出-->
+        <LinearLayout
+            android:layout_width="279dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:paddingBottom="30dp"
+            android:id="@+id/zhibo_jiesu_ll"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:background="@drawable/icon_bg1"
+            android:layout_gravity="center">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="73dp"
+                android:text="直播已结束"
+                android:textSize="19sp"
+                android:textColor="@color/tv_back"
+                android:layout_gravity="center"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="直播时长：00:00:00"
+                android:id="@+id/zb_time"
+                android:textSize="15sp"
+                android:textColor="@color/tv_back2"
+                android:layout_gravity="center"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginLeft="60dp"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:visibility="visible"
+                    android:gravity="center"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tv_back"
+                        android:textSize="17sp"
+                        android:id="@+id/tv_fs"
+                        android:text="0"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="粉丝"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/b99"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:visibility="visible"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tv_back"
+                        android:textSize="17sp"
+                        android:id="@+id/tv_gz"
+                        android:text="0"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="关注"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/b99"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/js_tv"
+                android:layout_width="192dp"
+                android:layout_height="47dp"
+                android:layout_gravity="center"
+                android:text="返回首页"
+                android:layout_marginTop="52dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/icon_bg22" />
+
+        </LinearLayout>
+
+        <!--美颜-->
+
+        <com.rzico.weex.zhibo.view.BeautySettingPannel
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutFaceBeauty"
+            android:layout_alignParentBottom="true"
+            android:clickable="true"
+            android:visibility="gone"
+            android:background="@color/colorGray4"/>
+
+        <!--<RelativeLayout android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/mEffectContainer"-->
+            <!--android:clickable="true"-->
+            <!--android:visibility="gone"-->
+            <!--android:layout_alignParentBottom="true">-->
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/meiyanview"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--/>-->
+            <!--<include layout="@layout/layout_effect"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="215dp"-->
+                <!--android:layout_alignParentBottom="true" />-->
+        <!--</RelativeLayout>-->
+
+    </RelativeLayout>
+</RelativeLayout>

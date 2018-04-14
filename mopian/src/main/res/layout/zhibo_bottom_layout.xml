@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/member_bottom_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:layout_width="39dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center"
+        android:layout_height="39dp"
+        android:id="@+id/beauty_tv01"
+        android:layout_gravity="center"
+        android:background="@drawable/l02"
+        />
+    <!--<TextView-->
+        <!--android:layout_width="39dp"-->
+        <!--android:layout_marginLeft="14dp"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_height="39dp"-->
+        <!--android:id="@+id/beauty_tv02"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:background="@drawable/l06"-->
+        <!--/>-->
+    <TextView
+        android:layout_width="39dp"
+        android:layout_marginLeft="14dp"
+        android:gravity="center"
+        android:layout_height="39dp"
+        android:id="@+id/beauty_tv03"
+        android:layout_gravity="center"
+        android:background="@drawable/l03"
+        />
+    <TextView
+        android:layout_width="39dp"
+        android:layout_marginLeft="14dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_height="39dp"
+        android:id="@+id/beauty_tv04"
+        android:layout_gravity="center"
+        android:background="@drawable/l04"
+        />
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:visibility="invisible"
+        android:layout_height="1dp" />
+    <!--<TextView-->
+        <!--android:layout_width="39dp"-->
+        <!--android:layout_marginRight="9dp"-->
+        <!--android:gravity="right"-->
+        <!--android:layout_height="39dp"-->
+        <!--android:id="@+id/beauty_tv05"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:background="@drawable/l05"-->
+        <!--/>-->
+    <!--<View-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="40dp" />-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="144dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:id="@+id/say_ll"-->
+    <!--android:gravity="center"-->
+    <!--android:background="@drawable/bg02"-->
+    <!--android:layout_height="40dp">-->
+    <!--<TextView-->
+    <!--android:id="@+id/tv_input"-->
+    <!--android:layout_width="80dp"-->
+    <!--android:gravity="center"-->
+    <!--android:layout_height="20dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="14sp"-->
+    <!--android:text="聊点什么吧~"-->
+    <!--/>-->
+    <!--</LinearLayout>-->
+    <!--<View-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="40dp" />-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="38dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:gravity="center"-->
+    <!--android:id="@+id/member_send_good"-->
+    <!--android:background="@drawable/bg03"-->
+    <!--android:layout_height="38dp">-->
+    <!--<TextView-->
+    <!--android:layout_width="20dp"-->
+    <!--android:gravity="center"-->
+    <!--android:layout_height="20dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:background="@drawable/shop"-->
+    <!--/>-->
+
+    <!--</LinearLayout>-->
+    <!--<View-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="40dp" />-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="38dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:id="@+id/member_menu_more"-->
+    <!--android:gravity="center"-->
+    <!--android:background="@drawable/bg01"-->
+    <!--android:layout_height="38dp">-->
+    <!--<TextView-->
+    <!--android:layout_width="20dp"-->
+    <!--android:gravity="center"-->
+    <!--android:layout_height="20dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:background="@drawable/gift" />-->
+    <!--</LinearLayout>-->
+    <!--<View-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="40dp" />-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="38dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:id="@+id/member_fullscreen_btn"-->
+    <!--android:gravity="center"-->
+    <!--android:background="@drawable/bg01"-->
+    <!--android:layout_height="38dp">-->
+    <!--<TextView-->
+    <!--android:layout_width="20dp"-->
+    <!--android:gravity="center"-->
+    <!--android:layout_height="20dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:background="@drawable/good" />-->
+    <!--</LinearLayout>-->
+    <!--<View-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_height="40dp" />-->
+</LinearLayout>
