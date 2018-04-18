@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import com.rzico.weex.zhibo.activity.utils.BaseRoom;
 import com.rzico.weex.zhibo.message.BaseMsgView;
 import com.rzico.weex.zhibo.message.GifMsgView;
+import com.rzico.weex.zhibo.message.NoticeMsgView;
 import com.rzico.weex.zhibo.message.TextMsgView;
 
 import java.util.ArrayList;
@@ -45,6 +46,8 @@ public class ChatListAdapter extends BaseAdapter {
                 baseMsgView = new TextMsgView(parent.getContext());
             } else if(msgContent.cmd.equals(BaseRoom.MessageType.CustomGifMsg.name())){
                 baseMsgView = new GifMsgView(parent.getContext());
+            }else if(msgContent.cmd.equals(BaseRoom.MessageType.CustomNoticeMsg.name())){
+                baseMsgView = new NoticeMsgView(parent.getContext());
             }
 //        }
         baseMsgView.setContent(msgContent);

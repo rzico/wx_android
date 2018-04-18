@@ -49,17 +49,19 @@
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/rc_editor_bg_selector"
                     android:layout_marginRight="10dp"
-                    />
+                    android:id="@+id/view" />
+
+                <ImageView
+                    android:id="@+id/input_emoji_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/view"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignRight="@+id/view"
+                    android:paddingBottom="10dp"
+                    android:src="@drawable/rc_emoji_selector" />
             </RelativeLayout>
-            <ImageView
-                android:id="@+id/input_emoji_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_margin="5dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/rc_emoji_selector"/>
+
         </RelativeLayout>
 
         <TextView

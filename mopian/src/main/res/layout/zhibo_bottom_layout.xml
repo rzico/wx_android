@@ -24,6 +24,22 @@
         <!--android:layout_gravity="center"-->
         <!--android:background="@drawable/l06"-->
         <!--/>-->
+    <LinearLayout
+        android:layout_width="38dp"
+        android:layout_gravity="top"
+        android:id="@+id/ll_giftlist"
+        android:layout_marginLeft="14dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:background="@drawable/bg01"
+        android:layout_height="38dp">
+        <TextView
+            android:layout_width="20dp"
+            android:gravity="center"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:background="@drawable/gift" />
+    </LinearLayout>
     <TextView
         android:layout_width="39dp"
         android:layout_marginLeft="14dp"

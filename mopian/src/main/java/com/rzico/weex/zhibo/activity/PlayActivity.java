@@ -39,11 +39,14 @@ import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.BaseEntity;
 import com.rzico.weex.model.zhibo.LiveGiftBean;
 import com.rzico.weex.model.zhibo.LiveRoomBean;
+import com.rzico.weex.model.zhibo.NoticeBean;
 import com.rzico.weex.model.zhibo.SendGift;
 import com.rzico.weex.model.zhibo.UserBean;
+import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
 import com.rzico.weex.utils.SharedUtils;
+import com.rzico.weex.view.SlideSwitch;
 import com.rzico.weex.zhibo.activity.utils.BaseRoom;
 import com.rzico.weex.zhibo.activity.utils.LiveRoom;
 import com.rzico.weex.zhibo.adapter.ChatListAdapter;
@@ -54,6 +57,8 @@ import com.rzico.weex.zhibo.view.HeartLayout;
 import com.rzico.weex.zhibo.view.InputPanel;
 import com.rzico.weex.zhibo.view.MagicTextView;
 import com.squareup.picasso.Picasso;
+import com.taobao.weex.bridge.JSCallback;
+import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMCustomElem;
 import com.tencent.imsdk.TIMElem;
 import com.tencent.imsdk.TIMFriendshipManager;
@@ -77,6 +82,15 @@ import java.util.TimerTask;
 
 import com.rzico.weex.zhibo.view.GifView;
 
+import master.flame.danmaku.controller.DrawHandler;
+import master.flame.danmaku.danmaku.model.BaseDanmaku;
+import master.flame.danmaku.danmaku.model.DanmakuTimer;
+import master.flame.danmaku.danmaku.model.IDanmakus;
+import master.flame.danmaku.danmaku.model.android.DanmakuContext;
+import master.flame.danmaku.danmaku.model.android.Danmakus;
+import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
+import master.flame.danmaku.ui.widget.DanmakuView;
+
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.rzico.weex.model.event.MessageBus.Type.ZHIBOCHAT;
@@ -87,6 +101,16 @@ public class PlayActivity extends BaseActivity {
 
     private final static  String tag = "PlayActivity";
     private TXCloudVideoView mView;
+    private DanmakuView danmaku_view;
+    private DanmakuContext danmakuContext;
+
+    private BaseDanmakuParser parser = new BaseDanmakuParser() {
+        @Override
+        protected IDanmakus parse() {
+            return new Danmakus();
+        }
+    };
+
     private LiveRoom liveRoom;
 
     private BottomPanelFragment bottomPanel;
@@ -96,7 +120,9 @@ public class PlayActivity extends BaseActivity {
     private GifView bigivgift;//送礼物时显示的最大数
     RelativeLayout mInView;
     private TextView room_count;
+    private TextView gift_count;
     private Long roomCount;
+    private Long giftCount;
 
     private ImageView head_image;
     private Timer timer;
@@ -122,10 +148,12 @@ public class PlayActivity extends BaseActivity {
 
     private ChatListView chat_listview;
     private ChatListAdapter chatListAdapter;
+    private boolean showDanmaku;
     /**
      * 刷礼物
      */
     private LinearLayout llgiftcontent;
+
     /**
      * 动画相关
      */
@@ -139,9 +167,14 @@ public class PlayActivity extends BaseActivity {
      */
     private List<View> giftViewCollection = new ArrayList<View>();
 
+    private SlideSwitch ssBarrage;//是否显示弹幕
+    private boolean isBarrage = false;
+
 //    用户信息
     private String username = "";
     private String userpic = "";
+    //weex回调的 key
+    private String key;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,6 +184,7 @@ public class PlayActivity extends BaseActivity {
         setContentView(R.layout.activity_play_new);
         EventBus.getDefault().register(this);
         //mPlayerView 即 step1 中添加的界面 viewRENDER_MODE_FILL_SCREEN
+        key = getIntent().getStringExtra("key");
         initView();
         initData();
         clearTiming();
@@ -158,29 +192,56 @@ public class PlayActivity extends BaseActivity {
     }
     private void initData() {
         HashMap<String, Object> params = new HashMap<>();
-        params.put("id" , getIntent().getStringExtra("id"));
+        params.put("id" , getIntent().getStringExtra("liveId"));
         params.put("lat", "");
         params.put("lng", "");
         //进入直播间
-        new XRequest(PlayActivity.this, "/weex/live/into.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(PlayActivity.this, "weex/live/into.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 LiveRoomBean data = new Gson().fromJson(result, LiveRoomBean.class);
                 if(data != null){
                     liveRoom.setLiveRoomBean(data);
 
+                    //这里请求获取公告：
+                    new XRequest(PlayActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                        @Override
+                        public void onSuccess(BaseActivity activity, String result, String type) {
+                            NoticeBean data = new Gson().fromJson(result, NoticeBean.class);
+                            if(data.getType().equals("success")){
+                                BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+                                userInfo.text = data.getData().getTitle();
+                                userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+                                chatListAdapter.addMessage(userInfo);
+                                chatListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(BaseActivity activity, String cacheData, int code) {
+
+                        }
+                    }).execute();
+
                     //判断是否关注了
                     setGuanzu(data.getData().getFollow());
                     roomCount = data.getData().getViewerCount();
+                    giftCount = data.getData().getGift();
                     //显示在线人数
-                    room_count.setText("观众" + roomCount);
-                    room_count.setVisibility(VISIBLE);
-                    if(data.getData().getFrontcover() !=null && !data.getData().getFrontcover().equals("")){
-                        Picasso.with(PlayActivity.this).load(data.getData().getFrontcover()).into(head_image);
-                    }else {
-                        Picasso.with(PlayActivity.this).load("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3994969733,336727888&fm=27&gp=0.jpg").into(head_image);
+                    if(roomCount > 0){//因为自己已经加入了
+                        room_count.setText(--roomCount + "人" );
+                    }else{
+                        room_count.setText(roomCount + "人" );
                     }
-                    head_image.setVisibility(VISIBLE);
+                    room_count.setVisibility(VISIBLE);
+                    gift_count.setText("印票" + giftCount);
+                    gift_count.setVisibility(VISIBLE);
+//                    if(data.getData().getFrontcover() !=null && !data.getData().getFrontcover().equals("")){
+//                        Picasso.with(PlayActivity.this).load(data.getData().getFrontcover()).into(head_image);
+//                    }else {
+//                        Picasso.with(PlayActivity.this).load("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3994969733,336727888&fm=27&gp=0.jpg").into(head_image);
+//                    }
+//                    head_image.setVisibility(VISIBLE);
                     //设置房间名称和 主播昵称信息
                     Picasso.with(PlayActivity.this).load(data.getData().getHeadpic()).into(head_icon);
                     room_name.setText(data.getData().getTitle().trim());
@@ -209,12 +270,15 @@ public class PlayActivity extends BaseActivity {
                                     liveRoom.sendGroupTextMessage(timUserProfile.getNickName(), timUserProfile.getFaceUrl(), "加入房间", new BaseRoom.MessageCallback() {
                                         @Override
                                         public void onError(int code, String errInfo) {
-                                            head_image.setVisibility(View.GONE);
+//                                            head_image.setVisibility(View.GONE);
+                                            if(code == 10017){
+                                                showToast("您已被主播禁言");
+                                            }
                                         }
 
                                         @Override
                                         public void onSuccess(Object... args) {
-                                            head_image.setVisibility(View.GONE);
+//                                            head_image.setVisibility(View.GONE);
 
                                         }
                                     });
@@ -288,11 +352,44 @@ public class PlayActivity extends BaseActivity {
         bigivgift = (GifView) findViewById(R.id.bigivgift);
         llgiftcontent = (LinearLayout) findViewById(R.id.llgiftcontent);
         chat_listview = (ChatListView) findViewById(R.id.chat_listview);
+        ssBarrage =(SlideSwitch) findViewById(R.id.ssBarrage);
 
         head_icon = (CircleImageView) findViewById(R.id.head_icon);
         room_name = (TextView) findViewById(R.id.room_name);
         concern_ll = (LinearLayout) findViewById(R.id.concern_ll);
         room_count = (TextView) findViewById(R.id.room_count);
+        gift_count = (TextView) findViewById(R.id.gift_count);
+
+        danmaku_view = (DanmakuView) findViewById(R.id.danmaku_view);
+
+
+        danmaku_view.enableDanmakuDrawingCache(true);
+        danmaku_view.setCallback(new DrawHandler.Callback() {
+            @Override
+            public void prepared() {
+                showDanmaku = true;
+                danmaku_view.start();
+//                generateSomeDanmaku();
+            }
+
+            @Override
+            public void updateTimer(DanmakuTimer timer) {
+
+            }
+
+            @Override
+            public void danmakuShown(BaseDanmaku danmaku) {
+
+            }
+
+            @Override
+            public void drawingFinished() {
+
+            }
+        });
+        danmakuContext = DanmakuContext.create();
+        danmaku_view.prepare(parser, danmakuContext);
+
 
         chatListAdapter = new ChatListAdapter();
         chat_listview.setAdapter(chatListAdapter);
@@ -303,12 +400,32 @@ public class PlayActivity extends BaseActivity {
         outAnim = (TranslateAnimation) AnimationUtils.loadAnimation(this, R.anim.gift_out);
         giftNumAnim = new NumAnim();
 
-
+        ssBarrage.setChecked(false);
+        //是否发送弹幕监听
+        ssBarrage.setOnChangedListener(new SlideSwitch.OnChangedListener() {
+            @Override
+            public void OnChanged(boolean checkState) {
+                isBarrage = checkState;
+            }
+        });
+        //点击左上角头像
+        head_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(liveRoom != null && liveRoom.getLiveRoomBean() != null){
+                    liveRoom.showUserInfo(PlayActivity.this, liveRoom.getLiveRoomBean().getData().getLiveMemberId(), true);
+                }
+            }
+        });
         //点击获取用户信息
         chat_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                liveRoom.showUserInfo(PlayActivity.this, ((BaseRoom.UserInfo)chatListAdapter.getItem(position)).id, false);
+                Long pid = ((BaseRoom.UserInfo)chatListAdapter.getItem(position)).id;
+                if(pid == SharedUtils.readLoginId()) return;//如果是自己就不获取了
+                if(pid!=null && pid != 0){
+                    liveRoom.showUserInfo(PlayActivity.this, pid, true);
+                }
             }
         });
         //关注主播
@@ -327,6 +444,7 @@ public class PlayActivity extends BaseActivity {
                                     //取消关注成功
                                     liveRoom.getLiveRoomBean().getData().setFollow(false);
                                     showToast("取消关注成功");
+                                    liveRoom.sendGroupFollowMessage(username, userpic, BaseRoom.UNFOLLOW, null);
                                     setGuanzu(false);
                                 }
                         }
@@ -346,6 +464,7 @@ public class PlayActivity extends BaseActivity {
                                 //关注成功
                                 liveRoom.getLiveRoomBean().getData().setFollow(true);
                                 setGuanzu(true);
+                                liveRoom.sendGroupFollowMessage(username, userpic, BaseRoom.ISFOLLOW, null);
                                 showToast("关注成功");
                             }
                         }
@@ -379,15 +498,56 @@ public class PlayActivity extends BaseActivity {
             @Override
             public void onSendClick(final String text) {
 
-                        liveRoom.sendGroupTextMessage(username, userpic, text, new BaseRoom.MessageCallback() {
+                if(!isBarrage){//不是发弹幕
+                    liveRoom.sendGroupTextMessage(username, userpic, text, new BaseRoom.MessageCallback() {
+                        @Override
+                        public void onError(int code, String errInfo) {
+                            if(code == 10017){
+                                showToast("您已被主播禁言");
+                            }
+                        }
+                        @Override
+                        public void onSuccess(Object... args) {
+                        }
+                    });
+                }else {
+                    //发送弹幕
+                    //=========================这里需要调用张总接口成功再调用
+                    if(showDanmaku){
+                        HashMap<String, Object> params = new HashMap<>();
+                        params.put("liveId", liveRoom.getLiveRoomBean().getData().getLiveId());
+                        new XRequest(PlayActivity.this, "weex/live/gift/barrage.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                             @Override
-                            public void onError(int code, String errInfo) {
+                            public void onSuccess(BaseActivity activity, String result, String type) {
+                                SendGift data = new Gson().fromJson(result, SendGift.class);
+                                if(data.getType().equals("success")){
+                                    liveRoom.sendGroupBarrageMessage(username, userpic, text, new BaseRoom.MessageCallback() {
+                                        @Override
+                                        public void onError(int code, String errInfo) {
+                                            if(code == 10017){
+                                                showToast("您已被主播禁言");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onSuccess(Object... args) {
+
+                                        }
+                                    });
+                                }else{
+                                    showToast("您的积分不足！弹幕发送失败！");
+                                }
 
                             }
+
                             @Override
-                            public void onSuccess(Object... args) {
+                            public void onFail(BaseActivity activity, String cacheData, int code) {
+                                showToast("发送弹幕失败");
                             }
-                        });
+                        }).execute();
+                    }
+                }
+
 
             }
         });
@@ -419,6 +579,7 @@ public class PlayActivity extends BaseActivity {
             public void onClick(View v) {
 
                 bottomPanel.onBackAction();
+
 //                liveRoom.sendGroupTextMessage("陈金乐", "", "主播好帅啊！", new BaseRoom.MessageCallback() {
 //                    @Override
 //                    public void onError(int code, String errInfo) {
@@ -429,6 +590,13 @@ public class PlayActivity extends BaseActivity {
 //                    public void onSuccess(Object... args) {
 //                    }
 //                });
+            }
+        });
+        danmaku_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomPanel.onBackAction();
+//                liveRoom.sendGroupGapMessage(150L, "郭书智", BaseRoom.ISGAG, null);
             }
         });
     }
@@ -571,12 +739,29 @@ public class PlayActivity extends BaseActivity {
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("id", liveGiftBean.getData().getData().get(gifid - 1 >= 0 ? gifid -1 : 0).getId());
                     params.put("liveId", liveRoom.getLiveRoomBean().getData().getLiveId());
-                    new XRequest(PlayActivity.this, "/weex/live/gift/submit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayActivity.this, "weex/live/gift/submit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             SendGift data = new Gson().fromJson(result, SendGift.class);
                             if(data.getType().equals("success")){
-                                sendgif();
+//                                sendgif();
+
+                                List<LiveGiftBean.data.datagif> giftdatas = liveGiftBean.getData().getData();
+                                int len = giftdatas.size();
+                                int i = gifid;
+                                i = i > len ? len : i;
+                                String sendText = "送了【"+ giftdatas.get(i > 0 ? i - 1 : 0).getName() +"】";
+                                liveRoom.sendGroupGifMessage(username, userpic, sendText, new BaseRoom.MessageCallback() {
+                                    @Override
+                                    public void onError(int code, String errInfo) {
+
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Object... args) {
+
+                                    }
+                                });
                                 cashmoney = cashmoney - data.getData();
                                 jifen_tv.setText(cashmoney + "");
                             }else{
@@ -796,6 +981,7 @@ public class PlayActivity extends BaseActivity {
     public void groupMessage(MessageBus messageBus){
         if(messageBus.getMessageType() == ZHIBOCHAT){
             TIMMessage message = (TIMMessage) messageBus.getMessage();
+            if(message.getConversation().getType() == TIMConversationType.Group && !message.getConversation().getPeer().equals(liveRoom.getLiveRoomBean().getData().getLiveId().toString())) return;
             //处理消息类型
             long len = message.getElementCount();
             for (int i = 0; i < len; i++) {
@@ -844,6 +1030,103 @@ public class PlayActivity extends BaseActivity {
                                 }
                             }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomGifMsg.name())){
 
+//                                ++i;
+//                                BaseRoom.UserInfo userInfo = new Gson().fromJson(new Gson().toJson(commonJson.data), BaseRoom.UserInfo.class);
+//                                if (userInfo != null && i < message.getElementCount()) {
+//                                    TIMElem nextElement = message.getElement(i);
+//                                    TIMTextElem textElem = (TIMTextElem) nextElement;
+//                                    String text = textElem.getText();//信息
+//                                    userInfo.text = text;
+//
+//                                    chatListAdapter.addMessage(userInfo);
+//                                    chatListAdapter.notifyDataSetChanged();
+//                                }
+
+                                ++i;
+                                BaseRoom.UserInfo userInfo = new Gson().fromJson(new Gson().toJson(commonJson.data), BaseRoom.UserInfo.class);
+                                if (userInfo != null && i < message.getElementCount()) {
+                                    TIMElem nextElement = message.getElement(i);
+                                    TIMTextElem textElem = (TIMTextElem) nextElement;
+                                    String text = textElem.getText();//信息
+                                    userInfo.text = text;
+                                    chatListAdapter.addMessage(userInfo);
+                                    chatListAdapter.notifyDataSetChanged();
+
+                                    //播放动画
+                                    int gifType = 0;
+                                    //播放GIF动画
+                                    if(text.contains("送了【666】")){
+                                        gifType = 1;
+                                    }else if(text.contains("送了【棒棒糖】")){
+                                        gifType = 2;
+                                    }else if(text.contains("送了【爱心】")){
+                                        gifType = 3;
+                                    }else if(text.contains("送了【玫瑰】")){
+                                        gifType = 4;
+                                    }else if(text.contains("送了【么么哒】")){
+                                        gifType = 5;
+                                    }else if(text.contains("送了【萌萌哒】")){
+                                        gifType = 6;
+                                    }else if(text.contains("送了【甜甜圈】")){
+                                        gifType = 7;
+                                    }else if(text.contains("送了【女神称号】")){
+                                        gifType = 8;
+                                    }
+                                    //这里需要请求接口赠送礼物 请求成功了以后 开始动画
+
+                                    //4秒后删除动画
+                                    Message message2 = mHandler.obtainMessage();
+                                    message2.what = INVISIBLE;
+                                    mHandler.sendMessageDelayed(message2, 4000);
+                                    showGift(gifType + "", gifType, userInfo.headPic, userInfo.nickName);
+                                    giftCount = giftCount + liwu_money[gifType - 1 < 0 ? 0 : gifType - 1];
+                                    gift_count.setText("印票" + giftCount);
+                                    //播放礼物动画
+                                    if (bigivgift.getVisibility() == VISIBLE) {
+                                        bigivgift.setPaused(true);
+                                        bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+                                        bigivgift.setPaused(false);
+                                    } else {
+                                        bigivgift.setVisibility(VISIBLE);
+                                        bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+                                        bigivgift.setPaused(false);
+                                    }
+                                }
+                            }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomFollowMsg.name())){
+                                //被关注了
+                                ++i;
+                                BaseRoom.UserInfo userInfo = new Gson().fromJson(new Gson().toJson(commonJson.data), BaseRoom.UserInfo.class);
+                                if (userInfo != null && i < message.getElementCount()) {
+                                    TIMElem nextElement = message.getElement(i);
+                                    TIMTextElem textElem = (TIMTextElem) nextElement;
+                                    String text = textElem.getText();//信息
+                                    userInfo.text = text;
+
+                                    chatListAdapter.addMessage(userInfo);
+                                    chatListAdapter.notifyDataSetChanged();
+                                }
+                            }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomKickMsg.name())){
+                                //被踢了
+                                ++i;
+                                BaseRoom.UserInfo userInfo = new Gson().fromJson(new Gson().toJson(commonJson.data), BaseRoom.UserInfo.class);
+                                if (userInfo != null && i < message.getElementCount()) {
+                                    TIMElem nextElement = message.getElement(i);
+                                    TIMTextElem textElem = (TIMTextElem) nextElement;
+                                    String text = textElem.getText();//信息
+                                    userInfo.text = text;
+                                    chatListAdapter.addMessage(userInfo);
+                                    chatListAdapter.notifyDataSetChanged();
+
+                                    if(userInfo.imid.equals(SharedUtils.readImId())){//说明是自己
+                                        new AlertView("系统消息", "您被主播踢出房间！", null, new String[]{"返回"}, null, PlayActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(Object o, int position) {
+                                                finish();
+                                            }
+                                        }).show();
+                                    }
+                                }
+                            }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomGagMsg.name())){
                                 ++i;
                                 BaseRoom.UserInfo userInfo = new Gson().fromJson(new Gson().toJson(commonJson.data), BaseRoom.UserInfo.class);
                                 if (userInfo != null && i < message.getElementCount()) {
@@ -854,8 +1137,20 @@ public class PlayActivity extends BaseActivity {
                                     chatListAdapter.addMessage(userInfo);
                                     chatListAdapter.notifyDataSetChanged();
                                 }
-                            }
+                            }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomBarrageMsg.name())){
+                                ++i;
+                                BaseRoom.UserInfo userInfo = new Gson().fromJson(new Gson().toJson(commonJson.data), BaseRoom.UserInfo.class);
+                                if (userInfo != null && i < message.getElementCount()) {
+                                    TIMElem nextElement = message.getElement(i);
+                                    TIMTextElem textElem = (TIMTextElem) nextElement;
+                                    String text = textElem.getText();//信息
+                                    userInfo.text = text;
 
+                                    chatListAdapter.addMessage(userInfo);
+                                    chatListAdapter.notifyDataSetChanged();
+                                    addDanmaku(userInfo.nickName + ":" + userInfo.text , userInfo.id == SharedUtils.readLoginId());
+                                }
+                            }
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
@@ -863,10 +1158,46 @@ public class PlayActivity extends BaseActivity {
                 }
             }
 
+        }else if(messageBus.getMessageType() == MessageBus.Type.SENDGAG){
+            BaseRoom.UserInfo userInfo = (BaseRoom.UserInfo) messageBus.getMessage();
+            liveRoom.sendGroupGapMessage(userInfo, null);
+
+        }else if(messageBus.getMessageType() == MessageBus.Type.SENDKICK){
+            BaseRoom.UserInfo userInfo = (BaseRoom.UserInfo) messageBus.getMessage();
+            liveRoom.sendGroupKickMessage(userInfo, null);
         }
     }
+    /**
+     * sp转px的方法。
+     */
+    public int sp2px(float spValue) {
+        final float fontScale = getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+    /**
+     * 向弹幕View中添加一条弹幕
+     * @param content
+     *          弹幕的具体内容
+     * @param  withBorder
+     *          弹幕是否有边框
+     */
+    private void addDanmaku(String content, boolean withBorder) {
+        BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+        danmaku.text = content;
+        danmaku.padding = 5;
+        danmaku.textSize = sp2px(20);
+        danmaku.textColor = Color.WHITE;
+        danmaku.setTime(danmaku_view.getCurrentTime());
+        if (withBorder) {
+            danmaku.borderColor = Color.GREEN;
+        }
+        danmaku_view.addDanmaku(danmaku);
+    }
+
 
     private int[] liwu_gif = {R.raw.gg1,R.raw.gg2,R.raw.gg3,R.raw.gg4,R.raw.gg5,R.raw.gg6,R.raw.gg7,R.raw.gg8};
+    private int[] liwu_money = {1, 3, 5, 10, 20, 30, 50, 100};
     public void sendgif(){
 
         //这里需要请求接口赠送礼物 请求成功了以后 开始动画
@@ -995,17 +1326,6 @@ public class PlayActivity extends BaseActivity {
 //                sendText = "送了【女神称号】";
 //            }
             giftype.setText(sendText);
-
-            liveRoom.sendGroupGifMessage(usernmae, head, sendText, new BaseRoom.MessageCallback() {
-                @Override
-                public void onError(int code, String errInfo) {
-
-                }
-
-                @Override
-                public void onSuccess(Object... args) {
-                }
-            });
             giftNum.setText("x1");/*设置礼物数量*/
             crvheadimage.setTag(System.currentTimeMillis());/*设置时间标记*/
             giftNum.setTag(1);/*给数量控件设置标记*/
@@ -1037,16 +1357,16 @@ public class PlayActivity extends BaseActivity {
                 crvheadimage.setTag(System.currentTimeMillis());
                 giftNumAnim.start(giftNum);
                 TextView textView = (TextView) giftView.findViewById(R.id.giftype);/*找到头像控件*/
-                liveRoom.sendGroupGifMessage(usernmae, head, textView.getText().toString(), new BaseRoom.MessageCallback() {
-                    @Override
-                    public void onError(int code, String errInfo) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(Object... args) {
-                    }
-                });
+//                liveRoom.sendGroupGifMessage(usernmae, head, textView.getText().toString(), new BaseRoom.MessageCallback() {
+//                    @Override
+//                    public void onError(int code, String errInfo) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(Object... args) {
+//                    }
+//                });
             } else {
                 int index = 0;
                 map.put("username", i);
@@ -1216,10 +1536,22 @@ public class PlayActivity extends BaseActivity {
 
         liveRoom.exitRoom(null);
         mView.onDestroy();
+
     }
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        showDanmaku = false;
+        if (danmaku_view != null) {
+            danmaku_view.release();
+            danmaku_view = null;
+        }
+        JSCallback jsCallback = JSCallBaskManager.get(key);
+        if(jsCallback != null){
+            jsCallback.invoke(new com.rzico.weex.model.info.Message().success(liveRoom.getLiveRoomBean()));
+            JSCallBaskManager.remove(key);
+        }
         exitRoom();
 
         HashMap<String, Object> params = new HashMap<>();

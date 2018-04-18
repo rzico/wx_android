@@ -104,8 +104,28 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        wxApplication = (WXApplication) this.getApplicationContext();
+        setContentView(R.layout.activity_splash);
+        Constant.isSetting = true;
+        mHandler = new MyHandler(this);
+        isClearAll = 0;
+        progress = (ProgressBar) findViewById(R.id.progress);
+        progress.setVisibility(View.GONE);
+        progress.setProgress(0);
+        //清除状态栏
+        clearNotification();
+        //读取 userid
+        Constant.userId = SharedUtils.readLoginId();
+        //初始化im
+        initIM();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        //为了防止用户 点击去设置以后 没有开启权限 回到项目中 再次提示
         if (Constant.isSetting) {
             Constant.isSetting = false;
             Dexter.withActivity(SplashActivity.this).withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)

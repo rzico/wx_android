@@ -17,6 +17,8 @@ public class MessageBus {
         LOGINERROR,//登录失败
         ZHIBOCHAT,//直播消息
         ZHIBOCLOSE,//直播房间被关闭
+        SENDGAG,//禁言发送消息
+        SENDKICK,//踢人发送消息
     }
 
     //向weex推送全局消息

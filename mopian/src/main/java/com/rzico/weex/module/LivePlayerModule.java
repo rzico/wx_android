@@ -17,6 +17,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LivePlayerActivity;
 import com.rzico.weex.model.LivePlayerBean;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.model.zhibo.LiveGiftBean;
 import com.rzico.weex.net.HttpRequest;
@@ -35,9 +36,15 @@ import com.tencent.imsdk.TIMUserProfile;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.rzico.weex.zhibo.activity.utils.BaseRoom.ISGAG;
+import static com.rzico.weex.zhibo.activity.utils.BaseRoom.ISKICK;
+import static com.rzico.weex.zhibo.activity.utils.BaseRoom.UNGAG;
 
 /**
  * Created by Jinlesoft on 2018/2/1.
@@ -61,7 +68,7 @@ public class LivePlayerModule extends WXModule {
     }
 
     @JSMethod
-    public void toPlayLiveRoom(){
+    public void toPlayLiveRoom(final String id, final boolean play, final boolean record, final JSCallback callback){
         Dexter.withActivity( (BaseActivity) mWXSDKInstance.getContext()).withPermission(Manifest.permission.CAMERA)
                 .withListener(new PermissionListener() {
                     @Override
@@ -71,6 +78,12 @@ public class LivePlayerModule extends WXModule {
                                     @Override
                                     public void onPermissionGranted(PermissionGrantedResponse response) {
                                         Intent intent = new Intent(mWXSDKInstance.getContext(), OpenVideoActivity.class);
+                                        String key = String.valueOf(System.currentTimeMillis());
+                                        JSCallBaskManager.put(key, callback);
+                                        intent.putExtra("liveId", id);
+                                        intent.putExtra("isPlay", play);
+                                        intent.putExtra("key", key);
+                                        intent.putExtra("record", record);
                                         mWXSDKInstance.getContext().startActivity(intent);
                                     }
 
@@ -101,6 +114,36 @@ public class LivePlayerModule extends WXModule {
                     }
                 }).check();
     }
+
+    public BaseActivity getActivity(){
+        return (BaseActivity) mWXSDKInstance.getContext();
+    }
+    @JSMethod
+    public void toLookLiveRoom(final String id,JSCallback callback){
+//        HashMap<String, Object> params = new HashMap<>();
+//        params.put("id", "57");
+//        params.put("lat", "");
+//        params.put("lng", "");
+//        //进入直播间
+//        new XRequest(getActivity(), "/weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+//            @Override
+//            public void onSuccess(BaseActivity activity, String result, String type) {
+        String key = String.valueOf(System.currentTimeMillis());
+        JSCallBaskManager.put(key, callback);
+
+        Intent intent = new Intent(mWXSDKInstance.getContext(), PlayActivity.class);
+        intent.putExtra("liveId", id);
+        intent.putExtra("key", key);
+        getActivity().startActivity(intent);
+//            }
+//
+//            @Override
+//            public void onFail(BaseActivity activity, String cacheData, int code) {
+//                getActivity().showToast("进入房间失败");
+//            }
+//        }).execute();
+
+    }
     /**
      * 获取指定的群成员的群内信息
      */
@@ -124,59 +167,67 @@ public class LivePlayerModule extends WXModule {
         });
     }
 
+
+//    @JSMethod
+//    public void setAdamin(String id,String groupId,boolean set, final JSCallback callback){
+//
+//    }
+
+    @JSMethod
+        public void getGag(String userId, String groupId, final JSCallback callback){
+        List<String> userIds = new ArrayList<>();
+        userIds.add(userId);
+        TIMGroupManagerExt.getInstance().getGroupMembersInfo(groupId, userIds, new TIMValueCallBack<List<TIMGroupMemberInfo>>() {
+            @Override
+            public void onError(int i, String s) {
+                callback.invoke(new Message().error("获取失败"));
+            }
+
+            @Override
+            public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
+                long s = timGroupMemberInfos.get(0).getSilenceSeconds();
+                if(s > 100 && s < System.currentTimeMillis()){
+                    callback.invoke(new Message().success(true));//被禁言了
+                }else {
+                    callback.invoke(new Message().success(false));//没被禁言
+                }
+            }
+
+        });
+    }
     /**
      *
-     * @param id
+     * @param userId
      * @param groupId
      * @param callback
      */
     @JSMethod
-    public void toGag(String id, String groupId, final JSCallback callback){
+    public void toGag(final String userId, final String nickName, String groupId, String time, final JSCallback callback){
         //禁言 100 秒
-        TIMGroupManagerExt.ModifyMemberInfoParam param = new TIMGroupManagerExt.ModifyMemberInfoParam(groupId, id);
-        param.setSilence(60 * 60 * 24);//经验24小时
+        BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+        userInfo.id = SharedUtils.imIdToId(userId);
+        userInfo.imid = userId;
+        userInfo.time = time;
+        userInfo.nickName = nickName;
+        if(Long.parseLong(time) == 1){
+            userInfo.text = UNGAG;
+        }else{
+            userInfo.text = ISGAG;
+        }
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.SENDGAG, userInfo));
+        callback.invoke(new Message().success("发送成功"));
 
-        TIMGroupManagerExt.getInstance().modifyMemberInfo(param, new TIMCallBack() {
-            @Override
-            public void onError(int code, String desc) {
-                Log.e("live", "modifyMemberInfo failed, code:" + code + "|msg: " + desc);
-                Message message = new Message().error();
-                callback.invoke(message);
-            }
-
-            @Override
-            public void onSuccess() {
-                Log.d("live", "modifyMemberInfo succ");
-                Message message = new Message().success("禁言成功");
-                callback.invoke(message);
-            }
-        });
     }
 
-    public BaseActivity getActivity(){
-        return (BaseActivity) mWXSDKInstance.getContext();
-    }
     @JSMethod
-    public void toLookLiveRoom(final String id){
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("id", "57");
-//        params.put("lat", "");
-//        params.put("lng", "");
-//        //进入直播间
-//        new XRequest(getActivity(), "/weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
-//            @Override
-//            public void onSuccess(BaseActivity activity, String result, String type) {
-
-                Intent intent = new Intent(mWXSDKInstance.getContext(), PlayActivity.class);
-                intent.putExtra("id", id);
-                getActivity().startActivity(intent);
-//            }
-//
-//            @Override
-//            public void onFail(BaseActivity activity, String cacheData, int code) {
-//                getActivity().showToast("进入房间失败");
-//            }
-//        }).execute();
-
+    public void toKick(String userId, final String nickName, final JSCallback callback){
+        BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+        userInfo.id   = SharedUtils.imIdToId(userId);
+        userInfo.imid = userId;
+        userInfo.nickName = nickName;
+        userInfo.text = ISKICK;
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.SENDKICK, userInfo));
+        Message message = new Message().success("踢出成功");
+        callback.invoke(message);
     }
 }

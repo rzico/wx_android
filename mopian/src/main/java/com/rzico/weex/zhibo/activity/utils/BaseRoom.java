@@ -18,6 +18,7 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rzico.weex.Constant;
+import com.rzico.weex.R;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.Message;
@@ -67,6 +68,14 @@ public abstract class BaseRoom {
     public static String ROOM_SERVICE_DOMAIN = "https://room.qcloud.com/weapp/";;
 
     private static String tag = "BaseRoom";
+
+
+    public final static  String ISFOLLOW = "关注了主播";
+    public final static  String UNFOLLOW = "取消关注主播";
+    public final static  String ISKICK   = "被主播踢出房间";
+    public final static String  ISGAG    = "被禁言了";
+    public final static String  UNGAG    = "被解除禁言了";
+
     protected Context mContext;
     protected Handler mHandler;
     private LiveRoomBean liveRoomBean;
@@ -345,7 +354,10 @@ public abstract class BaseRoom {
     protected void initLivePusher() {
         if (mTXLivePusher == null) {
             TXLivePushConfig config = new TXLivePushConfig();
-            config.setPauseFlag(TXLiveConstants.PAUSE_FLAG_PAUSE_VIDEO | TXLiveConstants.PAUSE_FLAG_PAUSE_AUDIO);
+//            config.setPauseFlag(TXLiveConstants.PAUSE_FLAG_PAUSE_VIDEO | TXLiveConstants.PAUSE_FLAG_PAUSE_AUDIO);
+            config.setPauseFlag(10);
+            config.setPauseImg(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.pause_publish));
+
             mTXLivePusher = new TXLivePusher(this.mContext);
             mTXLivePusher.setConfig(config);
             mTXLivePusher.setBeautyFilter(TXLiveConstants.BEAUTY_STYLE_SMOOTH, 5, 3, 2);
@@ -584,24 +596,56 @@ public abstract class BaseRoom {
         void onSuccess(Object ...args);
     }
     public enum MessageType{
+        CustomNoticeMsg,//这个消息是每个用户一进去的推送消息 不需要发送
         CustomTextMsg,
-        CustomGifMsg
+        CustomGifMsg,
+        CustomGagMsg,//经验
+        CustomKickMsg,//踢人
+        CustomFollowMsg,//关注啦
+        CustomBarrageMsg,//弹幕
     }
     public void sendGroupGifMessage(final @NonNull String userName, final @NonNull String headPic, final @NonNull String text, final MessageCallback callback){
-        sendGroupMessage(userName, headPic, MessageType.CustomGifMsg, text, callback);
+        UserInfo userInfo = new UserInfo();
+        userInfo.nickName = userName;
+        userInfo.headPic = headPic;
+        userInfo.text = text;
+        sendGroupMessage(userInfo, MessageType.CustomGifMsg, callback);
     }
     public void sendGroupTextMessage(final @NonNull String userName, final @NonNull String headPic, final @NonNull String text, final MessageCallback callback){
-        sendGroupMessage(userName, headPic, MessageType.CustomTextMsg, text, callback);
+        UserInfo userInfo = new UserInfo();
+        userInfo.nickName = userName;
+        userInfo.headPic = headPic;
+        userInfo.text = text;
+        sendGroupMessage(userInfo, MessageType.CustomTextMsg, callback);
     }
+    public void sendGroupGapMessage(UserInfo userInfo, final MessageCallback callback){
+        sendGroupMessage(userInfo, MessageType.CustomGagMsg, callback);
+    }
+    public void sendGroupKickMessage(UserInfo userInfo, final MessageCallback callback){
+        sendGroupMessage(userInfo, MessageType.CustomKickMsg, callback);
+    }
+
+    public void sendGroupFollowMessage(final @NonNull String userName, final @NonNull String headPic, final @NonNull String text, final MessageCallback callback){
+        UserInfo userInfo = new UserInfo();
+        userInfo.nickName = userName;
+        userInfo.headPic = headPic;
+        userInfo.text = text;
+        sendGroupMessage(userInfo, MessageType.CustomFollowMsg, callback);
+    }
+    public void sendGroupBarrageMessage( final @NonNull String userName, final @NonNull String headPic, final @NonNull String text, final MessageCallback callback){
+        UserInfo userInfo = new UserInfo();
+        userInfo.nickName = userName;
+        userInfo.headPic = headPic;
+        userInfo.text = text;
+        sendGroupMessage(userInfo, MessageType.CustomBarrageMsg, callback);
+    }
+
 
     /**
      * 发送IM群文本消息
-     * @param userName  发送者用户名
-     * @param headPic   发送者头像
-     * @param text      文本内容
      * @param callback
      */
-    public void sendGroupMessage(final @NonNull String userName, final @NonNull String headPic, final MessageType messageType, final @NonNull String text, final MessageCallback callback){
+    public void sendGroupMessage(final UserInfo userInfo, final MessageType messageType, final MessageCallback callback){
 
 
         this.mHandler.post(new Runnable() {
@@ -611,10 +655,20 @@ public abstract class BaseRoom {
                 try {
                     CommonJson<UserInfo> txtHeadMsg = new CommonJson<UserInfo>();
                     txtHeadMsg.cmd = messageType.name();
-                    txtHeadMsg.data = new UserInfo();
-                    txtHeadMsg.data.id = SharedUtils.readLoginId();
-                    txtHeadMsg.data.nickName = userName;
-                    txtHeadMsg.data.headPic = headPic;
+                    txtHeadMsg.data = userInfo;
+                    //一下可能是多余的
+                    if(messageType == MessageType.CustomKickMsg && userInfo.id!=null && userInfo.id != 0L){
+                        txtHeadMsg.data.id = userInfo.id;
+                        txtHeadMsg.data.imid = SharedUtils.idToImId(userInfo.id);
+                    }else if(messageType == MessageType.CustomGagMsg && userInfo.id!=null && userInfo.id != 0L){
+                        txtHeadMsg.data.id = userInfo.id;
+                        txtHeadMsg.data.imid = SharedUtils.idToImId(userInfo.id);
+                    }else{//如果不是KICK和 GAG 就是不传对方的id
+                        txtHeadMsg.data.id = SharedUtils.readLoginId();
+                        txtHeadMsg.data.imid = SharedUtils.idToImId(txtHeadMsg.data.id);
+                    }
+//                    txtHeadMsg.data.nickName = userName;
+//                    txtHeadMsg.data.headPic = headPic;
                     txtHeadMsg.data.cmd = messageType.name();
                     String strCmdMsg = new Gson().toJson(txtHeadMsg, new TypeToken<CommonJson<UserInfo>>(){}.getType());
 
@@ -622,7 +676,7 @@ public abstract class BaseRoom {
                     customElem.setData(strCmdMsg.getBytes("UTF-8"));
 
                     TIMTextElem textElem = new TIMTextElem();
-                    textElem.setText(text);
+                    textElem.setText(userInfo.text);
 
                     message.addElement(customElem);
                     message.addElement(textElem);
@@ -719,8 +773,8 @@ public abstract class BaseRoom {
         }
     }
 
-    private void openUserInfo(final BaseActivity activity, Long userId, boolean isShow){
-        String url =  "file://view/live/host.js?id=" + userId + "&showJinYan=" + isShow + "&groupId=" + mCurrRoomID;
+    private void openUserInfo(final BaseActivity activity, Long userId, final boolean isUser){
+        String url =  "file://view/live/host.js?id=" + userId + "&isUser=" + isUser + "&groupId=" + mCurrRoomID;
         String key = String.valueOf(System.currentTimeMillis());
         if (TextUtils.isEmpty(url)) {
             return;
@@ -751,36 +805,67 @@ public abstract class BaseRoom {
         intent.setData(uri);
         activity.startActivity(intent);
     }
-    public void showUserInfo(final BaseActivity activity, final Long userId, final boolean isShow){
+    public void showGiftList(final BaseActivity activity, final Long liveId){
+
+        String url =  "file://view/live/gifts.js?liveId=" + liveId ;
+        String key = String.valueOf(System.currentTimeMillis());
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse(url);
+        String scheme = uri.getScheme();
+        if (TextUtils.equals("tel", scheme)) {
+
+        } else if (TextUtils.equals("sms", scheme)) {
+
+        } else if (TextUtils.equals("mailto", scheme)) {
+
+        } else if (TextUtils.equals("http", scheme) ||
+                TextUtils.equals("https",
+                        scheme)) {
+            intent.putExtra("isLocal", "false");
+            intent.putExtra("key", key);
+            intent.addCategory(Constant.WEEX_CATEGORY);
+        } else if (TextUtils.equals("file", scheme)) {
+            intent.putExtra("isLocal", "true");
+            intent.putExtra("key", key);
+            intent.addCategory(Constant.WEEX_CATEGORY);
+        } else {
+            intent.addCategory(Constant.WEEX_CATEGORY);
+            uri = Uri.parse(new StringBuilder("http:").append(url).toString());
+        }
+        intent.setData(uri);
+        activity.startActivity(intent);
+    }
+
+    public void showUserInfo(final BaseActivity activity, final Long userId, final boolean isUser){
         if(userId == null){
             activity.showToast("获取用户信息失败");
             return;
         }
-        if(isShow){
+
+        if(isUser){
             List<String> userIds = new ArrayList<>();
             userIds.add("u" + (10200 + userId));
             TIMGroupManagerExt.getInstance().getGroupMembersInfo(mCurrRoomID, userIds, new TIMValueCallBack<List<TIMGroupMemberInfo>>() {
                 @Override
                 public void onError(int i, String s) {
-                    openUserInfo(activity, userId, isShow);
+                    openUserInfo(activity, userId, isUser);
                 }
 
                 @Override
                 public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
-                    long s = timGroupMemberInfos.get(0).getSilenceSeconds();
-                    if(s > 0){
-                        //被禁言啦
-                        openUserInfo(activity, userId, false);
-                    }else {
-                        openUserInfo(activity, userId, isShow);
+                    if(timGroupMemberInfos.size()>0){
+                        long s = timGroupMemberInfos.get(0).getSilenceSeconds();
+                        openUserInfo(activity, userId,  isUser);
                     }
                 }
 
             });
         }else {
-            openUserInfo(activity, userId, isShow);
+            openUserInfo(activity, userId, isUser);
         }
-
     }
 
     public static class CommonJson<T> {
@@ -788,11 +873,14 @@ public abstract class BaseRoom {
         public T      data;
     }
     public static final class UserInfo {
-        public Long id;
+        public Long id;//这个是用于查看用户个人信息的
+        public String imid;//这个是禁言跟提出成员使用的
         public String nickName;
+//        public String groupId;
         public String headPic;
         public String text;//发送的信息
         public String cmd;//消息类型
+        public String time;//被禁言时长
     }
     protected class HeartBeatThread extends HandlerThread {
         private Handler handler;
