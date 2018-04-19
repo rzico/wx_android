@@ -17,6 +17,7 @@ import java.util.Map;
  * http://www.ruishangquan.com/
  * http://192.168.0.63:8080/tiaohuo/
  */
+
 public class Constant {
 
     //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
