@@ -210,6 +210,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
 
     private String key;
 
+    private String title;
+
 
     //弹幕
     private DanmakuView danmaku_view;
@@ -321,6 +323,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         chat_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(((BaseRoom.UserInfo)chatListAdapter.getItem(position)).id == null) return;
                 Long pid = ((BaseRoom.UserInfo)chatListAdapter.getItem(position)).id;
                 if(pid == SharedUtils.readLoginId()) return;//如果是自己就不获取了
                 if(pid!=null && pid != 0){
@@ -455,7 +458,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
 
                 if(checkbox.isChecked()) {
                     if (!title_zhibo.getText().toString().equals("") && isUpdateHeadImg) {
-                        playParams.put("title", title_zhibo.getText().toString());
+                        title = title_zhibo.getText().toString();
+                        playParams.put("title", title);
                         playParams.put("frontcover", frontcover);
                         playParams.put("location", "");
 
@@ -475,36 +479,6 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                   public void onAnimationRepeat(Animation animation) {
                                   }
                               });
-//                      new XRequest(OpenVideoActivity.this, "/weex/live/create.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
-//                          @Override
-//                          public void onSuccess(BaseActivity activity, String result, String type) {
-//                              LiveRoomBean data = new Gson().fromJson(result, LiveRoomBean.class);
-//                              if(data != null){
-//                                  liveRoom.setLiveRoomBean(data);
-//                              }
-//                              zhibo_ll.startAnimation(livestartAnim);/*开始执行显示礼物的动画*/
-//                              livestartAnim.setAnimationListener(new Animation.AnimationListener() {/*显示动画的监听*/
-//                                  @Override
-//                                  public void onAnimationStart(Animation animation) {
-//                                  }
-//
-//                                  @Override
-//                                  public void onAnimationEnd(Animation animation) {
-//                                      zhibo_ll.setVisibility(GONE);
-//                                      zhibo_start.setVisibility(VISIBLE);
-//                                  }
-//
-//                                  @Override
-//                                  public void onAnimationRepeat(Animation animation) {
-//                                  }
-//                              });
-//                          }
-//
-//                          @Override
-//                          public void onFail(BaseActivity activity, String cacheData, int code) {
-//                                showToast("创建房间失败");
-//                          }
-//                      }).execute();
                     } else if (title_zhibo.getText().toString().equals("")) {
                         Toast.makeText(OpenVideoActivity.this, "请输入直播标题", Toast.LENGTH_SHORT).show();
                     } else if (!isUpdateHeadImg) {
@@ -522,7 +496,9 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 playParams.put("id", getIntent().getStringExtra("liveId"));
                 playParams.put("lat", "");
                 playParams.put("lng", "");
-                playParams.put("record", false);
+                playParams.put("title", title);
+                playParams.put("frontcover", frontcover);
+                playParams.put("record", getIntent().getBooleanArrayExtra("record"));
 //                Constant.groupId = liveRoomBean.getData().getLiveId().toString();
                 new XRequest(OpenVideoActivity.this, "/weex/live/play.jhtml", XRequest.POST, playParams).setOnRequestListener(new HttpRequest.OnRequestListener() {
                     @Override
@@ -984,7 +960,16 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     private void initLive() {
         liveRoom = new LiveRoom(OpenVideoActivity.this);
         liveRoom.startLocalPreview(mCaptureView);
-
+        if(getIntent().getStringExtra("title") == null || getIntent().getStringExtra("title").equals("")){
+            title = getIntent().getStringExtra("title");
+        }else{
+            title = "没有标题";
+        }
+        if(getIntent().getStringArrayExtra("frontcover") == null || getIntent().getStringArrayExtra("frontcover").equals("")){
+               frontcover = "";
+        }else {
+            frontcover = getIntent().getStringExtra("frontcover");
+        }
     }
     /**
      * 显示礼物的方法
