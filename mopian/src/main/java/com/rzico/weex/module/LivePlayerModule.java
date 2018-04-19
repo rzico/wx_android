@@ -66,9 +66,13 @@ public class LivePlayerModule extends WXModule {
         intent.putExtra("key", key);
         mWXSDKInstance.getContext().startActivity(intent);
     }
-
     @JSMethod
     public void toPlayLiveRoom(final String id, final boolean play, final boolean record, final JSCallback callback){
+        toPlayLiveRoom(id, play, record, "", "",callback);
+    }
+
+    @JSMethod
+    public void toPlayLiveRoom(final String id, final boolean play, final boolean record,final String title,final String frontcover, final JSCallback callback){
         Dexter.withActivity( (BaseActivity) mWXSDKInstance.getContext()).withPermission(Manifest.permission.CAMERA)
                 .withListener(new PermissionListener() {
                     @Override
@@ -84,6 +88,8 @@ public class LivePlayerModule extends WXModule {
                                         intent.putExtra("isPlay", play);
                                         intent.putExtra("key", key);
                                         intent.putExtra("record", record);
+                                        intent.putExtra("title", title);
+                                        intent.putExtra("frontcover", frontcover);
                                         mWXSDKInstance.getContext().startActivity(intent);
                                     }
 
