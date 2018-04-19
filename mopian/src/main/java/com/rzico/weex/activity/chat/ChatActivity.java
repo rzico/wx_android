@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -15,33 +14,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
-import com.rzico.weex.activity.AbsWeexActivity;
-import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.adapter.chat.ChatAdapter;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.bean.Redis;
 import com.rzico.weex.model.chat.ChatInfo;
 import com.rzico.weex.model.chat.CustomMessage;
 import com.rzico.weex.model.chat.FileMessage;
-import com.rzico.weex.model.chat.FriendProfile;
-import com.rzico.weex.model.chat.FriendshipInfo;
 import com.rzico.weex.model.chat.ImageMessage;
 import com.rzico.weex.model.chat.Message;
 import com.rzico.weex.model.chat.TextMessage;
 import com.rzico.weex.model.chat.UGCMessage;
 import com.rzico.weex.model.chat.VideoMessage;
 import com.rzico.weex.model.chat.VoiceMessage;
-import com.rzico.weex.model.event.MessageEvent;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.IMMessage;
 import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.SharedUtils;
@@ -62,7 +55,6 @@ import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.imsdk.ext.message.TIMMessageDraft;
 import com.tencent.imsdk.ext.message.TIMMessageExt;
 import com.tencent.imsdk.ext.message.TIMMessageLocator;
-import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt;
 import com.tencent.qcloud.presentation.presenter.ChatPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.ChatView;
 import com.tencent.qcloud.ui.ChatInput;
@@ -450,7 +442,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
                     Map<String, Object> params = new HashMap<>();
                     params.put("data", onMessage);
 
-                    EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, "onMessage", params));
+                    EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "onMessage", params));
 
                 }
 
@@ -471,7 +463,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
                     onMessage.setData(imMessage);
                     Map<String, Object> params = new HashMap<>();
                     params.put("data", onMessage);
-                    EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, "onMessage", params));
+                    EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "onMessage", params));
 
                 }
             });

@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bigkoo.alertview.AlertView;
 import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -27,6 +26,7 @@ import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.dialog.UpdateDialog;
 import com.rzico.weex.db.XDB;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.Launch;
 import com.rzico.weex.model.info.MainUrl;
 import com.rzico.weex.net.HttpRequest;
@@ -58,11 +58,9 @@ import org.xutils.x;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-import java.util.Map;
 
 import static com.rzico.weex.Constant.imUserId;
 import static com.rzico.weex.utils.task.ZipExtractorTask.ZIPSUCCESS;
-import static com.tencent.open.utils.Global.getVersionCode;
 import static com.yixiang.mopian.constant.AllConstant.isClearAll;
 
 public class SplashActivity extends BaseActivity {
@@ -81,6 +79,7 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         wxApplication = (WXApplication) this.getApplicationContext();
         setContentView(R.layout.activity_splash);
+        Constant.isSetting = true;
         mHandler = new MyHandler(this);
         isClearAll = 0;
         progress = (ProgressBar) findViewById(R.id.progress);
@@ -105,8 +104,28 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        wxApplication = (WXApplication) this.getApplicationContext();
+        setContentView(R.layout.activity_splash);
+        Constant.isSetting = true;
+        mHandler = new MyHandler(this);
+        isClearAll = 0;
+        progress = (ProgressBar) findViewById(R.id.progress);
+        progress.setVisibility(View.GONE);
+        progress.setProgress(0);
+        //清除状态栏
+        clearNotification();
+        //读取 userid
+        Constant.userId = SharedUtils.readLoginId();
+        //初始化im
+        initIM();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        //为了防止用户 点击去设置以后 没有开启权限 回到项目中 再次提示
         if (Constant.isSetting) {
             Constant.isSetting = false;
             Dexter.withActivity(SplashActivity.this).withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -179,7 +198,7 @@ public class SplashActivity extends BaseActivity {
                 Constant.userId = 0;
                 Constant.imUserId = "";
                 SharedUtils.saveLoginId(Constant.userId);
-                EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.FORCEOFFLINE));
+                EventBus.getDefault().post(new MessageBus(MessageBus.Type.FORCEOFFLINE));
             }
 
             @Override
@@ -504,7 +523,7 @@ public class SplashActivity extends BaseActivity {
         try {
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
-                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+                downloadFile("http://cdnx.1xx.me/weex/release/res-0.0.0.zip" + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
 //                toNext();
             } else {
                 if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){

@@ -7,11 +7,12 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.assistant"
+//        applicationId "com.rzico.weex"
+        applicationId "com.yixiang.mopian"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 3
-        versionName "3.2.5"
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
@@ -32,32 +33,31 @@ android {
         jumboMode true
     }
     signingConfigs {
-        release {
-            storeFile file("tools/rzico.jks")
-            storePassword "123456"
-            keyAlias "rzico"
-            keyPassword "123456"
-        }
-        debug {
-            storeFile file("tools/rzico.jks")
-            storePassword "123456"
-            keyAlias "rzico"
-            keyPassword "123456"
-        }
-
 //        release {
-//            storeFile file("tools/mopian.jks")
+//            storeFile file("tools/rzico.jks")
 //            storePassword "123456"
-//            keyAlias "mopian"
+//            keyAlias "rzico"
 //            keyPassword "123456"
 //        }
 //        debug {
-//            storeFile file("tools/mopian.jks")
+//            storeFile file("tools/rzico.jks")
 //            storePassword "123456"
-//            keyAlias "mopian"
+//            keyAlias "rzico"
 //            keyPassword "123456"
 //        }
 
+        release {
+            storeFile file("tools/mopian.jks")
+            storePassword "123456"
+            keyAlias "mopian"
+            keyPassword "123456"
+        }
+        debug {
+            storeFile file("tools/mopian.jks")
+            storePassword "123456"
+            keyAlias "mopian"
+            keyPassword "123456"
+        }
     }
     buildTypes {
         release {
@@ -151,4 +151,9 @@ dependencies {
     compile project(path: ':graffiti')
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
+    //    哎吖包包特效
+    compile 'com.xw.repo:bubbleseekbar:3.5'
+    compile 'com.lht:paintview:1.16'
+    //    弹幕
+    compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
 }

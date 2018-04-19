@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:imagecontrol="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/re_ll"
+    android:fitsSystemWindows="true"
+    android:background="@color/black"
+    android:layout_height="fill_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/live_start"
+        android:visibility="visible"
+        android:layout_height="match_parent"
+        android:background="@color/tv_back2"
+        android:layout_alignParentTop="true">
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:background="@color/tv_back2"-->
+        <!--android:layout_height="match_parent"></LinearLayout>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="@color/backgroud"
+            android:layout_height="250dp"></LinearLayout>
+
+        <com.tencent.rtmp.ui.TXCloudVideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="#000000"/>
+
+        <master.flame.danmaku.ui.widget.DanmakuView
+            android:id="@+id/danmaku_view"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <!--顶部头像-->
+        <FrameLayout
+            android:id="@+id/controll_ui"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+            <!--底部-->
+            <include
+                layout="@layout/member_bottom_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:visibility="gone"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="15dp" />
+
+
+
+            <!--<include-->
+            <!--android:id="@+id/bottom_bar"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:layout_marginTop="15dp"-->
+            <!--layout="@layout/fragment_bottombar"/>-->
+
+            <!--点赞-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tobuy_ll"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom|left"
+                    android:layout_above="@+id/chat_listview"
+                    android:visibility="gone"
+                    android:background="@drawable/tobuy1"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/shop_who"
+                        android:layout_marginLeft="10dp"
+                        android:text="何先生正在购买1号商品"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        />
+                </LinearLayout>
+                <com.rzico.weex.zhibo.view.ChatListView
+                    android:id="@+id/chat_listview"
+                    android:layout_width="300dp"
+                    android:layout_height="200dp"
+                    android:divider="@null"
+                    android:layout_marginBottom="58dp"
+                    android:listSelector="@android:color/transparent"
+                    android:scrollbars="none"
+                    android:transcriptMode="alwaysScroll"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/tobuy_ll"
+                    android:layout_toEndOf="@+id/tobuy_ll" />
+                <com.rzico.weex.zhibo.view.HeartLayout
+                    android:id="@+id/heart_layout"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="-10dp"
+                    android:focusable="true" />
+            </RelativeLayout>
+
+        </FrameLayout>
+        <!--直播logo显示-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_marginTop="28dp"
+            android:gravity="center_vertical"
+            >
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/baouu_icon"
+                android:src="@drawable/baouu_icon"
+                />
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"
+                android:text=""/>
+
+
+        </LinearLayout>
+
+        <!--顶部跑马灯-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/lamp_ll"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone"
+            android:background="@drawable/lamp_bg"
+            android:layout_height="28dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:id="@+id/lamp_iv"
+                android:layout_gravity="center"
+                android:layout_marginRight="18dp"
+                android:layout_marginLeft="12dp"
+                android:layout_height="22dp" />
+            <com.rzico.weex.zhibo.view.MarqueTextView
+                android:id="@+id/lamp_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14.4sp"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollHorizontally="true"
+                android:textColor="#ffffffff"/>
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/ll"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:background="@color/white"/>
+        <fragment
+            android:id="@+id/bottom_bar"
+            android:name="com.rzico.weex.zhibo.view.BottomPanelFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentBottom="true"
+            tools:layout="@layout/fragment_bottombar"/>
+
+        <!--用于移动的控件-->
+        <TextView
+            android:layout_width="150dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/mytv"
+            android:layout_height="250dp" />
+
+    </RelativeLayout>
+
+    <!--刷礼物-->
+    <LinearLayout
+        android:id="@+id/llgiftcontent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="40dp"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:animateLayoutChanges="true"
+        android:gravity="top"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        >
+        <com.rzico.weex.zhibo.view.GifView
+            android:id="@+id/bigivgift"
+            android:visibility="gone"
+            android:layout_marginBottom="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <!--主播不存在-->
+    <LinearLayout
+        android:id="@+id/ll_host_leave1"
+        android:visibility="gone"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/tv_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <ImageView
+            android:src="@drawable/host_leave"
+            android:layout_width="wrap_content"
+            android:clickable="false"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="主播已离开房间！！！"
+            android:layout_marginTop="10dp"
+            android:id="@+id/tvstatus1"
+            android:textColor="@color/colorGray3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!--进直播，先显示主播头像-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:clickable="false"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:id="@+id/head_image"
+        android:layout_height="match_parent" />
+
+
+    <!--头像-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/head_ll"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/ll_host_leave1"
+        android:layout_toEndOf="@+id/ll_host_leave1">
+        <!-- 头像-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:background="@drawable/beiing01"
+            android:layout_marginLeft="10dp"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+
+                <com.rzico.weex.zhibo.view.CircleImageView
+                    android:id="@+id/head_icon"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/defaltshop"
+                    imagecontrol:border_outside_color="@color/blue_FF8EC7F9" />
+
+                <TextView
+                    android:id="@+id/room_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top|left"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/head_icon"
+                    android:gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/white"
+                    android:text="毛小雅" />
+                <!--关注-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:visibility="visible"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:background="@drawable/gz_yes"
+                    android:id="@+id/concern_ll"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/room_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            android:text="" />
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:gravity="right"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:layout_height="match_parent">-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/room_count"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:textColor="@color/white"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_marginRight="3dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text=""/>&ndash;&gt;-->
+
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:id="@+id/hlvaudience"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"/>-->
+
+        <!--</LinearLayout>-->
+        <LinearLayout
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/gift_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                android:textSize="13sp"
+                android:visibility="gone"
+                android:background="@drawable/dd02"
+                android:textColor="@color/white"
+                android:text="印票0"/>
+            <TextView
+                android:id="@+id/room_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                android:textSize="13sp"
+                android:visibility="gone"
+                android:background="@drawable/dd02"
+                android:textColor="@color/white"
+                android:text="0人"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_back"
+                android:layout_gravity="center"
+                android:onClick="onClick"
+                android:layout_marginRight="0dp"
+                android:background="@drawable/l01" />
+        </LinearLayout>
+        <!--删除-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="60dp"-->
+            <!--android:id="@+id/btn_back"-->
+            <!--android:clickable="true"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:gravity="center|top"-->
+            <!--android:focusable="true"-->
+            <!--android:onClick="onClick"-->
+            <!--android:layout_height="40dp">-->
+            <!--<TextView-->
+                <!--android:layout_width="18dp"-->
+                <!--android:layout_height="18dp"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:gravity="center"-->
+                <!--android:background="@drawable/cross_icon"-->
+                <!--/>-->
+        <!--</LinearLayout>-->
+    </LinearLayout>
+
+    <!--删除-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="60dp"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:id="@+id/btn_back"-->
+    <!--android:clickable="true"-->
+    <!--android:gravity="center|top"-->
+    <!--android:focusable="true"-->
+    <!--android:onClick="onClick"-->
+    <!--android:layout_height="40dp">-->
+    <!--<TextView-->
+    <!--android:layout_width="18dp"-->
+    <!--android:layout_height="18dp"-->
+    <!--android:layout_marginTop="15dp"-->
+    <!--android:gravity="center"-->
+    <!--android:background="@drawable/cross_icon"-->
+    <!--/>-->
+    <!--</LinearLayout>-->
+</RelativeLayout>
+

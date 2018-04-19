@@ -42,7 +42,7 @@ import com.rzico.weex.activity.RouterActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.notidmanager.DbCacheBean;
-import com.rzico.weex.model.event.MessageEvent;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.CacheSize;
 import com.rzico.weex.model.info.Contact;
 import com.rzico.weex.model.info.IMMessage;
@@ -135,7 +135,7 @@ public class WXEventModule extends WXModule {
                             SharedUtils.saveImId(Constant.imUserId);
                             Message message = new Message().success("登出成功");
                             callback.invoke(message);
-                            EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.LOGOUT));
+                            EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGOUT));
                         }
                     });
                 }else{
@@ -147,7 +147,7 @@ public class WXEventModule extends WXModule {
                     SharedUtils.saveImId(Constant.imUserId);
                     Message message = new Message().success("登出成功");
                     callback.invoke(message);
-                    EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.LOGOUT));
+                    EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGOUT));
                 }
 
             }
@@ -864,7 +864,7 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void getUnReadMessage(){
-        EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.RECEIVEMSG));
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.RECEIVEMSG));
 
         List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
         List<String> userIds = new ArrayList<>();
@@ -914,7 +914,7 @@ public class WXEventModule extends WXModule {
                             onMessage.setData(imMessage);
                             Map<String, Object> params = new HashMap<>();
                             params.put("data", onMessage);
-                            EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, "onMessage", params));
+                            EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "onMessage", params));
 
                         }
                     }
@@ -1468,7 +1468,7 @@ public class WXEventModule extends WXModule {
         params.put("data", data);
         //推送前面4个页面
 
-        EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, eventKey, params));
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, eventKey, params));
         //判断当前页面是不是weex页面
     }
 
