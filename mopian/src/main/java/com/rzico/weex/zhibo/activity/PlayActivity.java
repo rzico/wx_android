@@ -1156,7 +1156,7 @@ public class PlayActivity extends BaseActivity {
 
                                     chatListAdapter.addMessage(userInfo);
                                     chatListAdapter.notifyDataSetChanged();
-                                    addDanmaku(userInfo.nickName + ":" + userInfo.text , userInfo.id == SharedUtils.readLoginId());
+                                    liveRoom.addDanmaku(danmaku_view, danmakuContext,userInfo.nickName + ":" + userInfo.text , userInfo.id == SharedUtils.readLoginId());
                                 }
                             }
                         } catch (JsonSyntaxException e) {
@@ -1175,33 +1175,9 @@ public class PlayActivity extends BaseActivity {
             liveRoom.sendGroupKickMessage(userInfo, null);
         }
     }
-    /**
-     * sp转px的方法。
-     */
-    public int sp2px(float spValue) {
-        final float fontScale = getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
-    }
 
-    /**
-     * 向弹幕View中添加一条弹幕
-     * @param content
-     *          弹幕的具体内容
-     * @param  withBorder
-     *          弹幕是否有边框
-     */
-    private void addDanmaku(String content, boolean withBorder) {
-        BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
-        danmaku.text = content;
-        danmaku.padding = 5;
-        danmaku.textSize = sp2px(20);
-        danmaku.textColor = Color.WHITE;
-        danmaku.setTime(danmaku_view.getCurrentTime());
-        if (withBorder) {
-            danmaku.borderColor = Color.GREEN;
-        }
-        danmaku_view.addDanmaku(danmaku);
-    }
+
+
 
 
     private int[] liwu_gif = {R.raw.gg1,R.raw.gg2,R.raw.gg3,R.raw.gg4,R.raw.gg5,R.raw.gg6,R.raw.gg7,R.raw.gg8};

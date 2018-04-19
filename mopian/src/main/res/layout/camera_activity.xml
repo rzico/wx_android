@@ -281,7 +281,7 @@
             android:layout_marginBottom="8dp" />
         <master.flame.danmaku.ui.widget.DanmakuView
             android:id="@+id/danmaku_view"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="100dp"
             android:layout_width="match_parent"
             android:layout_height="100dp" />
         <!--启动-->

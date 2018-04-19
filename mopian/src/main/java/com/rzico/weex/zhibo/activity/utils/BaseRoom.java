@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,6 +59,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import master.flame.danmaku.danmaku.model.BaseDanmaku;
+import master.flame.danmaku.danmaku.model.android.DanmakuContext;
+import master.flame.danmaku.ui.widget.DanmakuView;
 
 /**
  * Created by dennyfeng on 2017/12/8.
@@ -772,7 +777,32 @@ public abstract class BaseRoom {
             this.view.onDestroy();
         }
     }
-
+    /**
+     * sp转px的方法。
+     */
+    public int sp2px(float spValue) {
+        final float fontScale = mContext.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+    /**
+     * 向弹幕View中添加一条弹幕
+     * @param content
+     *          弹幕的具体内容
+     * @param  withBorder
+     *          弹幕是否有边框
+     */
+    public void addDanmaku(DanmakuView danmaku_view, DanmakuContext danmakuContext, String content, boolean withBorder) {
+        BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+        danmaku.text = content;
+        danmaku.padding = 5;
+        danmaku.textSize = sp2px(16);
+        danmaku.textColor = 0xFFEF9A01;//金色
+        danmaku.setTime(danmaku_view.getCurrentTime());
+        if (withBorder) {
+            danmaku.borderColor = Color.GREEN;
+        }
+        danmaku_view.addDanmaku(danmaku);
+    }
     private void openUserInfo(final BaseActivity activity, Long userId, final boolean isUser){
         String url =  "file://view/live/host.js?id=" + userId + "&isUser=" + isUser + "&groupId=" + mCurrRoomID;
         String key = String.valueOf(System.currentTimeMillis());

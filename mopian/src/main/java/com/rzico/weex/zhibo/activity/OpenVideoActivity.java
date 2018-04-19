@@ -530,7 +530,30 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                         LiveRoomBean data = new Gson().fromJson(result, LiveRoomBean.class);
                         if(data != null){
                             liveRoom.setLiveRoomBean(data);
+//这里请求获取公告：
+                            new XRequest(OpenVideoActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                                @Override
+                                public void onSuccess(BaseActivity activity, String result, String type) {
+//                               NoticeBean data = new Gson().fromJson(result, NoticeBean.class);
+//                               if(data.getType().equals("success")){
+//                                   BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+//                                    userInfo.text = data.getData().getTitle();
+//                                   userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+//                                  chatListAdapter.addMessage(userInfo);
+//                                  chatListAdapter.notifyDataSetChanged();
+//                              }
+                                    BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+                                    userInfo.text = "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】\\n安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
+                                    userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+                                    chatListAdapter.addMessage(userInfo);
+                                    chatListAdapter.notifyDataSetChanged();
+                                }
 
+                                @Override
+                                public void onFail(BaseActivity activity, String cacheData, int code) {
+
+                                }
+                            }).execute();
                             ll_giftlist.setVisibility(VISIBLE);
                             //显示人数
                             roomCount = data.getData().getViewerCount();
@@ -804,7 +827,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
 
                                         chatListAdapter.addMessage(userInfo);
                                         chatListAdapter.notifyDataSetChanged();
-                                        addDanmaku(userInfo.nickName + ":" + userInfo.text , userInfo.id == SharedUtils.readLoginId());
+                                        liveRoom.addDanmaku(danmaku_view, danmakuContext,userInfo.nickName + ":" + userInfo.text , userInfo.id == SharedUtils.readLoginId());
                                     }
                                 }
 
@@ -824,34 +847,6 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             liveRoom.sendGroupKickMessage(userInfo, null);
         }
 
-    }
-    /**
-     * sp转px的方法。
-     */
-    public int sp2px(float spValue) {
-        final float fontScale = getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
-    }
-
-
-    /**
-     * 向弹幕View中添加一条弹幕
-     * @param content
-     *          弹幕的具体内容
-     * @param  withBorder
-     *          弹幕是否有边框
-     */
-    private void addDanmaku(String content, boolean withBorder) {
-        BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
-        danmaku.text = content;
-        danmaku.padding = 5;
-        danmaku.textSize = sp2px(20);
-        danmaku.textColor = Color.WHITE;
-        danmaku.setTime(danmaku_view.getCurrentTime());
-        if (withBorder) {
-            danmaku.borderColor = Color.GREEN;
-        }
-        danmaku_view.addDanmaku(danmaku);
     }
     /**
      * 时间格式化

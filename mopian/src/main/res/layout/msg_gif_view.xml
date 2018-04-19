@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:textColor="@color/gold"
+        android:layout_marginLeft="8dp"
         android:layout_toRightOf="@+id/vip"
         android:textStyle="bold"
         android:textSize="15sp"/>
