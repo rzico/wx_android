@@ -121,7 +121,9 @@ public class PlayActivity extends BaseActivity {
     private GifView bigivgift;//送礼物时显示的最大数
     RelativeLayout mInView;
     private TextView room_count;
+    private TextView fs_count;
     private TextView gift_count;
+    private TextView tv_danmu;
     private Long roomCount;
     private Long giftCount;
 
@@ -139,6 +141,7 @@ public class PlayActivity extends BaseActivity {
 //    private String anhorid;//主播id
 
     private UserBean userBean;
+    private UserBean zhuboBean;
 
     private CircleImageView head_icon;//头像
     private TextView room_name;//房间昵称
@@ -146,6 +149,7 @@ public class PlayActivity extends BaseActivity {
 
     public static final int GIFSHOW = 135;
     public static final int INVISIBLE = 132;
+    private static final int CANDASHAN = 136;//控制 打赏按钮 1秒后才可以再打赏
 
     private ChatListView chat_listview;
     private ChatListAdapter chatListAdapter;
@@ -203,7 +207,30 @@ public class PlayActivity extends BaseActivity {
                 LiveRoomBean data = new Gson().fromJson(result, LiveRoomBean.class);
                 if(data != null){
                     liveRoom.setLiveRoomBean(data);
+                    //获取用户信息
+                    HashMap<String, Object> params = new HashMap<>();
+                    params.put("id", data.getData().getLiveMemberId());
+                    //获取用户信息
+                    new XRequest(PlayActivity.this, "weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                        @Override
+                        public void onSuccess(BaseActivity activity, String result, String type) {
 
+                            UserBean data = new Gson().fromJson(result, UserBean.class);
+                            if(data!=null){
+                                zhuboBean = data;
+                                fs_count.setText("粉丝" + zhuboBean.getData().getFans());
+                            }else {
+                                showToast("获取用户信息失败");
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(BaseActivity activity, String cacheData, int code) {
+                            showToast("获取用户信息失败");
+                            finish();
+                        }
+                    }).execute();
                     //这里请求获取公告：
                     new XRequest(PlayActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
@@ -217,7 +244,7 @@ public class PlayActivity extends BaseActivity {
 //                                chatListAdapter.notifyDataSetChanged();
 //                            }
                             BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
-                            userInfo.text = "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】\\n安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
+                            userInfo.text = "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
                             userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
                             chatListAdapter.addMessage(userInfo);
                             chatListAdapter.notifyDataSetChanged();
@@ -250,7 +277,6 @@ public class PlayActivity extends BaseActivity {
 //                    head_image.setVisibility(VISIBLE);
                     //设置房间名称和 主播昵称信息
                     Picasso.with(PlayActivity.this).load(data.getData().getHeadpic()).into(head_icon);
-                    room_name.setText(data.getData().getTitle().trim());
 
 
                     liveRoom.enterRoom(data.getData().getLiveId() + "", mView, new LiveRoom.EnterRoomCallback() {
@@ -273,6 +299,12 @@ public class PlayActivity extends BaseActivity {
 
                                 @Override
                                 public void onSuccess(TIMUserProfile timUserProfile) {
+
+                                    String roomName = timUserProfile.getNickName();
+                                    if(roomName.length() > 4){
+                                        roomName = roomName.substring(0, 3) + "...";
+                                    }
+                                    room_name.setText(roomName);
                                     liveRoom.sendGroupTextMessage(timUserProfile.getNickName(), timUserProfile.getFaceUrl(), "加入房间", new BaseRoom.MessageCallback() {
                                         @Override
                                         public void onError(int code, String errInfo) {
@@ -313,6 +345,7 @@ public class PlayActivity extends BaseActivity {
                 UserBean data = new Gson().fromJson(result, UserBean.class);
                 if(data!=null){
                     userBean = data;
+                    liveRoom.setUserBean(userBean);
                     cashmoney = data.getData().getBalance();
                 }else {
                     showToast("获取用户信息失败");
@@ -364,7 +397,9 @@ public class PlayActivity extends BaseActivity {
         room_name = (TextView) findViewById(R.id.room_name);
         concern_ll = (LinearLayout) findViewById(R.id.concern_ll);
         room_count = (TextView) findViewById(R.id.room_count);
+        fs_count   = (TextView) findViewById(R.id.fs_count);
         gift_count = (TextView) findViewById(R.id.gift_count);
+        tv_danmu  = (TextView) findViewById(R.id.tv_danmu);
 
         danmaku_view = (DanmakuView) findViewById(R.id.danmaku_view);
 
@@ -412,6 +447,11 @@ public class PlayActivity extends BaseActivity {
             @Override
             public void OnChanged(boolean checkState) {
                 isBarrage = checkState;
+                if(isBarrage){
+                    tv_danmu.setTextColor(getResources().getColor(R.color.danmu));
+                }else {
+                    tv_danmu.setTextColor(getResources().getColor(R.color.white));
+                }
             }
         });
         //点击左上角头像
@@ -427,6 +467,7 @@ public class PlayActivity extends BaseActivity {
         chat_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(((BaseRoom.UserInfo)chatListAdapter.getItem(position)).id == null) return;
                 Long pid = ((BaseRoom.UserInfo)chatListAdapter.getItem(position)).id;
                 if(pid == SharedUtils.readLoginId()) return;//如果是自己就不获取了
                 if(pid!=null && pid != 0){
@@ -496,6 +537,7 @@ public class PlayActivity extends BaseActivity {
                 if(timUserProfile != null){
                     username = timUserProfile.getNickName();
                     userpic  = timUserProfile.getFaceUrl();
+
                 }
             }
         });
@@ -527,6 +569,10 @@ public class PlayActivity extends BaseActivity {
                             public void onSuccess(BaseActivity activity, String result, String type) {
                                 SendGift data = new Gson().fromJson(result, SendGift.class);
                                 if(data.getType().equals("success")){
+
+                                    //发送弹幕就扣除积分
+                                    cashmoney = cashmoney - 1;
+                                    jifen_tv.setText(cashmoney + "");
                                     liveRoom.sendGroupBarrageMessage(username, userpic, text, new BaseRoom.MessageCallback() {
                                         @Override
                                         public void onError(int code, String errInfo) {
@@ -537,7 +583,6 @@ public class PlayActivity extends BaseActivity {
 
                                         @Override
                                         public void onSuccess(Object... args) {
-
                                         }
                                     });
                                 }else{
@@ -739,8 +784,17 @@ public class PlayActivity extends BaseActivity {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
-
+                case CANDASHAN:
+                    dashan.setEnabled(true);
+                    dashan.setFocusable(true);
+                    break;
                 case GIFSHOW://礼物大图显示
+                    dashan.setEnabled(false);
+                    dashan.setFocusable(false);
+                    Message message = mHandler.obtainMessage();
+                    message.what = CANDASHAN;
+
+                    mHandler.sendMessageDelayed(message, 1000);
 //                    进行送礼物接口
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("id", liveGiftBean.getData().getData().get(gifid - 1 >= 0 ? gifid -1 : 0).getId());
@@ -1109,8 +1163,13 @@ public class PlayActivity extends BaseActivity {
                                     userInfo.text = text;
 
                                     if(text.contains(ISFOLLOW)){
+                                        zhuboBean.getData().setFans(zhuboBean.getData().getFans() + 1);
+                                        fs_count.setText("粉丝" + zhuboBean.getData().getFans());
                                         chatListAdapter.addMessage(userInfo);
                                         chatListAdapter.notifyDataSetChanged();
+                                    }else {
+                                        zhuboBean.getData().setFans(zhuboBean.getData().getFans() - 1);
+                                        fs_count.setText("粉丝" + zhuboBean.getData().getFans());
                                     }
                                 }
                             }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomKickMsg.name())){
@@ -1538,18 +1597,23 @@ public class PlayActivity extends BaseActivity {
         }
         exitRoom();
 
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("id", liveRoom.getLiveRoomBean().getData().getLiveId());
-        new XRequest((BaseActivity) mContext, "/weex/live/quit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
-            @Override
-            public void onSuccess(BaseActivity activity, String result, String type) {
-                Log.e("live", result);
-            }
+        if(liveRoom.getLiveRoomBean()==null){
 
-            @Override
-            public void onFail(BaseActivity activity, String cacheData, int code) {
-                Log.e("live", code + "");
-            }
-        }).execute();
+        }else {
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("id", liveRoom.getLiveRoomBean().getData().getLiveId());
+            new XRequest((BaseActivity) mContext, "/weex/live/quit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                @Override
+                public void onSuccess(BaseActivity activity, String result, String type) {
+                    Log.e("live", result);
+                }
+
+                @Override
+                public void onFail(BaseActivity activity, String cacheData, int code) {
+                    Log.e("live", code + "");
+                }
+            }).execute();
+        }
+
     }
 }

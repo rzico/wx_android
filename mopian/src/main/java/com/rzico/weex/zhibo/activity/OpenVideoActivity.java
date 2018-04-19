@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
@@ -227,6 +228,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setStatusBarFullTransparent();
         setContentView(R.layout.camera_activity);
         EventBus.getDefault().register(this);
@@ -519,7 +521,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
 //                                  chatListAdapter.notifyDataSetChanged();
 //                              }
                                     BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
-                                    userInfo.text = "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】\\n安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
+                                    userInfo.text = "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
                                     userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
                                     chatListAdapter.addMessage(userInfo);
                                     chatListAdapter.notifyDataSetChanged();
@@ -584,7 +586,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("id", SharedUtils.readLoginId());
                     //获取用户信息
-                    new XRequest(OpenVideoActivity.this, "/weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(OpenVideoActivity.this, "weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             UserBean data = new Gson().fromJson(result, UserBean.class);

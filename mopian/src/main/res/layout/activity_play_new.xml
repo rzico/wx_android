@@ -297,17 +297,34 @@
                     android:src="@drawable/defaltshop"
                     imagecontrol:border_outside_color="@color/blue_FF8EC7F9" />
 
-                <TextView
-                    android:id="@+id/room_name"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="top|left"
-                    android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/head_icon"
-                    android:gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:textColor="@color/white"
-                    android:text="毛小雅" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/room_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|left"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:text="毛小雅啊。。。" />
+
+                    <TextView
+                        android:id="@+id/fs_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|left"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:text="粉丝100" />
+                </LinearLayout>
                 <!--关注-->
                 <LinearLayout
                     android:orientation="horizontal"
