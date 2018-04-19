@@ -94,6 +94,7 @@ import master.flame.danmaku.ui.widget.DanmakuView;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.rzico.weex.model.event.MessageBus.Type.ZHIBOCHAT;
+import static com.rzico.weex.zhibo.activity.utils.BaseRoom.ISFOLLOW;
 import static com.squareup.picasso.MemoryPolicy.NO_CACHE;
 import static com.squareup.picasso.MemoryPolicy.NO_STORE;
 
@@ -207,14 +208,19 @@ public class PlayActivity extends BaseActivity {
                     new XRequest(PlayActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
-                            NoticeBean data = new Gson().fromJson(result, NoticeBean.class);
-                            if(data.getType().equals("success")){
-                                BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
-                                userInfo.text = data.getData().getTitle();
-                                userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
-                                chatListAdapter.addMessage(userInfo);
-                                chatListAdapter.notifyDataSetChanged();
-                            }
+//                            NoticeBean data = new Gson().fromJson(result, NoticeBean.class);
+//                            if(data.getType().equals("success")){
+//                                BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+//                                userInfo.text = data.getData().getTitle();
+//                                userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+//                                chatListAdapter.addMessage(userInfo);
+//                                chatListAdapter.notifyDataSetChanged();
+//                            }
+                            BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+                            userInfo.text = "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】\\n安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
+                            userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+                            chatListAdapter.addMessage(userInfo);
+                            chatListAdapter.notifyDataSetChanged();
                         }
 
                         @Override
@@ -1102,8 +1108,10 @@ public class PlayActivity extends BaseActivity {
                                     String text = textElem.getText();//信息
                                     userInfo.text = text;
 
-                                    chatListAdapter.addMessage(userInfo);
-                                    chatListAdapter.notifyDataSetChanged();
+                                    if(text.contains(ISFOLLOW)){
+                                        chatListAdapter.addMessage(userInfo);
+                                        chatListAdapter.notifyDataSetChanged();
+                                    }
                                 }
                             }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomKickMsg.name())){
                                 //被踢了

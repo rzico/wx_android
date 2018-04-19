@@ -742,13 +742,13 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                             userBean.getData().setFollow(userBean.getData().getFollow() + 1);
                                             fs_count.setText(userBean.getData().getFollow() + "");
                                             tv_fs.setText(userBean.getData().getFollow() + "");
+                                            chatListAdapter.addMessage(userInfo);
+                                            chatListAdapter.notifyDataSetChanged();
                                         }else{
                                             userBean.getData().setFollow(userBean.getData().getFollow() - 1);
                                             fs_count.setText(userBean.getData().getFollow() + "");
                                             tv_fs.setText(userBean.getData().getFollow() + "");
                                         }
-                                        chatListAdapter.addMessage(userInfo);
-                                        chatListAdapter.notifyDataSetChanged();
                                     }
                                 }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomKickMsg.name())){
                                     //有人被提了
