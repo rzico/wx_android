@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="imsdk_ugc_ext">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/wx_sdk/libs/imsdk_ugc_ext.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
