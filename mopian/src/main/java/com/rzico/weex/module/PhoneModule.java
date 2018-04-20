@@ -1,5 +1,6 @@
 package com.rzico.weex.module;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -8,7 +9,6 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.rzico.weex.Manifest;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.model.info.Message;
 import com.taobao.weex.annotation.JSMethod;
@@ -29,6 +29,7 @@ public class PhoneModule extends WXModule{
     public void tel(final String number, final JSCallback callback){
         Dexter.withActivity(getActivity()).withPermission(android.Manifest.permission.CALL_PHONE)
                 .withListener(new com.karumi.dexter.listener.single.PermissionListener() {
+                    @SuppressLint("MissingPermission")
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         //用intent启动拨打电话

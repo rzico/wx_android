@@ -90,7 +90,7 @@
     <Wechat
         Id="4"
         SortId="4"
-        AppId="wxe9044e4a3a478046"
+        AppId="wx11"
         AppSecret="e1a6bffb5ad1eb7ffa2f442032df2d78"
 		userName="gh_6c02f1dba547"
 		path="pages/index/index.html?id=1"
@@ -100,7 +100,7 @@
     <WechatMoments
         Id="5"
         SortId="5"
-        AppId="wxe9044e4a3a478046"
+        AppId="wx11"
         AppSecret="e1a6bffb5ad1eb7ffa2f442032df2d78"
         BypassApproval="false"
         Enable="true" />
