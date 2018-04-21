@@ -219,6 +219,12 @@ public class PlayActivity extends BaseActivity {
                             if(data!=null){
                                 zhuboBean = data;
                                 fs_count.setText("粉丝" + zhuboBean.getData().getFans());
+
+                                String roomName = zhuboBean.getData().getNickName();
+                                if(roomName.length() > 4){
+                                    roomName = roomName.substring(0, 4) + "...";
+                                }
+                                room_name.setText(roomName);
                             }else {
                                 showToast("获取用户信息失败");
                                 finish();
@@ -300,11 +306,6 @@ public class PlayActivity extends BaseActivity {
                                 @Override
                                 public void onSuccess(TIMUserProfile timUserProfile) {
 
-                                    String roomName = timUserProfile.getNickName();
-                                    if(roomName.length() > 4){
-                                        roomName = roomName.substring(0, 3) + "...";
-                                    }
-                                    room_name.setText(roomName);
                                     liveRoom.sendGroupTextMessage(timUserProfile.getNickName(), timUserProfile.getFaceUrl(), "加入房间", new BaseRoom.MessageCallback() {
                                         @Override
                                         public void onError(int code, String errInfo) {
@@ -347,6 +348,7 @@ public class PlayActivity extends BaseActivity {
                     userBean = data;
                     liveRoom.setUserBean(userBean);
                     cashmoney = data.getData().getBalance();
+
                 }else {
                     showToast("获取用户信息失败");
                     finish();
@@ -450,7 +452,7 @@ public class PlayActivity extends BaseActivity {
                 if(isBarrage){
                     tv_danmu.setTextColor(getResources().getColor(R.color.danmu));
                 }else {
-                    tv_danmu.setTextColor(getResources().getColor(R.color.white));
+                    tv_danmu.setTextColor(getResources().getColor(R.color.text_dark));
                 }
             }
         });

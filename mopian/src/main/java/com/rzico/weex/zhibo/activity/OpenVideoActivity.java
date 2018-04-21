@@ -156,6 +156,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     private Long roomCount = 0L;
     private Long giftCount = 0L;
 
+    private boolean isPlay = false;//是否跳过直播页面
+
 //    直播底部
     private TextView beauty_tv01;//美颜
     private BeautySettingPannel mBeautyPannelView;
@@ -445,9 +447,10 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 }
             }
         });
+        isPlay = getIntent().getBooleanExtra("isPlay", false);
         //
         //默认跳过 测试用 到时候要删掉
-        if(getIntent().getBooleanExtra("isPlay", false)){
+        if(isPlay){
             //如果是跳过 直接开播的话
             zhibo_ll.setVisibility(GONE);
             zhibo_start.setVisibility(VISIBLE);
@@ -508,7 +511,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                         LiveRoomBean data = new Gson().fromJson(result, LiveRoomBean.class);
                         if(data != null){
                             liveRoom.setLiveRoomBean(data);
-//这里请求获取公告：
+                            //这里请求获取公告：
                             new XRequest(OpenVideoActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                                 @Override
                                 public void onSuccess(BaseActivity activity, String result, String type) {
@@ -581,36 +584,40 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 if(!mRecording){
                     finish();
                 }else{
-
-                    //获取用户信息
-                    HashMap<String, Object> params = new HashMap<>();
-                    params.put("id", SharedUtils.readLoginId());
-                    //获取用户信息
-                    new XRequest(OpenVideoActivity.this, "weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
-                        @Override
-                        public void onSuccess(BaseActivity activity, String result, String type) {
-                            UserBean data = new Gson().fromJson(result, UserBean.class);
-                            if(data != null){
-                                userBean = data;
-                                fs_count.setText(data.getData().getFans() + "");
-                                gz_count.setText(data.getData().getFollow() + "");
-                                tv_fs.setText(data.getData().getFans() + "");
-                                tv_gz.setText(data.getData().getFollow() + "");
+                    if (!isPlay){
+                        //获取用户信息
+                        HashMap<String, Object> params = new HashMap<>();
+                        params.put("id", SharedUtils.readLoginId());
+                        //获取用户信息
+                        new XRequest(OpenVideoActivity.this, "weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                            @Override
+                            public void onSuccess(BaseActivity activity, String result, String type) {
+                                UserBean data = new Gson().fromJson(result, UserBean.class);
+                                if(data != null){
+                                    userBean = data;
+                                    fs_count.setText(data.getData().getFans() + "");
+                                    gz_count.setText(data.getData().getFollow() + "");
+                                    tv_fs.setText(data.getData().getFans() + "");
+                                    tv_gz.setText(data.getData().getFollow() + "");
+                                }
+                                liveRoom.stopLocalPreview();
+                                //关闭计时器
+                                mVideoTimer.cancel();
+                                zhibo_jiesu_ll.setVisibility(View.VISIBLE);
                             }
-                            liveRoom.stopLocalPreview();
-                            //关闭计时器
-                            mVideoTimer.cancel();
-                            zhibo_jiesu_ll.setVisibility(View.VISIBLE);
-                        }
 
-                        @Override
-                        public void onFail(BaseActivity activity, String cacheData, int code) {
-                            liveRoom.stopLocalPreview();
-                            //关闭计时器
-                            mVideoTimer.cancel();
-                            zhibo_jiesu_ll.setVisibility(View.VISIBLE);
-                        }
-                    }).execute();
+                            @Override
+                            public void onFail(BaseActivity activity, String cacheData, int code) {
+                                liveRoom.stopLocalPreview();
+                                //关闭计时器
+                                mVideoTimer.cancel();
+                                zhibo_jiesu_ll.setVisibility(View.VISIBLE);
+                            }
+                        }).execute();
+                    }else{
+                        //结束跳过 play
+                       finish();
+                    }
                 }
             }
         });

@@ -138,8 +138,9 @@
                     <!-- 头像-->
                     <com.rzico.weex.zhibo.view.CircleImageView
                         android:id="@+id/head_icon"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="5dp"
                         android:src="@drawable/defaltshop"
                         android:layout_gravity="center_vertical"
                         imagecontrol:border_outside_color="@color/blue_FF8EC7F9"/>
