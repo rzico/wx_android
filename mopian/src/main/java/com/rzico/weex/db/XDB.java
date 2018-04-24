@@ -4,7 +4,7 @@ import android.os.Environment;
 
 import com.rzico.weex.Constant;
 import com.rzico.weex.WXApplication;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import org.xutils.DbManager;
 

@@ -17,7 +17,7 @@ import com.rzico.weex.oos.PauseableUploadTask;
 import com.rzico.weex.oos.STSGetter;
 import com.taobao.weex.bridge.JSCallback;
 import com.tencent.imsdk.TIMManager;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import net.bither.util.NativeUtil;
 

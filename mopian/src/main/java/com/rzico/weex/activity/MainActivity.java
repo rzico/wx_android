@@ -76,7 +76,7 @@ import java.util.Map;
 
 import static com.rzico.weex.Constant.imUserId;
 import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
-import static com.yixiang.mopian.constant.AllConstant.isClearAll;
+import static com.rzico.weex.constant.AllConstant.isClearAll;
 
 
 /**

@@ -3,7 +3,7 @@ package com.rzico.weex;
 import android.os.Handler;
 
 import com.taobao.weex.WXSDKInstance;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import java.util.ArrayList;
 import java.util.Arrays;
