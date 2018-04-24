@@ -30,7 +30,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import com.taobao.weex.common.WXThread;
 import com.taobao.weex.utils.WXLogUtils;
 
 import java.text.ParseException;
@@ -106,8 +105,8 @@ public class DatePickerImpl {
             }
         });
 
-        setButtonText(dialog, DialogInterface.BUTTON_NEGATIVE, String.valueOf(extras != null ? extras.get("cancelTitle") : null));
-        setButtonText(dialog, DialogInterface.BUTTON_POSITIVE, String.valueOf(extras != null ? extras.get("confirmTitle") : null));
+        setButtonText(dialog, DialogInterface.BUTTON_NEGATIVE, String.valueOf(extras.get("cancelTitle")));
+        setButtonText(dialog, DialogInterface.BUTTON_POSITIVE, String.valueOf(extras.get("confirmTitle")));
 
         dialog.show();
     }
@@ -138,8 +137,8 @@ public class DatePickerImpl {
             }
         });
 
-        setButtonText(dialog, DialogInterface.BUTTON_NEGATIVE, String.valueOf(extras != null ? extras.get("cancelTitle") : null));
-        setButtonText(dialog, DialogInterface.BUTTON_POSITIVE, String.valueOf(extras != null ? extras.get("confirmTitle") : null));
+        setButtonText(dialog, DialogInterface.BUTTON_NEGATIVE, String.valueOf(extras.get("cancelTitle")));
+        setButtonText(dialog, DialogInterface.BUTTON_POSITIVE, String.valueOf(extras.get("confirmTitle")));
 
         dialog.show();
     }
@@ -181,7 +180,7 @@ public class DatePickerImpl {
             return;
         }
         try {
-            dialog.getWindow().getDecorView().post(WXThread.secure(new Runnable() {
+            dialog.getWindow().getDecorView().post(new Runnable() {
                 @Override
                 public void run() {
                     Button button = dialog.getButton(which);
@@ -190,7 +189,7 @@ public class DatePickerImpl {
                         button.setText(text);
                     }
                 }
-            }));
+            });
         } catch (Throwable t) {
             t.printStackTrace();
         }

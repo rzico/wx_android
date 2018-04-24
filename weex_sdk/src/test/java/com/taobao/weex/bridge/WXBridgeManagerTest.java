@@ -19,12 +19,9 @@
 package com.taobao.weex.bridge;
 
 import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import android.os.Handler;
 import android.os.Message;
-
-import com.alibaba.fastjson.JSON;
 import com.taobao.weappplus_sdk.BuildConfig;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXSDKEngine;
@@ -108,12 +105,12 @@ public class WXBridgeManagerTest {
   public void testCallNative() throws Exception {
     getInstance()
         .callNative(instance.getInstanceId(),
-            JSON.parseArray("[{\"module\":\"testModule\",\"method\":\"test\"}]"),
+            "[{\"module\":\"testModule\",\"method\":\"test\"}]",
             null);
 
     getInstance()
         .callNative(instance.getInstanceId(),
-                JSON.parseArray("[{\"module\":\""+WXDomModule.WXDOM+"\",\"method\":\"test\"}]"),
+            "[{\"module\":\""+WXDomModule.WXDOM+"\",\"method\":\"test\"}]",
             null);
 
   }
@@ -130,7 +127,7 @@ public class WXBridgeManagerTest {
 
   @Test
   public void testCallback() throws Exception {
-//    getInstance().callbackJavascript(instance.getInstanceId(),"test",null,false);
+    getInstance().callbackJavascript(instance.getInstanceId(),"test",null,false);
   }
 
   @Test

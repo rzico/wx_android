@@ -28,7 +28,6 @@ import com.taobao.weex.adapter.DefaultWXHttpAdapter;
 import com.taobao.weex.adapter.ICrashInfoReporter;
 import com.taobao.weex.adapter.IDrawableLoader;
 import com.taobao.weex.adapter.ITracingAdapter;
-import com.taobao.weex.adapter.IWXAccessibilityRoleAdapter;
 import com.taobao.weex.adapter.IWXHttpAdapter;
 import com.taobao.weex.adapter.IWXImgLoaderAdapter;
 import com.taobao.weex.adapter.IWXJSExceptionAdapter;
@@ -77,7 +76,6 @@ public class WXSDKManager {
   private IDrawableLoader mDrawableLoader;
   private IWXHttpAdapter mIWXHttpAdapter;
   private IActivityNavBarSetter mActivityNavBarSetter;
-  private IWXAccessibilityRoleAdapter mRoleAdapter;
 
   private ICrashInfoReporter mCrashInfo;
 
@@ -443,14 +441,6 @@ public class WXSDKManager {
       mLifeCycleCallbacks = new ArrayList<>();
     }
     mLifeCycleCallbacks.add(callbacks);
-  }
-
-  public void setAccessibilityRoleAdapter(IWXAccessibilityRoleAdapter adapter) {
-    this.mRoleAdapter = adapter;
-  }
-
-  public IWXAccessibilityRoleAdapter getAccessibilityRoleAdapter() {
-    return mRoleAdapter;
   }
 
   public interface InstanceLifeCycleCallbacks {

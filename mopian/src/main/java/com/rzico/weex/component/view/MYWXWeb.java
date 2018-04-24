@@ -196,7 +196,7 @@ public class MYWXWeb extends WXComponent {
                 saveBitmap(longImage, callback);
                 getWebView().getWebView().setDrawingCacheEnabled(false);
                 getWebView().getWebView().destroyDrawingCache();
-                getWebView().getWebView().reload();
+                getWebView().reload();
             }
         },300);
     }

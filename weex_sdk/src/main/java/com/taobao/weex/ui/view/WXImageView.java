@@ -48,7 +48,7 @@ public class WXImageView extends ImageView implements WXGestureObservable,
   private float[] borderRadius;
   private boolean gif;
   private boolean isBitmapReleased = false;
-  private boolean enableBitmapAutoManage = true;
+  private boolean enableBitmapAutoManage = false;
 
 
   public WXImageView(Context context) {
@@ -223,11 +223,11 @@ public class WXImageView extends ImageView implements WXGestureObservable,
   }
 
 
-  public void setEnableBitmapAutoManage(boolean enableBitmapAutoManage) {
+  protected void setEnableBitmapAutoManage(boolean enableBitmapAutoManage) {
      this.enableBitmapAutoManage = enableBitmapAutoManage;
   }
 
-  public void autoReleaseImage(){
+  protected void autoReleaseImage(){
       if(enableBitmapAutoManage) {
         if (!isBitmapReleased) {
           isBitmapReleased = true;
@@ -239,7 +239,7 @@ public class WXImageView extends ImageView implements WXGestureObservable,
       }
   }
 
-  public void autoRecoverImage(){
+  protected void autoRecoverImage(){
     if(enableBitmapAutoManage){
       if(isBitmapReleased){
         WXImage image = getComponent();

@@ -92,11 +92,7 @@ public class DefaultWXHttpAdapter implements IWXHttpAdapter {
             listener.onHttpFinish(response);
           }
           if (e instanceof IOException) {
-            try {
-              reporter.httpExchangeFailed((IOException) e);
-            } catch (Throwable t) {
-              t.printStackTrace();
-            }
+            reporter.httpExchangeFailed((IOException) e);
           }
         }
       }

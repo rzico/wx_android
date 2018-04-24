@@ -182,16 +182,8 @@ public class CSSNode {
   /**
    * See {@link LayoutState#DIRTY}.
    */
-  public boolean isDirty() {
+  protected boolean isDirty() {
     return mLayoutState == LayoutState.DIRTY;
-  }
-
-  public void markDirty() {
-    try{
-      this.dirty();
-    }catch (Exception e){
-      WXLogUtils.e("markDirty",  e);
-    }
   }
 
   protected void dirty() {
@@ -201,9 +193,7 @@ public class CSSNode {
       if(WXEnvironment.isApkDebugable()){
           WXLogUtils.d("Previous csslayout was ignored! markLayoutSeen() never called");
       }
-      if(hasNewLayout()) {
-        markLayoutSeen();
-      }
+      markLayoutSeen();
     }
 
     mLayoutState = LayoutState.DIRTY;
