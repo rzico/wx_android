@@ -48,7 +48,7 @@ import com.yalantis.ucrop.view.CropImageView;
 import cn.finalteam.rxgalleryfinal.view.ImageButtonWithText;
 import com.yalantis.ucrop.view.TopView;
 import com.yalantis.ucrop.view.widget.AspectRatioTextView;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import org.xutils.common.util.FileUtil;
 
