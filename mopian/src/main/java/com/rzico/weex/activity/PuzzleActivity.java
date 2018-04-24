@@ -18,7 +18,7 @@ import com.rzico.weex.R;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.utils.BarTextColorUtils;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import org.xutils.common.util.FileUtil;
 

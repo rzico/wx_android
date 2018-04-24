@@ -61,7 +61,7 @@ import java.util.HashMap;
 
 import static com.rzico.weex.Constant.imUserId;
 import static com.rzico.weex.utils.task.ZipExtractorTask.ZIPSUCCESS;
-import static com.yixiang.mopian.constant.AllConstant.isClearAll;
+import static com.rzico.weex.constant.AllConstant.isClearAll;
 
 public class SplashActivity extends BaseActivity {
 

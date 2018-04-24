@@ -26,7 +26,7 @@ import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.model.AspectRatio;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import org.xutils.common.util.FileUtil;
 
