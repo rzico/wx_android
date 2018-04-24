@@ -188,6 +188,13 @@
         android:orientation="vertical"
         android:background="@color/background_gray1">
 
+        <!--<com.tencent.qcloud.ui.EmojiBoard-->
+            <!--android:id="@+id/emoticonPanel"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="200dp"-->
+            <!--android:background="@color/background_gray1"-->
+            <!--android:visibility="gone"/>-->
+
     </LinearLayout>
 
 </LinearLayout>
