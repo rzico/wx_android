@@ -42,7 +42,6 @@ import com.taobao.weex.bridge.WXModuleManager;
 import com.taobao.weex.bridge.WXServiceManager;
 import com.taobao.weex.common.Destroyable;
 import com.taobao.weex.common.TypeModuleFactory;
-import com.taobao.weex.common.WXErrorCode;
 import com.taobao.weex.common.WXException;
 import com.taobao.weex.common.WXInstanceWrap;
 import com.taobao.weex.common.WXModule;
@@ -89,13 +88,12 @@ import com.taobao.weex.ui.component.list.SimpleListComponent;
 import com.taobao.weex.ui.component.list.WXCell;
 import com.taobao.weex.ui.component.list.WXListComponent;
 import com.taobao.weex.ui.component.list.template.WXRecyclerTemplateList;
-import com.taobao.weex.ui.module.WXLocaleModule;
+import com.taobao.weex.ui.module.WXLocalModule;
 import com.taobao.weex.ui.module.WXMetaModule;
 import com.taobao.weex.ui.module.WXModalUIModule;
 import com.taobao.weex.ui.module.WXTimerModule;
 import com.taobao.weex.ui.module.WXWebViewModule;
 import com.taobao.weex.utils.LogLevel;
-import com.taobao.weex.utils.WXExceptionUtils;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXSoInstallMgrSdk;
 import com.taobao.weex.utils.batch.BatchOperationHelper;
@@ -180,11 +178,6 @@ public class WXSDKEngine {
     WXEnvironment.sApplication = application;
 	if(application == null){
 	  WXLogUtils.e(TAG, " doInitInternal application is null");
-	  WXExceptionUtils.commitCriticalExceptionRT(null,
-			  WXErrorCode.WX_KEY_EXCEPTION_SDK_INIT.getErrorCode(),
-			  "doInitInternal",
-			  WXErrorCode.WX_KEY_EXCEPTION_SDK_INIT.getErrorMsg() + "WXEnvironment sApplication is null",
-			  null);
 	}
     WXEnvironment.JsFrameworkInit = false;
 
@@ -202,12 +195,6 @@ public class WXSDKEngine {
                               sm.getWXStatisticsListener());
         boolean isSoInitSuccess = WXSoInstallMgrSdk.initSo(V8_SO_NAME, 1, config!=null?config.getUtAdapter():null);
         if (!isSoInitSuccess) {
-		  WXExceptionUtils.commitCriticalExceptionRT(null,
-				  WXErrorCode.WX_KEY_EXCEPTION_SDK_INIT.getErrorCode(),
-				  "doInitInternal",
-				  WXErrorCode.WX_KEY_EXCEPTION_SDK_INIT.getErrorMsg() + "isSoInit false",
-				  null);
-
           return;
         }
         sm.initScriptsFramework(config!=null?config.getFramework():null);
@@ -323,7 +310,7 @@ public class WXSDKEngine {
       registerModule("picker", WXPickersModule.class);
       registerModule("meta", WXMetaModule.class,true);
       registerModule("webSocket", WebSocketModule.class);
-      registerModule("locale", WXLocaleModule.class);
+      registerModule("local", WXLocalModule.class);
 
 
       registerDomObject(simpleList, WXListDomObject.class);
@@ -434,7 +421,7 @@ public class WXSDKEngine {
     return registerModule(moduleName, moduleClass,false);
   }
 
-  public static boolean registerService(String name, String serviceScript, Map<String, Object> options) {
+  public static boolean registerService(String name, String serviceScript, Map<String, String> options) {
     return WXServiceManager.registerService(name, serviceScript, options);
   }
 
@@ -523,7 +510,6 @@ public class WXSDKEngine {
     WXBridgeManager.getInstance().restart();
     WXBridgeManager.getInstance().initScriptsFramework(framework);
 
-    WXServiceManager.reload();
     WXModuleManager.reload();
     WXComponentRegistry.reload();
     WXSDKManager.getInstance().postOnUiThread(new Runnable() {

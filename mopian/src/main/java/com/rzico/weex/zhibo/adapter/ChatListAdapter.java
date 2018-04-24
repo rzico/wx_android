@@ -42,14 +42,14 @@ public class ChatListAdapter extends BaseAdapter {
         BaseMsgView baseMsgView = (BaseMsgView) convertView;
         BaseRoom.UserInfo msgContent = msgList.get(position);
 //        if(baseMsgView == null){
-            if(msgContent.cmd.equals(BaseRoom.MessageType.CustomTextMsg.name())){
-                baseMsgView = new TextMsgView(parent.getContext());
-            } else if(msgContent.cmd.equals(BaseRoom.MessageType.CustomGifMsg.name())){
+            if(msgContent.cmd.equals(BaseRoom.MessageType.CustomGifMsg.name())){
                 baseMsgView = new GifMsgView(parent.getContext());
             }else if(msgContent.cmd.equals(BaseRoom.MessageType.CustomNoticeMsg.name())){
                 baseMsgView = new NoticeMsgView(parent.getContext());
+            } else {
+                //(msgContent.cmd.equals(BaseRoom.MessageType.CustomTextMsg.name()))
+            baseMsgView = new TextMsgView(parent.getContext());
             }
-//        }
         baseMsgView.setContent(msgContent);
 
         return baseMsgView;

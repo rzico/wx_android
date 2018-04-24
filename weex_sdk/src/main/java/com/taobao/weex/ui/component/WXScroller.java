@@ -411,7 +411,6 @@ public class WXScroller extends WXVContainer<ViewGroup> implements WXScrollViewL
         LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
       innerView.addView(mRealView, layoutParams);
       innerView.setVerticalScrollBarEnabled(true);
-      innerView.setNestedScrollingEnabled(WXUtils.getBoolean(getDomObject().getAttrs().get(Constants.Name.NEST_SCROLLING_ENABLED), true));
       innerView.addScrollViewListener(new WXScrollViewListener() {
         @Override
         public void onScrollChanged(WXScrollView scrollView, int x, int y, int oldx, int oldy) {
@@ -641,7 +640,7 @@ public class WXScroller extends WXVContainer<ViewGroup> implements WXScrollViewL
       return;
     }
 
-    getInnerView().postDelayed(WXThread.secure(new Runnable() {
+    getInnerView().postDelayed(new Runnable() {
       @Override
       public void run() {
         if (mOrientation == Constants.Orientation.VERTICAL) {
@@ -659,7 +658,7 @@ public class WXScroller extends WXVContainer<ViewGroup> implements WXScrollViewL
         }
         getInnerView().invalidate();
       }
-    }), 16);
+    }, 16);
   }
 
   @Override

@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by sospartan on 17/03/2017.
@@ -164,16 +163,6 @@ public class StickyHeaderHelper {
     for(WXCell cell:toRemove){
       notifyStickyRemove(cell);
     }
-  }
-
-  public void  clearStickyHeaders(){
-      if(mHeaderViews.size() <= 0){
-        return;
-      }
-      Set<String> keys = mHeaderViews.keySet();
-      for(String key : keys){
-        notifyStickyRemove(mHeaderComps.get(key));
-      }
   }
 
 

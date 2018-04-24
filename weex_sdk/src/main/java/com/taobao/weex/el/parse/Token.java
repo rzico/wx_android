@@ -74,10 +74,11 @@ public class Token {
         throw new IllegalArgumentException("unhandled token type " + type);
     }
 
+    /***
     @Override
     public String toString() {
         return "{" + token + "," + type + '}';
-    }
+    }*/
 
     public String getToken() {
         return token;
