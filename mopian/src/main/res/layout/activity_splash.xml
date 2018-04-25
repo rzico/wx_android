@@ -19,6 +19,61 @@
         android:progressDrawable="@drawable/progressbar_color"
         style="?android:attr/progressBarStyleHorizontal"/>
 
+    <TextView
+        android:text="正在更新数据，请稍后..."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/progress"
+        android:textColor="@color/colorYellow"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView"/>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:text="泥炭娱乐是亚洲著名的娱乐品牌"
+        android:textColor="@color/colorYellow" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:text="这里是一个公平公正"
+        android:textColor="@color/colorYellow" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorYellow"
+        android:layout_centerVertical="true"
+        android:text="" />
+
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:text="丰富多彩的娱乐世界"
+        android:textColor="@color/colorYellow" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView5"
+        android:layout_centerHorizontal="true"
+        android:text="请尽情享受这紧张刺激的时光"
+        android:textColor="@color/colorYellow" />
+
     <!--<TextView android:id="@+id/fullscreen_content"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
