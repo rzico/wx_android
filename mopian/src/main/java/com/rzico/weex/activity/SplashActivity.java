@@ -63,7 +63,7 @@ import java.util.Map;
 import static com.rzico.weex.Constant.imUserId;
 import static com.rzico.weex.utils.task.ZipExtractorTask.ZIPSUCCESS;
 import static com.tencent.open.utils.Global.getVersionCode;
-import static com.yixiang.mopian.constant.AllConstant.isClearAll;
+import static com.rzico.weex.constant.AllConstant.isClearAll;
 
 public class SplashActivity extends BaseActivity {
 
@@ -179,7 +179,7 @@ public class SplashActivity extends BaseActivity {
                 Constant.userId = 0;
                 Constant.imUserId = "";
                 SharedUtils.saveLoginId(Constant.userId);
-                EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.FORCEOFFLINE));
+                EventBus.getDefault().post(new com.rzico.weex.model.event.MessageBus(com.rzico.weex.model.event.MessageBus.Type.FORCEOFFLINE));
             }
 
             @Override
