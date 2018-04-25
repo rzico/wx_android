@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.StatFs;
 
-import com.yixiang.mopian.constant.AllConstant;
-
 import org.xutils.x;
 
 import java.io.BufferedInputStream;

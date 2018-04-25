@@ -10,11 +10,11 @@
 
         <!--裁剪功能组件-->
         <!--<LinearLayout-->
-            <!--android:id="@+id/layout_filter"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="horizontal"/>-->
+        <!--android:id="@+id/layout_filter"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="horizontal"/>-->
         <!--裁剪功能组件-->
         <LinearLayout
             android:id="@+id/layout_aspect_ratio"
@@ -28,8 +28,8 @@
             layout="@layout/ucrop_layout_rotate_wheel"/>
         <!--原来是缩放组件现改了-->
         <!--<include-->
-            <!--android:id="@+id/layout_scale_wheel"-->
-            <!--layout="@layout/ucrop_layout_scale_wheel"/>-->
+        <!--android:id="@+id/layout_scale_wheel"-->
+        <!--layout="@layout/ucrop_layout_scale_wheel"/>-->
 
     </FrameLayout>
 
@@ -50,35 +50,35 @@
         android:orientation="horizontal">
 
         <!--<FrameLayout-->
-            <!--android:id="@+id/state_photo_change"-->
-            <!--style="@style/ucrop_WrapperIconState">-->
+        <!--android:id="@+id/state_photo_change"-->
+        <!--style="@style/ucrop_WrapperIconState">-->
 
-            <!--<ImageView-->
-                <!--android:id="@+id/image_view_photo_change"-->
-                <!--style="@style/ucrop_ImageViewWidgetIcon"-->
-                <!--android:src="@drawable/ucrop_ic_scale"/>-->
-
-        <!--</FrameLayout>-->
-
-        <!--<FrameLayout-->
-            <!--android:id="@+id/state_photo_puzzle"-->
-            <!--style="@style/ucrop_WrapperIconState">-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/image_view_photo_puzzle"-->
-                <!--style="@style/ucrop_ImageViewWidgetIcon"-->
-                <!--android:src="@drawable/ucrop_ic_scale"/>-->
+        <!--<ImageView-->
+        <!--android:id="@+id/image_view_photo_change"-->
+        <!--style="@style/ucrop_ImageViewWidgetIcon"-->
+        <!--android:src="@drawable/ucrop_ic_scale"/>-->
 
         <!--</FrameLayout>-->
 
         <!--<FrameLayout-->
-            <!--android:id="@+id/state_filter"-->
-            <!--style="@style/ucrop_WrapperIconState">-->
+        <!--android:id="@+id/state_photo_puzzle"-->
+        <!--style="@style/ucrop_WrapperIconState">-->
 
-            <!--<ImageView-->
-                <!--android:id="@+id/image_view_state_filter"-->
-                <!--style="@style/ucrop_ImageViewWidgetIcon"-->
-                <!--android:src="@drawable/ucrop_ic_scale"/>-->
+        <!--<ImageView-->
+        <!--android:id="@+id/image_view_photo_puzzle"-->
+        <!--style="@style/ucrop_ImageViewWidgetIcon"-->
+        <!--android:src="@drawable/ucrop_ic_scale"/>-->
+
+        <!--</FrameLayout>-->
+
+        <!--<FrameLayout-->
+        <!--android:id="@+id/state_filter"-->
+        <!--style="@style/ucrop_WrapperIconState">-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/image_view_state_filter"-->
+        <!--style="@style/ucrop_ImageViewWidgetIcon"-->
+        <!--android:src="@drawable/ucrop_ic_scale"/>-->
 
         <!--</FrameLayout>-->
 

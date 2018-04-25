@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/macOS/Documents/mopian/wx_android/richeditor/src/main/shaders"/></dataSet><dataSet config="release"><source path="/Users/macOS/Documents/mopian/wx_android/richeditor/src/release/shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/Users/zhangsr/Documents/GitHub/weex/wx_android/richeditor/src/main/shaders"/></dataSet><dataSet config="release"><source path="/Users/zhangsr/Documents/GitHub/weex/wx_android/richeditor/src/release/shaders"/></dataSet></merger>
