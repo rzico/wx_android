@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.StatFs;
 
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import org.xutils.x;
 
