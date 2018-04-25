@@ -1,4 +1,4 @@
-package com.rzico.weex;
+package com.rzico.weex.constant;
 
 import android.app.Activity;
 import android.os.Environment;
