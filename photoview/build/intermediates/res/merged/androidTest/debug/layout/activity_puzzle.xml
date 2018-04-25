@@ -15,7 +15,7 @@
         android:background="#ffffff"
         android:orientation="vertical">
 
-        <com.yalantis.ucrop.view.PuzzleView
+        <cn.finalteam.rxgalleryfinal.view.PuzzleView
             android:id="@+id/puzzle_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

@@ -14,34 +14,34 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
     <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar"-->
-        <!--style="@style/gallery_NoSpaceActionBarTheme"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?attr/actionBarSize"-->
-        <!--android:background="?attr/colorPrimary"-->
-        <!--app:navigationIcon="?attr/homeAsUpIndicator"-->
-        <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
-        <!--android:gravity="center">-->
+    <!--android:id="@+id/toolbar"-->
+    <!--style="@style/gallery_NoSpaceActionBarTheme"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--android:background="?attr/colorPrimary"-->
+    <!--app:navigationIcon="?attr/homeAsUpIndicator"-->
+    <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
+    <!--android:gravity="center">-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/toolbar_title"-->
-            <!--style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="left"-->
-            <!--android:text="@string/ucrop_label_edit_photo"-->
-            <!--android:textColor="@color/ucrop_color_toolbar_widget"/>-->
+    <!--<TextView-->
+    <!--android:id="@+id/toolbar_title"-->
+    <!--style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="left"-->
+    <!--android:text="@string/ucrop_label_edit_photo"-->
+    <!--android:textColor="@color/ucrop_color_toolbar_widget"/>-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_over_action"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="right"-->
-            <!--android:textSize="18sp"-->
-            <!--android:layout_margin="12dp"-->
+    <!--<TextView-->
+    <!--android:id="@+id/tv_over_action"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="right"-->
+    <!--android:textSize="18sp"-->
+    <!--android:layout_margin="12dp"-->
 
-            <!--android:textColor="#ffffff"-->
-            <!--android:text="@string/gallery_over_button_text" />-->
+    <!--android:textColor="#ffffff"-->
+    <!--android:text="@string/gallery_over_button_text" />-->
     <!--</android.support.v7.widget.Toolbar>-->
 
     <FrameLayout
