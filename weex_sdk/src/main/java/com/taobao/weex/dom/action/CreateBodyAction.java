@@ -43,7 +43,6 @@ import com.taobao.weex.utils.WXViewUtils;
 
 class CreateBodyAction extends AbstractAddElementAction {
   private final JSONObject mData;
-  private StringBuilder mErrMsg = new StringBuilder("CreateBodyAction Error:");
 
   CreateBodyAction(JSONObject data) {
     mData = data;
@@ -79,12 +78,7 @@ class CreateBodyAction extends AbstractAddElementAction {
 
   @Override
   protected WXErrorCode getErrorCode() {
-    return WXErrorCode.WX_KEY_EXCEPTION_DOM_CREATE_BODY;
-  }
-
-  @Override
-  protected String getErrorMsg() {
-	return mErrMsg.toString();
+    return WXErrorCode.WX_ERR_DOM_CREATEBODY;
   }
 
   @Override
@@ -99,7 +93,6 @@ class CreateBodyAction extends AbstractAddElementAction {
     WXSDKInstance instance = context.getInstance();
     if (instance == null || instance.getContext() == null) {
       WXLogUtils.e("instance is null or instance is destroy!");
-	  mErrMsg.append("instance is null or instance is destroy!");
       return;
     }
     try {
@@ -133,11 +126,11 @@ class CreateBodyAction extends AbstractAddElementAction {
       if (instance.getRenderStrategy() != WXRenderStrategy.APPEND_ONCE) {
         instance.onCreateFinish();
       }
+      instance.commitUTStab(IWXUserTrackAdapter.DOM_MODULE, WXErrorCode.WX_SUCCESS);
       component.mTraceInfo.uiQueueTime = mUIQueueTime;
       component.onRenderFinish(WXComponent.STATE_ALL_FINISH);
     } catch (Exception e) {
       WXLogUtils.e("create body failed.", e);
-	  mErrMsg.append("create body failed.").append(WXLogUtils.getStackTrace(e)).toString();
     }
   }
 

@@ -63,12 +63,6 @@ public class WXStatement extends ArrayMap<String, Object> implements  Cloneable 
      * */
     public static final String WX_IF = "[[match]]";
 
-
-    /**
-     * once statement
-     * */
-    public static final  String WX_ONCE = "[[once]]";
-
     public WXStatement() {
     }
 

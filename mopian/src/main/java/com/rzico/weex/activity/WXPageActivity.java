@@ -21,18 +21,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rzico.weex.Constant;
-import com.rzico.weex.WXApplication;
-import com.rzico.weex.model.event.MessageEvent;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.module.JSCallBaskManager;
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.rzico.weex.R;
 import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.module.WXEventModule;
@@ -43,7 +39,6 @@ import com.rzico.weex.utils.weex.DevOptionHandler;
 import com.rzico.weex.utils.weex.ShakeDetector;
 import com.rzico.weex.utils.weex.constants.Constants;
 import com.taobao.weex.WXEnvironment;
-import com.taobao.weex.WXRenderErrorCode;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.ui.component.NestedContainer;
@@ -100,9 +95,9 @@ public class WXPageActivity extends AbsWeexActivity implements
   };
 
   @Subscribe(threadMode = ThreadMode.MAIN)
-  public void handleEvent(MessageEvent messageEvent){
-    if(messageEvent.getMessageType() == MessageEvent.Type.GLOBAL){
-      getWXSDKInstance().fireGlobalEventCallback(messageEvent.getEventKey(), messageEvent.getParams());
+  public void handleEvent(MessageBus messageBus){
+    if(messageBus.getMessageType() == MessageBus.Type.GLOBAL){
+      getWXSDKInstance().fireGlobalEventCallback(messageBus.getEventKey(), messageBus.getParams());
     }
 
   }

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:focusable="false"
+        android:paddingLeft="5dp"
+        android:visibility="visible"
+        android:paddingRight="5dp">
+        <LinearLayout
+            android:layout_width="38dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:visibility="visible"
+            android:layout_height="38dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_danmu"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:textColor="@color/text_dark"
+                android:text="弹幕"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:visibility="visible"
+            android:layout_height="38dp"
+            android:orientation="horizontal">
+
+            <com.rzico.weex.view.SlideSwitch
+                android:id="@+id/ssBarrage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/input_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/input_emoji_btn">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="43dp">
+                <EditText
+                    android:id="@+id/input_editor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:maxLines="4"
+                    android:gravity="bottom"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="35dp"
+                    android:paddingBottom="11dp"
+                    android:textSize="16sp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/rc_editor_bg_selector"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/view" />
+
+                <ImageView
+                    android:id="@+id/input_emoji_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/view"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignRight="@+id/view"
+                    android:paddingBottom="10dp"
+                    android:src="@drawable/rc_emoji_selector" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/input_send"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/input_send_button"
+            android:enabled="false"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/rc_send"
+            android:textColor="#ffffff"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+
+    <com.rzico.weex.zhibo.view.EmojiBoard
+        android:id="@+id/input_emoji_board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+</LinearLayout>

@@ -26,7 +26,7 @@ import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.model.AspectRatio;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import org.xutils.common.util.FileUtil;
 
@@ -84,15 +84,12 @@ public class AlbumModule extends WXModule {
     }
 
     @JSMethod
-    public void openAlbumSingle(boolean isCrop, JSCallback callback){
-        com.alibaba.fastjson.JSONObject jsonObject = new JSONObject();
-        jsonObject.put("isCrop", isCrop);
-        jsonObject.put("width", 1);
-        jsonObject.put("height",1);
-        openAlbumSingle(jsonObject.toJSONString(), callback);
-    }
-    @JSMethod
     public void openAlbumSingle(String option, final JSCallback callback){
+        if(option == null || option.equals("")){
+            Message message = new Message().error("图片地址不合法");
+            callback.invoke(message);
+            return;
+        }
         boolean getCrop = false;
         int width = 1;
         int height = 1;
@@ -230,6 +227,11 @@ public class AlbumModule extends WXModule {
 
     @JSMethod
     public void cropHeadImg(String imagePath,int width, int height, final JSCallback callback){
+        if(imagePath == null || imagePath.equals("")){
+            Message message = new Message().error("图片地址不合法");
+            callback.invoke(message);
+            return;
+        }
         //调用当前文件下的接口 并且实现它回调给 callback
         AspectRatio aspectRatio = new AspectRatio(width + ":" + height, width,height);
         AlbumModule.get().init(new RxGalleryFinalCropListener() {
@@ -279,6 +281,12 @@ public class AlbumModule extends WXModule {
     }
     @JSMethod
     public void openCrop(String imagePath, final JSCallback callback){
+
+        if(imagePath == null || imagePath.equals("")){
+            Message message = new Message().error("图片地址不合法");
+            callback.invoke(message);
+            return;
+        }
         //调用当前文件下的接口 并且实现它回调给 callback
         AlbumModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull

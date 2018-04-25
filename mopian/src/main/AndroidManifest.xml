@@ -68,6 +68,7 @@
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme">
@@ -77,6 +78,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--zhibo-->
+        <activity android:name=".zhibo.activity.OpenVideoActivity" />
+        <activity android:name=".zhibo.activity.PlayActivity"
+
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            ></activity>
         <activity
             android:name=".activity.WXPageActivity"
             android:label="@string/app_name"

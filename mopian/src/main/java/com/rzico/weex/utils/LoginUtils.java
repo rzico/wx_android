@@ -1,52 +1,29 @@
 package com.rzico.weex.utils;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 
 import com.google.gson.Gson;
-import com.huawei.android.pushagent.PushManager;
 import com.rzico.weex.Constant;
-import com.rzico.weex.R;
-import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LoginActivity;
-import com.rzico.weex.activity.MainActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.db.DbUtils;
-import com.rzico.weex.db.notidmanager.DbCacheBean;
-import com.rzico.weex.db.notidmanager.NotIdManager;
-import com.rzico.weex.model.info.IMMessage;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.LoginBean;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
 import com.rzico.weex.utils.chat.PushUtil;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConversationType;
-import com.tencent.imsdk.TIMFriendshipManager;
 import com.tencent.imsdk.TIMManager;
 
-import com.tencent.imsdk.TIMOfflinePushSettings;
-import com.tencent.imsdk.TIMUserProfile;
-import com.tencent.imsdk.TIMValueCallBack;
-import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
-import org.xutils.ex.DbException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.tencent.open.utils.Global.getPackageName;
 
 /**
  * Created by Jinlesoft on 2017/10/18.
@@ -151,7 +128,7 @@ public class LoginUtils  {
     public static void loginSuccess(){
         Constant.loginState = true;
         SharedUtils.saveLoginId(Constant.userId);
-        EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.LOGINSUCCESS));
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINSUCCESS));
 
         //测试
 
@@ -159,6 +136,7 @@ public class LoginUtils  {
     }
     public static void loginError(){
         Constant.loginState = false;
+        //登录失败现在改成
         Constant.userId = SharedUtils.readLoginId();
         //如果是离线登录的话
         //unLinelogin是判断是否是离线登录
@@ -168,6 +146,6 @@ public class LoginUtils  {
             Constant.unLinelogin = false;
         }
 
-        EventBus.getDefault().post(new com.rzico.weex.model.event.MessageEvent(com.rzico.weex.model.event.MessageEvent.Type.LOGINERROR));
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINERROR));
     }
 }

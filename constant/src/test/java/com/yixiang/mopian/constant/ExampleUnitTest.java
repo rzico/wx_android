@@ -1,4 +1,4 @@
-package com.yixiang.mopian.constant;
+package com.rzico.weex.constant;
 
 import org.junit.Test;
 

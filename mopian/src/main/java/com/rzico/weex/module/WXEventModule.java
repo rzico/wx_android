@@ -42,7 +42,7 @@ import com.rzico.weex.activity.RouterActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.notidmanager.DbCacheBean;
-import com.rzico.weex.model.event.MessageEvent;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.CacheSize;
 import com.rzico.weex.model.info.Contact;
 import com.rzico.weex.model.info.IMMessage;
@@ -82,7 +82,7 @@ import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 import com.yixiang.mopian.wxapi.WXEntryActivity;
 
 import net.bither.util.NativeUtil;
@@ -135,7 +135,7 @@ public class WXEventModule extends WXModule {
                             SharedUtils.saveImId(Constant.imUserId);
                             Message message = new Message().success("登出成功");
                             callback.invoke(message);
-                            EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.LOGOUT));
+                            EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGOUT));
                         }
                     });
                 }else{
@@ -147,7 +147,7 @@ public class WXEventModule extends WXModule {
                     SharedUtils.saveImId(Constant.imUserId);
                     Message message = new Message().success("登出成功");
                     callback.invoke(message);
-                    EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.LOGOUT));
+                    EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGOUT));
                 }
 
             }
@@ -868,7 +868,7 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void getUnReadMessage(){
-        EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.RECEIVEMSG));
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.RECEIVEMSG));
 
         List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
         List<String> userIds = new ArrayList<>();
@@ -918,7 +918,7 @@ public class WXEventModule extends WXModule {
                             onMessage.setData(imMessage);
                             Map<String, Object> params = new HashMap<>();
                             params.put("data", onMessage);
-                            EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, "onMessage", params));
+                            EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "onMessage", params));
 
                         }
                     }
@@ -1075,21 +1075,28 @@ public class WXEventModule extends WXModule {
     private WeakReference<PauseableUploadTask> task;
     //上传文件
     public void uploadFile(String stsData, BaseActivity activity, String filePath, JSCallback callback, JSCallback progressCallback) {
-        OSSCredentialProvider credentialProvider = new STSGetter(stsData);
-        OSS oss = new OSSClient(activity, Constant.endpoint, credentialProvider);
-        OssService ossService = new OssService(oss, Constant.bucket);
-        Date nowTime = new Date();
-        SimpleDateFormat time = new SimpleDateFormat("yyyy/MM/dd");
-        String [] text = filePath.split("/");
-        String [] houzui = text[text.length - 1].split("\\.");
-        String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + "." + houzui[houzui.length - 1];
+        try{
+            OSSCredentialProvider credentialProvider = new STSGetter(stsData);
+            OSS oss = new OSSClient(activity, Constant.endpoint, credentialProvider);
+            OssService ossService = new OssService(oss, Constant.bucket);
+            Date nowTime = new Date();
+            SimpleDateFormat time = new SimpleDateFormat("yyyy/MM/dd");
+            String [] text = filePath.split("/");
+            String [] houzui = text[text.length - 1].split("\\.");
+            String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + "." + houzui[houzui.length - 1];
 //        ossService.asyncPutImage(imagePath, filePath, callback, progressCallback);
 //        if ((task == null) || (task.get() == null)){
 //            Log.d("MultiPartUpload", "Start");
-        task = new WeakReference<>(ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback));
-//        }
-//        else {
-//        }
+            PauseableUploadTask pauseableUploadTask = ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback);
+            if(pauseableUploadTask != null){
+                task = new WeakReference<>(pauseableUploadTask);
+            }else {
+                callback.invoke(new Message().error("图片地址不合法"));
+            }
+        } catch (Exception e){
+            callback.invoke(new Message().error("图片地址不合法"));
+        }
+
     }    /**获取库Phon表字段**/
     private static final String[] PHONES_PROJECTION = new String[] {
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY, ContactsContract.CommonDataKinds.Photo.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.DATA1 };
@@ -1469,7 +1476,7 @@ public class WXEventModule extends WXModule {
         params.put("data", data);
         //推送前面4个页面
 
-        EventBus.getDefault().post(new MessageEvent(MessageEvent.Type.GLOBAL, eventKey, params));
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, eventKey, params));
         //判断当前页面是不是weex页面
     }
 

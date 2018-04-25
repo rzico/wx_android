@@ -24,7 +24,7 @@ import java.util.Map;
 public class WXJSService implements IWXObject {
     private String name;
     private String script;
-    private Map<String, Object> options = new HashMap<>();
+    private Map<String, String> options = new HashMap<>();
 
     public String getName() { return name; }
     public void setName(String name) {
@@ -36,8 +36,8 @@ public class WXJSService implements IWXObject {
         this.script = script;
     }
 
-    public Map<String, Object> getOptions() { return options; }
-    public void setOptions(Map<String, Object> options) {
+    public Map<String, String> getOptions() { return options; }
+    public void setOptions(Map<String, String> options) {
         this.options = options;
     }
 }

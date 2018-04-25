@@ -43,7 +43,7 @@ import com.yalantis.ucrop.*;
 import com.yalantis.ucrop.callback.BitmapLoadCallback;
 import com.yalantis.ucrop.model.ExifInfo;
 import com.yalantis.ucrop.util.BitmapLoadUtils;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

@@ -125,7 +125,30 @@ public class SharedUtils {
         return sp.getString(key, defaultStr);
     }
     public static String read(String key){
-
         return read(key, "");
+    }
+
+    public static Long imIdToId(String imId){
+        Long id = null;
+        if(imId!=null && !imId.equals("") && imId.startsWith("u")){
+            imId = imId.substring(1, imId.length());
+            if(Long.parseLong(imId) > 10200){
+                id = Long.parseLong(imId) - 10200;
+                return id;
+            }else{
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+    public static String idToImId(Long id){
+        if(id!=null){
+            id = id + 10200;
+            return "u" + id;
+        }
+        else{
+            return "";
+        }
     }
 }
