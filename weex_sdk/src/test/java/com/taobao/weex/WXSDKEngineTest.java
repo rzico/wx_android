@@ -67,17 +67,7 @@ public class WXSDKEngineTest {
   public void testInit() throws Exception {
     assertFalse(WXSDKEngine.isInitialized());
     WXSDKEngine.initialize(RuntimeEnvironment.application,null);
-
-    new Thread(){
-      public void run(){
-        try {
-          Thread.sleep(60000);
-          assertTrue(WXSDKEngine.isInitialized());
-        } catch (InterruptedException e) { }
-      }
-    }.start();
-
-
+    assertTrue(WXSDKEngine.isInitialized());
     //keep compatible
     WXSDKEngine.init(RuntimeEnvironment.application);
     WXSDKEngine.init(RuntimeEnvironment.application,null);

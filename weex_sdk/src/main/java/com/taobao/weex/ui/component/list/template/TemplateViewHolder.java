@@ -17,7 +17,6 @@
  * under the License.
  */
 package com.taobao.weex.ui.component.list.template;
-import android.os.AsyncTask;
 import android.view.View;
 
 import com.taobao.weex.annotation.Component;
@@ -45,10 +44,6 @@ public class TemplateViewHolder extends ListBaseViewHolder {
 
     private int holderPosition = -1;
 
-    public AsyncTask<Void, Void, Void> asyncTask;
-
-    public Object  data;
-
     /**
      * header position
      * */
@@ -67,10 +62,6 @@ public class TemplateViewHolder extends ListBaseViewHolder {
             layoutContext = new CSSLayoutContext();
         }
         return layoutContext;
-    }
-
-    public void setLayoutContext(CSSLayoutContext layoutContext){
-        this.layoutContext = layoutContext;
     }
 
 

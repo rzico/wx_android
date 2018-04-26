@@ -27,11 +27,9 @@ import com.taobao.weex.ui.component.WXBasicComponentType;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXViewUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
+import static com.taobao.weex.dom.flex.CSSLayout.DIMENSION_WIDTH;
 
 /**
  * Created by zhengshihan on 2017/2/21.
@@ -44,10 +42,6 @@ public class WXRecyclerDomObject extends WXDomObject{
     private float mColumnGap = Constants.Value.COLUMN_GAP_NORMAL;
     private float mAvailableWidth = 0;
     private boolean mIsPreCalculateCellWidth =false;
-
-    /**cell-slot not on the tree */
-    private List<WXCellDomObject> cellList;
-
 
     public float getAvailableWidth() {
         return WXViewUtils.getRealPxByWidth(mAvailableWidth,getViewPortWidth());
@@ -70,18 +64,9 @@ public class WXRecyclerDomObject extends WXDomObject{
     }
     @Override
     public void add(WXDomObject child, int index) {
-        if(WXBasicComponentType.CELL_SLOT.equals(child.getType())
-                && child instanceof  WXCellDomObject){
-            if(cellList == null){
-                cellList = Collections.synchronizedList(new ArrayList<WXCellDomObject>());
-            }
-            cellList.add((WXCellDomObject)child);
-        }else{
-            super.add(child, index);
-        }
+        super.add(child, index);
 
-        if (WXBasicComponentType.CELL.equals(child.getType())
-                || WXBasicComponentType.CELL_SLOT.equals(child.getType())) {
+        if (WXBasicComponentType.CELL.equals(child.getType())) {
             if (!mIsPreCalculateCellWidth) {
                 preCalculateCellWidth();
             }
@@ -89,22 +74,6 @@ public class WXRecyclerDomObject extends WXDomObject{
                 child.getStyles().put(Constants.Name.WIDTH, mColumnWidth);
             }
         }
-    }
-
-    @Override
-    public void remove(WXDomObject child) {
-        if(cellList != null){
-            cellList.remove(child);
-        }
-        super.remove(child);
-    }
-
-    @Override
-    public void removeFromDom(WXDomObject child) {
-        if(cellList != null){
-            cellList.remove(child);
-        }
-        super.removeFromDom(child);
     }
 
     @Override
@@ -223,17 +192,4 @@ public class WXRecyclerDomObject extends WXDomObject{
         return  Constants.Orientation.VERTICAL;
     }
 
-    @Override
-    public WXDomObject clone() {
-        if(isCloneThis()){
-            return  this;
-        }
-        WXRecyclerDomObject domObject = (WXRecyclerDomObject) super.clone();
-        domObject.cellList = cellList;
-        return domObject;
-    }
-
-    public List<WXCellDomObject> getCellList() {
-        return cellList;
-    }
 }

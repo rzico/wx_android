@@ -185,9 +185,6 @@ class DOMActionContextImpl implements DOMActionContext {
       batchEvent.ph = "X";
       WXTracing.submit(batchEvent);
     }
-    if(WXEnvironment.isApkDebugable()){
-       WXLogUtils.d("mInstanceId  " + mInstanceId  + " batch used " + (System.currentTimeMillis() - start));
-    }
   }
 
   void layout(WXDomObject rootDom) {
@@ -215,7 +212,6 @@ class DOMActionContextImpl implements DOMActionContext {
       instance.cssLayoutTime(System.currentTimeMillis() - start);
     }
 
-    start = System.currentTimeMillis();
     rootDom.traverseTree( new WXDomObject.Consumer() {
       @Override
       public void accept(WXDomObject dom) {
@@ -224,8 +220,10 @@ class DOMActionContextImpl implements DOMActionContext {
         }
         dom.layoutAfter();
       }
-    }, new ApplyUpdateConsumer());
+    });
 
+    start = System.currentTimeMillis();
+    rootDom.traverseTree(new ApplyUpdateConsumer());
 
     if (instance != null) {
       instance.applyUpdateTime(System.currentTimeMillis() - start);
@@ -376,15 +374,6 @@ class DOMActionContextImpl implements DOMActionContext {
   @Override
   public boolean isDestory() {
     return false;
-  }
-
-  @Override
-  public void markDirty() {
-    if(!mDestroy){
-      if(!mDirty){
-        mDirty = true;
-      }
-    }
   }
 
   @Override

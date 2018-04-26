@@ -33,7 +33,6 @@ import com.taobao.weex.common.Constants.Name;
 import com.taobao.weex.dom.flex.CSSLayoutContext;
 import com.taobao.weex.dom.flex.CSSNode;
 import com.taobao.weex.dom.flex.Spacing;
-import com.taobao.weex.dom.transition.WXTransition;
 import com.taobao.weex.ui.component.WXBasicComponentType;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXViewUtils;
@@ -43,8 +42,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-
 
 /**
  * WXDomObject contains all the info about the given node, including style, attribute and event.
@@ -90,8 +87,6 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
 
   /** package **/ WXEvent mEvents;
 
-  private  WXTransition transition;;
-
 
 
 
@@ -108,8 +103,6 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
 
   public long mDomThreadNanos;
   public long mDomThreadTimestamp;
-
-  private  boolean cloneThis = false;
 
   public void traverseTree(Consumer...consumers){
     long startNanos = System.nanoTime();
@@ -143,7 +136,6 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     return mRef;
   }
 
-
   public String getType(){
     return mType;
   }
@@ -170,9 +162,7 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     return mEvents;
   }
 
-  public WXTransition getTransition() {
-    return transition;
-  }
+
 
   public @NonNull DomContext getDomContext() {
     return mDomContext;
@@ -229,7 +219,6 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
       WXStyle styles = new WXStyle();
       styles.putAll((JSONObject) style,false);
       this.mStyles = styles;
-      this.transition = WXTransition.fromMap(styles, this);
     }
     Object attr = map.get("attr");
     if (attr != null && attr instanceof JSONObject) {
@@ -312,7 +301,6 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     }
   }
 
-
   public boolean isFixed() {
     return mStyles == null ? false : mStyles.isFixed();
   }
@@ -344,7 +332,9 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
 
     int index = mDomChildren.indexOf(child);
     if (index == -1) {
+      if (WXEnvironment.isApkDebugable()) {
         WXLogUtils.e("[WXDomObject] remove function error");
+      }
       return;
     }
     mDomChildren.remove(index).parent = null;
@@ -448,9 +438,6 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
       mAttributes = new WXAttr();
     }
     mAttributes.putAll(attrs);
-    if(hasNewLayout()){
-       markUpdateSeen();
-    }
     super.dirty();
   }
 
@@ -462,38 +449,18 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     if (styles == null || styles.isEmpty()) {
       return;
     }
-    if(transition != null){
-      if(transition.hasTransitionProperty(styles)){
-        transition.startTransition(styles);
-      }
-    }
     if (mStyles == null) {
       mStyles = new WXStyle();
     }
     mStyles.putAll(styles,byPesudo);
-    if(transition == null){
-      this.transition = WXTransition.fromMap(mStyles, this);
-    }
     super.dirty();
   }
 
-
-  public void applyStyle(Map<String, Object> styles){
-     applyStyleToNode(styles);
-  }
-
-  void applyStyleToNode() {
-    applyStyleToNode(getStyles());
-  }
-
-  /** package **/ void applyStyleToNode(Map<String, Object> updates) {
-    if(updates.size() == 0){
-      return;
-    }
+  /** package **/ void applyStyleToNode() {
     WXStyle stylesMap = getStyles();
     int vp = getViewPortWidth();
     if (!stylesMap.isEmpty()) {
-      for(Map.Entry<String,Object> item: updates.entrySet()) {
+      for(Map.Entry<String,Object> item:stylesMap.entrySet()) {
         switch (item.getKey()) {
           case Constants.Name.ALIGN_ITEMS:
             setAlignItems(stylesMap.getAlignItems());
@@ -623,9 +590,6 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     if (sDestroy.get()) {
       return null;
     }
-    if(cloneThis){
-      return  this;
-    }
     WXDomObject dom = null;
     try {
       dom = WXDomObjectFactory.newInstance(mType);
@@ -712,7 +676,7 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
             type = TextUtils.isEmpty(result.replacedComponent) ? WXBasicComponentType.DIV
                     : result.replacedComponent;
             json.put(TYPE, type);
-            if (result.validateInfo != null) {
+            if (WXEnvironment.isApkDebugable() && result.validateInfo != null) {
               String tag = "[WXDomObject]onComponentValidate failure. >>> " + result.validateInfo.toJSONString();
               WXLogUtils.e(tag);
             }
@@ -749,13 +713,5 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
 
   public interface Consumer{
     void accept(WXDomObject dom);
-  }
-
-  public boolean isCloneThis() {
-    return cloneThis;
-  }
-
-  public void setCloneThis(boolean cloneThis) {
-    this.cloneThis = cloneThis;
   }
 }

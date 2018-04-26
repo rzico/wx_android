@@ -68,7 +68,6 @@ public class WXEnvironment {
   public static boolean sDebugServerConnectable = false;
   public static boolean sRemoteDebugMode = false;
   public static String sRemoteDebugProxyUrl = "";
-  public static boolean sDebugNetworkEventReporterEnable = false;//debugtool network switch
   public static long sJSLibInitTime = 0;
 
   public static long sSDKInitStart = 0;// init start timestamp
@@ -80,6 +79,8 @@ public class WXEnvironment {
   public static LogLevel sLogLevel = LogLevel.DEBUG;
   private static boolean isApkDebug = true;
   public static boolean isPerf = false;
+
+  public static boolean sShow3DLayer=true;
 
   private static Map<String, String> options = new HashMap<>();
   static {
