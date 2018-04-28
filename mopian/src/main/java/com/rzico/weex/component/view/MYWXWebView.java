@@ -24,12 +24,15 @@ import android.widget.ProgressBar;
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.activity.MainActivity;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.utils.MD5;
 import com.rzico.weex.utils.PhoneUtil;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.http.WXHttpUtil;
 import com.taobao.weex.ui.view.IWebView;
 import com.taobao.weex.utils.WXLogUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -216,6 +219,14 @@ public class MYWXWebView implements IWebView {
                                     }else if(one[0].equals("topic")){
                                         // 专栏 file://view/topic/index.js?id=%@
                                         url = "file://view/topic/index.js?id=" + two[1];
+                                    }
+                                    else if(one[0].equals("buyGood")){
+                                        //一键购
+                                        Map<String, Object> params = new HashMap<>();
+                                        params.put("goodId", two[1]);
+                                        //推送前面4个页面
+
+                                        EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "buyGood", params));
                                     }
                                 }
                             }
