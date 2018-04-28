@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
 
-    compileSdkVersion 24
-    buildToolsVersion '26.0.0'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
 //        applicationId "com.rzico.weex"
         applicationId "com.yixiang.mopian"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 99
         versionName "5.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -156,4 +156,9 @@ dependencies {
     compile 'com.lht:paintview:1.16'
     //    弹幕
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
+    compile project(path: ':SwipeBackLayoutLibrary')
+    /**
+     *             permission Rx
+     */
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
 }

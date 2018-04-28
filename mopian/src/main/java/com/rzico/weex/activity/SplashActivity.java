@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.VersionManagementUtil;
 import com.rzico.weex.utils.task.ZipExtractorTask;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMLogLevel;
@@ -78,7 +80,10 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 放在setContentView()之前运行
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+//        toCheckPermission();
         wxApplication = (WXApplication) this.getApplicationContext();
         setContentView(R.layout.activity_splash);
         mHandler = new MyHandler(this);
@@ -94,6 +99,16 @@ public class SplashActivity extends BaseActivity {
         initIM();
     }
 
+    /**
+     * check permission
+     */
+    private void toCheckPermission() {
+
+        RxPermissions mRxPermissions = new RxPermissions(this);
+        mRxPermissions.request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)//
+                .subscribe();
+
+    }
     /**
      * 清楚所有通知栏通知
      */

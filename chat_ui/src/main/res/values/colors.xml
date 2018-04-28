@@ -7,6 +7,9 @@
 
     <!--主色-->
     <color name="wxColor">#99CCFF</color>
+    <!--主色-->
+    <color name="topBarColor">#444444</color>
+
 
     <color name="background">#F9F7F8</color>
     <color name="background_gray1">#EBEBEB</color>

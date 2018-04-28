@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -256,8 +257,10 @@ public class RecyclerViewFinal extends RecyclerView {
             LayoutManager layoutManager = recyclerView.getLayoutManager();
             int visibleItemCount = layoutManager.getChildCount();
             int totalItemCount = layoutManager.getItemCount();
+//            Log.e("view", "visibleItemCount:" + visibleItemCount + "|" + "currentScrollState:" + currentScrollState + "|" + "lastVisibleItemPosition:" + lastVisibleItemPosition + "|" + "totalItemCount:" + totalItemCount + "|" );
             if ((visibleItemCount > 0 && currentScrollState == RecyclerView.SCROLL_STATE_IDLE && (lastVisibleItemPosition) >= totalItemCount - 1)) {
                 if (mHasLoadMore) {
+//                    Log.e("view", "上一条达标了" );
                     executeLoadMore();
                 }
             }

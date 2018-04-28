@@ -2,6 +2,8 @@ package com.rzico.weex.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -34,6 +36,10 @@ public class LoginActivity extends BaseActivity implements IWXRenderListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_net_weex);
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }else
+            setStatusBarFullTransparent();
         mWXSDKInstance = new WXSDKInstance(this);
         mWXSDKInstance.registerRenderListener(this);
 

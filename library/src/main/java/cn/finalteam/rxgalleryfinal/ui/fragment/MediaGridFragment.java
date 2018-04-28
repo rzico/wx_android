@@ -441,7 +441,7 @@ public class MediaGridFragment extends BaseFragment implements MediaGridView, Re
 
         mPage++;
 
-        if (list == null || list.size() < LIMIT) {
+        if (list == null || list.size() < 1) {
             mRvMedia.setFooterViewHide(true);
             mRvMedia.setHasLoadMore(false);
         } else {

@@ -8,6 +8,9 @@
     <color name="colorBefore">#F0AD3C</color>
 
     <!--<color name="wxColor">#F0AD3C</color>-->
+
+    <!--主色-->
+    <color name="topBarColor">#444444</color>
     <!--主色-->
     <color name="wxColor">#99CCFF</color>
     <!--辅色-->

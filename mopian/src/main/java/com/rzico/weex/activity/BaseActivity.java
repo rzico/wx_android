@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -79,9 +80,38 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
             window.setStatusBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= 19) {//19表示4.4
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //虚拟键盘也透明
-            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
+    }
+
+    /**
+     * 半透明状态栏
+     */
+    protected void setHalfTransparent() {
+
+        if (Build.VERSION.SDK_INT >= 21) {//21表示5.0
+            View decorView = getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        } else if (Build.VERSION.SDK_INT >= 19) {//19表示4.4
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //虚拟键盘也透明
+            // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+    }
+
+    /**
+     * 如果需要内容紧贴着StatusBar
+     * 应该在对应的xml布局文件中，设置根布局fitsSystemWindows=true。
+     */
+    private View contentViewGroup;
+
+    protected void setFitSystemWindow(boolean fitSystemWindow) {
+        if (contentViewGroup == null) {
+            contentViewGroup = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        }
+        contentViewGroup.setFitsSystemWindows(fitSystemWindow);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +119,18 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
         mContext = BaseActivity.this;
         evevt = this;
         initView();
-//        BarTextColorUtils.StatusBarLightMode(this, 0);
-        initSystemBar();
+//        initSystemBar();
+
+        setStatusBarFullTransparent();
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(R.color.b3a);
+        }
     }
+
+    /**
+     * 这是更改baouu版本之前的顶部样式处理 现在要换成baouu的了
+     *
+     */
     public void initSystemBar(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -105,18 +144,7 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
         tintManager.setStatusBarTintColor(getResources().getColor(R.color.transparent));//设置状态栏颜色
         tintManager.setStatusBarDarkMode(false, this);//false 状态栏字体颜色是白色 true 颜色是黑色
     }
-    protected void setStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
-            View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.wxColor));
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//4.4到5.0
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-        }
-    }
+
     private void initView() {
         WXApplication.getInstance().addActivity(this);
     }
