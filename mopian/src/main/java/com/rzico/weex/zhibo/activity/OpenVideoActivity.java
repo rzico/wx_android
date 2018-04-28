@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -150,10 +153,11 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     private TextView tv_gz;//结束 关注数
     private TextView js_tv;//结束 返回首页
     private TextView gift_count;//礼物数量
+    private TextView tv_nickname;//主播昵称
 
     private TextView room_count;//观看数量
 
-    private Long roomCount = 0L;
+    private Long roomCount = 1L;
     private Long giftCount = 0L;
 
     private boolean isPlay = false;//是否跳过直播页面
@@ -167,7 +171,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     private TXCloudVideoView mCaptureView;//直播页面
     private ImageView img_fengmian;//封面
 
-    private TextView fs_count, gz_count;
+    private TextView fs_count;
 
     private ChatListAdapter chatListAdapter;
 //
@@ -262,6 +266,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         head_icon = (CircleImageView) findViewById(R.id.head_icon);
         room_count = (TextView)findViewById(R.id.room_count);
         gift_count = (TextView)findViewById(R.id.gift_count);
+        tv_nickname = (TextView)findViewById(R.id.tv_nickname);
 
         danmaku_view = (DanmakuView) findViewById(R.id.danmaku_view);
         danmaku_view.enableDanmakuDrawingCache(true);
@@ -292,7 +297,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         danmaku_view.prepare(parser, danmakuContext);
 
         fs_count = (TextView) findViewById(R.id.fs_count);
-        gz_count = (TextView) findViewById(R.id.gz_count);
+//        gz_count = (TextView) findViewById(R.id.gz_count);
 
         chatListAdapter = new ChatListAdapter();
         chat_listview.setAdapter(chatListAdapter);
@@ -366,7 +371,9 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 if(data != null){
                     userBean = data;
                     fs_count.setText(data.getData().getFans() + "");
-                    gz_count.setText(data.getData().getFollow() + "");
+//                    gz_count.setText(data.getData().getFollow() + "");
+                    String nickName =  data.getData().getNickName().length() > 4 ? data.getData().getNickName().substring(0, 4) + "..." : data.getData().getNickName();
+                    tv_nickname.setText(nickName);
                     tv_fs.setText(data.getData().getFans() + "");
                     tv_gz.setText(data.getData().getFollow() + "");
                 }else{
@@ -596,7 +603,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                 if(data != null){
                                     userBean = data;
                                     fs_count.setText(data.getData().getFans() + "");
-                                    gz_count.setText(data.getData().getFollow() + "");
+//                                    gz_count.setText(data.getData().getFollow() + "");
                                     tv_fs.setText(data.getData().getFans() + "");
                                     tv_gz.setText(data.getData().getFollow() + "");
                                 }
@@ -1440,6 +1447,39 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             animSet.playTogether(anim1, anim2);
             animSet.start();
         }
+    }
+
+    private long exitTime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if(!mRecording){
+                finish();
+            }else{
+                exit();
+            }
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    private AlertView exitAlert;
+    public void exit() {
+
+        //房间被删了
+        exitAlert = new AlertView("温馨提示", "是否确定关闭直播间！", "取消", new String[]{"确定"}, null, OpenVideoActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+                if(position == 0){
+                 finish();
+                }else{
+                    if(exitAlert!=null){
+                        exitAlert.dismiss();
+                    }
+                }
+            }
+        });
+        exitAlert.show();
     }
 
 }
