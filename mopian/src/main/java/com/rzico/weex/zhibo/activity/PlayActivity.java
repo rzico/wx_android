@@ -4,8 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -57,6 +60,7 @@ import com.rzico.weex.zhibo.view.HeartLayout;
 import com.rzico.weex.zhibo.view.InputPanel;
 import com.rzico.weex.zhibo.view.MagicTextView;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.taobao.weex.bridge.JSCallback;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMCustomElem;
@@ -131,7 +135,7 @@ public class PlayActivity extends BaseActivity {
     private Timer timer;
     boolean isRealFinish = false;
 
-    public static double cashmoney;//用户金币
+    public static double cashmoney = 0.0;//用户金币
 
 //    private String headimg;//直播封面
 //    private String roomNum;//直播房间号
@@ -687,8 +691,12 @@ public class PlayActivity extends BaseActivity {
     private TextView counttv;
 
     private ImageView iv_lw1,iv_lw2,iv_lw3,iv_lw4,iv_lw5,iv_lw6,iv_lw7,iv_lw8;
+    private TextView tv_1,tv_2,tv_3,tv_4,tv_5,tv_6,tv_7,tv_8;//礼物名称
+    private TextView tv1,tv2,tv3,tv4,tv5,tv6,tv7,tv8;//礼物金币额度
 
     private List<ImageView> lws;
+    private List<TextView> lwNames;
+    private List<TextView> lwMoneys;
     private TextView dashan;
     private TextView jifen_tv;
     private boolean ischeck = false;
@@ -720,6 +728,8 @@ public class PlayActivity extends BaseActivity {
             lw08 = (RelativeLayout) view.findViewById(R.id.lw8);
 
             lws = new ArrayList<>();
+            lwNames = new ArrayList<>();
+            lwMoneys = new ArrayList<>();
             iv_lw1 = (ImageView) view.findViewById(R.id.iv_lw1);
             iv_lw2 = (ImageView) view.findViewById(R.id.iv_lw2);
             iv_lw3 = (ImageView) view.findViewById(R.id.iv_lw3);
@@ -728,6 +738,22 @@ public class PlayActivity extends BaseActivity {
             iv_lw6 = (ImageView) view.findViewById(R.id.iv_lw6);
             iv_lw7 = (ImageView) view.findViewById(R.id.iv_lw7);
             iv_lw8 = (ImageView) view.findViewById(R.id.iv_lw8);
+            tv_1 = (TextView)  view.findViewById(R.id.tv_1);
+            tv_2 = (TextView)  view.findViewById(R.id.tv_2);
+            tv_3 = (TextView)  view.findViewById(R.id.tv_3);
+            tv_4 = (TextView)  view.findViewById(R.id.tv_4);
+            tv_5 = (TextView)  view.findViewById(R.id.tv_5);
+            tv_6 = (TextView)  view.findViewById(R.id.tv_6);
+            tv_7 = (TextView)  view.findViewById(R.id.tv_7);
+            tv_8 = (TextView)  view.findViewById(R.id.tv_8);
+            tv1 = (TextView)  view.findViewById(R.id.tv1);
+            tv2 = (TextView)  view.findViewById(R.id.tv2);
+            tv3 = (TextView)  view.findViewById(R.id.tv3);
+            tv4 = (TextView)  view.findViewById(R.id.tv4);
+            tv5 = (TextView)  view.findViewById(R.id.tv5);
+            tv6 = (TextView)  view.findViewById(R.id.tv6);
+            tv7 = (TextView)  view.findViewById(R.id.tv7);
+            tv8 = (TextView)  view.findViewById(R.id.tv8);
             lws.add(iv_lw1);
             lws.add(iv_lw2);
             lws.add(iv_lw3);
@@ -736,12 +762,47 @@ public class PlayActivity extends BaseActivity {
             lws.add(iv_lw6);
             lws.add(iv_lw7);
             lws.add(iv_lw8);
+            lwNames.add(tv_1);
+            lwNames.add(tv_2);
+            lwNames.add(tv_3);
+            lwNames.add(tv_4);
+            lwNames.add(tv_5);
+            lwNames.add(tv_6);
+            lwNames.add(tv_7);
+            lwNames.add(tv_8);
+            lwMoneys.add(tv1);
+            lwMoneys.add(tv2);
+            lwMoneys.add(tv3);
+            lwMoneys.add(tv4);
+            lwMoneys.add(tv5);
+            lwMoneys.add(tv6);
+            lwMoneys.add(tv7);
+            lwMoneys.add(tv8);
             //设置礼物图片
             List<LiveGiftBean.data.datagif> datagifs = liveGiftBean.getData().getData();
             int len = datagifs.size() > 8 ? 8 : datagifs.size();
             for (int i = 0; i <  len; i++){
 //                Log.e("live", datagifs.get(i).getThumbnail() + "|" + lws.get(i) + "|" + i);
-                Picasso.with(PlayActivity.this).load(datagifs.get(i).getThumbnail()).into(lws.get(i));
+//                Picasso.with(PlayActivity.this).load(datagifs.get(i).getThumbnail()).into(lws.get(i));
+                final int now = i;
+                lwNames.get(i).setText(datagifs.get(i).getName());
+                lwMoneys.get(i).setText(datagifs.get(i).getPrice() + "金币");
+                Picasso.with(PlayActivity.this).load(datagifs.get(i).getThumbnail()).into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        lws.get(now).setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
             }
 
             dashan = (TextView) view.findViewById(R.id.dashan);
