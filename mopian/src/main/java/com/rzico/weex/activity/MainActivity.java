@@ -620,7 +620,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             startActivityForResult(intent, LoginActivity.LOGINCODE);
             return;
         }
-        if(handleCount < (page + 1)) return;
+        if(page != 0 && handleCount < (page + 1)) return;
 //        if (page != 0) {
 //            BarTextColorUtils.StatusBarLightMode(this, false);
 //        } else {

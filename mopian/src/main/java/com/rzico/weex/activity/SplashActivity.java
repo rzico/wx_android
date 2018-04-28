@@ -39,7 +39,6 @@ import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.VersionManagementUtil;
 import com.rzico.weex.utils.task.ZipExtractorTask;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMLogLevel;
@@ -99,16 +98,6 @@ public class SplashActivity extends BaseActivity {
         initIM();
     }
 
-    /**
-     * check permission
-     */
-    private void toCheckPermission() {
-
-        RxPermissions mRxPermissions = new RxPermissions(this);
-        mRxPermissions.request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)//
-                .subscribe();
-
-    }
     /**
      * 清楚所有通知栏通知
      */

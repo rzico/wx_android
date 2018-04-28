@@ -10,7 +10,7 @@ android {
 //        applicationId "com.rzico.weex"
         applicationId "com.yixiang.mopian"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 99
         versionName "5.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -157,8 +157,4 @@ dependencies {
     //    弹幕
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
     compile project(path: ':SwipeBackLayoutLibrary')
-    /**
-     *             permission Rx
-     */
-    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
 }
