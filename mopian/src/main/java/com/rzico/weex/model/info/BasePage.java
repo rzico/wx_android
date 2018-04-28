@@ -8,7 +8,7 @@ import java.util.List;
  *
  */
 
-public class BasePage<T> extends BaseEntity {
+public class BasePage extends BaseEntity {
 
     private data data;
 
@@ -33,7 +33,7 @@ public class BasePage<T> extends BaseEntity {
         private Long recordsTotal;
         private Long recordsFiltered;
 
-        private List<T> data;
+        private List<NoticeInfo> data;
 
         public Long getDraw() {
             return draw;
@@ -75,11 +75,11 @@ public class BasePage<T> extends BaseEntity {
             this.recordsFiltered = recordsFiltered;
         }
 
-        public List<T> getData() {
+        public List<NoticeInfo> getData() {
             return data;
         }
 
-        public void setData(List<T> data) {
+        public void setData(List<NoticeInfo> data) {
             this.data = data;
         }
     }

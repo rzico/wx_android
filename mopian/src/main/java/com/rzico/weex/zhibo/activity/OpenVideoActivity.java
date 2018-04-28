@@ -86,6 +86,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -502,7 +503,6 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             }
         });
         //开始直播
-
         zhibo_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -524,7 +524,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                             new XRequest(OpenVideoActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                                 @Override
                                 public void onSuccess(BaseActivity activity, String result, String type) {
-                                    BasePage<NoticeInfo> notiveInfo = new Gson().fromJson(result, new TypeToken<BasePage<NoticeInfo>>(){}.getType());
+                                    BasePage notiveInfo = new Gson().fromJson(result, BasePage.class);
 //                               NoticeBean data = new Gson().fromJson(result, NoticeBean.class);
 //                               if(data.getType().equals("success")){
 //                                   BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
@@ -537,9 +537,10 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         int len = notiveInfo.getData().getData().size();
                                         List<NoticeInfo> noticeInfos = notiveInfo.getData().getData();
                                         for (int i = 0 ; i < len ; i++){
-                                            if(noticeInfos.get(i).getType().equals("live")){//如果是系统公告
+                                            NoticeInfo data = noticeInfos.get(i);
+                                            if(data.getType().equals("live")){//如果是系统公告
                                                 BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
-                                                userInfo.text = "系统消息：" + noticeInfos.get(i).getTitle();
+                                                userInfo.text = "系统消息：" + data.getTitle();
                                                 userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
                                                 chatListAdapter.addMessage(userInfo);
                                                 chatListAdapter.notifyDataSetChanged();
@@ -659,6 +660,10 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 mBeautyPannelView.setVisibility(mBeautyPannelView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
             }
         });
+    }
+    public static <T> List<T> fromJson2Array(String json) throws Exception{
+        List<T> list  = new Gson().fromJson(json,new TypeToken<List<T>>(){}.getType());
+        return list;
     }
 
     /**

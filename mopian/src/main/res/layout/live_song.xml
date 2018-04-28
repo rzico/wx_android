@@ -85,7 +85,7 @@
                             android:id="@+id/tv_1"
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
-                            android:text="1积分"
+                            android:text="1金币"
                             android:textColor="@color/b99"
                             android:textSize="12sp" />
                     </RelativeLayout>
@@ -137,7 +137,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="3积分"
+                            android:text="3金币"
                             android:textColor="@color/b99"
                             android:textSize="12sp"
                             android:id="@+id/tv_2"
@@ -192,7 +192,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="5积分"
+                            android:text="5金币"
                             android:textColor="@color/b99"
                             android:id="@+id/tv3"
                             android:layout_marginBottom="8dp"
@@ -245,7 +245,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="10积分"
+                            android:text="10金币"
                             android:id="@+id/tv4"
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
@@ -313,7 +313,7 @@
                             android:layout_marginTop="1dp"
                             android:gravity="center"
                             android:id="@+id/tv5"
-                            android:text="20积分"
+                            android:text="20金币"
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="8dp"
                             android:textColor="@color/b99"
@@ -367,7 +367,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="30积分"
+                            android:text="30金币"
                             android:id="@+id/tv6"
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
@@ -428,7 +428,7 @@
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
                             android:gravity="center"
-                            android:text="50积分"
+                            android:text="50金币"
                             android:textColor="@color/b99"
                             android:textSize="12sp" />
                     </RelativeLayout>
@@ -484,7 +484,7 @@
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
                             android:gravity="center"
-                            android:text="100积分"
+                            android:text="100金币"
                             android:textColor="@color/b99"
                             android:textSize="12sp" />
                     </RelativeLayout>
@@ -510,7 +510,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="14dp"
                 android:gravity="center"
-                android:text="当前积分："
+                android:text="当前金币："
                 android:textColor="@color/tv_back"
                 android:textSize="13sp" />
 

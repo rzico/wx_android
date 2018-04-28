@@ -131,7 +131,7 @@ public class PlayActivity extends BaseActivity {
     private Timer timer;
     boolean isRealFinish = false;
 
-    public static double cashmoney;//用户积分
+    public static double cashmoney;//用户金币
 
 //    private String headimg;//直播封面
 //    private String roomNum;//直播房间号
@@ -572,7 +572,7 @@ public class PlayActivity extends BaseActivity {
                                 SendGift data = new Gson().fromJson(result, SendGift.class);
                                 if(data.getType().equals("success")){
 
-                                    //发送弹幕就扣除积分
+                                    //发送弹幕就扣除金币
                                     cashmoney = cashmoney - 1;
                                     jifen_tv.setText(cashmoney + "");
                                     liveRoom.sendGroupBarrageMessage(username, userpic, text, new BaseRoom.MessageCallback() {
@@ -588,7 +588,7 @@ public class PlayActivity extends BaseActivity {
                                         }
                                     });
                                 }else{
-                                    showToast("您的积分不足！弹幕发送失败！");
+                                    showToast("您的金币余额不足！弹幕发送失败！");
                                 }
 
                             }
@@ -959,7 +959,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的积分不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 2) {
                             if (cashmoney >= 2 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -969,7 +969,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的积分不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 3) {
                             if (cashmoney >= 5 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -979,7 +979,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的积分不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 4) {
                             if (cashmoney >= 10 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -989,7 +989,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的积分不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 5) {
                             if (cashmoney >= 20 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -999,7 +999,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的积分不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 6) {
                             if (cashmoney >= 30 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1009,7 +1009,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的积分不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 7) {
                             if (cashmoney >= 50 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1019,7 +1019,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的积分不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 8) {
                             if (cashmoney >= 100 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1029,7 +1029,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的积分不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         }
                     }
                 } else {
