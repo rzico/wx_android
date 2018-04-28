@@ -273,7 +273,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                 boolean canHerf = true;
                 System.out.print(url);
 
-                if(url.startsWith("https://weex.yzwap.com/home")){
+                if(url.length()<35 && url.contains("/home")){
                     //关闭当前页面
                     finish();
                     canHerf = false;
