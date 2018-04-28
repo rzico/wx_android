@@ -43,6 +43,8 @@ import com.google.gson.reflect.TypeToken;
 import com.rzico.weex.R;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.model.event.MessageBus;
+import com.rzico.weex.model.info.BasePage;
+import com.rzico.weex.model.info.NoticeInfo;
 import com.rzico.weex.model.zhibo.LiveRoomBean;
 import com.rzico.weex.model.zhibo.UserBean;
 import com.rzico.weex.module.AlbumModule;
@@ -522,6 +524,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                             new XRequest(OpenVideoActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                                 @Override
                                 public void onSuccess(BaseActivity activity, String result, String type) {
+                                    BasePage<NoticeInfo> notiveInfo = new Gson().fromJson(result, new TypeToken<BasePage<NoticeInfo>>(){}.getType());
 //                               NoticeBean data = new Gson().fromJson(result, NoticeBean.class);
 //                               if(data.getType().equals("success")){
 //                                   BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
@@ -530,11 +533,26 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
 //                                  chatListAdapter.addMessage(userInfo);
 //                                  chatListAdapter.notifyDataSetChanged();
 //                              }
-                                    BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
-                                    userInfo.text = "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
-                                    userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
-                                    chatListAdapter.addMessage(userInfo);
-                                    chatListAdapter.notifyDataSetChanged();
+                                    if(notiveInfo != null && notiveInfo.getType().equals("success") && notiveInfo.getData() != null && notiveInfo.getData().getData() != null && notiveInfo.getData().getData().size() > 0){
+                                        int len = notiveInfo.getData().getData().size();
+                                        List<NoticeInfo> noticeInfos = notiveInfo.getData().getData();
+                                        for (int i = 0 ; i < len ; i++){
+                                            if(noticeInfos.get(i).getType().equals("live")){//如果是系统公告
+                                                BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+                                                userInfo.text = "系统消息：" + noticeInfos.get(i).getTitle();
+                                                userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+                                                chatListAdapter.addMessage(userInfo);
+                                                chatListAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    }else{
+                                        //如果服务器返回错误
+                                        BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+                                        userInfo.text = "系统消息：" + "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
+                                        userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+                                        chatListAdapter.addMessage(userInfo);
+                                        chatListAdapter.notifyDataSetChanged();
+                                    }
                                 }
 
                                 @Override
