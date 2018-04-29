@@ -526,7 +526,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                             new XRequest(OpenVideoActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                                 @Override
                                 public void onSuccess(BaseActivity activity, String result, String type) {
-                                    BasePage<NoticeInfo> notiveInfo = new Gson().fromJson(result, new TypeToken<BasePage<NoticeInfo>>(){}.getType());
+                                    BasePage notiveInfo = new Gson().fromJson(result, BasePage.class);
 //
                                     if(notiveInfo != null && notiveInfo.getType().equals("success") && notiveInfo.getData() != null && notiveInfo.getData().getData() != null && notiveInfo.getData().getData().size() > 0){
                                         int len = notiveInfo.getData().getData().size();
