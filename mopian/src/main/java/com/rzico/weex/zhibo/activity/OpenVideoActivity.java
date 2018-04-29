@@ -45,6 +45,7 @@ import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.BasePage;
 import com.rzico.weex.model.info.NoticeInfo;
+import com.rzico.weex.model.zhibo.LiveGiftBean;
 import com.rzico.weex.model.zhibo.LiveRoomBean;
 import com.rzico.weex.model.zhibo.UserBean;
 import com.rzico.weex.module.AlbumModule;
@@ -185,6 +186,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     private Handler mHandler;
     private String frontcover = "";//封面地址
 
+    private LiveGiftBean liveGiftBean;
 
     /**
      * 刷礼物
@@ -214,8 +216,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
      * 数据相关
      */
     private List<View> giftViewCollection = new ArrayList<View>();
-    private int[] liwu_gif = {R.raw.gg1,R.raw.gg2,R.raw.gg3,R.raw.gg4,R.raw.gg5,R.raw.gg6,R.raw.gg7,R.raw.gg8};
-    private int[] liwu_money = {1, 3, 5, 10, 20, 30, 50, 100};
+//    private int[] liwu_gif = {R.raw.gg1,R.raw.gg2,R.raw.gg3,R.raw.gg4,R.raw.gg5,R.raw.gg6,R.raw.gg7,R.raw.gg8};
+//    private int[] liwu_money = {1, 3, 5, 10, 20, 30, 50, 100};
 
     private String key;
 
@@ -525,14 +527,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                 @Override
                                 public void onSuccess(BaseActivity activity, String result, String type) {
                                     BasePage<NoticeInfo> notiveInfo = new Gson().fromJson(result, new TypeToken<BasePage<NoticeInfo>>(){}.getType());
-//                               NoticeBean data = new Gson().fromJson(result, NoticeBean.class);
-//                               if(data.getType().equals("success")){
-//                                   BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
-//                                    userInfo.text = data.getData().getTitle();
-//                                   userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
-//                                  chatListAdapter.addMessage(userInfo);
-//                                  chatListAdapter.notifyDataSetChanged();
-//                              }
+//
                                     if(notiveInfo != null && notiveInfo.getType().equals("success") && notiveInfo.getData() != null && notiveInfo.getData().getData() != null && notiveInfo.getData().getData().size() > 0){
                                         int len = notiveInfo.getData().getData().size();
                                         List<NoticeInfo> noticeInfos = notiveInfo.getData().getData();
@@ -723,24 +718,32 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         chatListAdapter.notifyDataSetChanged();
 
                                         //播放动画
-                                        int gifType = 0;
-                                        //播放GIF动画
-                                        if(text.contains("送了【666】")){
-                                            gifType = 1;
-                                        }else if(text.contains("送了【棒棒糖】")){
-                                            gifType = 2;
-                                        }else if(text.contains("送了【爱心】")){
-                                            gifType = 3;
-                                        }else if(text.contains("送了【玫瑰】")){
-                                            gifType = 4;
-                                        }else if(text.contains("送了【么么哒】")){
-                                            gifType = 5;
-                                        }else if(text.contains("送了【萌萌哒】")){
-                                            gifType = 6;
-                                        }else if(text.contains("送了【甜甜圈】")){
-                                            gifType = 7;
-                                        }else if(text.contains("送了【女神称号】")){
-                                            gifType = 8;
+//                                        int gifType = 0;
+//                                        //播放GIF动画
+//                                        if(text.contains("送了【666】")){
+//                                            gifType = 1;
+//                                        }else if(text.contains("送了【棒棒糖】")){
+//                                            gifType = 2;
+//                                        }else if(text.contains("送了【爱心】")){
+//                                            gifType = 3;
+//                                        }else if(text.contains("送了【玫瑰】")){
+//                                            gifType = 4;
+//                                        }else if(text.contains("送了【么么哒】")){
+//                                            gifType = 5;
+//                                        }else if(text.contains("送了【萌萌哒】")){
+//                                            gifType = 6;
+//                                        }else if(text.contains("送了【甜甜圈】")){
+//                                            gifType = 7;
+//                                        }else if(text.contains("送了【女神称号】")){
+//                                            gifType = 8;
+//                                        }
+
+                                        List<LiveGiftBean.data.datagif> gifts = liveGiftBean.getData().getData();
+                                        LiveGiftBean.data.datagif nowGif = null;
+                                        for(LiveGiftBean.data.datagif item: gifts){
+                                            if(text.contains(item.getName())){
+                                                nowGif = item;
+                                            }
                                         }
                                         //这里需要请求接口赠送礼物 请求成功了以后 开始动画
 
@@ -748,17 +751,19 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         Message message2 = mHandler.obtainMessage();
                                         message2.what = INVISIBLE;
                                         mHandler.sendMessageDelayed(message2, 4000);
-                                        showGift(gifType + "", gifType, userInfo.headPic, userInfo.nickName);
-                                        giftCount = giftCount + liwu_money[gifType - 1 < 0 ? 0 : gifType - 1];
+                                        showGift(nowGif.getId() + "", nowGif, userInfo.headPic, userInfo.nickName);
+                                        giftCount = giftCount + nowGif.getPrice();
                                         gift_count.setText("印票" + giftCount);
                                         //播放礼物动画
                                         if (bigivgift.getVisibility() == VISIBLE) {
                                             bigivgift.setPaused(true);
-                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+//                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+                                            bigivgift.setMovieNet(nowGif.getAnimation());
                                             bigivgift.setPaused(false);
                                         } else {
                                             bigivgift.setVisibility(VISIBLE);
-                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+                                            bigivgift.setMovieNet(nowGif.getAnimation());
+//                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
                                             bigivgift.setPaused(false);
                                         }
                                     }
@@ -1004,17 +1009,32 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         }else {
             frontcover = getIntent().getStringExtra("frontcover");
         }
+
+        //        获取礼物信息
+        new XRequest(OpenVideoActivity.this, "/weex/live/gift/list.jhtml", XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+            @Override
+            public void onSuccess(BaseActivity activity, String result, String type) {
+                LiveGiftBean data = new Gson().fromJson(result, LiveGiftBean.class);
+                liveGiftBean = data;
+            }
+
+            @Override
+            public void onFail(BaseActivity activity, String cacheData, int code) {
+                showToast("获取礼物信息失败");
+                finish();
+            }
+        }).execute();
     }
     /**
      * 显示礼物的方法
      */
-    HashMap<String, Integer> map = new HashMap<String, Integer>();
+    HashMap<String, Long> map = new HashMap<String, Long>();
 
-    private void showGift(String gifid, int i, String head, String usernmae) {
+    private void showGift(String gifid, LiveGiftBean.data.datagif datagif, String head, String usernmae) {
         View giftView = llgiftcontent.findViewWithTag(usernmae);
 
         if (giftView == null) {/*该用户不在礼物显示列表*/
-            map.put("username", i);
+            map.put("username", datagif.getId());
 
             if (llgiftcontent.getChildCount() > 3) {/*如果正在显示的礼物的个数超过两个，那么就移除最后一次更新时间比较长的*/
                 View giftView1 = llgiftcontent.getChildAt(0);
@@ -1062,39 +1082,41 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             GifView gifView = (GifView) giftView.findViewById(R.id.ivgift);
             // 设置背景gif图片资源
             String sendText = "";
-            if (i == 1) {
-                gifView.setMovieResource(R.raw.gg1);
-//                giftype.setText("送了【666】");
-                sendText = "送了【666】";
-            } else if (i == 2) {
-                gifView.setMovieResource(R.raw.gg2);
-//                giftype.setText("送了【棒棒糖】");
-                sendText = "送了【棒棒糖】";
-            } else if (i == 3) {
-                gifView.setMovieResource(R.raw.gg3);
-//                giftype.setText("送了【爱心】");
-                sendText = "送了【爱心】";
-            } else if (i == 4) {
-                gifView.setMovieResource(R.raw.gg4);
-//                giftype.setText("送了【玫瑰】");
-                sendText = "送了【玫瑰】";
-            } else if (i == 5) {
-                gifView.setMovieResource(R.raw.gg5);
-//                giftype.setText("送了【么么哒】");
-                sendText = "送了【么么哒】";
-            } else if (i == 6) {
-                gifView.setMovieResource(R.raw.gg6);
-//                giftype.setText("送了【萌萌哒】");
-                sendText = "送了【萌萌哒】";
-            } else if (i == 7) {
-                gifView.setMovieResource(R.raw.gg7);
-//                giftype.setText("送了【甜甜圈】");
-                sendText = "送了【甜甜圈】";
-            } else if (i == 8) {
-                gifView.setMovieResource(R.raw.gg8);
-//                giftype.setText("送了【女神称号】");
-                sendText = "送了【女神称号】";
-            }
+            sendText = "送了【" + datagif.getName() +"】";
+            gifView.setMovieNet(datagif.getAnimation());
+//            if (i == 1) {
+//                gifView.setMovieResource(R.raw.gg1);
+////                giftype.setText("送了【666】");
+//                sendText = "送了【666】";
+//            } else if (i == 2) {
+//                gifView.setMovieResource(R.raw.gg2);
+////                giftype.setText("送了【棒棒糖】");
+//                sendText = "送了【棒棒糖】";
+//            } else if (i == 3) {
+//                gifView.setMovieResource(R.raw.gg3);
+////                giftype.setText("送了【爱心】");
+//                sendText = "送了【爱心】";
+//            } else if (i == 4) {
+//                gifView.setMovieResource(R.raw.gg4);
+////                giftype.setText("送了【玫瑰】");
+//                sendText = "送了【玫瑰】";
+//            } else if (i == 5) {
+//                gifView.setMovieResource(R.raw.gg5);
+////                giftype.setText("送了【么么哒】");
+//                sendText = "送了【么么哒】";
+//            } else if (i == 6) {
+//                gifView.setMovieResource(R.raw.gg6);
+////                giftype.setText("送了【萌萌哒】");
+//                sendText = "送了【萌萌哒】";
+//            } else if (i == 7) {
+//                gifView.setMovieResource(R.raw.gg7);
+////                giftype.setText("送了【甜甜圈】");
+//                sendText = "送了【甜甜圈】";
+//            } else if (i == 8) {
+//                gifView.setMovieResource(R.raw.gg8);
+////                giftype.setText("送了【女神称号】");
+//                sendText = "送了【女神称号】";
+//            }
             giftype.setText(sendText);
 
             giftNum.setText("x1");/*设置礼物数量*/
@@ -1119,7 +1141,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 }
             });
         } else {/*该用户在礼物显示列表*/
-            if (map.get("username") == i) {
+            if (map.get("username") == datagif.getId()) {
                 CircleImageView crvheadimage = (CircleImageView) giftView.findViewById(R.id.crvheadimage);/*找到头像控件*/
                 MagicTextView giftNum = (MagicTextView) giftView.findViewById(R.id.giftNum);/*找到数量控件*/
                 int showNum = (Integer) giftNum.getTag() + 1;
@@ -1129,13 +1151,13 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 giftNumAnim.start(giftNum);
             } else {
                 int index = 0;
-                map.put("username", i);
+                map.put("username", datagif.getId());
                 for (int k = 0; k < llgiftcontent.getChildCount(); k++) {
                     if (llgiftcontent.getChildAt(k) == giftView)
                         index = k;
                 }
                 giftView = null;
-                removeGiftView(index, gifid, i, head, usernmae);
+                removeGiftView(index, gifid, datagif, head, usernmae);
             }
         }
     }
@@ -1171,11 +1193,11 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     /**
      * 删除礼物view2
      */
-    private void removeGiftView(final int index, final String gifid, final int i, final String headimg, final String usernmae) {
+    private void removeGiftView(final int index, final String gifid, final LiveGiftBean.data.datagif datagif, final String headimg, final String usernmae) {
         final View removeView = llgiftcontent.getChildAt(index);
         final GifView gifView = (GifView) removeView.findViewById(R.id.ivgift);
         llgiftcontent.removeViewAt(index);
-        showGift(gifid, i, headimg, usernmae);
+        showGift(gifid, datagif, headimg, usernmae);
         outAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
