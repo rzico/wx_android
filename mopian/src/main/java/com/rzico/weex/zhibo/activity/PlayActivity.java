@@ -179,7 +179,7 @@ public class PlayActivity extends BaseActivity {
     private SlideSwitch ssBarrage;//是否显示弹幕
     private boolean isBarrage = false;
 
-//    用户信息
+    //    用户信息
     private String username = "";
     private String userpic = "";
     //weex回调的 key
@@ -362,24 +362,24 @@ public class PlayActivity extends BaseActivity {
             @Override
             public void onFail(BaseActivity activity, String cacheData, int code) {
                 showToast("获取用户信息失败");
-                 finish();
+                finish();
             }
         }).execute();
 
 //        获取礼物信息
-            new XRequest(PlayActivity.this, "/weex/live/gift/list.jhtml", XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
-                @Override
-                public void onSuccess(BaseActivity activity, String result, String type) {
-                    LiveGiftBean data = new Gson().fromJson(result, LiveGiftBean.class);
-                    liveGiftBean = data;
-                }
+        new XRequest(PlayActivity.this, "/weex/live/gift/list.jhtml", XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+            @Override
+            public void onSuccess(BaseActivity activity, String result, String type) {
+                LiveGiftBean data = new Gson().fromJson(result, LiveGiftBean.class);
+                liveGiftBean = data;
+            }
 
-                @Override
-                public void onFail(BaseActivity activity, String cacheData, int code) {
-                    showToast("获取礼物信息失败");
-                    finish();
-                }
-            }).execute();
+            @Override
+            public void onFail(BaseActivity activity, String cacheData, int code) {
+                showToast("获取礼物信息失败");
+                finish();
+            }
+        }).execute();
 
     }
 
@@ -493,18 +493,18 @@ public class PlayActivity extends BaseActivity {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             BaseEntity data = new Gson().fromJson(result, BaseEntity.class);
-                                if(data!=null && data.getType().equals("success")){
-                                    //取消关注成功
-                                    liveRoom.getLiveRoomBean().getData().setFollow(false);
-                                    showToast("取消关注成功");
-                                    liveRoom.sendGroupFollowMessage(username, userpic, BaseRoom.UNFOLLOW, null);
-                                    setGuanzu(false);
-                                }
+                            if(data!=null && data.getType().equals("success")){
+                                //取消关注成功
+                                liveRoom.getLiveRoomBean().getData().setFollow(false);
+                                showToast("取消关注成功");
+                                liveRoom.sendGroupFollowMessage(username, userpic, BaseRoom.UNFOLLOW, null);
+                                setGuanzu(false);
+                            }
                         }
 
                         @Override
                         public void onFail(BaseActivity activity, String cacheData, int code) {
-                                showToast("取消关注失败");
+                            showToast("取消关注失败");
                         }
                     }).execute();
                 }else{
@@ -1153,17 +1153,6 @@ public class PlayActivity extends BaseActivity {
                                 }
                             }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomGifMsg.name())){
 
-//                                ++i;
-//                                BaseRoom.UserInfo userInfo = new Gson().fromJson(new Gson().toJson(commonJson.data), BaseRoom.UserInfo.class);
-//                                if (userInfo != null && i < message.getElementCount()) {
-//                                    TIMElem nextElement = message.getElement(i);
-//                                    TIMTextElem textElem = (TIMTextElem) nextElement;
-//                                    String text = textElem.getText();//信息
-//                                    userInfo.text = text;
-//
-//                                    chatListAdapter.addMessage(userInfo);
-//                                    chatListAdapter.notifyDataSetChanged();
-//                                }
 
                                 ++i;
                                 BaseRoom.UserInfo userInfo = new Gson().fromJson(new Gson().toJson(commonJson.data), BaseRoom.UserInfo.class);
@@ -1176,42 +1165,53 @@ public class PlayActivity extends BaseActivity {
                                     chatListAdapter.notifyDataSetChanged();
 
                                     //播放动画
-                                    int gifType = 0;
-                                    //播放GIF动画
-                                    if(text.contains("送了【666】")){
-                                        gifType = 1;
-                                    }else if(text.contains("送了【棒棒糖】")){
-                                        gifType = 2;
-                                    }else if(text.contains("送了【爱心】")){
-                                        gifType = 3;
-                                    }else if(text.contains("送了【玫瑰】")){
-                                        gifType = 4;
-                                    }else if(text.contains("送了【么么哒】")){
-                                        gifType = 5;
-                                    }else if(text.contains("送了【萌萌哒】")){
-                                        gifType = 6;
-                                    }else if(text.contains("送了【甜甜圈】")){
-                                        gifType = 7;
-                                    }else if(text.contains("送了【女神称号】")){
-                                        gifType = 8;
+//                                    int gifType = 0;
+//                                    //播放GIF动画
+//                                    if(text.contains("送了【666】")){
+//                                        gifType = 1;
+//                                    }else if(text.contains("送了【棒棒糖】")){
+//                                        gifType = 2;
+//                                    }else if(text.contains("送了【爱心】")){
+//                                        gifType = 3;
+//                                    }else if(text.contains("送了【玫瑰】")){
+//                                        gifType = 4;
+//                                    }else if(text.contains("送了【么么哒】")){
+//                                        gifType = 5;
+//                                    }else if(text.contains("送了【萌萌哒】")){
+//                                        gifType = 6;
+//                                    }else if(text.contains("送了【甜甜圈】")){
+//                                        gifType = 7;
+//                                    }else if(text.contains("送了【女神称号】")){
+//                                        gifType = 8;
+//                                    }
+                                    List<LiveGiftBean.data.datagif> gifts = liveGiftBean.getData().getData();
+                                    LiveGiftBean.data.datagif nowGif = null;
+                                    for(LiveGiftBean.data.datagif item: gifts){
+                                        if(text.contains(item.getName())){
+                                            nowGif = item;
+                                        }
                                     }
+
                                     //这里需要请求接口赠送礼物 请求成功了以后 开始动画
 
                                     //4秒后删除动画
                                     Message message2 = mHandler.obtainMessage();
                                     message2.what = INVISIBLE;
                                     mHandler.sendMessageDelayed(message2, 4000);
-                                    showGift(gifType + "", gifType, userInfo.headPic, userInfo.nickName);
-                                    giftCount = giftCount + liwu_money[gifType - 1 < 0 ? 0 : gifType - 1];
+                                    showGift(nowGif.getId() + "", nowGif, userInfo.headPic, userInfo.nickName);
+//                                    giftCount = giftCount + liwu_money[gifType - 1 < 0 ? 0 : gifType - 1];
+                                    giftCount = giftCount + nowGif.getPrice();
                                     gift_count.setText("印票" + giftCount);
                                     //播放礼物动画
                                     if (bigivgift.getVisibility() == VISIBLE) {
                                         bigivgift.setPaused(true);
-                                        bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+//                                        bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+                                        bigivgift.setMovieNet(nowGif.getAnimation());
                                         bigivgift.setPaused(false);
                                     } else {
                                         bigivgift.setVisibility(VISIBLE);
-                                        bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+//                                        bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+                                        bigivgift.setMovieNet(nowGif.getAnimation());
                                         bigivgift.setPaused(false);
                                     }
                                 }
@@ -1302,30 +1302,30 @@ public class PlayActivity extends BaseActivity {
 
 
 
-    private int[] liwu_gif = {R.raw.gg1,R.raw.gg2,R.raw.gg3,R.raw.gg4,R.raw.gg5,R.raw.gg6,R.raw.gg7,R.raw.gg8};
-    private int[] liwu_money = {1, 3, 5, 10, 20, 30, 50, 100};
-    public void sendgif(){
-
-        //这里需要请求接口赠送礼物 请求成功了以后 开始动画
-
-        //4秒后删除动画
-        Message message = mHandler.obtainMessage();
-        message.what = INVISIBLE;
-        mHandler.sendMessageDelayed(message, 4000);
-        showGift(gifid + "", gifid, userpic, username);
-
-        //播放礼物动画
-        if (bigivgift.getVisibility() == VISIBLE) {
-            bigivgift.setPaused(true);
-            bigivgift.setMovieResource(liwu_gif[gifid - 1]);
-            bigivgift.setPaused(false);
-        } else {
-            bigivgift.setVisibility(VISIBLE);
-            bigivgift.setMovieResource(liwu_gif[gifid - 1]);
-            bigivgift.setPaused(false);
-        }
-
-    }
+//    private int[] liwu_gif = {R.raw.gg1,R.raw.gg2,R.raw.gg3,R.raw.gg4,R.raw.gg5,R.raw.gg6,R.raw.gg7,R.raw.gg8};
+//    private int[] liwu_money = {1, 3, 5, 10, 20, 30, 50, 100};
+//    public void sendgif(){
+//
+//        //这里需要请求接口赠送礼物 请求成功了以后 开始动画
+//
+//        //4秒后删除动画
+//        Message message = mHandler.obtainMessage();
+//        message.what = INVISIBLE;
+//        mHandler.sendMessageDelayed(message, 4000);
+//        showGift(gifid + "", gifid, userpic, username);
+//
+//        //播放礼物动画
+//        if (bigivgift.getVisibility() == VISIBLE) {
+//            bigivgift.setPaused(true);
+//            bigivgift.setMovieResource(liwu_gif[gifid - 1]);
+//            bigivgift.setPaused(false);
+//        } else {
+//            bigivgift.setVisibility(VISIBLE);
+//            bigivgift.setMovieResource(liwu_gif[gifid - 1]);
+//            bigivgift.setPaused(false);
+//        }
+//
+//    }
 
     public void onClick(View view){
         switch (view.getId()){
@@ -1339,14 +1339,14 @@ public class PlayActivity extends BaseActivity {
     /**
      * 显示礼物的方法
      */
-    HashMap<String, Integer> map = new HashMap<String, Integer>();
+    HashMap<String, Long> map = new HashMap<String, Long>();
 
-    private void showGift(String gifid, int i, String head, String usernmae) {
+    private void showGift(String gifid,LiveGiftBean.data.datagif datagif, String head, String usernmae) {
         View giftView = llgiftcontent.findViewWithTag(usernmae);
 
         String sendText = "";
         if (giftView == null) {/*该用户不在礼物显示列表*/
-            map.put("username", i);
+            map.put("username", datagif.getId());
 
             if (llgiftcontent.getChildCount() > 3) {/*如果正在显示的礼物的个数超过两个，那么就移除最后一次更新时间比较长的*/
                 View giftView1 = llgiftcontent.getChildAt(0);
@@ -1392,45 +1392,12 @@ public class PlayActivity extends BaseActivity {
 
             final MagicTextView giftNum = (MagicTextView) giftView.findViewById(R.id.giftNum);/*找到数量控件*/
             GifView gifView = (GifView) giftView.findViewById(R.id.ivgift);
-            List<LiveGiftBean.data.datagif> giftdatas = liveGiftBean.getData().getData();
-            int len = giftdatas.size();
-            i = i > len ? len : i;
-            gifView.setMovieNet(giftdatas.get(i > 0 ? i - 1 : 0).getAnimation());
-            sendText = "送了【"+ giftdatas.get(i > 0 ? i - 1 : 0).getName() +"】";
-            // 设置背景gif图片资源
-//            if (i == 1) {
-//                gifView.setMovieResource(R.raw.gg1);
-////                giftype.setText("送了【666】");
-//                sendText = "送了【666】";
-//            } else if (i == 2) {
-//                gifView.setMovieResource(R.raw.gg2);
-////                giftype.setText("送了【棒棒糖】");
-//                sendText = "送了【棒棒糖】";
-//            } else if (i == 3) {
-//                gifView.setMovieResource(R.raw.gg3);
-////                giftype.setText("送了【爱心】");
-//                sendText = "送了【爱心】";
-//            } else if (i == 4) {
-//                gifView.setMovieResource(R.raw.gg4);
-////                giftype.setText("送了【玫瑰】");
-//                sendText = "送了【玫瑰】";
-//            } else if (i == 5) {
-//                gifView.setMovieResource(R.raw.gg5);
-////                giftype.setText("送了【么么哒】");
-//                sendText = "送了【么么哒】";
-//            } else if (i == 6) {
-//                gifView.setMovieResource(R.raw.gg6);
-////                giftype.setText("送了【萌萌哒】");
-//                sendText = "送了【萌萌哒】";
-//            } else if (i == 7) {
-//                gifView.setMovieResource(R.raw.gg7);
-////                giftype.setText("送了【甜甜圈】");
-//                sendText = "送了【甜甜圈】";
-//            } else if (i == 8) {
-//                gifView.setMovieResource(R.raw.gg8);
-////                giftype.setText("送了【女神称号】");
-//                sendText = "送了【女神称号】";
-//            }
+//            List<LiveGiftBean.data.datagif> giftdatas = liveGiftBean.getData().getData();
+//            int len = giftdatas.size();
+//            i = i > len ? len : i;
+            gifView.setMovieNet(datagif.getAnimation());
+            sendText = "送了【"+ datagif.getName() +"】";
+
             giftype.setText(sendText);
             giftNum.setText("x1");/*设置礼物数量*/
             crvheadimage.setTag(System.currentTimeMillis());/*设置时间标记*/
@@ -1454,7 +1421,7 @@ public class PlayActivity extends BaseActivity {
                 }
             });
         } else {/*该用户在礼物显示列表*/
-            if (map.get("username") == i) {
+            if (map.get("username") == datagif.getId()) {
                 CircleImageView crvheadimage = (CircleImageView) giftView.findViewById(R.id.crvheadimage);/*找到头像控件*/
                 MagicTextView giftNum = (MagicTextView) giftView.findViewById(R.id.giftNum);/*找到数量控件*/
                 int showNum = (Integer) giftNum.getTag() + 1;
@@ -1475,13 +1442,13 @@ public class PlayActivity extends BaseActivity {
 //                });
             } else {
                 int index = 0;
-                map.put("username", i);
+                map.put("username", datagif.getId());
                 for (int k = 0; k < llgiftcontent.getChildCount(); k++) {
                     if (llgiftcontent.getChildAt(k) == giftView)
                         index = k;
                 }
                 giftView = null;
-                removeGiftView(index, gifid, i, head, usernmae);
+                removeGiftView(index, gifid, datagif, head, usernmae);
             }
         }
     }
@@ -1600,11 +1567,11 @@ public class PlayActivity extends BaseActivity {
     /**
      * 删除礼物view2
      */
-    private void removeGiftView(final int index, final String gifid, final int i, final String headimg, final String usernmae) {
+    private void removeGiftView(final int index, final String gifid, final LiveGiftBean.data.datagif datagif, final String headimg, final String usernmae) {
         final View removeView = llgiftcontent.getChildAt(index);
         final GifView gifView = (GifView) removeView.findViewById(R.id.ivgift);
         llgiftcontent.removeViewAt(index);
-        showGift(gifid, i, headimg, usernmae);
+        showGift(gifid, datagif, headimg, usernmae);
         outAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
