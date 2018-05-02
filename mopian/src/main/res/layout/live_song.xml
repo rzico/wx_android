@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="95dp"
                 android:layout_gravity="center"
-                android:background="@color/white"
+                android:background="#30000000"
                 android:gravity="center">
 
                 <LinearLayout
@@ -62,8 +62,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
 
                         </LinearLayout>
 
@@ -118,8 +118,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height"/>
                         </LinearLayout>
 
                         <TextView
@@ -174,8 +174,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
                         <TextView
                             android:id="@+id/tv_3"
@@ -228,8 +228,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
                         <TextView
                             android:id="@+id/tv_4"
@@ -264,7 +264,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="95dp"
-                android:background="@color/white">
+                android:background="#30000000">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -286,13 +286,13 @@
                             android:id="@+id/img_5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="23dp"
+                            android:layout_marginTop="8dp"
                             android:gravity="center">
 
                             <ImageView
                                 android:id="@+id/iv_lw5"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
 
                         <TextView
@@ -348,8 +348,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw6"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
                         <TextView
                             android:id="@+id/tv_6"
@@ -398,13 +398,13 @@
                             android:id="@+id/img_7"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="8dp"
                             android:gravity="center">
 
                             <ImageView
                                 android:id="@+id/iv_lw7"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
 
                         <TextView
@@ -460,8 +460,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw8"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
                         <TextView
                             android:id="@+id/tv_8"

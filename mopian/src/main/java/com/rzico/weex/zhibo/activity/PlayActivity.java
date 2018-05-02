@@ -40,6 +40,8 @@ import com.rzico.weex.R;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.BaseEntity;
+import com.rzico.weex.model.info.BasePage;
+import com.rzico.weex.model.info.NoticeInfo;
 import com.rzico.weex.model.zhibo.LiveGiftBean;
 import com.rzico.weex.model.zhibo.LiveRoomBean;
 import com.rzico.weex.model.zhibo.NoticeBean;
@@ -245,24 +247,39 @@ public class PlayActivity extends BaseActivity {
                     new XRequest(PlayActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
-//                            NoticeBean data = new Gson().fromJson(result, NoticeBean.class);
-//                            if(data.getType().equals("success")){
-//                                BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
-//                                userInfo.text = data.getData().getTitle();
-//                                userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
-//                                chatListAdapter.addMessage(userInfo);
-//                                chatListAdapter.notifyDataSetChanged();
-//                            }
-                            BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
-                            userInfo.text = "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
-                            userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
-                            chatListAdapter.addMessage(userInfo);
-                            chatListAdapter.notifyDataSetChanged();
+                            BasePage notiveInfo = new Gson().fromJson(result, BasePage.class);
+//
+                            if(notiveInfo != null && notiveInfo.getType().equals("success") && notiveInfo.getData() != null && notiveInfo.getData().getData() != null && notiveInfo.getData().getData().size() > 0){
+                                int len = notiveInfo.getData().getData().size();
+                                List<NoticeInfo> noticeInfos = notiveInfo.getData().getData();
+                                for (int i = 0 ; i < len ; i++){
+                                    if(noticeInfos.get(i).getType().equals("live")){//如果是系统公告
+                                        BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+                                        userInfo.text = "系统消息：" + noticeInfos.get(i).getTitle();
+                                        userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+                                        chatListAdapter.addMessage(userInfo);
+                                        chatListAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            }else{
+                                //如果服务器返回错误
+                                BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+                                userInfo.text = "系统消息：" + "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
+                                userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+                                chatListAdapter.addMessage(userInfo);
+                                chatListAdapter.notifyDataSetChanged();
+                            }
                         }
 
                         @Override
                         public void onFail(BaseActivity activity, String cacheData, int code) {
 
+                            //如果服务器返回错误
+                            BaseRoom.UserInfo userInfo = new BaseRoom.UserInfo();
+                            userInfo.text = "系统消息：" + "倡导绿色直播，封面和直播内容涉及色情、低俗、暴力、引诱、暴露等都将被封停账号，同时禁止直播闹事，集会。文明直播，从我做起【网警24小时在线巡查】安全提示：若涉及本系统以外的交易操作，请一定要先核实对方身份，谨防受骗！";
+                            userInfo.cmd  = BaseRoom.MessageType.CustomNoticeMsg.name();//推送消息
+                            chatListAdapter.addMessage(userInfo);
+                            chatListAdapter.notifyDataSetChanged();
                         }
                     }).execute();
 
@@ -706,6 +723,7 @@ public class PlayActivity extends BaseActivity {
 
     @SuppressLint("WrongConstant")
     private void SongCouponWindow() {
+        if(liveGiftBean == null) return;
         if (songCouponview == null) {
             View view = LayoutInflater.from(this).inflate(R.layout.live_song, null);
             songCouponview = new PopupWindow(view,
@@ -782,27 +800,27 @@ public class PlayActivity extends BaseActivity {
             List<LiveGiftBean.data.datagif> datagifs = liveGiftBean.getData().getData();
             int len = datagifs.size() > 8 ? 8 : datagifs.size();
             for (int i = 0; i <  len; i++){
-//                Log.e("live", datagifs.get(i).getThumbnail() + "|" + lws.get(i) + "|" + i);
-//                Picasso.with(PlayActivity.this).load(datagifs.get(i).getThumbnail()).into(lws.get(i));
+                Picasso.with(PlayActivity.this).load(datagifs.get(i).getThumbnail()).into(lws.get(i));
                 final int now = i;
                 lwNames.get(i).setText(datagifs.get(i).getName());
                 lwMoneys.get(i).setText(datagifs.get(i).getPrice() + "金币");
-                Picasso.with(PlayActivity.this).load(datagifs.get(i).getThumbnail()).into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        lws.get(now).setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
+//                Picasso.with(PlayActivity.this).load(datagifs.get(i).getThumbnail()).into(new Target() {
+//                    @Override
+//                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                        lws.get(now).setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+//                    }
+//
+//                    @Override
+//                    public void onBitmapFailed(Drawable errorDrawable) {
+//                        System.out.println();
+//                    }
+//
+//                    @Override
+//                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                        System.out.println();
+//
+//                    }
+//                });
             }
 
             dashan = (TextView) view.findViewById(R.id.dashan);
