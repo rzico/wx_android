@@ -288,11 +288,11 @@ public class PlayActivity extends BaseActivity {
                     roomCount = data.getData().getViewerCount();
                     giftCount = data.getData().getGift();
                     //显示在线人数
-                    if(roomCount > 0){//因为自己已经加入了
-                        room_count.setText(--roomCount + "人" );
-                    }else{
-                        room_count.setText(roomCount + "人" );
-                    }
+//                    if(roomCount > 0){//因为自己已经加入了
+//                        room_count.setText(在线:--roomCount + "人" );
+//                    }else{
+                        room_count.setText("在线:" + roomCount);
+//                    }
                     room_count.setVisibility(VISIBLE);
                     gift_count.setText("印票" + giftCount);
                     gift_count.setVisibility(VISIBLE);
@@ -1164,7 +1164,7 @@ public class PlayActivity extends BaseActivity {
                                     String text = textElem.getText();//信息
                                     userInfo.text = text;
                                     if(text.contains("加入房间") && room_count != null){
-                                        room_count.setText(++roomCount + "人");
+                                        room_count.setText("在线:" + ++roomCount);
                                     }
                                     chatListAdapter.addMessage(userInfo);
                                     chatListAdapter.notifyDataSetChanged();
