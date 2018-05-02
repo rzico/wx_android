@@ -291,7 +291,7 @@ public class PlayActivity extends BaseActivity {
 //                    if(roomCount > 0){//因为自己已经加入了
 //                        room_count.setText(在线:--roomCount + "人" );
 //                    }else{
-                        room_count.setText("在线:" + roomCount);
+                        room_count.setText("在线:" + formatLooker(roomCount));
 //                    }
                     room_count.setVisibility(VISIBLE);
                     gift_count.setText("印票" + giftCount);
@@ -1164,7 +1164,7 @@ public class PlayActivity extends BaseActivity {
                                     String text = textElem.getText();//信息
                                     userInfo.text = text;
                                     if(text.contains("加入房间") && room_count != null){
-                                        room_count.setText("在线:" + ++roomCount);
+                                        room_count.setText("在线:" + formatLooker(++roomCount));
                                     }
                                     chatListAdapter.addMessage(userInfo);
                                     chatListAdapter.notifyDataSetChanged();
@@ -1352,6 +1352,24 @@ public class PlayActivity extends BaseActivity {
                 liveRoom.exitRoom(null);
                 finish();
                 break;
+        }
+    }
+
+    /**
+     * 格式化人数数据
+     * @param count
+     * @return
+     */
+    public String formatLooker(Long count){
+        double dd;
+        if(count > 1000){
+            dd = count * 1.0 / 1000;
+            return dd + "k";
+        } else if(count > 10000){
+            dd = count * 1.0 / 10000;
+            return dd + "w";
+        }else{
+            return count + "";
         }
     }
     /**
