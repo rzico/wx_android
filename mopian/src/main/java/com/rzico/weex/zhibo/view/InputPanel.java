@@ -15,7 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rzico.weex.R;
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.utils.ScreenHelper;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class InputPanel extends LinearLayout  implements View.OnLayoutChangeListener{
@@ -41,6 +45,43 @@ public class InputPanel extends LinearLayout  implements View.OnLayoutChangeList
         initView();
     }
 
+
+    /**
+     * 将焦点移到输入框，弹起输入法
+     */
+    public void focusKeywordView() {
+        if (textEditor != null) {
+            textEditor.requestFocus();
+            textEditor.setSelection(textEditor.getText().length());
+            showInputMethod(textEditor, true, 500);
+        }
+    }
+
+    /**
+     * 弹起输入法
+     * @param edit
+     * @param delay
+     * @param delayTime
+     */
+    private void showInputMethod(final EditText edit, boolean delay, int delayTime) {
+        if (delay) {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    InputMethodManager imm = (InputMethodManager) WXApplication.getInstance().getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.showSoftInput(edit, 0);
+                    }
+
+                }
+            }, delayTime);
+        } else {
+            InputMethodManager imm = (InputMethodManager) WXApplication.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(edit, 0);
+        }
+    }
     private void initView() {
         LayoutInflater.from(getContext()).inflate(R.layout.widget_input_panel, this);
         keyHeight = ScreenHelper.getScreenHeightPix(context)/3;
