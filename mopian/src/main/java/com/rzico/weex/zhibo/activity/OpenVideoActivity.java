@@ -558,7 +558,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                             ll_giftlist.setVisibility(VISIBLE);
                             //显示人数
                             roomCount = data.getData().getViewerCount();
-                            room_count.setText("在线:" + roomCount);
+                            room_count.setText("在线:" + formatLooker(roomCount));
                             room_count.setVisibility(VISIBLE);
                             giftCount = data.getData().getGift();
                             gift_count.setText("印票" + giftCount);
@@ -700,7 +700,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         String text = textElem.getText();//信息
                                         userInfo.text = text;
                                         if(text.contains("加入房间") && room_count != null){
-                                            room_count.setText("在线:" + ++roomCount);
+                                            room_count.setText("在线:" + formatLooker(++roomCount));
                                         }
                                         chatListAdapter.addMessage(userInfo);
                                         chatListAdapter.notifyDataSetChanged();
@@ -862,6 +862,25 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             liveRoom.sendGroupKickMessage(userInfo, null);
         }
 
+    }
+
+
+    /**
+     * 格式化人数数据
+     * @param count
+     * @return
+     */
+    public String formatLooker(Long count){
+        double dd;
+        if(count > 1000){
+            dd = count * 1.0 / 1000;
+            return dd + "k";
+        } else if(count > 10000){
+            dd = count * 1.0 / 10000;
+            return dd + "w";
+        }else{
+            return count + "";
+        }
     }
     /**
      * 时间格式化
