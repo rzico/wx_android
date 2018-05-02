@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="95dp"
                 android:layout_gravity="center"
-                android:background="@color/white"
+                android:background="#30000000"
                 android:gravity="center">
 
                 <LinearLayout
@@ -62,9 +62,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/lw01" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
 
                         </LinearLayout>
 
@@ -86,7 +85,7 @@
                             android:id="@+id/tv1"
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
-                            android:text="1积分"
+                            android:text="1金币"
                             android:textColor="@color/b99"
                             android:textSize="12sp" />
                     </RelativeLayout>
@@ -119,9 +118,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/lw02" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height"/>
                         </LinearLayout>
 
                         <TextView
@@ -139,7 +137,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="3积分"
+                            android:text="3金币"
                             android:textColor="@color/b99"
                             android:textSize="12sp"
                             android:id="@+id/tv2"
@@ -176,9 +174,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/lw03" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
                         <TextView
                             android:id="@+id/tv_3"
@@ -195,7 +192,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="5积分"
+                            android:text="5金币"
                             android:textColor="@color/b99"
                             android:id="@+id/tv3"
                             android:layout_marginBottom="8dp"
@@ -231,9 +228,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/lw04" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
                         <TextView
                             android:id="@+id/tv_4"
@@ -249,7 +245,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="10积分"
+                            android:text="10金币"
                             android:id="@+id/tv4"
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
@@ -268,7 +264,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="95dp"
-                android:background="@color/white">
+                android:background="#30000000">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -290,14 +286,13 @@
                             android:id="@+id/img_5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="23dp"
+                            android:layout_marginTop="8dp"
                             android:gravity="center">
 
                             <ImageView
                                 android:id="@+id/iv_lw5"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/lw05" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
 
                         <TextView
@@ -317,7 +312,7 @@
                             android:layout_marginTop="1dp"
                             android:gravity="center"
                             android:id="@+id/tv5"
-                            android:text="20积分"
+                            android:text="20金币"
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="8dp"
                             android:textColor="@color/b99"
@@ -353,9 +348,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw6"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/lw06" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
                         <TextView
                             android:id="@+id/tv_6"
@@ -372,7 +366,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="30积分"
+                            android:text="30金币"
                             android:id="@+id/tv6"
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
@@ -404,14 +398,13 @@
                             android:id="@+id/img_7"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="8dp"
                             android:gravity="center">
 
                             <ImageView
                                 android:id="@+id/iv_lw7"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/lw07" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
 
                         <TextView
@@ -433,7 +426,7 @@
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
                             android:gravity="center"
-                            android:text="50积分"
+                            android:text="50金币"
                             android:textColor="@color/b99"
                             android:textSize="12sp" />
                     </RelativeLayout>
@@ -467,9 +460,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw8"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/lw08" />
+                                android:layout_width="@dimen/gift_width"
+                                android:layout_height="@dimen/gift_height" />
                         </LinearLayout>
                         <TextView
                             android:id="@+id/tv_8"
@@ -490,7 +482,7 @@
                             android:layout_marginBottom="8dp"
                             android:layout_alignParentBottom="true"
                             android:gravity="center"
-                            android:text="100积分"
+                            android:text="100金币"
                             android:textColor="@color/b99"
                             android:textSize="12sp" />
                     </RelativeLayout>
@@ -516,7 +508,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="14dp"
                 android:gravity="center"
-                android:text="当前积分："
+                android:text="当前金币："
                 android:textColor="@color/tv_back"
                 android:textSize="13sp" />
 

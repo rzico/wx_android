@@ -20,6 +20,11 @@
     <!-- 微小字体   20px-->
     <dimen name="font_mini">8sp</dimen>
 
+    <!--直播礼物大小-->
+
+    <dimen name="gift_width">45dp</dimen>
+    <dimen name="gift_height">40dp</dimen>
+
 
     <!-- 微小间距 -->
     <dimen name="margin_micro">4dp</dimen>
