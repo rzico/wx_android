@@ -89,7 +89,6 @@ public class GifView extends View {
             public void run()
             {
                 getNetGif(url);
-                mHandler.sendEmptyMessage(0);
             }
         }).start();
     }
@@ -102,7 +101,16 @@ public class GifView extends View {
             switch (msg.what)
             {
                 case 0:
-                    requestLayout();
+                    if(getVisibility() == VISIBLE){
+
+                       setPaused(true);
+                        requestLayout();
+                        setPaused(false);
+                    }else{
+                        setVisibility(VISIBLE);
+                        requestLayout();
+                        setPaused(false);
+                    }
                     break;
 
 
@@ -126,6 +134,7 @@ public class GifView extends View {
             InputStream in = connection.getInputStream();
             byte[] array = streamToBytes(in);
             mMovie = Movie.decodeByteArray(array, 0, array.length);
+            mHandler.sendEmptyMessage(0);
 //mMovie = Movie.decodeStream(in);
 // mBmp = BitmapFactory.decodeStream(in);
             in.close();

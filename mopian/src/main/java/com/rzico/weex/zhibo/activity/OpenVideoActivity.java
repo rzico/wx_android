@@ -755,17 +755,18 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         giftCount = giftCount + nowGif.getPrice();
                                         gift_count.setText("印票" + giftCount);
                                         //播放礼物动画
-                                        if (bigivgift.getVisibility() == VISIBLE) {
-                                            bigivgift.setPaused(true);
-//                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
-                                            bigivgift.setMovieNet(nowGif.getAnimation());
-                                            bigivgift.setPaused(false);
-                                        } else {
-                                            bigivgift.setVisibility(VISIBLE);
-                                            bigivgift.setMovieNet(nowGif.getAnimation());
-//                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
-                                            bigivgift.setPaused(false);
-                                        }
+                                        bigivgift.setMovieNet(nowGif.getAnimation());
+//                                        if (bigivgift.getVisibility() == VISIBLE) {
+//                                            bigivgift.setPaused(true);
+////                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+//                                            bigivgift.setMovieNet(nowGif.getAnimation());
+//                                            bigivgift.setPaused(false);
+//                                        } else {
+//                                            bigivgift.setVisibility(VISIBLE);
+//                                            bigivgift.setMovieNet(nowGif.getAnimation());
+////                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
+//                                            bigivgift.setPaused(false);
+//                                        }
                                     }
                                 }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomFollowMsg.name())){
                                     //被关注了
