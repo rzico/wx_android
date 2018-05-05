@@ -180,7 +180,7 @@ public class LivePlayerModule extends WXModule {
 //    }
 
     @JSMethod
-        public void getGag(String userId, String groupId, final JSCallback callback){
+    public void getGag(String userId, String groupId, final JSCallback callback){
         List<String> userIds = new ArrayList<>();
         userIds.add(userId);
         TIMGroupManagerExt.getInstance().getGroupMembersInfo(groupId, userIds, new TIMValueCallBack<List<TIMGroupMemberInfo>>() {
@@ -192,7 +192,9 @@ public class LivePlayerModule extends WXModule {
             @Override
             public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
                 long s = timGroupMemberInfos.get(0).getSilenceSeconds();
-                if(s > 100 && s < System.currentTimeMillis()){
+                long ss = System.currentTimeMillis();
+                ss = ss / 1000;
+                if(s > ss ){
                     callback.invoke(new Message().success(true));//被禁言了
                 }else {
                     callback.invoke(new Message().success(false));//没被禁言
