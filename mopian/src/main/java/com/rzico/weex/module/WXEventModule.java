@@ -40,6 +40,7 @@ import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.RichEditorAcitivity;
 import com.rzico.weex.activity.RouterActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
+import com.rzico.weex.constant.AllConstant;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.notidmanager.DbCacheBean;
 import com.rzico.weex.model.event.MessageBus;
@@ -82,7 +83,6 @@ import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
-import com.yixiang.mopian.constant.AllConstant;
 import com.rzico.assistant.wxapi.WXEntryActivity;
 
 import net.bither.util.NativeUtil;

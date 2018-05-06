@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 
 public class AllConstant {
-    public static final String PACKNAME = "com.rzico.weex";
+    public static final String PACKNAME = "com.rzico.assistant";
 
     public static int isClearAll = 1;
 
