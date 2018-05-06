@@ -1,18 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-
     compileSdkVersion 24
     buildToolsVersion '26.0.0'
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-//        applicationId "com.rzico.weex"
-        applicationId "com.yixiang.mopian"
+        applicationId "com.rzico.assistant"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 326
+        versionName "3.2.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
@@ -20,6 +18,7 @@ android {
         }
         multiDexEnabled true
     }
+
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def outputFile = output.outputFile
