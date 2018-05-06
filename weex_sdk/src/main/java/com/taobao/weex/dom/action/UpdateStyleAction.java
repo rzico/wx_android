@@ -32,7 +32,6 @@ import com.taobao.weex.dom.RenderActionContext;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.flex.Spacing;
 import com.taobao.weex.ui.component.WXComponent;
-import com.taobao.weex.utils.WXExceptionUtils;
 
 import java.util.Map;
 
@@ -67,10 +66,7 @@ class UpdateStyleAction extends TraceableAction implements DOMAction, RenderActi
     WXDomObject domObject = context.getDomByRef(mRef);
     if (domObject == null) {
       if (instance != null) {
-		WXExceptionUtils.commitCriticalExceptionRT(instance.getInstanceId(),
-				WXErrorCode.WX_KEY_EXCEPTION_DOM_UPDATE_STYLE.getErrorCode(),
-				"updateStyle",
-				WXErrorCode.WX_KEY_EXCEPTION_DOM_UPDATE_STYLE.getErrorMsg() + "domObject is null",null);
+        instance.commitUTStab(IWXUserTrackAdapter.DOM_MODULE, WXErrorCode.WX_ERR_DOM_UPDATESTYLE);
       }
       return;
     }
@@ -88,11 +84,15 @@ class UpdateStyleAction extends TraceableAction implements DOMAction, RenderActi
 
 
     if (!mData.isEmpty()) {
-      domObject.updateStyle(mData, mIsCausedByPesudo);
+      domObject.updateStyle(mData);
       domObject.applyStyle(mData);
       if(!mData.isEmpty()) {
         context.postRenderTask(this);
       }
+    }
+
+    if (instance != null) {
+      instance.commitUTStab(IWXUserTrackAdapter.DOM_MODULE, WXErrorCode.WX_SUCCESS);
     }
   }
 

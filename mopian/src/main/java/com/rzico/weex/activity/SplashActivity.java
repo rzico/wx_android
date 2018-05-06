@@ -61,7 +61,7 @@ import java.util.HashMap;
 
 import static com.rzico.weex.Constant.imUserId;
 import static com.rzico.weex.utils.task.ZipExtractorTask.ZIPSUCCESS;
-import static com.yixiang.mopian.constant.AllConstant.isClearAll;
+import static com.rzico.weex.constant.AllConstant.isClearAll;
 
 public class SplashActivity extends BaseActivity {
 
@@ -525,7 +525,7 @@ public class SplashActivity extends BaseActivity {
             if (Utils.isApkDebugable(SplashActivity.this)) {
                 downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
 //                toNext();
-            } else {
+            }  else {
                 if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
                     writeResVersion = netResVersion;
                     downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");

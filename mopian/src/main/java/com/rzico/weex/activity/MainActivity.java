@@ -76,7 +76,7 @@ import java.util.Map;
 
 import static com.rzico.weex.Constant.imUserId;
 import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
-import static com.yixiang.mopian.constant.AllConstant.isClearAll;
+import static com.rzico.weex.constant.AllConstant.isClearAll;
 
 
 /**
@@ -113,6 +113,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private NoScrollPageView mContainer;
 
+    private int handleCount = 0;//这个为4时候才证明全部加载完成
+
     protected List<View> viewLists;
 
 
@@ -140,19 +142,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             initWeexView();
             setSelectTab(0);
         } else if (messageBus.getMessageType() == MessageBus.Type.FORCEOFFLINE) {
-            //被注销了
-            destoryWeexInstance();
-            initWeexView();
-            setSelectTab(0);
-            //弹窗
-            new AlertView("账号异常", "您的账号再另一台设备登录！", null, new String[]{"确定"}, null, WXApplication.getActivity(), AlertView.Style.Alert, new OnItemClickListener() {
-                @Override
-                public void onItemClick(Object o, int position) {
-                    Intent intent = new Intent();
-                    intent.setClass(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
-            }).show();
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, MainActivity.class);
+            intent.putExtra("FORCEOFFLINE", true);
+            startActivity(intent);
         } else if (messageBus.getMessageType() == MessageBus.Type.RECEIVEMSG) {
             setUnRead();
         } else if (messageBus.getMessageType() == MessageBus.Type.LOGINERROR) {
@@ -617,6 +610,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             startActivityForResult(intent, LoginActivity.LOGINCODE);
             return;
         }
+        if(handleCount < (page + 1)) return;
 //        if (page != 0) {
 //            BarTextColorUtils.StatusBarLightMode(this, false);
 //        } else {
@@ -685,6 +679,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
 
             }
+            boolean is = getIntent().getBooleanExtra("FORCEOFFLINE", false);
+            if(is){//是否被强制登录
+                //被注销了
+                destoryWeexInstance();
+                initWeexView();
+                setSelectTab(0);
+                //弹窗
+                new AlertView("账号异常", "您的账号再另一台设备登录！", null, new String[]{"确定"}, null, MainActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        Intent intent = new Intent();
+                        intent.setClass(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                }).show();
+
+            }
         }
 
     }
@@ -699,7 +710,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onRenderSuccess(WXSDKInstance instance, int width, int height) {
-
+        handleCount++;
     }
 
     @Override

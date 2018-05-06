@@ -176,7 +176,6 @@ public class Constants {
     String TRANSFORM = "transform";
     String TRANSFORM_ORIGIN = "transformOrigin";
     String KEEP_INDEX = "keepIndex";
-    String KEEP_SELECTION_INDEX = "keepSelectionIndex";
 
     String INSERT_CELL_ANIMATION = "insertAnimation";
     String DELETE_CELL_ANIMATION = "deleteAnimation";
@@ -184,7 +183,6 @@ public class Constants {
     String NORMAL = "normal";
     String ARIA_LABEL = "ariaLabel";
     String ARIA_HIDDEN = "ariaHidden";
-    String ROLE = "role";
 
     String DIRECTION = "direction";
     String RTL = "rtl";
@@ -193,25 +191,14 @@ public class Constants {
     String HAS_FIXED_SIZE = "hasFixedSize";
     String KEEP_POSITION_LAYOUT_DELAY = "keepPositionLayoutDelay";
 
-    String OVERFLOW_HIDDEN_HEIGHT = "overflowHiddenHeight";
-    String OVERFLOW_HIDDEN_WIDTH = "overflowHiddenWidth";
-
-    String PRIORITY  = "priority";
-
-    String STRATEGY  = "strategy";
-
-    String ALLOW_COPY_PASTE = "allowCopyPaste";
-
-
-
-
     interface  Recycler{
       String LIST_DATA = "listData";
       String LIST_DATA_ITEM  ="alias";
       String LIST_DATA_ITEM_INDEX = "index";
-      String LIST_DATA_TEMPLATE_SWITCH_KEY = "switch";
-      String SLOT_TEMPLATE_CASE = "case";
-      String SLOT_TEMPLATE_DEFAULT = "default";
+      String LIST_DATA_TEMPLATE_KEY = "templateKey";
+
+      String SLOT_TEMPLATE_TYPE = "templateType";
+      String LIST_DATA_ITEM_ID = "itemId";
       String CELL_INDEX = "cellIndex";
       String TYPE_INDEX = "typeIndex";
     }
@@ -221,13 +208,6 @@ public class Constants {
     String UNDEFINED = "undefined";
     String FLAT = "flat";
     String RIPPLE_ENABLED = "rippleEnabled";
-
-
-    String SHOULD_STOP_PROPAGATION_INIT_RESULT = "shouldStopPropagationInitResult";
-    String SHOULD_STOP_PROPAGATION_INTERVAL = "shouldStopPropagationInterval";
-
-
-    String NEST_SCROLLING_ENABLED = "nestedScrollingEnabled";
   }
 
   public interface Value {
@@ -322,11 +302,6 @@ public class Constants {
       String DESTORY = "destroy";
     }
 
-
-    String SHOULD_STOP_PROPAGATION = "shouldStopPropagation";
-
-
-
   }
 
   public interface PSEUDO {
@@ -342,7 +317,6 @@ public class Constants {
     String HTTPS = "https";
     String HTTP = "http";
     String LOCAL = "local";
-    String DATA = "data";
   }
 
   public interface CodeCache {

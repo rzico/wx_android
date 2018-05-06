@@ -20,7 +20,7 @@ import cn.finalteam.rxgalleryfinal.model.Type;
 import cn.finalteam.rxgalleryfinal.utils.BarTextColorUtils;
 import cn.finalteam.rxgalleryfinal.view.PuzzleView;
 import com.yalantis.ucrop.view.TopView;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import com.rzico.weex.Constant;
 import com.rzico.weex.activity.BaseActivity;
 import com.taobao.weex.utils.WXLogUtils;
-import com.yixiang.mopian.constant.AllConstant;
+import com.rzico.weex.constant.AllConstant;
 
 import org.apache.http.util.EncodingUtils;
 

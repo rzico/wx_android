@@ -24,6 +24,7 @@ import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.model.zhibo.LiveRoomBean;
+import com.rzico.weex.model.zhibo.UserBean;
 import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
@@ -80,6 +81,16 @@ public abstract class BaseRoom {
     public final static  String ISKICK   = "被主播踢出房间";
     public final static String  ISGAG    = "被禁言了";
     public final static String  UNGAG    = "被解除禁言了";
+
+    private UserBean userBean;//当前用户
+
+    public UserBean getUserBean() {
+        return userBean;
+    }
+
+    public void setUserBean(UserBean userBean) {
+        this.userBean = userBean;
+    }
 
     protected Context mContext;
     protected Handler mHandler;
@@ -672,6 +683,9 @@ public abstract class BaseRoom {
                         txtHeadMsg.data.id = SharedUtils.readLoginId();
                         txtHeadMsg.data.imid = SharedUtils.idToImId(txtHeadMsg.data.id);
                     }
+                    if(userBean != null && userBean.getData() != null &&userBean.getData().getVip()!=null && !userBean.getData().getVip().equals("")){
+                        userInfo.vip = userBean.getData().getVip();
+                    }
 //                    txtHeadMsg.data.nickName = userName;
 //                    txtHeadMsg.data.headPic = headPic;
                     txtHeadMsg.data.cmd = messageType.name();
@@ -911,6 +925,7 @@ public abstract class BaseRoom {
         public String text;//发送的信息
         public String cmd;//消息类型
         public String time;//被禁言时长
+        public String vip;//VIP等级
     }
     protected class HeartBeatThread extends HandlerThread {
         private Handler handler;

@@ -60,16 +60,16 @@ public class WXModalUIModule extends WXSDKEngine.DestroyableModule {
   private Dialog activeDialog;
 
   @JSMethod(uiThread = true)
-  public void toast(JSONObject jsObj) {
+  public void toast(String param) {
 
     String message = "";
     int duration = Toast.LENGTH_SHORT;
-    if (jsObj != null) {
+    if (!TextUtils.isEmpty(param)) {
       try {
+        param = URLDecoder.decode(param, "utf-8");
+        JSONObject jsObj = JSON.parseObject(param);
         message = jsObj.getString(MESSAGE);
-        if(jsObj.containsKey(DURATION)) {
-          duration = jsObj.getInteger(DURATION);
-        }
+        duration = jsObj.getInteger(DURATION);
       } catch (Exception e) {
         WXLogUtils.e("[WXModalUIModule] alert param parse error ", e);
       }
@@ -95,14 +95,16 @@ public class WXModalUIModule extends WXSDKEngine.DestroyableModule {
   }
 
   @JSMethod(uiThread = true)
-  public void alert(JSONObject jsObj, final JSCallback callback) {
+  public void alert(String param, final JSCallback callback) {
 
     if (mWXSDKInstance.getContext() instanceof Activity) {
 
       String message = "";
       String okTitle = OK;
-      if (jsObj != null) {
+      if (!TextUtils.isEmpty(param)) {
         try {
+          param = URLDecoder.decode(param, "utf-8");
+          JSONObject jsObj = JSON.parseObject(param);
           message = jsObj.getString(MESSAGE);
           okTitle = jsObj.getString(OK_TITLE);
         } catch (Exception e) {
@@ -134,15 +136,17 @@ public class WXModalUIModule extends WXSDKEngine.DestroyableModule {
   }
 
   @JSMethod(uiThread = true)
-  public void confirm(JSONObject jsObj, final JSCallback callback) {
+  public void confirm(String param, final JSCallback callback) {
 
     if (mWXSDKInstance.getContext() instanceof Activity) {
       String message = "";
       String okTitle = OK;
       String cancelTitle = CANCEL;
 
-      if (jsObj != null) {
+      if (!TextUtils.isEmpty(param)) {
         try {
+          param = URLDecoder.decode(param, "utf-8");
+          JSONObject jsObj = JSON.parseObject(param);
           message = jsObj.getString(MESSAGE);
           okTitle = jsObj.getString(OK_TITLE);
           cancelTitle = jsObj.getString(CANCEL_TITLE);
@@ -185,15 +189,17 @@ public class WXModalUIModule extends WXSDKEngine.DestroyableModule {
   }
 
   @JSMethod(uiThread = true)
-  public void prompt(JSONObject jsObj, final JSCallback callback) {
+  public void prompt(String param, final JSCallback callback) {
     if (mWXSDKInstance.getContext() instanceof Activity) {
       String message = "";
       String defaultValue = "";
       String okTitle = OK;
       String cancelTitle = CANCEL;
 
-      if (jsObj != null) {
+      if (!TextUtils.isEmpty(param)) {
         try {
+          param = URLDecoder.decode(param, "utf-8");
+          JSONObject jsObj = JSON.parseObject(param);
           message = jsObj.getString(MESSAGE);
           okTitle = jsObj.getString(OK_TITLE);
           cancelTitle = jsObj.getString(CANCEL_TITLE);

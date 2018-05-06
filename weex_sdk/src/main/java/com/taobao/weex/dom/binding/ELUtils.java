@@ -39,7 +39,6 @@ public class ELUtils {
      * */
     public static final String IS_COMPONENT_ROOT = "@isComponentRoot";
 
-
     public static final String COMPONENT_PROPS = "@componentProps";
 
     public static final  String[] EXCLUDES_BINDING = {"clickEventParams"};

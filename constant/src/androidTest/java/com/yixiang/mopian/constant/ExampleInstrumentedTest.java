@@ -1,4 +1,4 @@
-package com.yixiang.mopian.constant;
+package com.rzico.weex.constant;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.yixiang.mopian.constant.test", appContext.getPackageName());
+        assertEquals("com.rzico.weex.constant.test", appContext.getPackageName());
     }
 }

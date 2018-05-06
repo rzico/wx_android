@@ -10,12 +10,44 @@
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:focusable="false"
         android:paddingLeft="5dp"
         android:visibility="visible"
         android:paddingRight="5dp">
+        <LinearLayout
+            android:layout_width="38dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:visibility="visible"
+            android:layout_height="38dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_danmu"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:textColor="@color/text_dark"
+                android:text="弹幕"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:visibility="visible"
+            android:layout_height="38dp"
+            android:orientation="horizontal">
+
+            <com.rzico.weex.view.SlideSwitch
+                android:id="@+id/ssBarrage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" />
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/input_bar"

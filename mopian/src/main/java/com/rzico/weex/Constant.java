@@ -1,15 +1,6 @@
 package com.rzico.weex;
 
-import android.os.Handler;
-
-import com.taobao.weex.WXSDKInstance;
-import com.yixiang.mopian.constant.AllConstant;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.rzico.weex.constant.AllConstant;
 
 /**
  * Created by shiweiwei on 2015/11/2.
