@@ -172,6 +172,10 @@ public class WXEventModule extends WXModule {
 //    }
 
     @JSMethod(uiThread = false)
+    public boolean getLiveState(){
+        return SharedUtils.readLiveSate();
+    }
+    @JSMethod(uiThread = false)
     public long getUId(){
         return SharedUtils.readLoginId();
     }

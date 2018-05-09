@@ -23,6 +23,7 @@ public class SharedUtils {
     public static final String ADD = "weex_add";
     public static final String RESVERSION = "res_version";
     public static final String IMID = "weex_imid";
+    public static final String LIVESTATE = "live_state";
 
     public static void saveImId(String imid){
         save(IMID, imid);
@@ -48,6 +49,14 @@ public class SharedUtils {
         }else {
             return Constant.center;
         }
+    }
+
+    public static void saveLiveState(boolean state){
+        save(LIVESTATE, state);
+    }
+
+    public static boolean readLiveSate(){
+        return read(LIVESTATE, false);
     }
 
     public static void saveIndex4(String url){
@@ -119,10 +128,20 @@ public class SharedUtils {
         editor.putString(key, value);
         editor.commit();
     }
+    public static void save(String key, boolean value){
+        SharedPreferences sp = WXApplication.getInstance().getSharedPreferences("PRIVATE", MODE_PRIVATE);
+        SharedPreferences.Editor editor=sp.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
 
     public static String read(String key, String defaultStr){
         SharedPreferences sp = WXApplication.getInstance().getSharedPreferences("PRIVATE", MODE_PRIVATE);
         return sp.getString(key, defaultStr);
+    }
+    public static boolean read(String key, boolean defaultBoolean){
+        SharedPreferences sp = WXApplication.getInstance().getSharedPreferences("PRIVATE", MODE_PRIVATE);
+        return sp.getBoolean(key, defaultBoolean);
     }
     public static String read(String key){
         return read(key, "");

@@ -548,6 +548,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         chatListAdapter.addMessage(userInfo);
                                         chatListAdapter.notifyDataSetChanged();
                                     }
+                                    //开始直播
+                                    SharedUtils.saveLiveState(true);
                                 }
 
                                 @Override
@@ -1365,6 +1367,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     protected void onDestroy() {
         super.onDestroy();
 
+        //停止直播
+        SharedUtils.saveLiveState(false);
         showDanmaku = false;
         if (danmaku_view != null) {
             danmaku_view.release();
