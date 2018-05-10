@@ -32,8 +32,6 @@ import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.VisibleForTesting;
 import android.util.SparseArray;
-
-import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.WXBridgeManager;
@@ -98,9 +96,7 @@ public class WXTimerModule extends WXModule implements Destroyable, Handler.Call
   @Override
   public void destroy() {
     if (handler != null) {
-      if(WXEnvironment.isApkDebugable()) {
-        WXLogUtils.d(TAG, "Timer Module removeAllMessages: ");
-      }
+      WXLogUtils.d(TAG, "Timer Module removeAllMessages: ");
       handler.removeCallbacksAndMessages(null);
       antiIntAutoBoxing.clear();
     }
@@ -112,9 +108,7 @@ public class WXTimerModule extends WXModule implements Destroyable, Handler.Call
     WXJSObject[] args;
     if (msg != null) {
       int what = msg.what;
-      if(WXEnvironment.isApkDebugable()) {
-          WXLogUtils.d(TAG, "Timer Module handleMessage : " + msg.what);
-      }
+      WXLogUtils.d(TAG, "Timer Module handleMessage : " + msg.what);
       switch (what) {
         case MODULE_TIMEOUT:
           if (msg.obj == null) {

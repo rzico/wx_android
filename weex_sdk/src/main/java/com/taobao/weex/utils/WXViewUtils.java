@@ -136,11 +136,6 @@ public class WXViewUtils {
     return getScreenWidth(WXEnvironment.sApplication);
   }
 
-  @Deprecated
-  public static int setScreenWidth(int screenWidth) {
-     return mScreenWidth = screenWidth;
-  }
-
   public static float getScreenDensity(Context ctx){
     if(ctx != null){
       try{
@@ -383,7 +378,7 @@ public class WXViewUtils {
   public static void clipCanvasWithinBorderBox(View targetView, Canvas canvas) {
     Drawable drawable;
     if (clipCanvasDueToAndroidVersion(canvas) &&
-        clipCanvasIfAnimationExist(targetView) &&
+        clipCanvasIfAnimationExist() &&
         ((drawable = targetView.getBackground()) instanceof BorderDrawable)) {
       BorderDrawable borderDrawable = (BorderDrawable) drawable;
       if (borderDrawable.isRounded()) {
@@ -399,7 +394,7 @@ public class WXViewUtils {
   public static void clipCanvasWithinBorderBox(Widget widget, Canvas canvas) {
     BorderDrawable borderDrawable;
     if (clipCanvasDueToAndroidVersion(canvas) &&
-        clipCanvasIfAnimationExist(null) &&
+        clipCanvasIfAnimationExist() &&
         (borderDrawable=widget.getBackgroundAndBorder())!=null ) {
       if (borderDrawable.isRounded() && clipCanvasIfBackgroundImageExist(widget, borderDrawable)) {
           Path path = borderDrawable.getContentPath(
@@ -429,12 +424,8 @@ public class WXViewUtils {
    * As animation will not cause redraw if hardware-acceleration enabled, clipCanvas feature has
    * to be disabled when API level is 24 without considering the animation property.
    */
-  private static boolean clipCanvasIfAnimationExist(View targetView) {
-    if (Build.VERSION.SDK_INT != VERSION_CODES.N) {
-      return true;
-    } else {
-      return false;
-    }
+  private static boolean clipCanvasIfAnimationExist() {
+    return Build.VERSION.SDK_INT != VERSION_CODES.N;
   }
 
   /**

@@ -15,3 +15,4 @@ include ":chat_ui"
 include ":ucrop"
 
 include ":weex_sdk"
+include ":SwipeBackLayoutLibrary"

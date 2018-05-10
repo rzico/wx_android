@@ -70,7 +70,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatActivity extends AppCompatActivity implements ChatView {
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+
+public class ChatActivity extends SwipeBackActivity implements ChatView {
     private static final String TAG = "ChatActivity";
     private List<Message> messageList = new ArrayList<>();
     private ChatAdapter adapter;
@@ -175,12 +177,10 @@ public class ChatActivity extends AppCompatActivity implements ChatView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         wxApplication = (WXApplication) this.getApplicationContext();
-        BarTextColorUtils.StatusBarLightMode(this, R.color.wxColor);
-//        BarTextColorUtils.StatusBarLightMode(this, false);
+        BarTextColorUtils.StatusBarLightMode(this, R.color.topBarColor);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//        BarTextColorUtils.StatusBarLightMode(ChatActivity.this, true);
         setContentView(R.layout.activity_chat);
-//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         identify = getIntent().getStringExtra("identify");
         type = (TIMConversationType) getIntent().getSerializableExtra("type");
         chatInfo = (ChatInfo) getIntent().getSerializableExtra("chatInfo");

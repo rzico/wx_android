@@ -58,13 +58,13 @@ import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXLoading;
 import com.taobao.weex.ui.component.WXRefresh;
 import com.taobao.weex.ui.component.WXVContainer;
-import com.taobao.weex.ui.component.helper.ScrollStartEndHelper;
 import com.taobao.weex.ui.component.helper.WXStickyHelper;
 import com.taobao.weex.ui.view.listview.WXRecyclerView;
 import com.taobao.weex.ui.view.listview.adapter.IOnLoadMoreListener;
 import com.taobao.weex.ui.view.listview.adapter.IRecyclerAdapterListener;
 import com.taobao.weex.ui.view.listview.adapter.ListBaseViewHolder;
 import com.taobao.weex.ui.view.listview.adapter.RecyclerViewBaseAdapter;
+import com.taobao.weex.ui.view.listview.adapter.TransformItemDecoration;
 import com.taobao.weex.ui.view.listview.adapter.WXRecyclerViewOnScrollListener;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXResourceUtils;
@@ -78,6 +78,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -112,7 +113,6 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
 
   private int mOffsetAccuracy = 10;
   private Point mLastReport = new Point(-1, -1);
-  private boolean mHasAddScrollEvent = false;
 
   private RecyclerView.ItemAnimator mItemAnimator;
 
@@ -148,21 +148,6 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
    **/
   private Map<String, Map<String, WXComponent>> mStickyMap = new HashMap<>();
   private WXStickyHelper stickyHelper;
-
-
-  /**
-   * scroll start and scroll end event
-   * */
-  private ScrollStartEndHelper mScrollStartEndHelper;
-
-
-
-  /**
-   * keep positon
-   * */
-  private  WXComponent keepPositionCell = null;
-  private  Runnable keepPositionCellRunnable = null;
-  private  long keepPositionLayoutDelay = 150;
 
 
   public BasicListComponent(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
@@ -240,6 +225,56 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     return params;
   }
 
+  /**
+   * These transform functions are supported:
+   * - `scale(x,y)`: scale item, x and y should be a positive float number.
+   * - `translate(x,y)`: translate item, `x` and `y` shoule be integer numbers.
+   * - `opacity(n)`: change the transparency of item, `n` must in `[0,1.0]`.
+   * - `rotate(n)`: rotate item, n is integer number.
+   *
+   * @param raw
+   * @return
+   */
+  private RecyclerView.ItemDecoration parseTransforms(String raw) {
+    if (raw == null) {
+      return null;
+    }
+    float scaleX = 0f, scaleY = 0f;
+    int translateX = 0, translateY = 0;
+    float opacity = 0f;
+    int rotate = 0;
+    //public TransformItemDecoration(boolean isVertical,float alpha,int translateX,int translateY,int rotation,float scale)
+    Matcher matcher = transformPattern.matcher(raw);
+    while (matcher.find()) {
+      String match = matcher.group();
+      String name = matcher.group(1);
+      try {
+        switch (name) {
+          case "scale":
+            scaleX = Float.parseFloat(matcher.group(2));
+            scaleY = Float.parseFloat(matcher.group(3));
+            break;
+          case "translate":
+            translateX = Integer.parseInt(matcher.group(2));
+            translateY = Integer.parseInt(matcher.group(3));
+            break;
+          case "opacity":
+            opacity = Float.parseFloat(matcher.group(2));
+            break;
+          case "rotate":
+            rotate = Integer.parseInt(matcher.group(2));
+            break;
+          default:
+            WXLogUtils.e(TAG, "Invaild transform expression:" + match);
+            break;
+        }
+      } catch (NumberFormatException e) {
+        WXLogUtils.e("", e);
+        WXLogUtils.e(TAG, "Invaild transform expression:" + match);
+      }
+    }
+    return new TransformItemDecoration(getOrientation() == Constants.Orientation.VERTICAL, opacity, translateX, translateY, rotate, scaleX, scaleY);
+  }
 
   abstract T generateListView(Context context, int orientation);
 
@@ -249,10 +284,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
 
     String transforms = (String) getDomObject().getAttrs().get(TRANSFORM);
     if (transforms != null) {
-      bounceRecyclerView.getInnerView().addItemDecoration(RecyclerTransform.parseTransforms(getOrientation(), transforms));
-    }
-    if(getDomObject().getAttrs().get(Constants.Name.KEEP_POSITION_LAYOUT_DELAY) != null){
-      keepPositionLayoutDelay = WXUtils.getNumberInt(getDomObject().getAttrs().get(Constants.Name.KEEP_POSITION_LAYOUT_DELAY), (int)keepPositionLayoutDelay);
+      bounceRecyclerView.getInnerView().addItemDecoration(parseTransforms(transforms));
     }
 
     mItemAnimator=bounceRecyclerView.getInnerView().getItemAnimator();
@@ -263,10 +295,6 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     bounceRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
     bounceRecyclerView.getInnerView().clearOnScrollListeners();
     bounceRecyclerView.getInnerView().addOnScrollListener(mViewOnScrollListener);
-    if(getDomObject().getAttrs().get(Constants.Name.HAS_FIXED_SIZE) != null){
-      boolean hasFixedSize = WXUtils.getBoolean(getDomObject().getAttrs().get(Constants.Name.HAS_FIXED_SIZE), false);
-      bounceRecyclerView.getInnerView().setHasFixedSize(hasFixedSize);
-    }
     bounceRecyclerView.getInnerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override
       public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -481,8 +509,36 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         //Invalid position
         return;
       }
+
       final WXRecyclerView view = bounceRecyclerView.getInnerView();
-      view.scrollTo(smooth, pos, offset, getOrientation());
+
+      if (!smooth) {
+        RecyclerView.LayoutManager layoutManager = view.getLayoutManager();
+        if (layoutManager instanceof LinearLayoutManager) {
+          //GridLayoutManager is also instance of LinearLayoutManager
+          ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(pos, -offset);
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+          ((StaggeredGridLayoutManager) layoutManager).scrollToPositionWithOffset(pos, -offset);
+        }
+        //Any else?
+      } else {
+        view.smoothScrollToPosition(pos);
+        if (offset != 0) {
+          view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+              if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                if (getOrientation() == Constants.Orientation.VERTICAL) {
+                  recyclerView.smoothScrollBy(0, offset);
+                } else {
+                  recyclerView.smoothScrollBy(offset, 0);
+                }
+                recyclerView.removeOnScrollListener(this);
+              }
+            }
+          });
+        }
+      }
     }
   }
 
@@ -507,54 +563,53 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       if (stickyComponent != null && stickyComponent.getDomObject() != null
           && stickyComponent instanceof WXCell) {
 
-          WXCell cell = (WXCell) stickyComponent;
-          if (cell.getHostView() == null) {
-            return;
-          }
-
-          int[] location = new int[2];
-          stickyComponent.getHostView().getLocationOnScreen(location);
-          int[] parentLocation = new int[2];
-          stickyComponent.getParentScroller().getView().getLocationOnScreen(parentLocation);
-          int top = location[1] - parentLocation[1];
-
+        WXCell cell = (WXCell) stickyComponent;
+        if (cell.getHostView() == null) {
+          return;
+        }
 
           RecyclerView.LayoutManager layoutManager;
           boolean beforeFirstVisibleItem = false;
           boolean removeOldSticky = false;
           layoutManager = getHostView().getInnerView().getLayoutManager();
           if (layoutManager instanceof LinearLayoutManager || layoutManager instanceof GridLayoutManager) {
-            int firstVisiblePosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-            int lastVisiblePosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            int fVisible = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
             int pos = mChildren.indexOf(cell);
             cell.setScrollPositon(pos);
-            if (pos <= firstVisiblePosition
-                    || (cell.getStickyOffset() > 0 && firstVisiblePosition < pos && pos <= lastVisiblePosition  &&
-                    top <= cell.getStickyOffset())) {
+
+            if (pos <= fVisible) {
               beforeFirstVisibleItem = true;
               if(pos > currentStickyPos) {
                 currentStickyPos = pos;
               }
-            }else{
+            }
+
+            if(pos > fVisible){
               removeOldSticky = true;
             }
           } else if(layoutManager instanceof StaggeredGridLayoutManager){
             int [] firstItems= new int[3];
-            int firstVisiblePosition = ((StaggeredGridLayoutManager) layoutManager).findFirstVisibleItemPositions(firstItems)[0];
-            int lastVisiblePosition = ((StaggeredGridLayoutManager)  layoutManager).findLastVisibleItemPositions(firstItems)[0];
+            int fVisible = ((StaggeredGridLayoutManager) layoutManager).findFirstVisibleItemPositions(firstItems)[0];
             int pos = mChildren.indexOf(cell);
 
-            if (pos <= firstVisiblePosition || (cell.getStickyOffset() > 0 && firstVisiblePosition < pos && pos <= lastVisiblePosition  &&
-                    top <= cell.getStickyOffset())) {
+            if (pos <= fVisible) {
               beforeFirstVisibleItem = true;
-            }else{
+            }
+
+            if(pos > fVisible){
               removeOldSticky = true;
             }
           }
 
+          int[] location = new int[2];
+          stickyComponent.getHostView().getLocationOnScreen(location);
+          int[] parentLocation = new int[2];
+          stickyComponent.getParentScroller().getView().getLocationOnScreen(parentLocation);
 
-          boolean showSticky = beforeFirstVisibleItem && cell.getLocationFromStart() >= 0 && top <= cell.getStickyOffset() && dy >= 0;
-          boolean removeSticky = cell.getLocationFromStart() <= cell.getStickyOffset() && top > cell.getStickyOffset() && dy <= 0;
+          int top = location[1] - parentLocation[1];
+
+          boolean showSticky = beforeFirstVisibleItem && cell.getLocationFromStart() >= 0 && top <= 0 && dy >= 0;
+          boolean removeSticky = cell.getLocationFromStart() <= 0 && top > 0 && dy <= 0;
           if (showSticky) {
             bounceRecyclerView.notifyStickyShow(cell);
           } else if (removeSticky || removeOldSticky) {
@@ -607,6 +662,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   @Override
   public void addChild(WXComponent child, int index) {
     super.addChild(child, index);
+
     if (child == null || index < -1) {
       return;
     }
@@ -615,7 +671,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     bindViewType(child);
 
     int adapterPosition = index == -1 ? mChildren.size() - 1 : index;
-    final T view = getHostView();
+    T view = getHostView();
     if (view != null) {
       boolean isAddAnimation = false;
       ImmutableDomObject domObject = child.getDomObject();
@@ -638,59 +694,15 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         }
       }
       if (isKeepScrollPosition) {
-        if(view.getInnerView().getLayoutManager() instanceof  LinearLayoutManager){
-            if(!view.getInnerView().isLayoutFrozen()){ //frozen, prevent layout when scroll
-                view.getInnerView().setLayoutFrozen(true);
-            }
-            if(keepPositionCell == null){
-              int last=((LinearLayoutManager)view.getInnerView().getLayoutManager()).findLastCompletelyVisibleItemPosition();
-              ListBaseViewHolder holder = (ListBaseViewHolder) view.getInnerView().findViewHolderForAdapterPosition(last);
-              if(holder != null){
-                 keepPositionCell = holder.getComponent();
-              }
-              if(keepPositionCell != null) {
-                if(keepPositionCellRunnable != null){
-                  view.removeCallbacks(keepPositionCellRunnable);
-                }
-                keepPositionCellRunnable = new Runnable() {
-                  @Override
-                  public void run() {
-                    if(keepPositionCell != null){
-                      int keepPosition = indexOf(keepPositionCell);
-                      int offset = 0;
-                      if(keepPositionCell.getHostView() != null){
-                        offset = keepPositionCell.getHostView().getTop();
-                      }
-                      if(offset > 0) {
-                        ((LinearLayoutManager) view.getInnerView().getLayoutManager()).scrollToPositionWithOffset(keepPosition, offset);
-                      }else{
-                        view.getInnerView().getLayoutManager().scrollToPosition(keepPosition);
-
-                      }
-                      view.getInnerView().setLayoutFrozen(false);
-                      keepPositionCell = null;
-                      keepPositionCellRunnable = null;
-                    }
-                  }
-                };
-              }
-            }
-            if(keepPositionCellRunnable == null){
-               view.getInnerView().scrollToPosition(((LinearLayoutManager)view.getInnerView().getLayoutManager()).findLastVisibleItemPosition());
-            }
-        }
+        int last=((LinearLayoutManager)view.getInnerView().getLayoutManager()).findLastVisibleItemPosition();
+        view.getInnerView().getLayoutManager().scrollToPosition(last);
         view.getRecyclerViewBaseAdapter().notifyItemInserted(adapterPosition);
-        if(keepPositionCellRunnable != null){
-          view.removeCallbacks(keepPositionCellRunnable);
-          view.postDelayed(keepPositionCellRunnable, keepPositionLayoutDelay);
-        }
       } else {
         view.getRecyclerViewBaseAdapter().notifyItemChanged(adapterPosition);
       }
     }
     relocateAppearanceHelper();
   }
-
 
 
 
@@ -712,7 +724,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
    * com.taobao.weex.ui.view.listview.WXRecyclerView}
    */
   @Override
-  public void addSubView(View child, int index) {
+  protected void addSubView(View child, int index) {
 
   }
 
@@ -1176,11 +1188,11 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       boolean visible = (!outOfVisibleRange) && item.isViewVisible(true);
 
       int result = item.setAppearStatus(visible);
-      if (result == AppearanceHelper.RESULT_NO_CHANGE) {
-        continue;
-      }
       if (WXEnvironment.isApkDebugable()) {
         WXLogUtils.d("appear", "item " + item.getCellPositionINScollable() + " result " + result);
+      }
+      if (result == AppearanceHelper.RESULT_NO_CHANGE) {
+        continue;
       }
       component.notifyAppearStateChange(result == AppearanceHelper.RESULT_APPEAR ? Constants.Event.APPEAR : Constants.Event.DISAPPEAR, direction);
     }
@@ -1210,11 +1222,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   @Override
   public void addEvent(String type) {
     super.addEvent(type);
-    if (ScrollStartEndHelper.isScrollEvent(type)
-            && getHostView() != null
-            && getHostView().getInnerView() != null
-            && !mHasAddScrollEvent) {
-      mHasAddScrollEvent = true;
+    if (Constants.Event.SCROLL.equals(type) && getHostView() != null && getHostView().getInnerView() != null) {
       WXRecyclerView innerView = getHostView().getInnerView();
       innerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
         private int offsetXCorrection, offsetYCorrection;
@@ -1240,10 +1248,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
             offsetX = offsetX - offsetXCorrection;
             offsetY = offsetY - offsetYCorrection;
           }
-          getScrollStartEndHelper().onScrolled(offsetX, offsetY);
-          if(!getDomObject().getEvents().contains(Constants.Event.SCROLL)){
-            return;
-          }
+
           if (mFirstEvent) {
             //skip first event
             mFirstEvent = false;
@@ -1264,10 +1269,6 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   }
 
   private void fireScrollEvent(RecyclerView recyclerView, int offsetX, int offsetY) {
-    fireEvent(Constants.Event.SCROLL, getScrollEvent(recyclerView, offsetX, offsetY));
-  }
-
-  public Map<String, Object> getScrollEvent(RecyclerView recyclerView, int offsetX, int offsetY){
     if(getOrientation() == Constants.Orientation.VERTICAL){
       offsetY = - calcContentOffset(recyclerView);
     }
@@ -1291,7 +1292,8 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     contentOffset.put(Constants.Name.Y, - WXViewUtils.getWebPxByWidth(offsetY, getInstance().getInstanceViewPortWidth()));
     event.put(Constants.Name.CONTENT_SIZE, contentSize);
     event.put(Constants.Name.CONTENT_OFFSET, contentOffset);
-    return event;
+
+    fireEvent(Constants.Event.SCROLL, event);
   }
 
   private boolean shouldReport(int offsetX, int offsetY) {
@@ -1371,12 +1373,5 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     }
     //Unhandled LayoutManager type
     return -1;
-  }
-
-  public ScrollStartEndHelper getScrollStartEndHelper() {
-    if(mScrollStartEndHelper == null){
-       mScrollStartEndHelper = new ScrollStartEndHelper(this);
-    }
-    return mScrollStartEndHelper;
   }
 }

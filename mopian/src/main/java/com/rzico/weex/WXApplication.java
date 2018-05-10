@@ -83,17 +83,17 @@ public class WXApplication extends Application {
     MultiDex.install(this);
     Foreground.init(this);
     context = getApplicationContext();
-    if(MsfSdkUtils.isMainProcess(this)) {
-      TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
-        @Override
-        public void handleNotification(TIMOfflinePushNotification notification) {
-          if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify){
-            //消息被设置为需要提醒
-              notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
-          }
-        }
-      });
-    }
+//    if(MsfSdkUtils.isMainProcess(this)) {
+//      TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
+//        @Override
+//        public void handleNotification(TIMOfflinePushNotification notification) {
+//          if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify){
+//            //消息被设置为需要提醒
+//              notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
+//          }
+//        }
+//      });
+//    }
 
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
     instance = this;

@@ -120,6 +120,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
         LivePlayerBean livePlayerBean = (LivePlayerBean) getIntent().getSerializableExtra("livePlayerParam");
 
+        mWebView.loadUrl("http://weex.udzyw.com/nihtan.html", null);
         //加载webview
         if(livePlayerBean != null){
 
@@ -197,9 +198,9 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         super.setContentView(R.layout.activity_play);
 
         mRootView = (LinearLayout) findViewById(R.id.root);
-        if (mLivePlayer == null){
-            mLivePlayer = new TXLivePlayer(this);
-        }
+//        if (mLivePlayer == null){
+//            mLivePlayer = new TXLivePlayer(this);
+//        }
 
         mPlayerView = (TXCloudVideoView) findViewById(R.id.video_view);
         mPlayerView.setBackgroundColor(getResources().getColor(R.color.black));
@@ -263,11 +264,11 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
 
 
-        this.setCacheStrategy(CACHE_STRATEGY_AUTO);
+//        this.setCacheStrategy(CACHE_STRATEGY_AUTO);
 
 
-        View view = mPlayerView.getRootView();
-        view.setOnClickListener(this);
+//        View view = mPlayerView.getRootView();
+//        view.setOnClickListener(this);
     }
 
 

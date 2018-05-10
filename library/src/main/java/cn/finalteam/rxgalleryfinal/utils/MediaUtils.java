@@ -35,6 +35,9 @@ public class MediaUtils {
      */
     public static List<MediaBean> getMediaWithImageList(Context context, String bucketId, int page, int limit) {
         int offset = (page - 1) * limit;
+        if(page == 10){
+            offset = offset - 4;
+        }
         List<MediaBean> mediaBeanList = new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();
         List<String> projection = new ArrayList<>();

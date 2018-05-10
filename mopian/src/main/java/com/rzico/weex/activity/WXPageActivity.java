@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
@@ -105,7 +106,14 @@ public class WXPageActivity extends AbsWeexActivity implements
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_wxpage);
+
+    setFitSystemWindow(false);
+    if (Build.VERSION.SDK_INT >= 21) {
+      getWindow().setStatusBarColor(Color.TRANSPARENT);
+    }else
+      setStatusBarFullTransparent();
     EventBus.getDefault().register(this);
+
 //    if (Constant.userId == 0) {
 //      if (null != savedInstanceState) {
 //        // activity由系统打开 (是由于手机内存不够,activity在后台被系统回收,再打开时出现的现象)

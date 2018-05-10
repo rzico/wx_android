@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
@@ -166,8 +168,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         wxApplication = (WXApplication) this.getApplicationContext();
-
         setContentView(R.layout.activity_main);
+
+        setFitSystemWindow(false);
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }else
+            setStatusBarFullTransparent();
         //设置高亮标题
         initWeexView();
         initView();
@@ -560,7 +567,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //
 //                    }
 //                }).execute();
-
+//                Intent intent2 = new Intent(MainActivity.this, LivePlayerActivity.class);
+//                startActivity(intent2);
 
                 setSelectTab(0);
                 break;
@@ -610,7 +618,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             startActivityForResult(intent, LoginActivity.LOGINCODE);
             return;
         }
-        if(handleCount < (page + 1)) return;
+        if(page != 0 && handleCount < (page + 1)) return;
 //        if (page != 0) {
 //            BarTextColorUtils.StatusBarLightMode(this, false);
 //        } else {

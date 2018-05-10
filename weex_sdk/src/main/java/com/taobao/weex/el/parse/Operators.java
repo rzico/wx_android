@@ -484,6 +484,9 @@ public class Operators {
 
     }
 
+    public static final Object keywordValue(String keyword){
+        return KEYWORDS.get(keyword);
+    }
 
     public static final Map<String,Object> KEYWORDS = new HashMap<>();
     static {

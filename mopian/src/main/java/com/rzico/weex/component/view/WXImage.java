@@ -123,9 +123,9 @@ public class WXImage extends WXComponent<GifImageView> {
           return true;
         case Constants.Name.IMAGE_QUALITY:
           return true;
-        case Constants.Name.AUTO_RECYCLE:
-          mAutoRecycle = WXUtils.getBoolean(param, mAutoRecycle);
-          return true;
+//        case Constants.Name.AUTO_RECYCLE:
+//          mAutoRecycle = WXUtils.getBoolean(param, mAutoRecycle);
+//          return true;
         case Constants.Name.FILTER:
           int blurRadius = 0;
           if(param != null && param instanceof String) {
