@@ -62,8 +62,9 @@
 
                             <ImageView
                                 android:id="@+id/iv_lw1"
-                                android:layout_width="@dimen/gift_width"
-                                android:layout_height="@dimen/gift_height" />
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/lw01" />
 
                         </LinearLayout>
 

@@ -113,6 +113,19 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
         }
         contentViewGroup.setFitsSystemWindows(fitSystemWindow);
     }
+
+    /**
+     * 如果需要内容紧贴着StatusBar
+     * 应该在对应的xml布局文件中，设置根布局fitsSystemWindows=true。
+     */
+    private View contentViewGroup;
+
+    protected void setFitSystemWindow(boolean fitSystemWindow) {
+        if (contentViewGroup == null) {
+            contentViewGroup = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        }
+        contentViewGroup.setFitsSystemWindows(fitSystemWindow);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
