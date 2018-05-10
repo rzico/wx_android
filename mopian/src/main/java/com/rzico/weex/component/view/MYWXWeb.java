@@ -230,7 +230,7 @@ public class MYWXWeb extends WXComponent {
             FileOutputStream out = new FileOutputStream(pictureFile);
             bm.compress(Bitmap.CompressFormat.PNG, 60, out);
 //            Snackbar.make(findViewById(android.R.id.content), "保存图片成功"+pictureFile.getAbsolutePath(), Snackbar.LENGTH_SHORT).show();
-            Toast.makeText(getContext(), "保存图片成功"+pictureFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "保存图片成功"+pictureFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
 
             out.flush();
             out.close();
