@@ -1,18 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 24
+    buildToolsVersion '26.0.0'
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-//        applicationId "com.rzico.weex"
-        applicationId "com.yixiang.mopian"
-        minSdkVersion 16
+        applicationId "com.rzico.assistant"
+        minSdkVersion 15
         targetSdkVersion 23
-        versionCode 99
-        versionName "5.0.2"
+        versionCode 326
+        versionName "3.2.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
@@ -20,6 +18,7 @@ android {
         }
         multiDexEnabled true
     }
+
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def outputFile = output.outputFile
@@ -47,15 +46,15 @@ android {
 //        }
 
         release {
-            storeFile file("tools/mopian.jks")
+            storeFile file("tools/rzico.jks")
             storePassword "123456"
-            keyAlias "mopian"
+            keyAlias "rzico"
             keyPassword "123456"
         }
         debug {
-            storeFile file("tools/mopian.jks")
+            storeFile file("tools/rzico.jks")
             storePassword "123456"
-            keyAlias "mopian"
+            keyAlias "rzico"
             keyPassword "123456"
         }
     }
