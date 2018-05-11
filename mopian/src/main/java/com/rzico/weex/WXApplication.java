@@ -94,7 +94,7 @@ public class WXApplication extends Application {
         public void handleNotification(TIMOfflinePushNotification notification) {
           if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify){
             //消息被设置为需要提醒
-              notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
+            notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
           }
         }
       });
@@ -244,9 +244,9 @@ public class WXApplication extends Application {
   private void init() {
 
     //xUtil
-      x.Ext.init(this);
+    x.Ext.init(this);
     //x.Ext.setDebug(false);
-      x.Ext.setDebug(BuildConfig.DEBUG);
+    x.Ext.setDebug(BuildConfig.DEBUG);
     MobSDK.init(this, Constant.shareAppId,Constant.shareAppSecret);
 
   }

@@ -95,7 +95,7 @@
                 <action android:name="com.alibaba.weex.protocol.openurl" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.taobao.android.intent.category.YUNDIAN" />
+                <category android:name="com.taobao.android.intent.category.MOPIAN" />
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
@@ -254,18 +254,18 @@
 
             <!-- ShareSDK<strong>3.1.0版本之前</strong>才需要在MobUIShell下面注册此意图，3.1.0版本之后（包含3.1.0）不需要注册此intent-->
             <!--<intent-filter>-->
-                <!--<data android:scheme="tencent100371282" />-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--<data android:scheme="tencent100371282" />-->
+            <!--<action android:name="android.intent.action.VIEW" />-->
+            <!--<category android:name="android.intent.category.BROWSABLE" />-->
+            <!--<category android:name="android.intent.category.DEFAULT" />-->
             <!--</intent-filter>-->
         </activity>
         <!--<activity-->
-            <!--android:name="cn.sharesdk.demo.wxapi.WXEntryActivity"-->
-            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
-            <!--android:exported="true"-->
-            <!--android:screenOrientation="portrait" />-->
+        <!--android:name="cn.sharesdk.demo.wxapi.WXEntryActivity"-->
+        <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
+        <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
+        <!--android:exported="true"-->
+        <!--android:screenOrientation="portrait" />-->
 
         <!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
         <!--<meta-data android:name="Mob-AppKey" android:value="22a31844e236a"/>-->
