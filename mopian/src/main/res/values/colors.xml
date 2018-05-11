@@ -12,11 +12,11 @@
     <!--主色-->
     <color name="topBarColor">#444444</color>
     <!--主色-->
-    <color name="wxColor">#99CCFF</color>
+    <color name="wxColor">#eb4e40</color>
     <!--辅色-->
     <color name="wxColor_dark">#6699FF</color>
 
-    <color name="selectBg">#99CCFF</color>
+    <color name="selectBg">#eb4e40</color>
 
     <!--文本编辑框底部颜色-->
     <color name="rich_editor_bottom">#e3e7ea</color>
