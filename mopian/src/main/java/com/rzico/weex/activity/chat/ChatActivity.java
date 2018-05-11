@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
+import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.adapter.chat.ChatAdapter;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.bean.Redis;
@@ -70,9 +71,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
-public class ChatActivity extends SwipeBackActivity implements ChatView {
+public class ChatActivity extends BaseActivity implements ChatView {
     private static final String TAG = "ChatActivity";
     private List<Message> messageList = new ArrayList<>();
     private ChatAdapter adapter;

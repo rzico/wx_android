@@ -156,5 +156,4 @@ dependencies {
     compile 'com.lht:paintview:1.16'
     //    弹幕
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
-    compile project(path: ':SwipeBackLayoutLibrary')
 }

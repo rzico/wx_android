@@ -2,7 +2,9 @@ package com.rzico.weex.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -43,6 +45,11 @@ public class RouterActivity extends AbsWeexActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wxpage);
 
+        setFitSystemWindow(false);
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }else
+            setStatusBarFullTransparent();
         mContainer = (ViewGroup) findViewById(R.id.container);
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
         mTipView = (TextView) findViewById(R.id.index_tip);
