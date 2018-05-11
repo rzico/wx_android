@@ -19,20 +19,26 @@ import java.util.Map;
  */
 public class Constant {
 
-    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
-    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.YUNDIAN";
+    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.MOPIAN" />
+    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.MOPIAN";
 
-    public static final String wxURL = "http://cdnx.rzico.com/weex/app/";
+    public static final String wxURL = "http://cdnx.1xx.me/weex/app/";
 
-    public static final String resURL = "http://cdnx.rzico.com/";
+    public static final String resURL = "http://cdnx.1xx.me/";
 
     //    云店wxkey
-    public static final String wxAppId = "wx490857e2baff7cfd";
-    public static final String wxAppSecret = "46acecbfa148ca89d443d38b0ce7c865";
+//    public static final String wxAppId = "wx490857e2baff7cfd";
+//    public static final String wxAppSecret = "46acecbfa148ca89d443d38b0ce7c865";
+    //    魔篇wxkey
+    public static final String wxAppId = "wxa3851ebdcfc050e1";
+    public static final String wxAppSecret = "1cdb76cfb393d5a1c391985e833a451d";
 
     //    云店shareSDK
-    public static final String shareAppId = "1d927fd47d636";
-    public static final String shareAppSecret = "277f7181f07499357cfa33531fe818ab";
+//    public static final String shareAppId = "1d927fd47d636";
+//    public static final String shareAppSecret = "277f7181f07499357cfa33531fe818ab";
+    //    魔篇shareSDK
+    public static final String shareAppId = "22a31844e236a";
+    public static final String shareAppSecret = "1b8e2c508eac21106cc6cc2025acda29";
 
 //    public static Handler loginHandler = null;
 
@@ -50,8 +56,11 @@ public class Constant {
 
 
     public static String app = AllConstant.PACKNAME;
+    //    public static final String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";
+//    public static final String bucket = "rzico";
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-    public static final String bucket = "rzico-weex";
+    //    public static final String bucket = "rzico-weex";
+    public static final String bucket = "mopian";
     public static final  String upLoadImages = "upload/images/";
     public static final  String upLoadVideos = "upload/videos/";
 
@@ -61,15 +70,16 @@ public class Constant {
     public static boolean loginState = false;
     public static boolean unLinelogin = false;
     //当前程序的资源包版本
-    public static String resVerison = "1.3.5";
+    public static String resVerison = "1.0.0";
     //服务器资源包版本
-    public static String netResVerison = "1.3.5";
+    public static String netResVerison = "1.0.0";
     public static String appVerison = "";
 
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://weex.rzico.com/";
+    public static final String SERVER = "http://mopian.1xx.me/";
+    //    public static final String SERVER = "http://dev.1xx.me/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
     public static boolean isLoginAcitivity = false;
