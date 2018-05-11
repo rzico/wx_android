@@ -83,7 +83,7 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.rzico.weex.constant.AllConstant;
-import com.yixiang.mopian.wxapi.WXEntryActivity;
+import com.rzico.assistant.WXEntryActivity;
 
 import net.bither.util.NativeUtil;
 
