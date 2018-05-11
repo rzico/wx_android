@@ -357,18 +357,6 @@
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/room_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:layout_marginRight="5dp"
-                android:textSize="13sp"
-                android:visibility="gone"
-                android:background="@drawable/dd02"
-                android:textColor="@color/white"
-                android:text="0人"/>
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_back"
@@ -401,6 +389,26 @@
             android:textColor="@color/white"
             android:text="印票0"/>
 
+        <LinearLayout
+            android:layout_width="0.0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="right">
+
+            <TextView
+                android:id="@+id/room_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                android:textSize="13sp"
+                android:visibility="gone"
+                android:background="@drawable/dd02"
+                android:textColor="@color/white"
+                android:text="在线:0"/>
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
 

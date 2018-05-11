@@ -30,6 +30,7 @@ public class BottomPanelFragment extends Fragment {
             public void onClick(View v) {
                 buttonPanel.setVisibility(View.GONE);
                 inputPanel.setVisibility(View.VISIBLE);
+                inputPanel.focusKeywordView();
             }
         });
         return view;
