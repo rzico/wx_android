@@ -1,4 +1,4 @@
-package com.rzico.assistant;
+package com.yixiang.mopian.wxapi;
 
 import android.content.Intent;
 import android.os.Bundle;

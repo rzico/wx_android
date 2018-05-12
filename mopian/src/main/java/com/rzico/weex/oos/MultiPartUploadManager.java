@@ -9,6 +9,7 @@ import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
 import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
 import com.alibaba.sdk.android.oss.common.utils.BinaryUtil;
 import com.rzico.weex.Constant;
+import com.rzico.weex.constant.AllConstant;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.utils.DeleteFileUtil;
 import com.taobao.weex.bridge.JSCallback;
@@ -67,7 +68,7 @@ public class MultiPartUploadManager {
 
                 Log.d("ETag", result.getETag());
                 //删除本地图片
-                if(request.getLocalFile().contains("com.yixiang.mopian/cache")){
+                if(request.getLocalFile().contains(AllConstant.PACKNAME + "/cache")){
                     DeleteFileUtil.delete(request.getLocalFile());
                 }
                 Log.d("RequestId", result.getRequestId());
