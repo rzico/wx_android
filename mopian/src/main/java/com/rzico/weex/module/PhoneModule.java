@@ -8,7 +8,6 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.rzico.weex.Manifest;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.model.info.Message;
 import com.taobao.weex.annotation.JSMethod;

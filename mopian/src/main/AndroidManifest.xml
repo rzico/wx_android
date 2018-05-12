@@ -42,12 +42,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
-    <permission
-        android:name="com.yixiang.mopian.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature" />
-    <!-- 这里com.tencent.imsdk改成app的包名 -->
-    <uses-permission android:name="com.yixiang.mopian.permission.MIPUSH_RECEIVE" />
-    <!-- 这里com.tencent.imsdk改成app的包名 -->
+    <!--<permission-->
+        <!--android:name="com.yixiang.mopian.permission.MIPUSH_RECEIVE"-->
+        <!--android:protectionLevel="signature" />-->
+    <!--&lt;!&ndash; 这里com.tencent.imsdk改成app的包名 &ndash;&gt;-->
+    <!--<uses-permission android:name="com.yixiang.mopian.permission.MIPUSH_RECEIVE" />-->
+    <!--&lt;!&ndash; 这里com.tencent.imsdk改成app的包名 &ndash;&gt;-->
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
