@@ -501,14 +501,14 @@ public class SplashActivity extends BaseActivity {
         String nowResVersion = SharedUtils.readResVersion();//现在的资源包版本
         String appResVersion = Constant.resVerison;//app自带资源包版本
         String netResVersion = Constant.netResVerison;//网络的资源包版本
-        // == null 或者 =="" 表示第一次使用， 否者是第二次使用 就判断版本号
-//    if(nowVersion.equals("")){
-//      nowVersion = Constant.resVerison;//设置默认的值
-//    }
+        //  == null 或者 =="" 表示第一次使用， 否者是第二次使用 就判断版本号
+        //  if(nowVersion.equals("")){
+        //      nowVersion = Constant.resVerison;//设置默认的值
+        //  }
         try {
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
-                downloadFile("http://cdnx.1xx.me/weex/release/res-1.0.0.zip" + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+                downloadFile("http://cdnx.1xx.me/weex/release/res-0.1.0.zip" + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
 //                toNext();
             } else {
                 if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
