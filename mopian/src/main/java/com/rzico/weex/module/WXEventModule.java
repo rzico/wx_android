@@ -83,7 +83,7 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.rzico.weex.constant.AllConstant;
-import com.rzico.assistant.WXEntryActivity;
+import com.rzico.assistant.wxapi.WXEntryActivity;
 
 import net.bither.util.NativeUtil;
 
@@ -929,11 +929,8 @@ public class WXEventModule extends WXModule {
 
     @JSMethod(uiThread = false)
     public boolean haveTop(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            return true;
-        }else {
-            return false;//顶部状态栏顶不上去
-        }
+        //顶部状态栏顶不上去
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
     @JSMethod
