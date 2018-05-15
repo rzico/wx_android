@@ -23,11 +23,12 @@ import cn.sharesdk.wechat.utils.WechatHandlerActivity;
 public class WXEntryActivity extends WechatHandlerActivity implements IWXAPIEventHandler {
 
 
-    private static final String APP_SECRET = Constant.wxAppSecret;
+    private static final String APP_SECRET   = Constant.wxAppSecret;
     private IWXAPI mWeixinAPI;
 //    public static final String WEIXIN_APP_ID = "wx90bb95d1d77f0cca";
     public static final String WEIXIN_APP_ID = Constant.wxAppId;
     private static String uuid;
+
     private String key;
     private String union;
     private String openid;
