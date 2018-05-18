@@ -415,7 +415,7 @@ public class WXEventModule extends WXModule {
                 message.setType("error");
                 message.setContent("发送被拒绝");
                 callback.invoke(message);
-//                activity.setResult(Activity.RESULT_CANCELED);
+//              activity.setResult(Activity.RESULT_CANCELED);
             }
         }).sendWxAuth(activity);
     }
@@ -476,7 +476,6 @@ public class WXEventModule extends WXModule {
             }
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
     @JSMethod
