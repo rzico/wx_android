@@ -207,10 +207,13 @@ package com.rzico.weex.adapter;
 import android.app.Activity;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.utils.PathUtils;
+import com.rzico.weex.utils.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.taobao.weex.WXEnvironment;
@@ -220,6 +223,10 @@ import com.taobao.weex.common.WXImageStrategy;
 import com.taobao.weex.dom.WXImageQuality;
 
 import java.io.File;
+import java.io.FileInputStream;
+
+import static com.squareup.picasso.MemoryPolicy.NO_CACHE;
+import static com.squareup.picasso.MemoryPolicy.NO_STORE;
 
 public class ImageAdapter implements IWXImgLoaderAdapter {
 
@@ -254,6 +261,7 @@ public class ImageAdapter implements IWXImgLoaderAdapter {
           img = new File(temp);
         }else if(url.startsWith("/")){
           isLocalImg = true;//如果是用自定义的activity 不用作替换处理
+
           img = new File(temp);
         }
         if (view.getLayoutParams().width <= 0 || view.getLayoutParams().height <= 0) {
@@ -291,8 +299,13 @@ public class ImageAdapter implements IWXImgLoaderAdapter {
                   });
         }else{
           //这里是处理本地图片的
-          Picasso.with(WXEnvironment.getApplication())
+          Picasso.with(WXApplication.getActivity())
                   .load(img)
+                  .memoryPolicy(NO_CACHE, NO_STORE)
+//                  .resize(Utils.dp2px(WXApplication.getActivity(), 250),Utils.dp2px(WXApplication.getActivity(), 250))
+//                  .centerCrop()
+                  .transform(new CropSquareTransformation())
+                  .noFade()
                   .into(view, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -310,6 +323,7 @@ public class ImageAdapter implements IWXImgLoaderAdapter {
                       if(strategy.getImageListener()!=null){
                         strategy.getImageListener().onImageFinish(url,view,false,null);
                       }
+
                     }
                   });
         }

@@ -501,10 +501,10 @@ public class SplashActivity extends BaseActivity {
         String nowResVersion = SharedUtils.readResVersion();//现在的资源包版本
         String appResVersion = Constant.resVerison;//app自带资源包版本
         String netResVersion = Constant.netResVerison;//网络的资源包版本
-        // == null 或者 =="" 表示第一次使用， 否者是第二次使用 就判断版本号
-//    if(nowVersion.equals("")){
-//      nowVersion = Constant.resVerison;//设置默认的值
-//    }
+        //  == null 或者 =="" 表示第一次使用， 否者是第二次使用 就判断版本号
+        //  if(nowVersion.equals("")){
+        //      nowVersion = Constant.resVerison;//设置默认的值
+        //  }
         try {
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {

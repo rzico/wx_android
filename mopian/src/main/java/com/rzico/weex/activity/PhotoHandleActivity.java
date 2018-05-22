@@ -38,6 +38,7 @@ import com.rzico.weex.utils.AntiShake;
 import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.PhotoUtils;
+import com.rzico.weex.utils.UriToPathUtil;
 import com.rzico.weex.utils.photo.PhotoHandle;
 import com.yalantis.ucrop.*;
 import com.yalantis.ucrop.callback.BitmapLoadCallback;
@@ -342,13 +343,16 @@ public class PhotoHandleActivity extends AppCompatActivity {
 
             if(nowBitmap != null){
                 // 涂鸦参数
-                GraffitiParams params = new GraffitiParams();
-                ByteArrayOutputStream baos=new ByteArrayOutputStream();
-                nowBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                byte [] bitmapByte =baos.toByteArray();
-
-                params.mPaintSize = 20;
-                GraffitiActivity.startActivityForResult(PhotoHandleActivity.this, params,bitmapByte, GRAFFITI);
+//                GraffitiParams params = new GraffitiParams();
+//                ByteArrayOutputStream baos=new ByteArrayOutputStream();
+//                nowBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//                byte [] bitmapByte =baos.toByteArray();
+//
+//                params.mPaintSize = 20;
+//                GraffitiActivity.startActivityForResult(PhotoHandleActivity.this, params,bitmapByte, GRAFFITI);
+                String inputPath = UriToPathUtil.getRealFilePath(PhotoHandleActivity.this, inputUri);
+                String outputPath = UriToPathUtil.getRealFilePath(PhotoHandleActivity.this, outputUri);
+                GraffitiActivity.startActivityForResult(PhotoHandleActivity.this, inputPath, outputPath, true, GRAFFITI);
             }
 
         } else if (tab == 2) {

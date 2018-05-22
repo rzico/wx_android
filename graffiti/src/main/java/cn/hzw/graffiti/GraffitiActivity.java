@@ -88,6 +88,7 @@ public class GraffitiActivity extends Activity {
         params.mImagePath = imagePath;
         params.mSavePath = savePath;
         params.mSavePathIsDir = isDir;
+        params.mPaintSize = 20;
         startActivityForResult(activity, params,null, requestCode);
     }
 
