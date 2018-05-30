@@ -37,11 +37,11 @@ public class Constant {
 //    public static Handler loginHandler = null;
 
     //菜单路径
-    public static  String index1 = "view/home/index.js";
-    public static  String index2 = "view/friend/list.js";
-    public static  String index3 = "view/message/list.js";
-    public static  String index4 = "view/member/index.js";
-    public static  String center = "view/member/editor/editor.js";
+    public static  String index1 = "view/circle/circle.js";
+    public static  String index2 = "view/mall/mall.js";
+    public static  String index3 = "view/messagecenter/messagecenter.js";
+    public static  String index4 = "view/mine/mine.js";
+    public static  String center = "view/newarticle/newarticle.js";
 
     //   用户id
     public static long userId = 0;
@@ -69,7 +69,7 @@ public class Constant {
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://weex.rzico.com/";
+    public static final String SERVER = "http://120.26.160.202:8082/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
     public static boolean isLoginAcitivity = false;
