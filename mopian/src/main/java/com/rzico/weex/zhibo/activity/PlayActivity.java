@@ -294,7 +294,7 @@ public class PlayActivity extends BaseActivity {
                         room_count.setText("在线:" + formatLooker(roomCount));
 //                    }
                     room_count.setVisibility(VISIBLE);
-                    gift_count.setText("印票" + giftCount);
+                    gift_count.setText("炭币" + giftCount);
                     gift_count.setVisibility(VISIBLE);
 //                    if(data.getData().getFrontcover() !=null && !data.getData().getFrontcover().equals("")){
 //                        Picasso.with(PlayActivity.this).load(data.getData().getFrontcover()).into(head_image);
@@ -1164,7 +1164,7 @@ public class PlayActivity extends BaseActivity {
                                     String text = textElem.getText();//信息
                                     userInfo.text = text;
                                     if(text.contains("加入房间") && room_count != null){
-                                        room_count.setText("在线:" + formatLooker(++roomCount));
+                                        room_count.setText("在线:" + formatLooker(roomCount));
                                     }
                                     chatListAdapter.addMessage(userInfo);
                                     chatListAdapter.notifyDataSetChanged();
@@ -1219,7 +1219,7 @@ public class PlayActivity extends BaseActivity {
                                     showGift(nowGif.getId() + "", nowGif, userInfo.headPic, userInfo.nickName);
 //                                    giftCount = giftCount + liwu_money[gifType - 1 < 0 ? 0 : gifType - 1];
                                     giftCount = giftCount + nowGif.getPrice();
-                                    gift_count.setText("印票" + giftCount);
+                                    gift_count.setText("炭币" + giftCount);
                                     //播放礼物动画
                                         bigivgift.setMovieNet(nowGif.getAnimation());
 //                                    if (bigivgift.getVisibility() == VISIBLE) {

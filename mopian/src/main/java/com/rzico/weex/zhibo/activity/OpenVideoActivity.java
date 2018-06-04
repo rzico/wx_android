@@ -563,7 +563,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                             room_count.setText("在线:" + formatLooker(roomCount));
                             room_count.setVisibility(VISIBLE);
                             giftCount = data.getData().getGift();
-                            gift_count.setText("印票" + giftCount);
+                            gift_count.setText("炭币" + giftCount);
                             gift_count.setVisibility(VISIBLE);
                         //创建房间
                         liveRoom.createRoom(data.getData().getLiveId() + "", data.getData().getTitle(), new LiveRoom.CreateRoomCallback() {
@@ -755,7 +755,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         mHandler.sendMessageDelayed(message2, 4000);
                                         showGift(nowGif.getId() + "", nowGif, userInfo.headPic, userInfo.nickName);
                                         giftCount = giftCount + nowGif.getPrice();
-                                        gift_count.setText("印票" + giftCount);
+                                        gift_count.setText("炭币" + giftCount);
                                         //播放礼物动画
                                         bigivgift.setMovieNet(nowGif.getAnimation());
 //                                        if (bigivgift.getVisibility() == VISIBLE) {
