@@ -258,7 +258,7 @@ public class SplashActivity extends BaseActivity {
                     } else {
                         //这里是后台返回的数据 解析出错
                         //无论什么错误 都要能运行 就是把assests里面的数据拷贝到 data里面
-                        Toast.makeText(SplashActivity.this, "包解析出错", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(SplashActivity.this, "包解析出错", Toast.LENGTH_SHORT).show();
                         toNext();
                     }
                 } catch (Exception e) {

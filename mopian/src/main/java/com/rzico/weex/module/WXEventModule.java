@@ -1457,9 +1457,8 @@ public class WXEventModule extends WXModule {
     }
     @JSMethod
     public void clearCache(String options, JSCallback callback){
-        String cachePath = PathUtils.getCachePath();
-        boolean success = DeleteFileUtil.delete(cachePath);
-        success = DeleteFileUtil.delete(AllConstant.getDiskCachePath(getActivity()));
+
+        boolean success = DeleteFileUtil.delete(AllConstant.getDiskCachePath(getActivity()));
         if(success){
             Message message = new Message().success("");
             callback.invoke(message);
