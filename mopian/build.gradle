@@ -6,7 +6,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.assistant"
+        applicationId "com.rzico.pine"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 326
@@ -32,27 +32,15 @@ android {
         jumboMode true
     }
     signingConfigs {
-//        release {
-//            storeFile file("tools/rzico.jks")
-//            storePassword "123456"
-//            keyAlias "rzico"
-//            keyPassword "123456"
-//        }
-//        debug {
-//            storeFile file("tools/rzico.jks")
-//            storePassword "123456"
-//            keyAlias "rzico"
-//            keyPassword "123456"
-//        }
 
         release {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/pine.jks")
             storePassword "123456"
             keyAlias "rzico"
             keyPassword "123456"
         }
         debug {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/pine.jks")
             storePassword "123456"
             keyAlias "rzico"
             keyPassword "123456"

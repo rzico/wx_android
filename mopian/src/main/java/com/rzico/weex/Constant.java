@@ -27,12 +27,12 @@ public class Constant {
     public static final String resURL = "http://cdnx.rzico.com/";
 
     //    云店wxkey
-    public static final String wxAppId = "wx490857e2baff7cfd";
-    public static final String wxAppSecret = "46acecbfa148ca89d443d38b0ce7c865";
+    public static final String wxAppId = "wx52f15c8b810a6195";
+    public static final String wxAppSecret = "fa8b36c812125ccc5a642db3daddcd59";
 
     //    云店shareSDK
-    public static final String shareAppId = "1d927fd47d636";
-    public static final String shareAppSecret = "277f7181f07499357cfa33531fe818ab";
+    public static final String shareAppId = "260ea801ce8a8";
+    public static final String shareAppSecret = "33694f59b0d8fea28304d06bb410838f";
 
 //    public static Handler loginHandler = null;
 
@@ -51,7 +51,7 @@ public class Constant {
 
     public static String app = AllConstant.PACKNAME;
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-    public static final String bucket = "rzico-weex";
+    public static final String bucket = "jdh";
     public static final  String upLoadImages = "upload/images/";
     public static final  String upLoadVideos = "upload/videos/";
 
