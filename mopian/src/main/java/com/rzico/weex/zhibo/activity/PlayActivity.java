@@ -186,6 +186,8 @@ public class PlayActivity extends BaseActivity {
     private String userpic = "";
     //weex回调的 key
     private String key;
+
+    private String gameUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1164,7 +1166,7 @@ public class PlayActivity extends BaseActivity {
                                     String text = textElem.getText();//信息
                                     userInfo.text = text;
                                     if(text.contains("加入房间") && room_count != null){
-                                        room_count.setText("在线:" + formatLooker(roomCount));
+                                        room_count.setText("在线:" + formatLooker(roomCount++));
                                     }
                                     chatListAdapter.addMessage(userInfo);
                                     chatListAdapter.notifyDataSetChanged();
@@ -1314,6 +1316,11 @@ public class PlayActivity extends BaseActivity {
         }else if(messageBus.getMessageType() == MessageBus.Type.SENDKICK){
             BaseRoom.UserInfo userInfo = (BaseRoom.UserInfo) messageBus.getMessage();
             liveRoom.sendGroupKickMessage(userInfo, null);
+        }else if(messageBus.getMessageType() == MessageBus.Type.LIVEPLAYGAME){
+            //开始游戏操作 如果已经有游戏地址了 就不做这操作以免重复打开游戏
+            if(gameUrl == null || gameUrl.equals("")){
+
+            }
         }
     }
 

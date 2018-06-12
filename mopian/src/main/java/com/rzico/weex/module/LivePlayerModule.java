@@ -54,6 +54,12 @@ public class LivePlayerModule extends WXModule {
 
 
     @JSMethod
+    public void loadGame(String url){
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.LIVEPLAYGAME, url));
+        getActivity().finish();
+    }
+
+    @JSMethod
     public void loadUrl(String url, String video, String method, JSCallback callback){
         LivePlayerBean livePlayerBean = new LivePlayerBean();
         livePlayerBean.setUrl(url);
@@ -191,11 +197,16 @@ public class LivePlayerModule extends WXModule {
 
             @Override
             public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
-                long s = timGroupMemberInfos.get(0).getSilenceSeconds();
-                long ss = System.currentTimeMillis();
-                ss = ss / 1000;
-                if(s > ss ){
-                    callback.invoke(new Message().success(true));//被禁言了
+                if(timGroupMemberInfos != null  && timGroupMemberInfos.size() > 0){
+
+                    long s = timGroupMemberInfos.get(0).getSilenceSeconds();
+                    long ss = System.currentTimeMillis();
+                    ss = ss / 1000;
+                    if(s > ss ){
+                        callback.invoke(new Message().success(true));//被禁言了
+                    }else {
+                        callback.invoke(new Message().success(false));//没被禁言
+                    }
                 }else {
                     callback.invoke(new Message().success(false));//没被禁言
                 }

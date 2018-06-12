@@ -212,6 +212,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
 
 
     private HashMap<String, Object> playParams = new HashMap<>();
+
+    private String gameUrl;
     /**
      * 数据相关
      */
@@ -703,6 +705,10 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         userInfo.text = text;
                                         if(text.contains("加入房间") && room_count != null){
                                             room_count.setText("在线:" + formatLooker(++roomCount));
+
+                                            if(gameUrl != null && !gameUrl.equals("")){//如果有游戏路径就推送游戏地址
+                                                EventBus.getDefault().post(new MessageBus(MessageBus.Type.LIVEPLAYGAME, gameUrl));
+                                            }
                                         }
                                         chatListAdapter.addMessage(userInfo);
                                         chatListAdapter.notifyDataSetChanged();
@@ -863,8 +869,12 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         }else if(messageBus.getMessageType() == MessageBus.Type.SENDKICK){
             BaseRoom.UserInfo userInfo = (BaseRoom.UserInfo) messageBus.getMessage();
             liveRoom.sendGroupKickMessage(userInfo, null);
-        }
+        }else if(messageBus.getMessageType() == MessageBus.Type.LIVEPLAYGAME){
+            //开始游戏操作 如果已经有游戏地址了 就不做这操作以免重复打开游戏
+            if(gameUrl == null || gameUrl.equals("")){
 
+            }
+        }
     }
 
 
