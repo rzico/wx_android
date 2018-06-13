@@ -191,7 +191,9 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     /**
      * 刷礼物
      */
-    private LinearLayout llgiftcontent;
+    private LinearLayout llgiftcontent, ll_game;
+
+    private TextView tv_game;
     /**
      * 动画相关
      */
@@ -273,7 +275,22 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         room_count = (TextView)findViewById(R.id.room_count);
         gift_count = (TextView)findViewById(R.id.gift_count);
         tv_nickname = (TextView)findViewById(R.id.tv_nickname);
+        ll_game =(LinearLayout) findViewById(R.id.ll_game);
+        tv_game = (TextView) findViewById(R.id.tv_game);
 
+        //游戏操作
+        ll_game.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(tv_game.getText().toString().equalsIgnoreCase("游")){
+                    tv_game.setText("关");
+                    liveRoom.showGameList(OpenVideoActivity.this);
+                }else {
+                    tv_game.setText("游");
+                    exitGame();
+                }
+            }
+        });
         danmaku_view = (DanmakuView) findViewById(R.id.danmaku_view);
         danmaku_view.enableDanmakuDrawingCache(true);
         danmaku_view.setCallback(new DrawHandler.Callback() {
@@ -706,8 +723,21 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         if(text.contains("加入房间") && room_count != null){
                                             room_count.setText("在线:" + formatLooker(++roomCount));
 
-                                            if(gameUrl != null && !gameUrl.equals("")){//如果有游戏路径就推送游戏地址
-                                                EventBus.getDefault().post(new MessageBus(MessageBus.Type.LIVEPLAYGAME, gameUrl));
+                                            if(gameUrl != null && !gameUrl.equals("")){//如果有游戏路径就向加入游戏的用户推送游戏地址
+                                                //通知客户端打开游戏
+                                                liveRoom.sendGroupGameMessage(gameUrl, "load", new BaseRoom.MessageCallback() {
+                                                    @Override
+                                                    public void onError(int code, String errInfo) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onSuccess(Object... args) {
+                                                        //打开游戏界面
+
+
+                                                    }
+                                                });
                                             }
                                         }
                                         chatListAdapter.addMessage(userInfo);
@@ -854,6 +884,12 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         liveRoom.addDanmaku(danmaku_view, danmakuContext,userInfo.nickName + ":" + userInfo.text , userInfo.id == SharedUtils.readLoginId());
                                     }
                                 }
+//                                else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomGameMsg.name())){
+//                                    //开始游戏操作 如果已经有游戏地址了 就不做这操作以免重复打开游戏\\\\\\ 主播不用监听游戏推送 因为在消息发送成功后自行打开在下面 LIVEPLAYGAME
+//                                    if(gameUrl != null && !gameUrl.equals("")){
+//
+//                                    }
+//                                }
 
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
@@ -870,11 +906,41 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             BaseRoom.UserInfo userInfo = (BaseRoom.UserInfo) messageBus.getMessage();
             liveRoom.sendGroupKickMessage(userInfo, null);
         }else if(messageBus.getMessageType() == MessageBus.Type.LIVEPLAYGAME){
-            //开始游戏操作 如果已经有游戏地址了 就不做这操作以免重复打开游戏
-            if(gameUrl == null || gameUrl.equals("")){
+            //主播收到推送后发送游戏通知
+            gameUrl = (String) messageBus.getMessage();
+            //通知客户端打开游戏
+            if (gameUrl != null && !gameUrl.equalsIgnoreCase("")){
+                liveRoom.sendGroupGameMessage(gameUrl, "load", new BaseRoom.MessageCallback() {
+                    @Override
+                    public void onError(int code, String errInfo) {
 
+                    }
+
+                    @Override
+                    public void onSuccess(Object... args) {
+                        //打开游戏界面
+                        Toast.makeText(OpenVideoActivity.this, "打开游戏界面", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
         }
+    }
+
+    public void exitGame(){
+        liveRoom.sendGroupGameMessage(gameUrl, "exit", new BaseRoom.MessageCallback() {
+            @Override
+            public void onError(int code, String errInfo) {
+
+            }
+
+            @Override
+            public void onSuccess(Object... args) {
+                //推出游戏界面
+                gameUrl = "";
+                Toast.makeText(OpenVideoActivity.this, "退出游戏界面", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

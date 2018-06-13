@@ -1301,6 +1301,20 @@ public class PlayActivity extends BaseActivity {
                                     chatListAdapter.notifyDataSetChanged();
                                     liveRoom.addDanmaku(danmaku_view, danmakuContext,userInfo.nickName + ":" + userInfo.text , userInfo.id == SharedUtils.readLoginId());
                                 }
+                            }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomGameMsg.name())){
+                                    //开始游戏操作 如果已经有游戏地址了 就不做这操作以免重复打开游戏
+                                    if(gameUrl == null || gameUrl.equals("")){
+
+                                        BaseRoom.UserInfo userInfo = new Gson().fromJson(new Gson().toJson(commonJson.data), BaseRoom.UserInfo.class);
+                                        if(userInfo.type.equalsIgnoreCase("load")){
+                                               gameUrl = userInfo.text;
+
+                                            Toast.makeText(PlayActivity.this, "开始游戏界面", Toast.LENGTH_SHORT).show();
+                                        }else if(userInfo.type.equalsIgnoreCase("exit")){
+                                            gameUrl = "";
+                                            Toast.makeText(PlayActivity.this, "退出游戏界面", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
                             }
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
@@ -1316,11 +1330,6 @@ public class PlayActivity extends BaseActivity {
         }else if(messageBus.getMessageType() == MessageBus.Type.SENDKICK){
             BaseRoom.UserInfo userInfo = (BaseRoom.UserInfo) messageBus.getMessage();
             liveRoom.sendGroupKickMessage(userInfo, null);
-        }else if(messageBus.getMessageType() == MessageBus.Type.LIVEPLAYGAME){
-            //开始游戏操作 如果已经有游戏地址了 就不做这操作以免重复打开游戏
-            if(gameUrl == null || gameUrl.equals("")){
-
-            }
         }
     }
 

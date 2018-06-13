@@ -59,6 +59,23 @@
         android:layout_gravity="center"
         android:background="@drawable/l04"
         />
+    <LinearLayout
+        android:layout_width="38dp"
+        android:layout_gravity="top"
+        android:id="@+id/ll_game"
+        android:layout_marginLeft="14dp"
+        android:gravity="center"
+        android:background="@drawable/bg01"
+        android:layout_height="38dp">
+        <TextView
+            android:id="@+id/tv_game"
+            android:layout_width="20dp"
+            android:gravity="center"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:text="游"
+            android:textColor="@color/white"/>
+    </LinearLayout>
     <View
         android:layout_width="0dp"
         android:layout_weight="1"

@@ -619,6 +619,7 @@ public abstract class BaseRoom {
         CustomKickMsg,//踢人
         CustomFollowMsg,//关注啦
         CustomBarrageMsg,//弹幕
+        CustomGameMsg//游戏
     }
     public void sendGroupGifMessage(final @NonNull String userName, final @NonNull String headPic, final @NonNull String text, final MessageCallback callback){
         UserInfo userInfo = new UserInfo();
@@ -654,6 +655,13 @@ public abstract class BaseRoom {
         userInfo.headPic = headPic;
         userInfo.text = text;
         sendGroupMessage(userInfo, MessageType.CustomBarrageMsg, callback);
+    }
+
+    public void sendGroupGameMessage(final String gameUrl, final String type, final MessageCallback callback){
+        UserInfo userInfo = new UserInfo();
+        userInfo.text = gameUrl;
+        userInfo.type = type;
+        sendGroupMessage(userInfo, MessageType.CustomGameMsg, callback);
     }
 
 
@@ -882,6 +890,39 @@ public abstract class BaseRoom {
         intent.setData(uri);
         activity.startActivity(intent);
     }
+    public void showGameList(BaseActivity activity){
+
+        String url =  "file://view/game/open.js" ;
+        String key = String.valueOf(System.currentTimeMillis());
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse(url);
+        String scheme = uri.getScheme();
+        if (TextUtils.equals("tel", scheme)) {
+
+        } else if (TextUtils.equals("sms", scheme)) {
+
+        } else if (TextUtils.equals("mailto", scheme)) {
+
+        } else if (TextUtils.equals("http", scheme) ||
+                TextUtils.equals("https",
+                        scheme)) {
+            intent.putExtra("isLocal", "false");
+            intent.putExtra("key", key);
+            intent.addCategory(Constant.WEEX_CATEGORY);
+        } else if (TextUtils.equals("file", scheme)) {
+            intent.putExtra("isLocal", "true");
+            intent.putExtra("key", key);
+            intent.addCategory(Constant.WEEX_CATEGORY);
+        } else {
+            intent.addCategory(Constant.WEEX_CATEGORY);
+            uri = Uri.parse(new StringBuilder("http:").append(url).toString());
+        }
+        intent.setData(uri);
+        activity.startActivity(intent);
+    }
 
     public void showUserInfo(final BaseActivity activity, final Long userId, final boolean isUser){
         if(userId == null){
@@ -926,6 +967,7 @@ public abstract class BaseRoom {
         public String cmd;//消息类型
         public String time;//被禁言时长
         public String vip;//VIP等级
+        public String type;//游戏类型 load、 exit
     }
     protected class HeartBeatThread extends HandlerThread {
         private Handler handler;
