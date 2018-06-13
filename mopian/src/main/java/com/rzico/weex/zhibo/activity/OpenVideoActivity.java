@@ -1,5 +1,6 @@
 package com.rzico.weex.zhibo.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -7,7 +8,9 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +18,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,10 +30,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,6 +52,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.rzico.weex.R;
 import com.rzico.weex.activity.BaseActivity;
+import com.rzico.weex.model.LivePlayerBean;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.BasePage;
 import com.rzico.weex.model.info.NoticeInfo;
@@ -77,7 +88,10 @@ import com.tencent.imsdk.TIMTextElem;
 import com.tencent.imsdk.TIMUserProfile;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt;
+import com.tencent.rtmp.ITXLivePlayListener;
 import com.tencent.rtmp.TXLiveConstants;
+import com.tencent.rtmp.TXLivePlayConfig;
+import com.tencent.rtmp.TXLivePlayer;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.yalantis.ucrop.model.AspectRatio;
 
@@ -99,6 +113,7 @@ import cn.finalteam.rxgalleryfinal.bean.MediaBean;
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType;
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
+import cn.finalteam.rxgalleryfinal.utils.DensityUtil;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -230,6 +245,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     private String title;
 
 
+
+
     //弹幕
     private DanmakuView danmaku_view;
     private DanmakuContext danmakuContext;
@@ -241,6 +258,42 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             return new Danmakus();
         }
     };
+
+//    游戏定义
+
+    private View beauty_choose,bar_bottom,zhibo_bottom_layout;
+    private FrameLayout game_frame;
+    private TXCloudVideoView gameCaptureView;
+    private WebView gameWebView;
+    private boolean mIsPlaying;
+private TXLivePlayer mLivePlayer = null;
+private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
+    private static final int  CACHE_STRATEGY_SMOOTH = 2;  //流畅
+    private static final int  CACHE_STRATEGY_AUTO = 3;  //自动
+
+    private static final float  CACHE_TIME_FAST = 1.0f;
+    private static final float  CACHE_TIME_SMOOTH = 5.0f;
+
+    public static final int ACTIVITY_TYPE_PUBLISH      = 1;
+    public static final int ACTIVITY_TYPE_LIVE_PLAY    = 2;
+    public static final int ACTIVITY_TYPE_VOD_PLAY     = 3;
+    public static final int ACTIVITY_TYPE_LINK_MIC     = 4;
+    public static final int ACTIVITY_TYPE_REALTIME_PLAY = 5;
+
+    private int              mCacheStrategy = 0;
+
+    LivePlayerBean livePlayerBean;
+
+    private int              mCurrentRenderMode;
+    private int              mCurrentRenderRotation;
+    private boolean  mHWDecode   = false;
+
+    private int              mPlayType = TXLivePlayer.PLAY_TYPE_LIVE_RTMP;
+    private TXLivePlayConfig mPlayConfig;
+    private long             mStartPlayTS = 0;
+    protected int            mActivityType;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -251,7 +304,9 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         key = getIntent().getStringExtra("key");
         initView();
         initLive();
+//        initGame();
     }
+
 
     private void initView() {
         mHandler = new MyHandler(this);
@@ -280,12 +335,18 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         ll_game =(LinearLayout) findViewById(R.id.ll_game);
         tv_game = (TextView) findViewById(R.id.tv_game);
 
+
+        //直播定义
+        game_frame = (FrameLayout) findViewById(R.id.game_frame);
+
+        beauty_choose = (View)findViewById(R.id.beauty_choose);
+        zhibo_bottom_layout = (View)findViewById(R.id.zhibo_bottom_layout);
+        bar_bottom = (View)findViewById(R.id.bar_bottom);
         //游戏操作
         ll_game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(tv_game.getText().toString().equalsIgnoreCase("游")){
-                    tv_game.setText("关");
                     liveRoom.showGameList(OpenVideoActivity.this);
                 }else {
                     tv_game.setText("游");
@@ -293,6 +354,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 }
             }
         });
+
         danmaku_view = (DanmakuView) findViewById(R.id.danmaku_view);
         danmaku_view.enableDanmakuDrawingCache(true);
         danmaku_view.setCallback(new DrawHandler.Callback() {
@@ -647,6 +709,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                 //关闭计时器
                                 mVideoTimer.cancel();
                                 zhibo_jiesu_ll.setVisibility(View.VISIBLE);
+                                exitGame();
                             }
 
                             @Override
@@ -655,6 +718,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                 //关闭计时器
                                 mVideoTimer.cancel();
                                 zhibo_jiesu_ll.setVisibility(View.VISIBLE);
+                                exitGame();
                             }
                         }).execute();
                     }else{
@@ -735,7 +799,6 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
 
                                                     @Override
                                                     public void onSuccess(Object... args) {
-                                                        //打开游戏界面
 
 
                                                     }
@@ -921,44 +984,12 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                     @Override
                     public void onSuccess(Object... args) {
                         //打开游戏界面
-                        Toast.makeText(OpenVideoActivity.this, "打开游戏界面", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(OpenVideoActivity.this, "打开游戏界面", Toast.LENGTH_SHORT).show();
                         openGame();
                     }
                 });
             }
         }
-    }
-
-    private void openGame() {
-        new XRequest(OpenVideoActivity.this, gameUrl, XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
-            @Override
-            public void onSuccess(BaseActivity activity, String result, String type) {
-                GameBean gameBean = new Gson().fromJson(result, GameBean.class);
-                //连接直播以及游戏页面
-
-            }
-
-            @Override
-            public void onFail(BaseActivity activity, String cacheData, int code) {
-
-            }
-        }).execute();
-    }
-
-    public void exitGame(){
-        liveRoom.sendGroupGameMessage(gameUrl, "exit", new BaseRoom.MessageCallback() {
-            @Override
-            public void onError(int code, String errInfo) {
-
-            }
-
-            @Override
-            public void onSuccess(Object... args) {
-                //推出游戏界面
-                gameUrl = "";
-                Toast.makeText(OpenVideoActivity.this, "退出游戏界面", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 
@@ -1200,39 +1231,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             String sendText = "";
             sendText = "送了【" + datagif.getName() +"】";
             gifView.setMovieNet(datagif.getAnimation());
-//            if (i == 1) {
-//                gifView.setMovieResource(R.raw.gg1);
-////                giftype.setText("送了【666】");
-//                sendText = "送了【666】";
-//            } else if (i == 2) {
-//                gifView.setMovieResource(R.raw.gg2);
-////                giftype.setText("送了【棒棒糖】");
-//                sendText = "送了【棒棒糖】";
-//            } else if (i == 3) {
-//                gifView.setMovieResource(R.raw.gg3);
-////                giftype.setText("送了【爱心】");
-//                sendText = "送了【爱心】";
-//            } else if (i == 4) {
-//                gifView.setMovieResource(R.raw.gg4);
-////                giftype.setText("送了【玫瑰】");
-//                sendText = "送了【玫瑰】";
-//            } else if (i == 5) {
-//                gifView.setMovieResource(R.raw.gg5);
-////                giftype.setText("送了【么么哒】");
-//                sendText = "送了【么么哒】";
-//            } else if (i == 6) {
-//                gifView.setMovieResource(R.raw.gg6);
-////                giftype.setText("送了【萌萌哒】");
-//                sendText = "送了【萌萌哒】";
-//            } else if (i == 7) {
-//                gifView.setMovieResource(R.raw.gg7);
-////                giftype.setText("送了【甜甜圈】");
-//                sendText = "送了【甜甜圈】";
-//            } else if (i == 8) {
-//                gifView.setMovieResource(R.raw.gg8);
-////                giftype.setText("送了【女神称号】");
-//                sendText = "送了【女神称号】";
-//            }
+
             giftype.setText(sendText);
 
             giftNum.setText("x1");/*设置礼物数量*/
@@ -1461,6 +1460,19 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     protected void onDestroy() {
         super.onDestroy();
 
+        //关闭游戏
+        if (mLivePlayer != null) {
+            mLivePlayer.stopPlay(true);
+            mLivePlayer = null;
+        }
+        if (gameCaptureView != null){
+            gameCaptureView.onDestroy();
+            gameCaptureView = null;
+        }
+        mPlayConfig = null;
+        gameWebView.removeAllViews();
+        gameWebView.destroy();
+
         //停止直播
         SharedUtils.saveLiveState(false);
         showDanmaku = false;
@@ -1638,6 +1650,333 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             }
         });
         exitAlert.show();
+    } //公用打印辅助函数
+
+//    游戏方法定义开始
+
+    private void initGame() {
+
+//        if(ll_game == null){
+
+//        }
+
+        gameCaptureView = (TXCloudVideoView) findViewById(R.id.game_video_view);
+        gameWebView = (WebView) findViewById(R.id.gameWebView);
+
+        mCurrentRenderMode     = TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION;
+        mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT;
+
+        if (mLivePlayer == null){
+            mLivePlayer = new TXLivePlayer(this);
+        }
+
+        gameCaptureView.setBackgroundColor(getResources().getColor(R.color.black));
+        gameCaptureView.setLogMargin(12, 12, 110, 60);
+        gameCaptureView.showLog(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            gameWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        } else { gameWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+        WebSettings set = gameWebView.getSettings();
+        set.setLoadWithOverviewMode(true);
+        set.setUseWideViewPort(true);
+        set.setDomStorageEnabled(true);
+        set.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        set.setTextZoom(100);
+        gameWebView.getSettings().setJavaScriptEnabled(true);
+        gameWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        gameWebView.getSettings().setSupportMultipleWindows(true);
+        gameWebView.setWebChromeClient(new WebChromeClient());
+        gameWebView.clearCache(true);
+        gameWebView.getBackground().setAlpha(0);
+        gameWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view,String url) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    gameWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                } else { gameWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                }
+                gameWebView.setBackgroundColor(Color.TRANSPARENT);
+
+//                LivePlayerBean livePlayerBean = (LivePlayerBean) getIntent().getSerializableExtra("livePlayerParam");
+
+
+                //开始播放
+                if (livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
+                    mIsPlaying = startPlay(livePlayerBean.getVideo());
+                } else {
+                    mIsPlaying = false;
+                }
+
+
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                boolean canHerf = true;
+                System.out.print(url);
+
+                if(url.length()<35 && url.contains("/home")){
+                    //关闭当前页面
+//                    finish();
+                    canHerf = false;
+                } else if(url.startsWith("http")){
+                    return false;
+                } else if(url.startsWith("https")){
+                    return false;
+                } else
+                if(url.startsWith("nihvolbutton://bluefrog")){
+                    canHerf = false;
+
+                }
+
+                return canHerf;
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+
+            }
+        });
+
+
+        mActivityType = getIntent().getIntExtra("PLAY_TYPE", ACTIVITY_TYPE_LIVE_PLAY);
+
+        mPlayConfig = new TXLivePlayConfig();
+//        checkPublishPermission();
+        mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
+        mLivePlayer.setRenderMode(mCurrentRenderMode);
     }
 
+    private boolean startPlay(String url) {
+//        String playUrl = "rtmp://47.75.7.152:1935/HKRepeaterBC01/video";
+        String playUrl = url;
+
+        if (!checkPlayUrl(playUrl)) {
+            return false;
+        }
+
+//        mRootView.setBackgroundColor(0xff000000);
+
+        mLivePlayer.setPlayerView(gameCaptureView);
+
+        mLivePlayer.setPlayListener(new ITXLivePlayListener() {
+            @Override
+            public void onPlayEvent(int event, Bundle param) {
+                String playEventLog = "receive event: " + event + ", " + param.getString(TXLiveConstants.EVT_DESCRIPTION);
+                Log.d("OpenVideoActivity", playEventLog);
+
+                if (event == TXLiveConstants.PLAY_EVT_PLAY_BEGIN) {
+//                    stopLoadingAnimation();
+                    Log.d("AutoMonitor", "PlayFirstRender,cost=" +(System.currentTimeMillis()-mStartPlayTS));
+                } else if (event == TXLiveConstants.PLAY_ERR_NET_DISCONNECT || event == TXLiveConstants.PLAY_EVT_PLAY_END) {
+                    stopPlay();
+                } else if (event == TXLiveConstants.PLAY_EVT_PLAY_LOADING){
+//                    startLoadingAnimation();
+                } else if (event == TXLiveConstants.PLAY_EVT_RCV_FIRST_I_FRAME) {
+//                    stopLoadingAnimation();
+                } else if (event == TXLiveConstants.PLAY_EVT_CHANGE_RESOLUTION) {
+
+                } else if (event == TXLiveConstants.PLAY_EVT_CHANGE_ROTATION) {
+                    return;
+                }
+
+                if (event < 0) {
+                    Toast.makeText(getApplicationContext(), param.getString(TXLiveConstants.EVT_DESCRIPTION), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNetStatus(Bundle status) {
+                String str = getNetStatusString(status);
+                Log.d("OpenVideoActivity", "Current status, CPU:"+status.getString(TXLiveConstants.NET_STATUS_CPU_USAGE)+
+                        ", RES:"+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_WIDTH)+"*"+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_HEIGHT)+
+                        ", SPD:"+status.getInt(TXLiveConstants.NET_STATUS_NET_SPEED)+"Kbps"+
+                        ", FPS:"+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_FPS)+
+                        ", ARA:"+status.getInt(TXLiveConstants.NET_STATUS_AUDIO_BITRATE)+"Kbps"+
+                        ", VRA:"+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_BITRATE)+"Kbps");
+            }
+        });
+        // 硬件加速在1080p解码场景下效果显著，但细节之处并不如想象的那么美好：
+        // (1) 只有 4.3 以上android系统才支持
+        // (2) 兼容性我们目前还仅过了小米华为等常见机型，故这里的返回值您先不要太当真
+        mLivePlayer.enableHardwareDecode(mHWDecode);
+        mLivePlayer.setRenderRotation(mCurrentRenderRotation);
+        mLivePlayer.setRenderMode(mCurrentRenderMode);
+        //设置播放器缓存策略
+        //这里将播放器的策略设置为自动调整，调整的范围设定为1到4s，您也可以通过setCacheTime将播放器策略设置为采用
+        //固定缓存时间。如果您什么都不调用，播放器将采用默认的策略（默认策略为自动调整，调整范围为1到4s）
+        //mLivePlayer.setCacheTime(5);
+
+        mLivePlayer.setConfig(mPlayConfig);
+
+        int result = mLivePlayer.startPlay(playUrl,mPlayType); // result返回值：0 success;  -1 empty url; -2 invalid url; -3 invalid playType;
+        if (result != 0) {
+//            mRootView.setBackgroundResource(R.drawable.main_bkg);
+            return false;
+        }
+
+        Log.w("video render","timetrack start play");
+
+
+
+        mStartPlayTS = System.currentTimeMillis();
+
+        return true;
+    }
+    private boolean checkPlayUrl(final String playUrl) {
+        if (TextUtils.isEmpty(playUrl) || (!playUrl.startsWith("http://") && !playUrl.startsWith("https://") && !playUrl.startsWith("rtmp://")  && !playUrl.startsWith("/"))) {
+            Toast.makeText(getApplicationContext(), "播放地址不合法，直播目前仅支持rtmp,flv播放方式!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        switch (mActivityType) {
+            case ACTIVITY_TYPE_LIVE_PLAY:
+            {
+                if (playUrl.startsWith("rtmp://")) {
+                    mPlayType = TXLivePlayer.PLAY_TYPE_LIVE_RTMP;
+                } else if ((playUrl.startsWith("http://") || playUrl.startsWith("https://"))&& playUrl.contains(".flv")) {
+                    mPlayType = TXLivePlayer.PLAY_TYPE_LIVE_FLV;
+                } else {
+                    Toast.makeText(getApplicationContext(), "播放地址不合法，直播目前仅支持rtmp,flv播放方式!", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+            break;
+            case ACTIVITY_TYPE_REALTIME_PLAY:
+                mPlayType = TXLivePlayer.PLAY_TYPE_LIVE_RTMP_ACC;
+                break;
+            default:
+                Toast.makeText(getApplicationContext(), "播放地址不合法，目前仅支持rtmp,flv播放方式!", Toast.LENGTH_SHORT).show();
+                return false;
+        }
+        return true;
+    }
+    private  void stopPlay() {
+//        mRootView.setBackgroundResource(R.drawable.main_bkg);
+
+        //关闭游戏
+        if (mLivePlayer != null) {
+            mLivePlayer.stopPlay(true);
+            mLivePlayer = null;
+        }
+        if (gameCaptureView != null){
+            gameCaptureView.onDestroy();
+            gameCaptureView = null;
+        }
+        mPlayConfig = null;
+        gameWebView.removeAllViews();
+
+
+
+        downAllView();
+        mIsPlaying = false;
+    }
+
+    private void openGame() {
+        new XRequest(OpenVideoActivity.this, gameUrl, XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+            @Override
+            public void onSuccess(BaseActivity activity, String result, String type) {
+                GameBean gameBean = new Gson().fromJson(result, GameBean.class);
+                //连接直播以及游戏页面
+                if(livePlayerBean == null && gameBean != null){
+                    game_frame.setVisibility(VISIBLE);
+                    livePlayerBean = new LivePlayerBean();
+                    livePlayerBean.setUrl(gameBean.getData().getUrl());
+                    livePlayerBean.setVideo(gameBean.getData().getVideo());
+                    initGame();
+                    gameWebView.postUrl(livePlayerBean.getUrl(), null);
+                    upAllView();
+                    tv_game.setText("关");
+                }
+            }
+
+            @Override
+            public void onFail(BaseActivity activity, String cacheData, int code) {
+
+            }
+        }).execute();
+    }
+
+    public void exitGame(){
+        liveRoom.sendGroupGameMessage(gameUrl, "exit", new BaseRoom.MessageCallback() {
+            @Override
+            public void onError(int code, String errInfo) {
+
+            }
+
+            @Override
+            public void onSuccess(Object... args) {
+                //退出游戏界面
+                gameUrl = null;
+                livePlayerBean = null;
+                game_frame.setVisibility(GONE);
+
+                stopPlay();
+//                Toast.makeText(OpenVideoActivity.this, "退出游戏界面", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    protected String getNetStatusString(Bundle status) {
+        String str = String.format("%-14s %-14s %-12s\n%-8s %-8s %-8s %-8s\n%-14s %-14s\n%-14s %-14s",
+                "CPU:"+status.getString(TXLiveConstants.NET_STATUS_CPU_USAGE),
+                "RES:"+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_WIDTH)+"*"+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_HEIGHT),
+                "SPD:"+status.getInt(TXLiveConstants.NET_STATUS_NET_SPEED)+"Kbps",
+                "JIT:"+status.getInt(TXLiveConstants.NET_STATUS_NET_JITTER),
+                "FPS:"+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_FPS),
+                "GOP:"+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_GOP)+"s",
+                "ARA:"+status.getInt(TXLiveConstants.NET_STATUS_AUDIO_BITRATE)+"Kbps",
+                "QUE:"+status.getInt(TXLiveConstants.NET_STATUS_CODEC_CACHE)
+                        +"|"+status.getInt(TXLiveConstants.NET_STATUS_CACHE_SIZE)
+                        +","+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_CACHE_SIZE)
+                        +","+status.getInt(TXLiveConstants.NET_STATUS_V_DEC_CACHE_SIZE)
+                        +"|"+status.getInt(TXLiveConstants.NET_STATUS_AV_RECV_INTERVAL)
+                        +","+status.getInt(TXLiveConstants.NET_STATUS_AV_PLAY_INTERVAL)
+                        +","+String.format("%.1f", status.getFloat(TXLiveConstants.NET_STATUS_AUDIO_PLAY_SPEED)).toString(),
+                "VRA:"+status.getInt(TXLiveConstants.NET_STATUS_VIDEO_BITRATE)+"Kbps",
+                "SVR:"+status.getString(TXLiveConstants.NET_STATUS_SERVER_IP),
+                "AUDIO:"+status.getString(TXLiveConstants.NET_STATUS_AUDIO_INFO));
+        return str;
+    }
+
+    //开始游戏时将控件上移
+
+
+    private  boolean isUpAll = false;
+    public void upAllView(){
+        if(!isUpAll){
+            upView(mBeautyPannelView);
+            upView(chat_listview);
+            upView(beauty_choose);
+            upView(bar_bottom);
+            upView(zhibo_bottom_layout);
+            isUpAll = true;
+        }
+    }
+    public void downAllView(){
+        if(isUpAll){
+            downView(mBeautyPannelView);
+            downView(chat_listview);
+            downView(beauty_choose);
+            downView(bar_bottom);
+            downView(zhibo_bottom_layout);
+            isUpAll = false;
+        }
+    }
+    //结束游戏时将控件下移
+
+//    控件上移方法
+
+    public void upView(View view){
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        params.bottomMargin += DensityUtil.dip2px(OpenVideoActivity.this, 230);;
+        view.setLayoutParams(params);
+    }
+    public void downView(View view){
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        params.bottomMargin -= DensityUtil.dip2px(OpenVideoActivity.this, 230);;
+        view.setLayoutParams(params);
+    }
 }

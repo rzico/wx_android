@@ -266,6 +266,7 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                     mIsPlaying = false;
                 }
 
+
             }
 
             @Override

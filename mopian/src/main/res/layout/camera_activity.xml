@@ -55,28 +55,7 @@
             android:visibility="gone"/>
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:id="@+id/tobuy_ll"
-            android:orientation="horizontal"
-            android:layout_gravity="bottom|left"
-            android:layout_above="@+id/chat_listview"
-            android:visibility="gone"
-            android:background="@drawable/tobuy1"
-            android:layout_marginBottom="10dp"
-            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/shop_who"
-                android:layout_marginLeft="10dp"
-                android:text="何先生正在购买1号商品"
-                android:textColor="@color/white"
-                android:layout_gravity="center"
-                android:gravity="center"
-                />
-        </LinearLayout>
         <com.rzico.weex.zhibo.view.ChatListView
             android:id="@+id/chat_listview"
             android:layout_width="300dp"
@@ -88,14 +67,6 @@
             android:listSelector="@android:color/transparent"
             android:scrollbars="none"
             android:transcriptMode="alwaysScroll"/>
-        <com.rzico.weex.zhibo.view.HeartLayout
-            android:id="@+id/heart_layout"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="55dp"
-            android:focusable="true" />
 
 
         <LinearLayout
@@ -296,6 +267,7 @@
 
         <!--底部-->
         <include
+            android:id="@+id/zhibo_bottom_layout"
             layout="@layout/zhibo_bottom_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -617,31 +589,45 @@
         <!--美颜-->
 
         <com.rzico.weex.zhibo.view.BeautySettingPannel
+            android:id="@+id/layoutFaceBeauty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/layoutFaceBeauty"
             android:layout_alignParentBottom="true"
             android:clickable="true"
             android:visibility="gone"
             android:background="@color/colorGray4"/>
+        <FrameLayout
+            android:id="@+id/game_frame"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp">
 
-        <!--<RelativeLayout android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/mEffectContainer"-->
-            <!--android:clickable="true"-->
-            <!--android:visibility="gone"-->
-            <!--android:layout_alignParentBottom="true">-->
-            <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:id="@+id/meiyanview"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--/>-->
-            <!--<include layout="@layout/layout_effect"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="215dp"-->
-                <!--android:layout_alignParentBottom="true" />-->
-        <!--</RelativeLayout>-->
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/game_video_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:visibility="visible"/>
+
+            <ImageView
+                android:id="@+id/loadingImageView"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
+                android:src="@drawable/loading_animation"
+                android:visibility="gone"/>
+
+            <WebView
+                android:id="@+id/gameWebView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:visibility="visible"/>
+
+
+        </FrameLayout>
 
     </RelativeLayout>
 </RelativeLayout>
