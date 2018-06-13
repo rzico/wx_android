@@ -1,4 +1,4 @@
-package com.rzico.assistant.wxapi;
+package com.rzico.pine.wxapi;
 
 import android.app.Activity;
 import android.content.Intent;

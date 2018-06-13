@@ -36,13 +36,13 @@ android {
         release {
             storeFile file("tools/pine.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "pine"
             keyPassword "123456"
         }
         debug {
             storeFile file("tools/pine.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "pine"
             keyPassword "123456"
         }
     }
