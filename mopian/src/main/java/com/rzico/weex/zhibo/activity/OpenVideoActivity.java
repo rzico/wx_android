@@ -45,6 +45,7 @@ import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.BasePage;
 import com.rzico.weex.model.info.NoticeInfo;
+import com.rzico.weex.model.zhibo.GameBean;
 import com.rzico.weex.model.zhibo.LiveGiftBean;
 import com.rzico.weex.model.zhibo.LiveRoomBean;
 import com.rzico.weex.model.zhibo.UserBean;
@@ -88,6 +89,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -920,11 +922,27 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                     public void onSuccess(Object... args) {
                         //打开游戏界面
                         Toast.makeText(OpenVideoActivity.this, "打开游戏界面", Toast.LENGTH_SHORT).show();
-
+                        openGame();
                     }
                 });
             }
         }
+    }
+
+    private void openGame() {
+        new XRequest(OpenVideoActivity.this, gameUrl, XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+            @Override
+            public void onSuccess(BaseActivity activity, String result, String type) {
+                GameBean gameBean = new Gson().fromJson(result, GameBean.class);
+                //连接直播以及游戏页面
+
+            }
+
+            @Override
+            public void onFail(BaseActivity activity, String cacheData, int code) {
+
+            }
+        }).execute();
     }
 
     public void exitGame(){
