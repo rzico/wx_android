@@ -23,9 +23,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.MainActivity;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.utils.MD5;
@@ -124,6 +126,8 @@ public class MYWXWebView implements IWebView {
 
     @Override
     public void loadUrl(String url) {
+//        Toast.makeText(WXApplication.getActivity(), "初始化耗时："+ (System.currentTimeMillis() - startLoad), Toast.LENGTH_SHORT).show();
+//        startLoad = System.currentTimeMillis();
         if(getWebView() == null)
             return;
         getWebView().loadUrl(url, extraHeaders);
@@ -181,6 +185,7 @@ public class MYWXWebView implements IWebView {
     private void showWebView(boolean shown) {
         mWebView.setVisibility(shown ? View.VISIBLE : View.INVISIBLE);
     }
+    private long startLoad = 0;
 
     public @Nullable
     WebView getWebView() {
@@ -189,20 +194,23 @@ public class MYWXWebView implements IWebView {
     }
 
     private void initWebView(WebView wv) {
+//        startLoad = System.currentTimeMillis();
         WebSettings settings = wv.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setAppCacheEnabled(true);
         settings.setUseWideViewPort(true);
         settings.setDomStorageEnabled(true);
         settings.setSupportZoom(false);
-        settings.setBlockNetworkImage(true);
         settings.setBuiltInZoomControls(false);
+        settings.setBlockNetworkImage(true);
+
         if (Build.VERSION.SDK_INT >= 21) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         // 修改ua使得web端正确判断
         String ua = settings.getUserAgentString();
         settings.setUserAgentString(ua+"; weex");
+
         wv.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -283,6 +291,9 @@ public class MYWXWebView implements IWebView {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 WXLogUtils.v("tag", "onPageFinished " + url);
+
+                view.getSettings().setBlockNetworkImage(false);
+//                Toast.makeText(view.getContext(), "耗时："+ (System.currentTimeMillis() - startLoad), Toast.LENGTH_SHORT).show();
                 if (mOnPageListener != null) {
                     mOnPageListener.onPageFinish(url, view.canGoBack(), view.canGoForward());
                 }
@@ -324,7 +335,7 @@ public class MYWXWebView implements IWebView {
                     //加载完毕进度条消失
                     mProgressBar.setVisibility(View.GONE);
 
-                    view.getSettings().setBlockNetworkImage(false);
+//                    view.getSettings().setBlockNetworkImage(false);
                 } else {
                     //更新进度
                     mProgressBar.setProgress(newProgress);
