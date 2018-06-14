@@ -138,7 +138,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
-            android:name="com.rzico.assistant.wxapi.WXEntryActivity"
+            android:name="com.rzico.pine.wxapi.WXEntryActivity"
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
