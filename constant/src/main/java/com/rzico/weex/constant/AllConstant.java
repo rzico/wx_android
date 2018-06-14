@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 
 public class AllConstant {
-    public static final String PACKNAME = "com.rzico.assistant";
+    public static final String PACKNAME = "com.rzico.pine";
 
     public static int isClearAll = 1;
 
