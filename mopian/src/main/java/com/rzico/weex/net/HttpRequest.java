@@ -203,7 +203,6 @@ public class HttpRequest {
                     } else {
                         if ("success".equals(type) && "login.success".equals(content)){
                             LoginUtils.checkLogin(task.activity, null, null);//不做处理 就传null
-
                             //这里拦截了 登录成功
                             while (!SessionOutManager.isEmpty()){//队列里如果有数据 就请求
                                 TaskBean taskBean = SessionOutManager.deQueue();

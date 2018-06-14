@@ -18,6 +18,8 @@
     <!--config -->
     <!--高德地图key-->
     <string name="amapkey">dfbe8d6227a33a088fcf6d2eb5c7fe71</string>
+
+
     <!-- time -->
     <string name="time_yesterday">昨天</string>
     <string name="time_day">日</string>

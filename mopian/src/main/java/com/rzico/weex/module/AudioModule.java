@@ -30,9 +30,9 @@ public class AudioModule extends WXModule {
 
 
     @JSMethod
-    public void play(String url){
+    public void play(String url, JSCallback callback){
         Player.getInstance().stop();
-        Player.getInstance().playUrl(url);
+        Player.getInstance().playUrl(url, callback);
         Player.getInstance().play();
     }
 
