@@ -8,8 +8,11 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.ConsoleMessage;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -37,6 +40,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.finalteam.rxgalleryfinal.utils.DensityUtil;
+
 import static com.rzico.weex.Constant.key;
 
 /**
@@ -46,7 +51,8 @@ import static com.rzico.weex.Constant.key;
 public class MYWXWebView implements IWebView {
     private Context mContext;
     private WebView mWebView;
-    private ProgressBar mProgressBar;
+//    private ProgressBar mProgressBar;
+    private ProgressView mProgressBar;
     private boolean mShowLoading = true;
 
     private OnErrorListener mOnErrorListener;
@@ -55,7 +61,7 @@ public class MYWXWebView implements IWebView {
     private Map extraHeaders = new HashMap();
     public MYWXWebView(Context context) {
         mContext = context;
-        extraHeaders.put("Referer", "http://mopian.1xx.me");
+        extraHeaders.put("Referer", "https://mopian.1xx.me");
 //        extraHeaders.put(WXHttpUtil.KEY_USER_AGENT, WXHttpUtil.assembleUserAgent(mContext, WXEnvironment.getConfig())+ "wexx");
         String uid= PhoneUtil.getDeviceId(mContext);
         String app= Constant.app;
@@ -75,7 +81,9 @@ public class MYWXWebView implements IWebView {
         FrameLayout root = new FrameLayout(mContext);
         root.setBackgroundColor(Color.WHITE);
 
-        mWebView = new WebView(mContext);//mContext.getApplicationContext();
+        if(mWebView == null){
+            mWebView = new WebView(mContext);//mContext.getApplicationContext();
+        }
         FrameLayout.LayoutParams wvLayoutParams =
                 new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                         FrameLayout.LayoutParams.MATCH_PARENT);
@@ -87,14 +95,21 @@ public class MYWXWebView implements IWebView {
         root.addView(mWebView);
         initWebView(mWebView);
 
-        mProgressBar = new ProgressBar(mContext);
-        showProgressBar(false);
-        FrameLayout.LayoutParams pLayoutParams =
-                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT);
-        mProgressBar.setLayoutParams(pLayoutParams);
-        pLayoutParams.gravity = Gravity.CENTER;
+//        mProgressBar = new ProgressBar(mContext);
+//        showProgressBar(false);
+//        FrameLayout.LayoutParams pLayoutParams =
+//                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+//                        FrameLayout.LayoutParams.WRAP_CONTENT);
+//        mProgressBar.setLayoutParams(pLayoutParams);
+//        pLayoutParams.gravity = Gravity.CENTER;
+//        root.addView(mProgressBar);
+        mProgressBar = new ProgressView(mContext);
+        mProgressBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(mContext, 3)));
+        mProgressBar.setColor(0xff62b900);
+        mProgressBar.setProgress(10);
+        //把进度条加到Webview中
         root.addView(mProgressBar);
+
         return root;
     }
 
@@ -180,8 +195,11 @@ public class MYWXWebView implements IWebView {
         settings.setUseWideViewPort(true);
         settings.setDomStorageEnabled(true);
         settings.setSupportZoom(false);
+        settings.setBlockNetworkImage(true);
         settings.setBuiltInZoomControls(false);
-
+        if (Build.VERSION.SDK_INT >= 21) {
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         // 修改ua使得web端正确判断
         String ua = settings.getUserAgentString();
         settings.setUserAgentString(ua+"; weex");
@@ -301,8 +319,24 @@ public class MYWXWebView implements IWebView {
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
                 showWebView(newProgress == 100);
-                showProgressBar(newProgress != 100);
+//                showProgressBar(newProgress != 100);
+                if (newProgress == 100) {
+                    //加载完毕进度条消失
+                    mProgressBar.setVisibility(View.GONE);
+
+                    view.getSettings().setBlockNetworkImage(false);
+                } else {
+                    //更新进度
+                    mProgressBar.setProgress(newProgress);
+                }
+                super.onProgressChanged(view, newProgress);
+
                 WXLogUtils.v("tag", "onPageProgressChanged " + newProgress);
+            }
+
+            @Override
+            public void onConsoleMessage(String message, int lineNumber, String sourceID) {
+                Log.d("webview", message + " -- From line " + lineNumber + " of " + sourceID);
             }
 
             @Override
