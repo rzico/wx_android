@@ -28,9 +28,11 @@ android {
             }
         }
     }
+
     dexOptions {
         jumboMode true
     }
+
     signingConfigs {
 
         release {
@@ -46,6 +48,7 @@ android {
             keyPassword "123456"
         }
     }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
