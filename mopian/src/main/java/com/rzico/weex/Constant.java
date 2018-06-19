@@ -22,9 +22,9 @@ public class Constant {
     //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
     public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.PINE";
 
-    public static final String wxURL = "http://cdnx.jdhone.com/weex/app/";
+    public static final String wxURL = "http://cdnx.ahxinying.cn/weex/app/";
 
-    public static final String resURL = "http://cdnx.jdhone.com/";
+    public static final String resURL = "http://cdnx.ahxinying.cn/";
 
     //    云店wxkey
     public static final String wxAppId = "wx52f15c8b810a6195";
@@ -35,7 +35,6 @@ public class Constant {
     public static final String shareAppSecret = "33694f59b0d8fea28304d06bb410838f";
 
 //    public static Handler loginHandler = null;
-
     //菜单路径
     public static  String index1 = "view/circle/circle.js";
     public static  String index2 = "view/mall/mall.js";
@@ -50,8 +49,8 @@ public class Constant {
 
 
     public static String app = AllConstant.PACKNAME;
-    public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-    public static final String bucket = "jdh";
+    public static final String endpoint = "http://oss-cn-shanghai.aliyuncs.com";
+    public static final String bucket = "ahxinying";
     public static final  String upLoadImages = "upload/images/";
     public static final  String upLoadVideos = "upload/videos/";
 
