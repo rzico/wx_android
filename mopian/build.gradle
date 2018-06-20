@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '26.0.0'
+    buildToolsVersion '28'
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
@@ -48,13 +48,13 @@ android {
         release {
             storeFile file("tools/sdar.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "sdar"
             keyPassword "123456"
         }
         debug {
             storeFile file("tools/sdar.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "sdar"
             keyPassword "123456"
         }
     }
