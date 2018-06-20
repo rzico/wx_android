@@ -21,6 +21,7 @@ public class BottomPanelFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bottombar, container);
+        view.bringToFront();
         buttonPanel = (ViewGroup) view.findViewById(R.id.button_panel);
         btnInput = (LinearLayout) view.findViewById(R.id.say_ll);
         inputPanel = (InputPanel) view.findViewById(R.id.input_panel);

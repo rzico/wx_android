@@ -38,6 +38,144 @@
             android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <!--头像-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/head_ll"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+            <!-- 头像-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:background="@drawable/beiing01"
+                android:layout_marginLeft="10dp"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+
+                    <com.rzico.weex.zhibo.view.CircleImageView
+                        android:id="@+id/head_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/defaltshop"
+                        imagecontrol:border_outside_color="@color/blue_FF8EC7F9" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@+id/head_icon"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/room_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|left"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:text="毛小雅啊" />
+
+                        <TextView
+                            android:id="@+id/fs_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|left"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:text="粉丝100" />
+                    </LinearLayout>
+                    <!--关注-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:visibility="visible"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:background="@drawable/gz_yes"
+                        android:id="@+id/concern_ll"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/room_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"
+                android:text="" />
+
+            <LinearLayout
+                android:layout_width="0.0dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_back"
+                    android:layout_gravity="center"
+                    android:onClick="onClick"
+                    android:layout_marginRight="0dp"
+                    android:background="@drawable/l01" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:layout_below="@id/head_ll"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/gift_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:visibility="gone"
+                android:background="@drawable/dd02"
+                android:layout_marginRight="20dp"
+                android:textColor="@color/white"
+                android:text="炭币0"/>
+
+            <LinearLayout
+                android:layout_width="0.0dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:gravity="right">
+
+                <TextView
+                    android:id="@+id/room_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    android:background="@drawable/dd02"
+                    android:textColor="@color/white"
+                    android:text="人气值:0"/>
+            </LinearLayout>
+        </LinearLayout>
         <!--顶部头像-->
         <FrameLayout
             android:id="@+id/controll_ui"
@@ -200,6 +338,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginTop="15dp"
+
             android:layout_alignParentBottom="true"
             tools:layout="@layout/fragment_bottombar"/>
 
@@ -271,146 +410,7 @@
         android:layout_height="match_parent" />
 
 
-    <!--头像-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:id="@+id/head_ll"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/ll_host_leave1"
-        android:layout_toEndOf="@+id/ll_host_leave1">
-        <!-- 头像-->
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:orientation="horizontal"
-            android:background="@drawable/beiing01"
-            android:layout_marginLeft="10dp"
-            >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
 
-
-                <com.rzico.weex.zhibo.view.CircleImageView
-                    android:id="@+id/head_icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/defaltshop"
-                    imagecontrol:border_outside_color="@color/blue_FF8EC7F9" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_toRightOf="@+id/head_icon"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/room_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|left"
-                        android:gravity="center"
-                        android:textColor="@color/white"
-                        android:textSize="13sp"
-                        android:text="毛小雅啊" />
-
-                    <TextView
-                        android:id="@+id/fs_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|left"
-                        android:gravity="center"
-                        android:textColor="@color/white"
-                        android:textSize="13sp"
-                        android:text="粉丝100" />
-                </LinearLayout>
-                <!--关注-->
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:visibility="visible"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:background="@drawable/gz_yes"
-                    android:id="@+id/concern_ll"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </RelativeLayout>
-        <TextView
-            android:id="@+id/room_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/white"
-            android:text="" />
-
-        <LinearLayout
-            android:layout_width="0.0dp"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="right"
-            android:layout_weight="1">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_back"
-                android:layout_gravity="center"
-                android:onClick="onClick"
-                android:layout_marginRight="0dp"
-                android:background="@drawable/l01" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:gravity="center_vertical"
-        android:layout_below="@id/head_ll"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/gift_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="13sp"
-            android:visibility="gone"
-            android:background="@drawable/dd02"
-            android:layout_marginRight="20dp"
-            android:textColor="@color/white"
-            android:text="炭币0"/>
-
-        <LinearLayout
-            android:layout_width="0.0dp"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="right">
-
-            <TextView
-                android:id="@+id/room_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:layout_marginRight="5dp"
-                android:textSize="13sp"
-                android:visibility="gone"
-                android:background="@drawable/dd02"
-                android:textColor="@color/white"
-                android:text="在线:0"/>
-        </LinearLayout>
-    </LinearLayout>
     <FrameLayout
         android:id="@+id/game_frame"
         android:layout_width="match_parent"

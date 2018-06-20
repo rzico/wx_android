@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.rzico.weex.R;
+import com.rzico.weex.utils.SharedUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -128,15 +129,15 @@ public class GifView extends View {
             URL url = new URL(path);
             HttpURLConnection connection = (HttpURLConnection) url
                     .openConnection();
-// connection.setRequestMethod("GET");
+            // connection.setRequestMethod("GET");
             int size = connection.getContentLength();
             Log.e("GifView", "size = " + size);
             InputStream in = connection.getInputStream();
             byte[] array = streamToBytes(in);
             mMovie = Movie.decodeByteArray(array, 0, array.length);
             mHandler.sendEmptyMessage(0);
-//mMovie = Movie.decodeStream(in);
-// mBmp = BitmapFactory.decodeStream(in);
+            //mMovie = Movie.decodeStream(in);
+            // mBmp = BitmapFactory.decodeStream(in);
             in.close();
         }
         catch (IOException e)

@@ -4,11 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,7 +50,6 @@ import com.rzico.weex.model.info.NoticeInfo;
 import com.rzico.weex.model.zhibo.GameBean;
 import com.rzico.weex.model.zhibo.LiveGiftBean;
 import com.rzico.weex.model.zhibo.LiveRoomBean;
-import com.rzico.weex.model.zhibo.NoticeBean;
 import com.rzico.weex.model.zhibo.SendGift;
 import com.rzico.weex.model.zhibo.UserBean;
 import com.rzico.weex.module.JSCallBaskManager;
@@ -67,11 +63,11 @@ import com.rzico.weex.zhibo.adapter.ChatListAdapter;
 import com.rzico.weex.zhibo.view.BottomPanelFragment;
 import com.rzico.weex.zhibo.view.ChatListView;
 import com.rzico.weex.zhibo.view.CircleImageView;
+import com.rzico.weex.zhibo.view.GifView;
 import com.rzico.weex.zhibo.view.HeartLayout;
 import com.rzico.weex.zhibo.view.InputPanel;
 import com.rzico.weex.zhibo.view.MagicTextView;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.taobao.weex.bridge.JSCallback;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMCustomElem;
@@ -99,8 +95,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.rzico.weex.zhibo.view.GifView;
-
 import cn.finalteam.rxgalleryfinal.utils.DensityUtil;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
@@ -118,7 +112,7 @@ import static com.rzico.weex.zhibo.activity.utils.BaseRoom.ISFOLLOW;
 import static com.squareup.picasso.MemoryPolicy.NO_CACHE;
 import static com.squareup.picasso.MemoryPolicy.NO_STORE;
 
-public class PlayActivity extends BaseActivity {
+public class PlayBfActivity extends BaseActivity {
 
     private final static  String tag = "PlayActivity";
     private TXCloudVideoView mView;
@@ -258,7 +252,7 @@ public class PlayActivity extends BaseActivity {
         params.put("lat", "");
         params.put("lng", "");
         //进入直播间
-        new XRequest(PlayActivity.this, "weex/live/into.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(PlayBfActivity.this, "weex/live/into.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 LiveRoomBean data = new Gson().fromJson(result, LiveRoomBean.class);
@@ -268,7 +262,7 @@ public class PlayActivity extends BaseActivity {
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("id", data.getData().getLiveMemberId());
                     //获取用户信息
-                    new XRequest(PlayActivity.this, "weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayBfActivity.this, "weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
 
@@ -295,7 +289,7 @@ public class PlayActivity extends BaseActivity {
                         }
                     }).execute();
                     //这里请求获取公告：
-                    new XRequest(PlayActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayBfActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             BasePage notiveInfo = new Gson().fromJson(result, BasePage.class);
@@ -354,7 +348,7 @@ public class PlayActivity extends BaseActivity {
 //                    }
 //                    head_image.setVisibility(VISIBLE);
                     //设置房间名称和 主播昵称信息
-                    Picasso.with(PlayActivity.this).load(data.getData().getHeadpic()).into(head_icon);
+                    Picasso.with(PlayBfActivity.this).load(data.getData().getHeadpic()).into(head_icon);
 
 
                     liveRoom.enterRoom(data.getData().getLiveId() + "", mView, new LiveRoom.EnterRoomCallback() {
@@ -411,7 +405,7 @@ public class PlayActivity extends BaseActivity {
         HashMap<String, Object> params2 = new HashMap<>();
         params2.put("id", SharedUtils.readLoginId());
         //获取用户信息
-        new XRequest(PlayActivity.this, "/weex/user/view.jhtml", XRequest.GET, params2).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(PlayBfActivity.this, "/weex/user/view.jhtml", XRequest.GET, params2).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
 
@@ -435,7 +429,7 @@ public class PlayActivity extends BaseActivity {
         }).execute();
 
 //        获取礼物信息
-        new XRequest(PlayActivity.this, "/weex/live/gift/list.jhtml", XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(PlayBfActivity.this, "/weex/live/gift/list.jhtml", XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 LiveGiftBean data = new Gson().fromJson(result, LiveGiftBean.class);
@@ -540,7 +534,7 @@ public class PlayActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if(liveRoom != null && liveRoom.getLiveRoomBean() != null){
-                    liveRoom.showUserInfo(PlayActivity.this, liveRoom.getLiveRoomBean().getData().getLiveMemberId(), true);
+                    liveRoom.showUserInfo(PlayBfActivity.this, liveRoom.getLiveRoomBean().getData().getLiveMemberId(), true);
                 }
             }
         });
@@ -552,7 +546,7 @@ public class PlayActivity extends BaseActivity {
                 Long pid = ((BaseRoom.UserInfo)chatListAdapter.getItem(position)).id;
                 if(pid == SharedUtils.readLoginId()) return;//如果是自己就不获取了
                 if(pid!=null && pid != 0){
-                    liveRoom.showUserInfo(PlayActivity.this, pid, true);
+                    liveRoom.showUserInfo(PlayBfActivity.this, pid, true);
                 }
             }
         });
@@ -564,7 +558,7 @@ public class PlayActivity extends BaseActivity {
                 params.put("authorId", liveRoom.getLiveRoomBean().getData().getLiveMemberId());
 
                 if(liveRoom.getLiveRoomBean().getData().getFollow()){
-                    new XRequest(PlayActivity.this, "/weex/member/follow/delete.jhtml", XRequest.POST,params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayBfActivity.this, "/weex/member/follow/delete.jhtml", XRequest.POST,params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             BaseEntity data = new Gson().fromJson(result, BaseEntity.class);
@@ -584,7 +578,7 @@ public class PlayActivity extends BaseActivity {
                     }).execute();
                 }else{
                     //关注
-                    new XRequest(PlayActivity.this, "/weex/member/follow/add.jhtml", XRequest.POST,params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayBfActivity.this, "/weex/member/follow/add.jhtml", XRequest.POST,params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             BaseEntity data = new Gson().fromJson(result, BaseEntity.class);
@@ -645,7 +639,7 @@ public class PlayActivity extends BaseActivity {
                     if(showDanmaku){
                         HashMap<String, Object> params = new HashMap<>();
                         params.put("liveId", liveRoom.getLiveRoomBean().getData().getLiveId());
-                        new XRequest(PlayActivity.this, "weex/live/gift/barrage.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                        new XRequest(PlayBfActivity.this, "weex/live/gift/barrage.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                             @Override
                             public void onSuccess(BaseActivity activity, String result, String type) {
                                 SendGift data = new Gson().fromJson(result, SendGift.class);
@@ -858,7 +852,7 @@ public class PlayActivity extends BaseActivity {
             List<LiveGiftBean.data.datagif> datagifs = liveGiftBean.getData().getData();
             int len = datagifs.size() > 8 ? 8 : datagifs.size();
             for (int i = 0; i <  len; i++){
-                Picasso.with(PlayActivity.this).load(datagifs.get(i).getThumbnail()).into(lws.get(i));
+                Picasso.with(PlayBfActivity.this).load(datagifs.get(i).getThumbnail()).into(lws.get(i));
                 final int now = i;
                 lwNames.get(i).setText(datagifs.get(i).getName());
                 lwMoneys.get(i).setText(datagifs.get(i).getPrice() + "金币");
@@ -893,13 +887,13 @@ public class PlayActivity extends BaseActivity {
             songlistener();
         }
         if (songCouponview.isShowing()) {
-            lw_ll.startAnimation(AnimationUtils.loadAnimation(PlayActivity.this, R.anim.out_from_bottom));
+            lw_ll.startAnimation(AnimationUtils.loadAnimation(PlayBfActivity.this, R.anim.out_from_bottom));
             songCouponview.dismiss();
         } else {
             jifen_tv.setText(cashmoney + "");
             counttv.setText("1");
             gifid = 0;
-            lw_ll.startAnimation(AnimationUtils.loadAnimation(PlayActivity.this, R.anim.in_from_bottom));
+            lw_ll.startAnimation(AnimationUtils.loadAnimation(PlayBfActivity.this, R.anim.in_from_bottom));
             songCouponview.showAtLocation(mInView, Gravity.CENTER, 0, 0);
         }
     }
@@ -938,7 +932,7 @@ public class PlayActivity extends BaseActivity {
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("id", liveGiftBean.getData().getData().get(gifid - 1 >= 0 ? gifid -1 : 0).getId());
                     params.put("liveId", liveRoom.getLiveRoomBean().getData().getLiveId());
-                    new XRequest(PlayActivity.this, "weex/live/gift/submit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayBfActivity.this, "weex/live/gift/submit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             SendGift data = new Gson().fromJson(result, SendGift.class);
@@ -1003,7 +997,7 @@ public class PlayActivity extends BaseActivity {
                     count++;
                     counttv.setText(count + "");
                 } else {
-                    Toast.makeText(PlayActivity.this, "一次最多送出6个礼物", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PlayBfActivity.this, "一次最多送出6个礼物", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -1096,7 +1090,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayBfActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 2) {
                             if (cashmoney >= 2 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1106,7 +1100,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayBfActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 3) {
                             if (cashmoney >= 5 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1116,7 +1110,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayBfActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 4) {
                             if (cashmoney >= 10 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1126,7 +1120,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayBfActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 5) {
                             if (cashmoney >= 20 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1136,7 +1130,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayBfActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 6) {
                             if (cashmoney >= 30 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1146,7 +1140,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayBfActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 7) {
                             if (cashmoney >= 50 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1156,7 +1150,7 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayBfActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         } else if (gifid == 8) {
                             if (cashmoney >= 100 * count) {
                                 for (int i = 0; i < count; i++) {
@@ -1166,11 +1160,11 @@ public class PlayActivity extends BaseActivity {
 //                                    sendgif();
                                 }
                             } else
-                                Toast.makeText(PlayActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayBfActivity.this, "您的金币余额不足，请充值", Toast.LENGTH_LONG).show();
                         }
                     }
                 } else {
-                    Toast.makeText(PlayActivity.this, "您还未选择礼物", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PlayBfActivity.this, "您还未选择礼物", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -1193,7 +1187,7 @@ public class PlayActivity extends BaseActivity {
 
                             case TIM_GROUP_SYSTEM_DELETE_GROUP_TYPE: {
                                 //房间被删了
-                                new AlertView("系统消息", "该直播间解散了！", null, new String[]{"返回"}, null, PlayActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+                                new AlertView("系统消息", "该直播间解散了！", null, new String[]{"返回"}, null, PlayBfActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
                                     @Override
                                     public void onItemClick(Object o, int position) {
                                         finish();
@@ -1295,7 +1289,7 @@ public class PlayActivity extends BaseActivity {
                                     chatListAdapter.notifyDataSetChanged();
 
                                     if(userInfo.imid.equals(SharedUtils.readImId())){//说明是自己
-                                        new AlertView("系统消息", "您被主播踢出房间！", null, new String[]{"返回"}, null, PlayActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+                                        new AlertView("系统消息", "您被主播踢出房间！", null, new String[]{"返回"}, null, PlayBfActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
                                             @Override
                                             public void onItemClick(Object o, int position) {
                                                 finish();
@@ -1444,7 +1438,7 @@ public class PlayActivity extends BaseActivity {
 
             CircleImageView crvheadimage = (CircleImageView) giftView.findViewById(R.id.crvheadimage);
             if (!head.equals("")) {
-                Picasso.with(PlayActivity.this).load(head).memoryPolicy(NO_CACHE, NO_STORE).error(R.drawable.defaltshop).into(crvheadimage);
+                Picasso.with(PlayBfActivity.this).load(head).memoryPolicy(NO_CACHE, NO_STORE).error(R.drawable.defaltshop).into(crvheadimage);
             } else {
                 crvheadimage.setBackground(getResources().getDrawable(R.drawable.defaltshop));
             }
@@ -1551,7 +1545,7 @@ public class PlayActivity extends BaseActivity {
         View view = null;
         if (giftViewCollection.size() <= 0) {
             /*如果垃圾回收中没有view,则生成一个*/
-            view = LayoutInflater.from(PlayActivity.this).inflate(R.layout.item_gift, null);
+            view = LayoutInflater.from(PlayBfActivity.this).inflate(R.layout.item_gift, null);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             lp.topMargin = 10;
             view.setLayoutParams(lp);
@@ -1950,7 +1944,7 @@ public class PlayActivity extends BaseActivity {
     }
 
     private void openGame() {
-        new XRequest(PlayActivity.this, gameUrl, XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(PlayBfActivity.this, gameUrl, XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 GameBean gameBean = new Gson().fromJson(result, GameBean.class);
@@ -2033,13 +2027,13 @@ public class PlayActivity extends BaseActivity {
 
     public void upView(View view){
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
-        params.bottomMargin += DensityUtil.dip2px(PlayActivity.this, 230);;
+        params.bottomMargin += DensityUtil.dip2px(PlayBfActivity.this, 230);;
         view.setLayoutParams(params);
     }
 
     public void downView(View view){
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
-        params.bottomMargin -= DensityUtil.dip2px(PlayActivity.this, 230);;
+        params.bottomMargin -= DensityUtil.dip2px(PlayBfActivity.this, 230);;
         view.setLayoutParams(params);
     }
 }

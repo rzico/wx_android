@@ -143,6 +143,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     public static final int UPLOADSUCCESS = 200;
     public static final int UPLOADERROR = 201;
     private boolean mIsFlashOpened = false;
+
+    private AlertView alertView;
 //initView
     private LinearLayout fengmian_ll01;//设置封面
     private LinearLayout ll_giftlist; //直播列表
@@ -641,9 +643,11 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
                                 }
                             }).execute();
                             ll_giftlist.setVisibility(VISIBLE);
+                            ll_game.setVisibility(VISIBLE);
+                            tv_game.setVisibility(VISIBLE);
                             //显示人数
                             roomCount = data.getData().getViewerCount();
-                            room_count.setText("在线:" + formatLooker(roomCount));
+                            room_count.setText("人气值:" + formatLooker(roomCount));
                             room_count.setVisibility(VISIBLE);
                             giftCount = data.getData().getGift();
                             gift_count.setText("炭币" + giftCount);
@@ -681,15 +685,28 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
                 zhibo_start.setFocusable(false);
             }
         });
-
 //        关闭直播
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 if(!mRecording){
                     finish();
                 }else{
                     if (!isPlay){
+                        if(gameUrl !=null && !gameUrl.equals("")){
+                            alertView = new AlertView("系统消息", "请您关闭游戏再退出直播间！", null, new String[]{"确定"}, null, OpenVideoActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(Object o, int position) {
+                                    if(alertView != null){
+                                        alertView.dismiss();
+                                    }
+                                }
+                            });
+                            alertView.show();
+                            return;
+                        }
                         //获取用户信息
                         HashMap<String, Object> params = new HashMap<>();
                         params.put("id", SharedUtils.readLoginId());
@@ -709,7 +726,9 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
                                 //关闭计时器
                                 mVideoTimer.cancel();
                                 zhibo_jiesu_ll.setVisibility(View.VISIBLE);
-                                exitGame();
+                                if(gameUrl != null && !gameUrl.equals("")){
+                                    exitGame();
+                                }
                             }
 
                             @Override
@@ -718,7 +737,9 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
                                 //关闭计时器
                                 mVideoTimer.cancel();
                                 zhibo_jiesu_ll.setVisibility(View.VISIBLE);
-                                exitGame();
+                                if(gameUrl != null && !gameUrl.equals("")){
+                                    exitGame();
+                                }
                             }
                         }).execute();
                     }else{
@@ -787,7 +808,7 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
                                         String text = textElem.getText();//信息
                                         userInfo.text = text;
                                         if(text.contains("加入房间") && room_count != null){
-                                            room_count.setText("在线:" + formatLooker(++roomCount));
+                                            room_count.setText("人气值:" + formatLooker(++roomCount));
 
                                             if(gameUrl != null && !gameUrl.equals("")){//如果有游戏路径就向加入游戏的用户推送游戏地址
                                                 //通知客户端打开游戏
@@ -1470,8 +1491,10 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
             gameCaptureView = null;
         }
         mPlayConfig = null;
-        gameWebView.removeAllViews();
-        gameWebView.destroy();
+        if(gameWebView!= null){
+            gameWebView.removeAllViews();
+            gameWebView.destroy();
+        }
 
         //停止直播
         SharedUtils.saveLiveState(false);
@@ -1692,17 +1715,20 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
         gameWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view,String url) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    gameWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                } else { gameWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                if(gameWebView !=null ){
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        gameWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                    } else { gameWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    }
+                    gameWebView.setBackgroundColor(Color.TRANSPARENT);
                 }
-                gameWebView.setBackgroundColor(Color.TRANSPARENT);
 
 //                LivePlayerBean livePlayerBean = (LivePlayerBean) getIntent().getSerializableExtra("livePlayerParam");
 
 
                 //开始播放
-                if (livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
+                if (livePlayerBean != null && livePlayerBean.getVideo()!=null && !"".equals(livePlayerBean.getVideo())) {
                     mIsPlaying = startPlay(livePlayerBean.getVideo());
                 } else {
                     mIsPlaying = false;
@@ -1719,7 +1745,7 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
                 if(url.length()<35 && url.contains("/home")){
                     //关闭当前页面
 //                    finish();
-                    canHerf = false;
+                    canHerf = true;
                 } else if(url.startsWith("http")){
                     return false;
                 } else if(url.startsWith("https")){
@@ -1865,7 +1891,10 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
             gameCaptureView = null;
         }
         mPlayConfig = null;
-        gameWebView.removeAllViews();
+        if(gameWebView!= null){
+            gameWebView.loadUrl("about:blank");
+            gameWebView.removeAllViews();
+        }
 
 
 
@@ -1885,7 +1914,7 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
                     livePlayerBean.setUrl(gameBean.getData().getUrl());
                     livePlayerBean.setVideo(gameBean.getData().getVideo());
                     initGame();
-                    gameWebView.postUrl(livePlayerBean.getUrl(), null);
+                    gameWebView.loadUrl(livePlayerBean.getUrl());
                     upAllView();
                     tv_game.setText("关");
                 }

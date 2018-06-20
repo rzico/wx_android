@@ -62,7 +62,7 @@ public class Constant {
 
     //生产环境服务器地址
             public static final String SERVER = "https://weex.ucmap.com/";
-//            public static final String SERVER = "https://192.168.2.103:8080/";
+    //            public static final String SERVER = "https://192.168.2.103:8080/";
     //    public static final String SERVER = "https://weex.yzwap.com/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
