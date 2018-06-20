@@ -34,15 +34,14 @@ android {
     }
 
     signingConfigs {
-
         release {
-            storeFile file("tools/pine.jks")
+            storeFile file('D:/weex/wx_android/mopian/tools/pine.jks')
             storePassword "123456"
             keyAlias "pine"
             keyPassword "123456"
         }
         debug {
-            storeFile file("tools/pine.jks")
+            storeFile file('D:/weex/wx_android/mopian/tools/pine.jks')
             storePassword "123456"
             keyAlias "pine"
             keyPassword "123456"
@@ -52,7 +51,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -108,14 +107,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:design:24.1.1'
     compile 'com.android.support:support-annotations:23.1.1'
-//    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'//delete
+    //    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'//delete
     compile 'com.journeyapps:zxing-android-embedded:3.4.0'
     compile 'com.karumi:dexter:4.1.0'
     compile 'com.android.support:multidex:'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.aliyun.dpa:oss-android-sdk:2.4.3'
     // PLUGIN GRADLE EXTENSIONS START
-
     // PLUGIN GRADLE EXTENSIONS END
     compile project(':xutils')
     compile project(':richeditor')
