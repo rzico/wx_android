@@ -35,13 +35,13 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('D:/weex/wx_android/mopian/tools/pine.jks')
+            storeFile file('tools/pine.jks')
             storePassword "123456"
             keyAlias "pine"
             keyPassword "123456"
         }
         debug {
-            storeFile file('D:/weex/wx_android/mopian/tools/pine.jks')
+            storeFile file('tools/pine.jks')
             storePassword "123456"
             keyAlias "pine"
             keyPassword "123456"
