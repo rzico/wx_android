@@ -88,7 +88,7 @@
                 <action android:name="com.alibaba.weex.protocol.openurl" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.taobao.android.intent.category.YUNDIAN" />
+                <category android:name="com.taobao.android.intent.category.SDAR" />
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
@@ -138,7 +138,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
-            android:name="com.rzico.assistant.wxapi.WXEntryActivity"
+            android:name="com.rzico.sdar.wxapi.WXEntryActivity"
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"

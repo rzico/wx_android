@@ -62,7 +62,7 @@ public class WXApplication extends Application {
 
   private  static List<BaseActivity> activityList = new LinkedList<BaseActivity>();
 
-  private final String tag = "yundian";
+  private final String tag = "sdar";
   //数据库管理类
   private static org.xutils.DbManager db;
 

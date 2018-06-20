@@ -20,19 +20,19 @@ import java.util.Map;
 public class Constant {
 
     //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
-    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.YUNDIAN";
+    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.SDAR";
 
     public static final String wxURL = "http://cdnx.xmsdar.com/weex/app/";
 
     public static final String resURL = "http://cdnx.xmsdar.com/";
 
     //    云店wxkey
-    public static final String wxAppId = "wx490857e2baff7cfd";
-    public static final String wxAppSecret = "46acecbfa148ca89d443d38b0ce7c865";
+    public static final String wxAppId = "wxdba4570916ab4957";
+    public static final String wxAppSecret = "0cb7d0aee2c7d9f38bf097e2aadc4edd";
 
     //    云店shareSDK
-    public static final String shareAppId = "1d927fd47d636";
-    public static final String shareAppSecret = "277f7181f07499357cfa33531fe818ab";
+    public static final String shareAppId = "26765cc5409d6";
+    public static final String shareAppSecret = "214a3dd9a409189b5290b3577d77855e";
 
 //    public static Handler loginHandler = null;
 
