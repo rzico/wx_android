@@ -179,8 +179,8 @@
     <orderEntry type="library" exported="" name="__local_aars__:D.\weex\wx_android\mopian\libs\MobCommons-2017.1024.1907.jar:unspecified@jar" level="project" />
     <orderEntry type="library" exported="" name="com.squareup.okhttp:okhttp:2.3.0@jar" level="project" />
     <orderEntry type="library" exported="" name="com.forward.androids:androids-1.1.4" level="project" />
-    <orderEntry type="library" exported="" name="com.github.bumptech.glide:glide:3.7.0@jar" level="project" />
     <orderEntry type="library" exported="" name="com.squareup.okio:okio:1.9.0@jar" level="project" />
+    <orderEntry type="library" exported="" name="com.github.bumptech.glide:glide:3.7.0@jar" level="project" />
     <orderEntry type="module" module-name="graffiti" exported="" />
     <orderEntry type="module" module-name="chat_ui" exported="" />
     <orderEntry type="module" module-name="ucrop" exported="" />
