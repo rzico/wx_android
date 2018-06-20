@@ -13,13 +13,13 @@
     <dimen name="gallery_default_toolbar_divider_height">0.3dp</dimen>
     <dimen name="gallery_default_toolbar_bottom_margin">1dp</dimen>
     <!--主色-->
-    <color name="gallery_default_toolbar_bg">#eb4e40</color>
+    <color name="gallery_default_toolbar_bg">#2fa8e1</color>
     <color name="gallery_default_toolbar_divider_bg">#151515</color>
     <color name="gallery_default_toolbar_text_color">#ffffff</color>
     <color name="gallery_default_color_toolbar_text">#fff</color>
     <color name="gallery_default_color_toolbar_icon">#fff</color>
     <color name="gallery_default_color_statusbar">#151515</color>
-    <color name="gallery_default_checkbox_button_tint_color">#eb4e40</color>
+    <color name="gallery_default_checkbox_button_tint_color">#2fa8e1</color>
     <color name="gallery_default_checkbox_text_color">#ffffff</color>
     <color name="gallery_default_toolbar_over_button_pressed_color">#CC5833</color>
     <color name="gallery_default_toolbar_over_button_normal_color">#FF6E40</color>
