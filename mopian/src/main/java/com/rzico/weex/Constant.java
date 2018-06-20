@@ -28,7 +28,7 @@ public class Constant {
 
     //    云店wxkey
     public static final String wxAppId = "wx52f15c8b810a6195";
-    public static final String wxAppSecret = "fa8b36c812125ccc5a642db3daddcd59";
+    public static final String wxAppSecret = "3875ec09a1306cd7637f241fb9400e5a";
 
     //    云店shareSDK
     public static final String shareAppId = "260ea801ce8a8";
