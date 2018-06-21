@@ -33,7 +33,24 @@ public class FileUtil {
         /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
     }
+    public static boolean fileIsExists(String strFile)
+    {
+        try
+        {
+            File f=new File(strFile);
+            if(!f.exists())
+            {
+                return false;
+            }
 
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * 创建临时文件
