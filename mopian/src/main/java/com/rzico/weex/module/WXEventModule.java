@@ -968,7 +968,7 @@ public class WXEventModule extends WXModule {
         if(filePath.endsWith("jpg") || filePath.endsWith("bmp") || filePath.endsWith("png") || filePath.endsWith("jpeg")){
             //在这里压缩 把压缩完的地址 放 filepath 里面
             cachefileName = AllConstant.getDiskCachePath(getActivity()) +"/"+ System.currentTimeMillis() + ".jpg";
-            if(FileUtil.fileIsExists(cachefileName)){
+            if(FileUtil.fileIsExists(filePath)){
                 NativeUtil.compressBitmap(filePath, cachefileName);
             }else {
                 Message message = new Message().error("图片已被删除");
