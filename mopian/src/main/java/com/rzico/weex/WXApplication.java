@@ -48,9 +48,11 @@ import com.tencent.qalsdk.sdk.MsfSdkUtils;
 
 import org.xutils.x;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 
 import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
 
@@ -63,6 +65,10 @@ public class WXApplication extends Application {
   private  static List<BaseActivity> activityList = new LinkedList<BaseActivity>();
 
   private final String tag = "mopian";
+
+
+  private static final String CACHE_NAME = "cache_path";
+
   //数据库管理类
   private static org.xutils.DbManager db;
 
@@ -106,6 +112,7 @@ public class WXApplication extends Application {
     initAlbum();
     initWeex();
 //    initIM();
+
   }
 
   public static void initWeex(){
