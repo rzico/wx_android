@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -168,6 +169,8 @@ public class PlayActivity extends BaseActivity {
     private LinearLayout concern_ll;//关注
 
     public static final int GIFSHOW = 135;
+    public static final int GIFPLAY = 137;
+    public static final int UPDATELIST = 138;
     public static final int INVISIBLE = 132;
     private static final int CANDASHAN = 136;//控制 打赏按钮 1秒后才可以再打赏
 
@@ -237,6 +240,8 @@ public class PlayActivity extends BaseActivity {
     private long             mStartPlayTS = 0;
     protected int            mActivityType;
     private String gameUrl;
+
+    private Thread mGiftThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -513,7 +518,7 @@ public class PlayActivity extends BaseActivity {
         danmaku_view.prepare(parser, danmakuContext);
 
 
-        chatListAdapter = new ChatListAdapter();
+        chatListAdapter = new ChatListAdapter(PlayActivity.this);
         chat_listview.setAdapter(chatListAdapter);
 
         //动画
@@ -777,6 +782,10 @@ public class PlayActivity extends BaseActivity {
     private boolean ischeck = false;
     private int gifid = 0;
     int count = 1;
+    int sendCount = 0;
+    List<LiveGiftBean.data.datagif> preGift = new ArrayList<>();//预发送的礼物
+
+    private boolean isPlaying = false;
     int servecount = 0;//服务器上传的count
 
     @SuppressLint("WrongConstant")
@@ -919,10 +928,14 @@ public class PlayActivity extends BaseActivity {
     }
 
     public Handler mHandler = new Handler(new Handler.Callback() {
-
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
+                case UPDATELIST:
+                    BaseRoom.UserInfo userInfo = (BaseRoom.UserInfo) msg.obj;
+                   chatListAdapter.addMessage(userInfo);
+                    chatListAdapter.notifyDataSetChanged();
+                    break;
                 case CANDASHAN:
                     dashan.setEnabled(true);
                     dashan.setFocusable(true);
@@ -932,8 +945,8 @@ public class PlayActivity extends BaseActivity {
                     dashan.setFocusable(false);
                     Message message = mHandler.obtainMessage();
                     message.what = CANDASHAN;
-
-                    mHandler.sendMessageDelayed(message, 1000);
+                    //
+                    mHandler.sendMessageDelayed(message, 500);
 //                    进行送礼物接口
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("id", liveGiftBean.getData().getData().get(gifid - 1 >= 0 ? gifid -1 : 0).getId());
@@ -943,7 +956,6 @@ public class PlayActivity extends BaseActivity {
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             SendGift data = new Gson().fromJson(result, SendGift.class);
                             if(data.getType().equals("success")){
-//                                sendgif();
 
                                 List<LiveGiftBean.data.datagif> giftdatas = liveGiftBean.getData().getData();
                                 int len = giftdatas.size();
@@ -963,8 +975,11 @@ public class PlayActivity extends BaseActivity {
                                 });
                                 cashmoney = cashmoney - data.getData();
                                 jifen_tv.setText(cashmoney + "");
+
                             }else{
+
                                 showToast(data.getContent());
+
                             }
                         }
 
@@ -975,9 +990,22 @@ public class PlayActivity extends BaseActivity {
                     }).execute();
                     break;
                 case INVISIBLE:
-                    bigivgift.setPaused(true);
-                    bigivgift.setVisibility(GONE);
+//                    if(!isPlaying){
+                        bigivgift.setPaused(true);
+                        bigivgift.setVisibility(GONE);
+//                    }
                     break;
+                case GIFPLAY:
+
+                    LiveGiftBean.data.datagif datagif = (LiveGiftBean.data.datagif) msg.obj;
+                    if(datagif != null){
+                        if(datagif.getPlay()){
+                            bigivgift.setMovieNet(datagif.getAnimation());
+                            bigivgift.setVisibility(VISIBLE);
+                        }
+                    }
+                    break;
+
             }
             return false;
         }
@@ -1070,7 +1098,6 @@ public class PlayActivity extends BaseActivity {
                 gifid = 7;
                 setview();
                 lw07.setBackground(getResources().getDrawable(R.drawable.icon_bg20));
-
             }
         });
         lw08.setOnClickListener(new View.OnClickListener() {
@@ -1087,12 +1114,13 @@ public class PlayActivity extends BaseActivity {
                 if (ischeck) {
                     if (!liveRoom.getLiveRoomBean().getData().getLiveId().equals("")) {
                         count = Integer.parseInt(counttv.getText().toString());
+                        int delayMillis = 100;
                         if (gifid == 1) {
                             if (cashmoney >= 1 * count) {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1102,7 +1130,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1112,7 +1140,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1122,7 +1150,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1132,7 +1160,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1142,7 +1170,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1152,7 +1180,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1162,7 +1190,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1175,6 +1203,36 @@ public class PlayActivity extends BaseActivity {
             }
         });
     }
+
+    Runnable mGiftRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            if(preGift != null && preGift.size() > 0){
+                do {
+                    Message message = new Message();
+                    LiveGiftBean.data.datagif datagif = preGift.get(0);
+                    message.what = GIFPLAY;
+                    message.obj = datagif;
+                    mHandler.sendMessage(message);
+
+                    if(datagif.getPlay()){
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    preGift.remove(datagif);
+                }while (preGift.size() > 0);
+            }
+
+            Message message = new Message();
+            message.what = INVISIBLE;
+            mHandler.sendMessage(message);
+            mGiftThread = null;
+        }
+    };
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void groupMessage(MessageBus messageBus){
@@ -1224,8 +1282,12 @@ public class PlayActivity extends BaseActivity {
                                     if(text.contains("加入房间") && room_count != null){
                                         room_count.setText("人气值:" + formatLooker(roomCount++));
                                     }
-                                    chatListAdapter.addMessage(userInfo);
-                                    chatListAdapter.notifyDataSetChanged();
+                                    Message listdata = new Message();
+                                    listdata.what = UPDATELIST;
+                                    listdata.obj = userInfo;
+                                    mHandler.sendMessage(listdata);
+//                                    chatListAdapter.addMessage(userInfo);
+//                                    chatListAdapter.notifyDataSetChanged();
                                 }
                             }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomGifMsg.name())){
 
@@ -1251,15 +1313,22 @@ public class PlayActivity extends BaseActivity {
 
 
                                     //4秒后删除动画
-                                    Message message2 = mHandler.obtainMessage();
-                                    message2.what = INVISIBLE;
-                                    mHandler.sendMessageDelayed(message2, 4000);
+//                                    Message message2 = mHandler.obtainMessage();
+//                                    message2.what = INVISIBLE;
+//                                    mHandler.sendMessageDelayed(message2, 4000);
                                     showGift(nowGif.getId() + "", nowGif, userInfo.headPic, userInfo.nickName);
-//                                    giftCount = giftCount + liwu_money[gifType - 1 < 0 ? 0 : gifType - 1];
+                                    preGift.add(nowGif);//添加至礼物列表
                                     giftCount = giftCount + nowGif.getPrice();
                                     gift_count.setText("炭币" + giftCount);
                                     //播放礼物动画
-                                    bigivgift.setMovieNet(nowGif.getAnimation());
+                                    if(mGiftThread == null){
+                                        mGiftThread = new Thread(mGiftRunnable);
+                                        mGiftThread.start();
+                                    }
+//                                    Message message2 = mHandler.obtainMessage();
+//                                    message2.what = GIFPLAY;
+//                                    mHandler.sendMessageDelayed(message2, 2000);
+
 
                                 }
                             }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomFollowMsg.name())){

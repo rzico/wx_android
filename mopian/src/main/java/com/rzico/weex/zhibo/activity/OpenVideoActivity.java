@@ -140,6 +140,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     private static final int CODE_RESULT_REQUEST = 0xa2;
     private static final int UPDAT_WALL_TIME_TIMER_TASK = 10;
     public static final int INVISIBLE = 132;
+    public static final int GIFPLAY = 137;
+    public static final int UPDATELIST = 138;
     public static final int UPLOADSUCCESS = 200;
     public static final int UPLOADERROR = 201;
     private boolean mIsFlashOpened = false;
@@ -295,7 +297,9 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
     private long             mStartPlayTS = 0;
     protected int            mActivityType;
 
+    private Thread mGiftThread;
 
+    List<LiveGiftBean.data.datagif> preGift = new ArrayList<>();//预发送的礼物
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -388,7 +392,7 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
         fs_count = (TextView) findViewById(R.id.fs_count);
 //        gz_count = (TextView) findViewById(R.id.gz_count);
 
-        chatListAdapter = new ChatListAdapter();
+        chatListAdapter = new ChatListAdapter(OpenVideoActivity.this);
         chat_listview.setAdapter(chatListAdapter);
 
         bigivgift = (GifView) findViewById(R.id.bigivgift);
@@ -763,7 +767,35 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
             }
         });
     }
+    Runnable mGiftRunnable = new Runnable() {
+        @Override
+        public void run() {
 
+            if(preGift != null && preGift.size() > 0){
+                do {
+                    Message message = new Message();
+                    LiveGiftBean.data.datagif datagif = preGift.get(0);
+                    message.what = GIFPLAY;
+                    message.obj = datagif;
+                    mHandler.sendMessage(message);
+
+                    if(datagif.getPlay()){
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    preGift.remove(datagif);
+                }while (preGift.size() > 0);
+            }
+
+            Message message = new Message();
+            message.what = INVISIBLE;
+            mHandler.sendMessage(message);
+            mGiftThread = null;
+        }
+    };
     /**
      * 向聊天界面推送消息
      */
@@ -871,26 +903,15 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
                                         }
                                         //这里需要请求接口赠送礼物 请求成功了以后 开始动画
 
-                                        //4秒后删除动画
-                                        Message message2 = mHandler.obtainMessage();
-                                        message2.what = INVISIBLE;
-                                        mHandler.sendMessageDelayed(message2, 4000);
                                         showGift(nowGif.getId() + "", nowGif, userInfo.headPic, userInfo.nickName);
+                                        preGift.add(nowGif);
                                         giftCount = giftCount + nowGif.getPrice();
                                         gift_count.setText("炭币" + giftCount);
                                         //播放礼物动画
-                                        bigivgift.setMovieNet(nowGif.getAnimation());
-//                                        if (bigivgift.getVisibility() == VISIBLE) {
-//                                            bigivgift.setPaused(true);
-////                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
-//                                            bigivgift.setMovieNet(nowGif.getAnimation());
-//                                            bigivgift.setPaused(false);
-//                                        } else {
-//                                            bigivgift.setVisibility(VISIBLE);
-//                                            bigivgift.setMovieNet(nowGif.getAnimation());
-////                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
-//                                            bigivgift.setPaused(false);
-//                                        }
+                                        if(mGiftThread == null){
+                                            mGiftThread = new Thread(mGiftRunnable);
+                                            mGiftThread.start();
+                                        }
                                     }
                                 }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomFollowMsg.name())){
                                     //被关注了
@@ -1447,6 +1468,17 @@ private static final int  CACHE_STRATEGY_FAST  = 1;  //极速
                     break;
                 case UPLOADERROR:
                     showToast("上传错误");
+                    break;
+
+                case GIFPLAY:
+
+                    LiveGiftBean.data.datagif datagif = (LiveGiftBean.data.datagif) msg.obj;
+                    if(datagif != null){
+                        if(datagif.getPlay()){
+                            bigivgift.setMovieNet(datagif.getAnimation());
+                            bigivgift.setVisibility(VISIBLE);
+                        }
+                    }
                     break;
             }
 

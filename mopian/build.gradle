@@ -150,7 +150,7 @@ dependencies {
     compile files('libs/AMap_Location_V3.6.1_20171012.jar')
     compile project(path: ':graffiti')
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     //    哎吖包包特效
     compile 'com.xw.repo:bubbleseekbar:3.5'
     compile 'com.lht:paintview:1.16'

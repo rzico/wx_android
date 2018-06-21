@@ -507,7 +507,7 @@ public class PlayBfActivity extends BaseActivity {
         danmaku_view.prepare(parser, danmakuContext);
 
 
-        chatListAdapter = new ChatListAdapter();
+        chatListAdapter = new ChatListAdapter(PlayBfActivity.this);
         chat_listview.setAdapter(chatListAdapter);
 
         //动画
