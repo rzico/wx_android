@@ -218,7 +218,11 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkVision(Launch.data data) {
-        showUplodeDialog(data);
+        if (!Utils.isApkDebugable(SplashActivity.this)) {
+            showUplodeDialog(data);
+        }else {
+            updateRes();
+        }
 
     }
 
@@ -258,7 +262,7 @@ public class SplashActivity extends BaseActivity {
                     } else {
                         //这里是后台返回的数据 解析出错
                         //无论什么错误 都要能运行 就是把assests里面的数据拷贝到 data里面
-                        Toast.makeText(SplashActivity.this, "包解析出错", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(SplashActivity.this, "包解析出错", Toast.LENGTH_SHORT).show();
                         toNext();
                     }
                 } catch (Exception e) {
@@ -330,6 +334,7 @@ public class SplashActivity extends BaseActivity {
      * 如果网路请求或下载失败 就讲assets的东西拷贝到项目目录下
      */
     private void copylocalfile() {
+        writeResVersion = Constant.resVerison;
         File file = new File(PathUtils.getResPath(SplashActivity.this));//检查有没有资源文件
         if (file.exists() && file.isDirectory()) {
             if (file.list().length > 0 && haveUpdate(file)) {
@@ -376,7 +381,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onSuccess(File result) {
                 //解压zip
-                ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath(SplashActivity.this) + "update.zip", PathUtils.getResPath(SplashActivity.this), mContext, true, mHandler);
+                ZipExtractorTask task = new ZipExtractorTask(PathUtils.getResPath(SplashActivity.this) + "update_net.zip", PathUtils.getResPath(SplashActivity.this), mContext, true, mHandler);
                 task.execute();
             }
 
@@ -440,8 +445,9 @@ public class SplashActivity extends BaseActivity {
             if (msg.what == ZIPSUCCESS) {
                 mainActivity.toNext();
             } else {
-                Toast.makeText(mainActivity, "解压资源包失败", Toast.LENGTH_SHORT).show();
-                mainActivity.finish();
+                Toast.makeText(mainActivity, "解压网络资源包失败", Toast.LENGTH_SHORT).show();
+//                mainActivity.finish();
+                mainActivity.copylocalfile();
             }
 
         }
@@ -508,12 +514,12 @@ public class SplashActivity extends BaseActivity {
         try {
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
-                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
 //                toNext();
             } else {
                 if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){
                     writeResVersion = netResVersion;
-                    downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
+                    downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
                 }else  if(nowResVersion.equals("0.0.0") || (Utils.compareVersion(appResVersion, nowResVersion) > 0 && Utils.compareVersion(appResVersion, netResVersion) > 0)){
                     //如果是app自带的版本好 是最大的 就压缩本地的
                     writeResVersion = appResVersion;

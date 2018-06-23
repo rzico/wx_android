@@ -331,8 +331,8 @@ public class AlbumModule extends WXModule {
 
                     Message message = new Message();
                     message.setType("error");
-                    message.setContent("用户取消");
-                    message.setData(errorMessage);
+                    message.setContent("该图片已被删除");
+                    message.setData("该图片已被删除");
                     callback.invoke(message);
             }
         }).openPhotoHandleActivity(imagePath);

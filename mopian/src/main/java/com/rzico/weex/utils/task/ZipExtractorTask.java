@@ -71,7 +71,9 @@ public class ZipExtractorTask extends AsyncTask<Void, Integer, Long> {
 //        Intent intent = new Intent();
 //        intent.setAction("com.sl.unzip");
 //        mContext.sendBroadcast(intent);
-        mHandler.sendEmptyMessage(ZIPSUCCESS);
+        if(result>0){
+            mHandler.sendEmptyMessage(ZIPSUCCESS);
+        }
     }
     @Override
     protected void onPreExecute() {

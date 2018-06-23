@@ -55,7 +55,7 @@ public class MYWXWeb extends WXComponent {
         super(instance, dom, parent, isLazy);
         createWebView();
 
-        extraHeaders.put("Referer", "http://weex.rizco.com");
+        extraHeaders.put("Referer", "https://mopian.1xx.me");
     }
 
     protected void  createWebView(){

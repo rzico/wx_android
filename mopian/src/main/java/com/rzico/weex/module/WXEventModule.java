@@ -62,6 +62,7 @@ import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.RSAUtils;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
+import com.rzico.weex.utils.chat.FileUtil;
 import com.rzico.weex.utils.chat.MessageFactory;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
@@ -964,7 +965,13 @@ public class WXEventModule extends WXModule {
         if(filePath.endsWith("jpg") || filePath.endsWith("bmp") || filePath.endsWith("png") || filePath.endsWith("jpeg")){
             //在这里压缩 把压缩完的地址 放 filepath 里面
             cachefileName = AllConstant.getDiskCachePath(getActivity()) +"/"+ System.currentTimeMillis() + ".jpg";
-            NativeUtil.compressBitmap(filePath, cachefileName);
+            if(FileUtil.fileIsExists(filePath)){
+                NativeUtil.compressBitmap(filePath, cachefileName);
+            }else {
+                Message message = new Message().error("图片已被删除");
+                callback.invoke(message);
+            }
+
         }else{
             cachefileName = filePath;
         }
@@ -1453,10 +1460,9 @@ public class WXEventModule extends WXModule {
         callback.invoke(message);
     }
     @JSMethod
-    public void clearCache(JSCallback callback){
-        String cachePath = PathUtils.getCachePath();
-        boolean success = DeleteFileUtil.delete(cachePath);
-        success = DeleteFileUtil.delete(AllConstant.getDiskCachePath(getActivity()));
+    public void clearCache(String options, JSCallback callback){
+
+        boolean success = DeleteFileUtil.delete(AllConstant.getDiskCachePath(getActivity()));
         if(success){
             Message message = new Message().success("");
             callback.invoke(message);

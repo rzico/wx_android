@@ -18,7 +18,9 @@ import java.io.File;
 public class XDB {
     static DbManager.DaoConfig daoConfig;
     public static DbManager.DaoConfig getDaoConfig(){
-            File file=new File(AllConstant.getDiskCachePath(WXApplication.getActivity()) + "/db");
+        String cachePath = AllConstant.getDiskCachePath(WXApplication.getActivity());
+        cachePath = cachePath.replace("/cache", "");
+            File file=new File( cachePath + "/db");
             if(daoConfig==null){
                 daoConfig=new DbManager.DaoConfig()
                         .setDbName("wx1.db")
