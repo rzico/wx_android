@@ -34,22 +34,17 @@
     <!--这个是主页在用-->
     <style name="FullscreenTheme" parent="AppTheme">
         <item name="windowActionBar">false</item>
-        <item name="android:windowAnimationStyle">@style/AppTheme.Slide.Animation</item>
+        <!--<item name="android:windowAnimationStyle">@style/AppTheme.Slide.Animation</item>-->
         <item name="windowNoTitle">true</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="FullscreenTheme_haveActionBar" parent="AppTheme">
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">true</item>
-        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
-        <!--<item name="android:windowIsTranslucent">true</item>-->
-        <!--<item name="android:windowAnimationStyle">@style/AppTheme.Slide.Animation</item>-->
-        <item name="android:windowActionBarOverlay">true</item>
-        <!--<item name="android:windowBackground">@color/transparent</item>-->
-        <item name="android:fitsSystemWindows">false</item>
-        <!--<item name="toolbarNavigationButtonStyle">@style/myToolbarNavigationButtonStyle</item>-->
+    <style name="FullscreenTheme_haveActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--<item name="windowActionBar">true</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+        <!--<item name="android:windowActionBarOverlay">true</item>-->
+        <!--<item name="android:fitsSystemWindows">false</item>-->
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
