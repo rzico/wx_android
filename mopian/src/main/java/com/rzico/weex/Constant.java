@@ -21,6 +21,7 @@ public class Constant {
 
     //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.MOPIAN" />
     public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.MOPIAN";
+    public static final String WEEX_ACTION = "com.taobao.android.intent.action.MOPIAN";
 
     public static final String wxURL = "http://cdnx.1xx.me/weex/app/";
 
@@ -67,14 +68,14 @@ public class Constant {
     public static String appVerison = "";
 
     //生产环境服务器地址
-    public static final String SERVER = "https://mopian.1xx.me/";
-//        public static final String SERVER = "http://dev.1xx.me/";
+//    public static final String SERVER = "https://mopian.1xx.me/";
+        public static final String SERVER = "https://dev.1xx.me/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
     public static boolean isLoginAcitivity = false;
 
     public static boolean isSetting = true; //设置权限
 
-    public static final int REQ_QR_CODE = 11002; // // 打开扫描界面请求码
+    public static final int REQ_QR_CODE = 11002; //打开扫描界面请求码
     public static final String INTENT_EXTRA_KEY_QR_SCAN = "qr_scan_result";
 }

@@ -240,7 +240,7 @@ public class WXEventModule extends WXModule {
     }
 
 
-    @JSMethod
+    @JSMethod(uiThread = true)
     public void openURL(String url, JSCallback jsCallback) {
         try {
 //            Toast.makeText(getContext(), "url:" + url , Toast.LENGTH_SHORT).show();
