@@ -8,8 +8,13 @@ import android.graphics.Matrix;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rzico.weex.R;
@@ -23,6 +28,8 @@ import com.tencent.imsdk.TIMFaceElem;
 import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMTextElem;
 import com.tencent.imsdk.ext.message.TIMMessageDraft;
+
+import org.xutils.common.util.DensityUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,7 +104,12 @@ public class TextMessage extends Message {
 
     }
 
-
+    public float getTextWidth(Context context, String text, int textSize){
+        TextPaint paint = new TextPaint();
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        paint.setTextSize(scaledDensity * textSize);
+        return paint.measureText(text);
+    }
 
     /**
      * 在聊天界面显示消息
@@ -113,8 +125,10 @@ public class TextMessage extends Message {
         viewHolder.rightMessage.setPadding(Utils.dp2px(context,10),Utils.dp2px(context,5),Utils.dp2px(context,15),Utils.dp2px(context,5));
         viewHolder.leftMessage.setPadding(Utils.dp2px(context,15),Utils.dp2px(context,5),Utils.dp2px(context,10),Utils.dp2px(context,5));
         TextView tv = new TextView(WXApplication.getContext());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         tv.setTextColor(WXApplication.getContext().getResources().getColor(isSelf() ? R.color.black : R.color.black));
+        tv.setEllipsize(TextUtils.TruncateAt.END);
+        tv.setSingleLine(false);
         List<TIMElem> elems = new ArrayList<>();
         for (int i = 0; i < message.getElementCount(); ++i){
             elems.add(message.getElement(i));
@@ -129,6 +143,14 @@ public class TextMessage extends Message {
         tv.setText(stringBuilder);
         getBubbleView(viewHolder).addView(tv);
         showStatus(viewHolder);
+//        float w  =getTextWidth(context, tv.getText().toString(), 16);
+//        float a = DensityUtil.getScreenWidth() - DensityUtil.dip2px(100);
+//        if(w < a){
+//            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewHolder.rightMessage.getLayoutParams();
+//            layoutParams.
+//            viewHolder.rightMessage.setLayoutParams(layoutParams);
+//
+//        }
     }
 
     /**
@@ -199,7 +221,16 @@ public class TextMessage extends Message {
                     break;
                 case Text:
                     TIMTextElem textElem = (TIMTextElem) elems.get(i);
-                    stringBuilder.append(textElem.getText());
+                    String hendleText = textElem.getText();
+//                    String hendleText = "";
+//                    int len = 15;
+//                    for (int j = 0; j < text.length() ; j++){
+//                        hendleText = hendleText + text.charAt(j);
+//                        if((j+1) % len == 0){
+//                            hendleText = hendleText + "\n";
+//                        }
+//                    }
+                    stringBuilder.append(hendleText);
                     break;
             }
 

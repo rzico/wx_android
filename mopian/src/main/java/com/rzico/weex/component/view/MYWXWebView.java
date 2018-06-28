@@ -250,9 +250,15 @@ public class MYWXWebView implements IWebView {
                                         //一键购
                                         Map<String, Object> params = new HashMap<>();
                                         params.put("goodId", two[1]);
-                                        //推送前面4个页面
 
                                         EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "buyGood", params));
+                                    }else if(one[0].equals("saveImage")){
+
+                                        //文件下载
+                                        Map<String, Object> params = new HashMap<>();
+                                        params.put("url", two[1]);
+
+                                        EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "saveImage", params));
                                     }
                                 }
                             }

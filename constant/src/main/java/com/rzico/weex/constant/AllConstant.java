@@ -39,7 +39,16 @@ public class AllConstant {
         }
         return cachePath;
     }
-
+    public static String getImagePath(){
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            //sd路径
+            //        return ;
+            return Environment.getExternalStorageDirectory().getPath() + "/" + "mopian/";
+        }else {
+            //本地路径
+            return Environment.getRootDirectory().getPath() + "/" + "mopian/";
+        }
+    }
 
     public static File getDiskCacheDir(Activity activity) {
         String cachePath;

@@ -1,7 +1,6 @@
 package com.rzico.weex.module;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,11 +12,11 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.rzico.weex.WXApplication;
-import com.rzico.weex.activity.BaseActivity;
-import com.rzico.weex.activity.SplashActivity;
+import com.rzico.weex.constant.AllConstant;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.utils.Player;
 import com.rzico.weex.utils.RecorderUtil;
+import com.rzico.weex.utils.audio.ExtAudioRecorder;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
@@ -54,7 +53,12 @@ public class AudioModule extends WXModule {
         Dexter.withActivity(getActivity()).withPermission(Manifest.permission.RECORD_AUDIO).withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        RecorderUtil.getInstance().startRecording(callback);
+//                        RecorderUtil.getInstance().startRecording(callback);
+                        ExtAudioRecorder extAudioRecorder = ExtAudioRecorder.getInstanse(false);
+                        String path  = AllConstant.getDiskCachePath(WXApplication.getActivity()) + "/recorderUtils_" + System.currentTimeMillis() + ".wav";
+                        extAudioRecorder.setOutputFile(path);
+                        extAudioRecorder.prepare();
+                        extAudioRecorder.start(callback);
                     }
 
                     @Override
@@ -77,15 +81,17 @@ public class AudioModule extends WXModule {
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        RecorderUtil.getInstance().stopRecording(callback);
-                        Record record = new Record();
-                        record.setPath(RecorderUtil.getInstance().getFilePath());
-                        record.setTime(RecorderUtil.getInstance().getTimeInterval());
-                        Message message = new Message();
-                        message.setType("success");
-                        message.setContent("录音成功");
-                        message.setData(record);
-                        callback.invoke(message);
+                        try{
+                            ExtAudioRecorder extAudioRecorder = ExtAudioRecorder.getInstanse(false);
+                            extAudioRecorder.stop();
+                            extAudioRecorder.release();
+                            Record record = new Record();
+                            record.setPath(extAudioRecorder.getFilePath());
+                            record.setTime(extAudioRecorder.getTimeInterval());
+                            callback.invoke(new Message().success(record));
+                        }catch (Exception e){
+                            callback.invoke(new Message().error("停止失败"));
+                        }
                     }
 
                     @Override
@@ -101,7 +107,7 @@ public class AudioModule extends WXModule {
                     }
                 }).check();
     }
-    class Record{
+   public static class Record{
         private String path;//录音保存的路径
         private long time;//录音时长
 

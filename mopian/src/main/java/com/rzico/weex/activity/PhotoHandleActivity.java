@@ -126,7 +126,6 @@ public class PhotoHandleActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception bitmapWorkerException) {
                             Log.e("PhotoHandle", "onFailure: setImageUri", bitmapWorkerException);
-//                            Toast.makeText(PhotoHandleActivity.this, "该图片已被删除", Toast.LENGTH_SHORT).show();
                             setResult(UCrop.RESULT_ERROR, new Intent()
                                     .putExtra(UCrop.EXTRA_OUTPUT_URI, inputUri));
                             finish();

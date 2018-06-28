@@ -106,15 +106,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
         setContentView();
 
-//        LinearLayout backLL = (LinearLayout)findViewById(R.id.back_ll);
-//        backLL.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                stopPlay();
-//                finish();
-//            }
-//        });
-
         checkPublishPermission();
 
 
@@ -137,8 +128,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
             mLivePlayer.setRenderMode(mCurrentRenderMode);
 
-//            mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
-//            mLivePlayer.setRenderRotation(mCurrentRenderRotation);
             //开始播放
             mIsPlaying = startPlay(livePlayerBean.getVideo());
         }
@@ -158,7 +147,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                     mWebView.postUrl(livePlayerBean.getUrl(), null);
                 }else {
                     mWebView.loadUrl(livePlayerBean.getUrl());
-//                    mWebView.postUrl(livePlayerBean.getUrl(), null);
                 }
             }
 
@@ -166,8 +154,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
             mLivePlayer.setRenderMode(mCurrentRenderMode);
 
-//            mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
-//            mLivePlayer.setRenderRotation(mCurrentRenderRotation);
             //开始播放
             mIsPlaying = startPlay(livePlayerBean.getVideo());
         }

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -16,11 +17,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.PuzzleActivity;
+import com.rzico.weex.activity.SplashActivity;
 import com.rzico.weex.activity.TestActivity;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.model.info.VideoBean;
 import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.photo.PhotoHandle;
+import com.rzico.weex.utils.task.ZipExtractorTask;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
@@ -28,7 +31,10 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.model.AspectRatio;
 import com.rzico.weex.constant.AllConstant;
 
+import org.xutils.common.Callback;
 import org.xutils.common.util.FileUtil;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.File;
 import java.io.Serializable;
@@ -184,6 +190,67 @@ public class AlbumModule extends WXModule {
                 })
                 .open();
     }
+    @JSMethod
+    public void saveImage(String url, final JSCallback callback){
+        if(url == null || url.equalsIgnoreCase("") || !url.startsWith("http")){
+            callback.invoke(new Message().error("路径错误"));
+            return;
+        }
+        //设置请求参数
+        RequestParams requestParams = new RequestParams(url);
+        String imagePath = AllConstant.getImagePath();
+        final String savePath = imagePath + "IMAGE_" + System.currentTimeMillis() + ".jpg";
+        requestParams.setSaveFilePath(savePath);//这里的path 是直接要给 保存的文件路径 包括文件名后缀名
+        x.http().get(requestParams, new Callback.ProgressCallback<File>() {
+
+            @Override
+            public void onSuccess(File result) {
+//                下载成功后
+                Message message = new Message();
+                message.setType("success");
+                message.setContent("下载成功");
+                message.setData(savePath);
+                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri uri = Uri.fromFile(result);
+                intent.setData(uri);
+                getActivity().sendBroadcast(intent);//这个广播的目的就是更新图库，发了这个广播进入相册就可以找到你保存的图片了！，记得要传你更新的file哦
+
+                callback.invoke(new Message().success(message));
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("下载失败");
+                callback.invoke(new Message().error("下载失败"));
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+                callback.invoke(new Message().error("下载取消"));
+                System.out.println("下载取消");
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+
+            @Override
+            public void onWaiting() {
+
+            }
+
+            @Override
+            public void onStarted() {
+            }
+
+            @Override
+            public void onLoading(long total, long current, boolean isDownloading) {
+
+            }
+        });
+    }
+
     @JSMethod
     public void openAlbumMuti(final JSCallback callback){
 //        回调不使用全局变量
