@@ -13,6 +13,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -38,8 +40,11 @@ import com.taobao.weex.ui.view.IWebView;
 import com.taobao.weex.utils.WXLogUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.xutils.http.cookie.DbCookieStore;
 
+import java.net.HttpCookie;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.finalteam.rxgalleryfinal.utils.DensityUtil;
@@ -64,7 +69,7 @@ public class MYWXWebView implements IWebView {
     public MYWXWebView(Context context) {
         mContext = context;
         extraHeaders.put("Referer", "https://mopian.1xx.me");
-//        extraHeaders.put(WXHttpUtil.KEY_USER_AGENT, WXHttpUtil.assembleUserAgent(mContext, WXEnvironment.getConfig())+ "wexx");
+        extraHeaders.put(WXHttpUtil.KEY_USER_AGENT, WXHttpUtil.assembleUserAgent(mContext, WXEnvironment.getConfig())+ "weex");
         String uid= PhoneUtil.getDeviceId(mContext);
         String app= Constant.app;
         String tsp = String.valueOf(System.currentTimeMillis());
@@ -76,6 +81,27 @@ public class MYWXWebView implements IWebView {
         extraHeaders.put("x-tsp", tsp);//时间戳
         extraHeaders.put("x-tkn", tkn);//令牌
 
+    }
+
+    /**
+     * 给WebView同步Cookie
+     *
+     * @param context 上下文
+     * @param url     可以使用[domain][host]
+     */
+    private void syncCookie(Context context, String url) {
+        CookieSyncManager.createInstance(context);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.removeSessionCookie();// 移除旧的[可以省略]
+        DbCookieStore instance = DbCookieStore.INSTANCE;
+        List<HttpCookie> cookies = instance.getCookies();// 获取Cookie[可以是其他的方式获取]
+        for (int i = 0; i < cookies.size(); i++) {
+            HttpCookie cookie = cookies.get(i);
+            String value = cookie.getName() + "=" + cookie.getValue();
+            cookieManager.setCookie(url, value);
+        }
+        CookieSyncManager.getInstance().sync();// To get instant sync instead of waiting for the timer to trigger, the host can call this.
     }
 
     @Override
@@ -130,6 +156,7 @@ public class MYWXWebView implements IWebView {
 //        startLoad = System.currentTimeMillis();
         if(getWebView() == null)
             return;
+        syncCookie(mContext, url);
         getWebView().loadUrl(url, extraHeaders);
     }
 
