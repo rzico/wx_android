@@ -52,6 +52,7 @@ import com.tencent.rtmp.TXLivePlayConfig;
 import com.tencent.rtmp.TXLivePlayer;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.tencent.ugc.TXRecordCommon;
+import com.umeng.analytics.MobclickAgent;
 
 public class LivePlayerActivity extends Activity implements ITXLivePlayListener, View.OnClickListener{
     private static final String TAG = LivePlayerActivity.class.getSimpleName();
@@ -287,9 +288,11 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         Log.d(TAG,"vrender onDestroy");
 	}
 
+
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -307,6 +310,8 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         if(getRequestedOrientation()!=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
+
+        MobclickAgent.onResume(this);
     }
 
 

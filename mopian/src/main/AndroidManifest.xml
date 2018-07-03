@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     package="com.rzico.weex">
-
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -64,7 +63,8 @@
         tools:replace="android:icon, android:theme">
         <uses-library android:name="android.test.runner" />
 
-
+        <meta-data android:value="5b3b22b18f4a9d7720000156" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="Android" android:name="UMENG_CHANNEL"/>
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

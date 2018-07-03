@@ -50,6 +50,7 @@ import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
@@ -98,6 +99,12 @@ public class SplashActivity extends BaseActivity {
         initIM();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
     /**
      * 清楚所有通知栏通知
      */
@@ -138,6 +145,7 @@ public class SplashActivity extends BaseActivity {
                         }
                     }).check();
         }
+        MobclickAgent.onResume(this);
     }
 
     private void initDb() {

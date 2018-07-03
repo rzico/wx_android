@@ -201,6 +201,7 @@ public class PlayActivity extends BaseActivity {
         clearTiming();
 
     }
+
     private void initData() {
         HashMap<String, Object> params = new HashMap<>();
         params.put("id" , getIntent().getStringExtra("liveId"));

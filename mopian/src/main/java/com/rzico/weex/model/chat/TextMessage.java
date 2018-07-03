@@ -20,8 +20,10 @@ import android.widget.TextView;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.adapter.chat.ChatAdapter;
+import com.rzico.weex.constant.AllConstant;
 import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.chat.EmoticonUtil;
+import com.tencent.qcloud.ui.EmojiManager;
 import com.tencent.imsdk.TIMElem;
 import com.tencent.imsdk.TIMElemType;
 import com.tencent.imsdk.TIMFaceElem;
@@ -140,17 +142,9 @@ public class TextMessage extends Message {
         if (!hasText){
             stringBuilder.insert(0," ");
         }
-        tv.setText(stringBuilder);
+        tv.setText(EmojiManager.parse(stringBuilder.toString(), DensityUtil.dip2px(AllConstant.emSize)));
         getBubbleView(viewHolder).addView(tv);
         showStatus(viewHolder);
-//        float w  =getTextWidth(context, tv.getText().toString(), 16);
-//        float a = DensityUtil.getScreenWidth() - DensityUtil.dip2px(100);
-//        if(w < a){
-//            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewHolder.rightMessage.getLayoutParams();
-//            layoutParams.
-//            viewHolder.rightMessage.setLayoutParams(layoutParams);
-//
-//        }
     }
 
     /**
@@ -222,14 +216,6 @@ public class TextMessage extends Message {
                 case Text:
                     TIMTextElem textElem = (TIMTextElem) elems.get(i);
                     String hendleText = textElem.getText();
-//                    String hendleText = "";
-//                    int len = 15;
-//                    for (int j = 0; j < text.length() ; j++){
-//                        hendleText = hendleText + text.charAt(j);
-//                        if((j+1) % len == 0){
-//                            hendleText = hendleText + "\n";
-//                        }
-//                    }
                     stringBuilder.append(hendleText);
                     break;
             }

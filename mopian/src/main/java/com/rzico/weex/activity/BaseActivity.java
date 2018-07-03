@@ -43,6 +43,7 @@ import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.NetUtil;
 import com.rzico.weex.utils.NetWorkStateReceiver;
 import com.rzico.weex.utils.SystemBarTintManager;
+import com.umeng.analytics.MobclickAgent;
 
 
 import java.lang.reflect.Field;
@@ -363,4 +364,17 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
 //            wasBackground = false;
 //        }
 //    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }

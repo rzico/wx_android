@@ -44,6 +44,7 @@ import com.rzico.weex.utils.chat.FileUtil;
 import com.rzico.weex.utils.chat.MediaUtil;
 import com.rzico.weex.utils.chat.MessageFactory;
 import com.rzico.weex.utils.chat.RecorderUtil;
+import com.tencent.qcloud.ui.EmojiManager;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMFriendshipManager;
@@ -61,6 +62,7 @@ import com.tencent.qcloud.presentation.viewfeatures.ChatView;
 import com.tencent.qcloud.ui.ChatInput;
 import com.tencent.qcloud.ui.TemplateTitle;
 import com.tencent.qcloud.ui.VoiceSendingView;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.xutils.ex.DbException;
@@ -180,7 +182,6 @@ public class ChatActivity extends BaseActivity implements ChatView {
         BarTextColorUtils.StatusBarLightMode(this, R.color.topBarColor);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         setContentView(R.layout.activity_chat);
-
         identify = getIntent().getStringExtra("identify");
         type = (TIMConversationType) getIntent().getSerializableExtra("type");
         chatInfo = (ChatInfo) getIntent().getSerializableExtra("chatInfo");
@@ -268,6 +269,14 @@ public class ChatActivity extends BaseActivity implements ChatView {
 //        RefreshEvent.getInstance().onRefresh();
         presenter.readMessages();
         MediaUtil.getInstance().stop();
+        MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -492,7 +501,7 @@ public class ChatActivity extends BaseActivity implements ChatView {
      */
     @Override
     public void sendText() {
-        Message message = new TextMessage(input.getText());
+        Message message = new TextMessage(input.getText().toString());
         presenter.sendMessage(message.getMessage());
         onMessage(message.getMessage());
         input.setText("");
