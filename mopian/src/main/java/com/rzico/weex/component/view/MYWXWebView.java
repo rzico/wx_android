@@ -215,10 +215,10 @@ public class MYWXWebView implements IWebView {
                                 if(one!=null && one.length == 2){
                                     if(one[0].equals("article")){
                                         // 文章 file://view/article/preview.js?articleId=%@&publish=true
-                                        url = "file://view/article/preview.js?articleId=" + two[1] + "&publish=true";
+                                        url = "file://view/articlePreview/articlePreview.js?articleId=" + two[1] + "&publish=true";
                                     }else if(one[0].equals("topic")){
                                         // 专栏 file://view/topic/index.js?id=%@
-                                        url = "file://view/topic/index.js?id=" + two[1];
+                                        url = "file://view/perHome/perHome.js?id=" + two[1];
                                     }
                                     else if(one[0].equals("buyGood")){
                                         //一键购
