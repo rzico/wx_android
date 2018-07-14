@@ -192,6 +192,9 @@ public class SplashActivity extends BaseActivity {
                 Constant.imUserId = "";
                 SharedUtils.saveLoginId(Constant.userId);
                 EventBus.getDefault().post(new com.rzico.weex.model.event.MessageBus(com.rzico.weex.model.event.MessageBus.Type.FORCEOFFLINE));
+
+                //测试
+                MobclickAgent.onProfileSignOff();
             }
 
             @Override
@@ -522,7 +525,7 @@ public class SplashActivity extends BaseActivity {
         try {
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
-                downloadFile("http://cdn.1xx.me/weex/release/res-1.0.0.zip" + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
+                downloadFile("http://cdn.1xx.me/weex/release/res-0.1.0.zip" + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
 //                downloadFile("http://cdn.rzico.com/weex/release/res-1.0.1.zip" + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
 //                toNext();
             } else {

@@ -20,6 +20,7 @@ import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMManager;
 
 import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -131,7 +132,7 @@ public class LoginUtils  {
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINSUCCESS));
 
         //测试
-
+        MobclickAgent.onProfileSignIn(Constant.userId + "");
 
     }
     public static void loginError(){

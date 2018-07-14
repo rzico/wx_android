@@ -323,4 +323,6 @@ public class WXApplication extends Application {
     }
     return processName;
   }
+
+
 }

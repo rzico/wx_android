@@ -149,6 +149,13 @@
             android:theme="@style/FullscreenTheme_haveActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yixiang.mopian.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:theme="@style/FullscreenTheme_haveActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+
         <!--  网络监听 -->
         <receiver android:name=".utils.NetWorkStateReceiver">
             <intent-filter>

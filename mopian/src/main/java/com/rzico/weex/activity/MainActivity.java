@@ -435,7 +435,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);       //强制为横屏
         setUnRead();
         PushUtil.getInstance().reset();
+        MobclickAgent.onPageStart("MainActivity");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("MainActivity");
     }
 
     public void setUnRead() {
