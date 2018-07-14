@@ -113,6 +113,11 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MobclickAgent.openActivityDurationTrack(false);
+
+        // 设置为U-APP场景
+        MobclickAgent.setScenarioType(mContext, MobclickAgent.EScenarioType.E_UM_NORMAL);
         mContext = BaseActivity.this;
         evevt = this;
         initView();
