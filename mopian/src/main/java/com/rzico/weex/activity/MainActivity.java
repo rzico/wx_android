@@ -10,8 +10,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.chat.ChatActivity;
+import com.rzico.weex.activity.popwindow.CommonPopupWindow;
 import com.rzico.weex.adapter.WeexPageAdapter;
 import com.rzico.weex.db.XDB;
 import com.rzico.weex.model.info.LoginBean;
@@ -39,8 +43,10 @@ import com.rzico.weex.net.XRequest;
 import com.rzico.weex.pageview.NoScrollPageView;
 import com.rzico.weex.utils.AntiShake;
 import com.rzico.weex.utils.BarTextColorUtils;
+import com.rzico.weex.utils.CommonUtil;
 import com.rzico.weex.utils.LoginUtils;
 import com.rzico.weex.utils.PathUtils;
+import com.rzico.weex.utils.ScreenHelper;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.chat.PushUtil;
 import com.rzico.weex.utils.weex.constants.Constants;
@@ -486,10 +492,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         rgGroupAdd.setOnClickListener(this);
         rgGroupMy.setOnClickListener(this);
     }
-
     private void setBottonChange(int page) {
         switch (page) {
             case 0:
+
+
                 BarTextColorUtils.StatusBarLightMode(MainActivity.this, false);
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home_focus);
                 rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);

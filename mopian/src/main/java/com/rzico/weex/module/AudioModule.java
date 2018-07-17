@@ -16,6 +16,7 @@ import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.SplashActivity;
 import com.rzico.weex.model.info.Message;
+import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.Player;
 import com.rzico.weex.utils.RecorderUtil;
 import com.taobao.weex.annotation.JSMethod;
@@ -31,6 +32,9 @@ public class AudioModule extends WXModule {
 
     @JSMethod
     public void play(String url, JSCallback callback){
+        if(url.startsWith("file://resource")){
+            url =  url.replace("file://", PathUtils.getResPath(WXApplication.getActivity()));//读取资源路径
+        }
         Player.getInstance().stop();
         Player.getInstance().playUrl(url, callback);
         Player.getInstance().play();

@@ -8,21 +8,30 @@ import android.graphics.Matrix;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.adapter.chat.ChatAdapter;
+import com.rzico.weex.constant.AllConstant;
 import com.rzico.weex.utils.Utils;
 import com.rzico.weex.utils.chat.EmoticonUtil;
+import com.tencent.qcloud.ui.EmojiManager;
 import com.tencent.imsdk.TIMElem;
 import com.tencent.imsdk.TIMElemType;
 import com.tencent.imsdk.TIMFaceElem;
 import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMTextElem;
 import com.tencent.imsdk.ext.message.TIMMessageDraft;
+
+import org.xutils.common.util.DensityUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,7 +106,12 @@ public class TextMessage extends Message {
 
     }
 
-
+    public float getTextWidth(Context context, String text, int textSize){
+        TextPaint paint = new TextPaint();
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        paint.setTextSize(scaledDensity * textSize);
+        return paint.measureText(text);
+    }
 
     /**
      * 在聊天界面显示消息
@@ -113,8 +127,10 @@ public class TextMessage extends Message {
         viewHolder.rightMessage.setPadding(Utils.dp2px(context,10),Utils.dp2px(context,5),Utils.dp2px(context,15),Utils.dp2px(context,5));
         viewHolder.leftMessage.setPadding(Utils.dp2px(context,15),Utils.dp2px(context,5),Utils.dp2px(context,10),Utils.dp2px(context,5));
         TextView tv = new TextView(WXApplication.getContext());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         tv.setTextColor(WXApplication.getContext().getResources().getColor(isSelf() ? R.color.black : R.color.black));
+        tv.setEllipsize(TextUtils.TruncateAt.END);
+        tv.setSingleLine(false);
         List<TIMElem> elems = new ArrayList<>();
         for (int i = 0; i < message.getElementCount(); ++i){
             elems.add(message.getElement(i));
@@ -126,7 +142,7 @@ public class TextMessage extends Message {
         if (!hasText){
             stringBuilder.insert(0," ");
         }
-        tv.setText(stringBuilder);
+        tv.setText(EmojiManager.parse(stringBuilder.toString(), DensityUtil.dip2px(AllConstant.emSize)));
         getBubbleView(viewHolder).addView(tv);
         showStatus(viewHolder);
     }
@@ -199,7 +215,8 @@ public class TextMessage extends Message {
                     break;
                 case Text:
                     TIMTextElem textElem = (TIMTextElem) elems.get(i);
-                    stringBuilder.append(textElem.getText());
+                    String hendleText = textElem.getText();
+                    stringBuilder.append(hendleText);
                     break;
             }
 

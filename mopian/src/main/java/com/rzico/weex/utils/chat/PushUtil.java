@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
@@ -60,6 +61,14 @@ public class PushUtil implements Observer {
     private void PushNotify(TIMMessage msg, List<TIMUserProfile> result) {
         //系统消息，自己发的消息，程序在前台的时候不通知
 
+//        boolean is1 = (msg.getConversation().getType() != TIMConversationType.Group &&
+//                msg.getConversation().getType() != TIMConversationType.C2C);
+//        boolean is2 = msg.isSelf();
+//        boolean is3 = msg.getRecvFlag() == TIMGroupReceiveMessageOpt.ReceiveNotNotify;
+//        boolean is4 = MessageFactory.getMessage(msg) instanceof CustomMessage;
+//
+//        Toast.makeText(WXApplication.getContext(), "is1:" + is1 + "is2:" + is2 + "is3:" + is3 + "is4:" + is4, Toast.LENGTH_SHORT).show();
+
         if (msg == null ||
 //                Foreground.get().isForeground()||
                 (msg.getConversation().getType() != TIMConversationType.Group &&
@@ -67,6 +76,7 @@ public class PushUtil implements Observer {
                 msg.isSelf() ||
                 msg.getRecvFlag() == TIMGroupReceiveMessageOpt.ReceiveNotNotify ||
                 MessageFactory.getMessage(msg) instanceof CustomMessage) return;
+
 
         String senderStr, contentStr;
         Message message = MessageFactory.getMessage(msg);
@@ -126,6 +136,8 @@ public class PushUtil implements Observer {
         Notification notify = mBuilder.build();
         notify.flags |= Notification.FLAG_AUTO_CANCEL;
         mNotificationManager.notify(pushId, notify);
+
+        Toast.makeText(WXApplication.getContext(), "推送成功", Toast.LENGTH_SHORT).show();
     }
 
     public static void resetPushNum() {
