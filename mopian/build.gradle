@@ -7,8 +7,8 @@ android {
 
     defaultConfig {
         applicationId "com.rzico.assistant"
-        minSdkVersion 15
-        targetSdkVersion 23
+        minSdkVersion 16
+        targetSdkVersion 24
         versionCode 327
         versionName "3.2.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -32,30 +32,30 @@ android {
         jumboMode true
     }
     signingConfigs {
-//        release {
-//            storeFile file("tools/rzico.jks")
-//            storePassword "123456"
-//            keyAlias "rzico"
-//            keyPassword "123456"
-//        }
-//        debug {
-//            storeFile file("tools/rzico.jks")
-//            storePassword "123456"
-//            keyAlias "rzico"
-//            keyPassword "123456"
-//        }
         release {
-            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
+            storeFile file("tools/rzico.jks")
             storePassword "123456"
             keyAlias "rzico"
             keyPassword "123456"
         }
         debug {
-            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
+            storeFile file("tools/rzico.jks")
             storePassword "123456"
             keyAlias "rzico"
             keyPassword "123456"
         }
+//        release {
+//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
+//            storePassword "123456"
+//            keyAlias "rzico"
+//            keyPassword "123456"
+//        }
+//        debug {
+//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
+//            storePassword "123456"
+//            keyAlias "rzico"
+//            keyPassword "123456"
+//        }
     }
     buildTypes {
         release {

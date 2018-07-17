@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.rzico.weex.R;
+import com.rzico.weex.utils.SharedUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

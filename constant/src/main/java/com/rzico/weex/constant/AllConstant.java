@@ -15,6 +15,7 @@ public class AllConstant {
 
     public static int isClearAll = 1;
 
+    public static int emSize = 20;//表情大小
 
     //自己的缓存图片的路径
     public static final  String CACHEIMAGEPATH = Environment.getExternalStorageDirectory().getPath() + "/" + PACKNAME + "/cache/img/";

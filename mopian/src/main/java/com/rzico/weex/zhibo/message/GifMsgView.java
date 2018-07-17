@@ -19,7 +19,7 @@ public class GifMsgView extends BaseMsgView{
         private TextView vip_tv;
     public GifMsgView(Context context) {
         super(context);
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.msg_gif_view, this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.msg_text_view, this);
         username = (TextView) view.findViewById(R.id.username);
         msgText = (TextView) view.findViewById(R.id.msg_text);
         vip_tv= (TextView) view.findViewById(R.id.vip);

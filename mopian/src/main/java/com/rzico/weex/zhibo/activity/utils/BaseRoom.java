@@ -903,6 +903,8 @@ public abstract class BaseRoom {
                     if(timGroupMemberInfos.size()>0){
                         long s = timGroupMemberInfos.get(0).getSilenceSeconds();
                         openUserInfo(activity, userId,  isUser);
+                    }else {
+                        openUserInfo(activity, userId,  isUser);
                     }
                 }
 

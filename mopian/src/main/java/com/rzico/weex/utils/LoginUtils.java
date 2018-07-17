@@ -1,11 +1,14 @@
 package com.rzico.weex.utils;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 
 import com.google.gson.Gson;
+import com.huawei.android.pushagent.api.PushManager;
 import com.rzico.weex.Constant;
+import com.rzico.weex.R;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LoginActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
@@ -19,11 +22,14 @@ import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMManager;
 
+import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+
+import static com.tencent.open.utils.Global.getPackageName;
 
 /**
  * Created by Jinlesoft on 2017/10/18.
@@ -100,17 +106,16 @@ public class LoginUtils  {
                                 //注册小米和华为推送
 //                                if (deviceMan.equals("Xiaomi") && shouldMiInit(activity)){
 //                                    MiPushClient.registerPush(activity, "2882303761517628612", "UrZo3a7sRVny1YqoUS7m4A==");
-//                                }else if (deviceMan.equals("HUAWEI")){
-//                                    PushManager.requestToken(activity);
-//                                }
+//                                }else
+                                  if (deviceMan.equals("HUAWEI")){
+                                    PushManager.requestToken(activity);
+                                    }
                                 if(listener!=null){
                                     listener.onSuccess(loginBean);
                                 }
                                     loginSuccess();
                             }
                         });
-
-
                     }
                 }
             }
@@ -131,7 +136,15 @@ public class LoginUtils  {
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINSUCCESS));
 
         //测试
-
+//        TIMOfflinePushSettings settings = new TIMOfflinePushSettings();
+////开启离线推送
+//        settings.setEnabled(true);
+////设置收到 C2C 离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+//        settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+////设置收到群离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+//        settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+//
+//        TIMManager.getInstance().setOfflinePushSettings(settings);
 
     }
     public static void loginError(){
