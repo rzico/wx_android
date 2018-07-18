@@ -29,6 +29,10 @@ public class MapModule extends WXModule {
     }
 
     @JSMethod
+    public void startListener() {
+
+    }
+    @JSMethod
     public void startNaviGao(String lat, String lon) {
         if (isAvilible(getActivity(), "com.autonavi.minimap")) {
             try {

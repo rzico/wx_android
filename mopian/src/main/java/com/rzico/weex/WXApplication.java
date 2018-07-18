@@ -12,7 +12,7 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 import com.mob.MobSDK;
-import com.rzico.weex.Service.LocationService;
+import com.rzico.weex.service.LocationService;
 import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
@@ -54,7 +54,6 @@ import com.tencent.qalsdk.sdk.MsfSdkUtils;
 
 import org.xutils.x;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -106,13 +105,12 @@ public class WXApplication extends Application {
         }
       });
     }
-
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
     instance = this;
     init();
     initAlbum();
     initWeex();
-    startAlarm();
+//    startAlarm();
 //    initIM();
     getUid();
   }
@@ -340,8 +338,9 @@ public class WXApplication extends Application {
     PendingIntent pendSender = PendingIntent.getService(this, 0, intent, 0);
     am.cancel(pendSender);
 
+    System.out.println("================================");
     /**AlarmManager.RTC_WAKEUP 这个参数表示系统会唤醒进程；我设置的间隔时间是10分钟 */
-    am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10*60*1000, pendSender);
+    am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1*60*1000, pendSender);
   }
 
 }

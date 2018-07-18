@@ -173,6 +173,10 @@
             android:name="cn.finalteam.rxgalleryfinal.PuzzleActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar" />
+        <!--<service-->
+            <!--android:name="com.rzico.weex.service.LocationService"-->
+            <!--android:exported="false"-->
+            <!--android:process=":LocationService" />-->
 
         <!-- 腾讯云IM -->
         <!-- 【必须】消息收发service -->
@@ -184,7 +188,6 @@
             android:name="com.tencent.qalsdk.service.QalAssistService"
             android:exported="false"
             android:process=":QALSERVICE" />
-
         <!-- 【必须】 离线消息广播接收器 -->
         <receiver
             android:name="com.tencent.qalsdk.QALBroadcastReceiver"
