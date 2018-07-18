@@ -6,11 +6,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.rzico.weex.WXApplication;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.common.WXModule;
 
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,18 +31,66 @@ public class MapModule extends WXModule {
     }
 
     @JSMethod
-    public void startNaviGao(String lat, String lon) {
-        if (isAvilible(getActivity(), "com.autonavi.minimap")) {
-            try {
-                //sourceApplication
-                Intent intent = Intent.getIntent("androidamap://navi?sourceApplication=睿商科技有限公司&poiname=我的目的地&lat=" + lat + "&lon=" + lon + "&dev=0");
-                getActivity().startActivity(intent);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
+    public void startNaviGao(String options) {
+
+        String slat = "";
+        String slon = "";
+        String dlat = "";
+        String dlon = "";
+        int type = 2;// 1 公交 2 驾车 4步行
+        if(options==null || options.equals("")) return;
+        try {
+            options = URLDecoder.decode(options, "utf-8");
+            com.alibaba.fastjson.JSONObject jsObj = JSON.parseObject(options);
+            if (jsObj.containsKey("type")) {
+                type = jsObj.getInteger("type");
             }
-        } else {
-            Toast.makeText(getActivity(), "您尚未安装高德地图或地图版本过低", Toast.LENGTH_SHORT).show();
+            if (jsObj.containsKey("slat")) {
+                slat = jsObj.getString("slat");
+            }
+            if (jsObj.containsKey("slon")) {
+                slon = jsObj.getString("slon");
+            }
+            if (jsObj.containsKey("dlat")) {
+                dlat = jsObj.getString("dlat");
+            }
+            if (jsObj.containsKey("dlon")) {
+                dlon = jsObj.getString("dlon");
+            }
+            if (isAvilible(getActivity(), "com.autonavi.minimap")) {
+
+                String locationStr = "androidamap://route?sourceApplication="
+                        + "rzico"
+                        +
+                        "&slat="
+                        + slat
+                        + "&slon="
+                        + slon
+                        +
+                        "&sname="
+                        + "起点"
+                        + "&dlat="
+                        + dlat
+                        + "&dlon="
+                        + dlon
+                        + "&dname="
+                        + "终点"
+                        + "&dev=0"
+                        + "&m=0"
+                        + "&t="
+                        + type
+                        + "&showType=1";
+                Intent intent = new Intent("android.intent.action.VIEW",
+                        android.net.Uri.parse(/*stringBuffer.toString()*/locationStr));
+                intent.setPackage("com.autonavi.minimap");
+                getActivity().startActivity(intent);
+            } else {
+                Toast.makeText(getActivity(), "您尚未安装高德地图或地图版本过低", Toast.LENGTH_SHORT).show();
+            }
+        }catch (Exception e){
+            Toast.makeText(getActivity(), "传入参数异常", Toast.LENGTH_SHORT).show();
         }
+
 
     }
 
