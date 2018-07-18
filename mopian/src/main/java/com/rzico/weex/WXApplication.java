@@ -24,6 +24,7 @@ import com.rzico.weex.adapter.WeexHttpAdapter;
 import com.rzico.weex.adapter.WeexJSExceptionAdapter;
 import com.rzico.weex.adapter.WeexUriAdapter;
 import com.rzico.weex.module.AlbumModule;
+import com.rzico.weex.utils.PhoneUtil;
 import com.rzico.weex.utils.chat.Foreground;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
@@ -75,10 +76,7 @@ public class WXApplication extends Application {
 
   private static WXApplication instance;
 
-
-
-
-
+  private static String uid = "";
 
   public static WXApplication getInstance() {
     return instance;
@@ -113,7 +111,16 @@ public class WXApplication extends Application {
     initAlbum();
     initWeex();
 //    initIM();
+    getUid();
+  }
 
+  public static String getUid() {
+    if(uid == null || uid.equals("")){
+      uid = PhoneUtil.getDeviceId(context);
+      return uid;
+    }else{
+      return uid;
+    }
   }
 
   public static void initWeex(){
