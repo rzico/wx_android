@@ -33,7 +33,7 @@ public class MapModule extends WXModule {
         if (isAvilible(getActivity(), "com.autonavi.minimap")) {
             try {
                 //sourceApplication
-                Intent intent = Intent.getIntent("androidamap://navi?sourceApplication=睿商科技有限公司&poiname=我的目的地&lat=" + lat + "&lon=" + lon + "&dev=0");
+                Intent intent = Intent.getIntent("androidamap://navi?sourceApplication=厦门睿商科技有限公司&poiname=我的目的地&lat=" + lat + "&lon=" + lon + "&dev=0");
                 getActivity().startActivity(intent);
             } catch (URISyntaxException e) {
                 e.printStackTrace();

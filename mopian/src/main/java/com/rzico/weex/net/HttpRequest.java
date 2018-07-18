@@ -74,7 +74,6 @@ public class HttpRequest {
 
     private List<XRequest> tasks;
     public void unRegisterTasks(BaseActivity activity) {
-
         Iterator<XRequest> it = tasks.iterator();
         while (it.hasNext()) {
             XRequest req = it.next();
@@ -176,7 +175,7 @@ public class HttpRequest {
         Callback.CommonCallback<String> callback = new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("======================" + task.url + "|success|请求耗时:" + (System.currentTimeMillis() - requestTime));
+
                 try {
                     Message entity= new Gson().fromJson(result, Message.class);
                     String type= entity.getType();
@@ -247,7 +246,7 @@ public class HttpRequest {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("======================" + task.url + "|error|请求耗时:" + (System.currentTimeMillis() - requestTime) + "：：：" + ex.toString());
+
                 if (ex instanceof HttpException) { // 网络错误
                     if (task.requestListener != null) {
                         task.requestListener.onFail(task.activity, task.cacheData,  XRequest.GET.equals(task.params) ? 1 : 2);

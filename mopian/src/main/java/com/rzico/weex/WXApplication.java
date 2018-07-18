@@ -2,13 +2,17 @@ package com.rzico.weex;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 import com.mob.MobSDK;
+import com.rzico.weex.Service.LocationService;
 import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
@@ -64,15 +68,11 @@ public class WXApplication extends Application {
   private  static List<BaseActivity> activityList = new LinkedList<BaseActivity>();
 
   private final String tag = "sdar";
+
   //数据库管理类
   private static org.xutils.DbManager db;
 
   private static WXApplication instance;
-
-
-
-
-
 
   public static WXApplication getInstance() {
     return instance;
@@ -106,6 +106,7 @@ public class WXApplication extends Application {
     init();
     initAlbum();
     initWeex();
+    startAlarm();
 //    initIM();
   }
 
@@ -310,4 +311,21 @@ public class WXApplication extends Application {
     }
     return processName;
   }
+
+  public void startAlarm(){
+    /**
+     首先获得系统服务
+     */
+    AlarmManager am = (AlarmManager)
+            getSystemService(Context.ALARM_SERVICE);
+
+    /** 设置闹钟的意图，我这里是去调用一个服务，该服务功能就是获取位置并且上传*/
+    Intent intent = new Intent(this, LocationService.class);
+    PendingIntent pendSender = PendingIntent.getService(this, 0, intent, 0);
+    am.cancel(pendSender);
+
+    /**AlarmManager.RTC_WAKEUP 这个参数表示系统会唤醒进程；我设置的间隔时间是10分钟 */
+    am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10*60*1000, pendSender);
+  }
+
 }
