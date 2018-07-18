@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.google.gson.Gson;
 import com.rzico.weex.Constant;
 import com.rzico.weex.WXActivityManager;
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LoginActivity;
 import com.rzico.weex.db.DbUtils;
@@ -85,12 +86,12 @@ public class HttpRequest {
     }
     public void execute(XRequest task) {
 
-        if (!Utils.checkConnection(task.activity) && !Utils.isApkDebugable(task.activity)) {
-            if (task.requestListener != null) {
-                task.requestListener.onFail(task.activity, task.cacheData,OnRequestListener.ERR_NO_NETWORK);
-            }
-            return;
-        }
+//        if (!Utils.checkConnection(task.activity) && !Utils.isApkDebugable(task.activity)) {
+//            if (task.requestListener != null) {
+//                task.requestListener.onFail(task.activity, task.cacheData,OnRequestListener.ERR_NO_NETWORK);
+//            }
+//            return;
+//        }
 
         Callback.CommonCallback<String> callback = getCallback(task);
 
@@ -150,7 +151,7 @@ public class HttpRequest {
                 params.addListParameter(bean.key, bean.value + "");
             }
         }
-       String uid= PhoneUtil.getDeviceId(task.activity);
+       String uid= WXApplication.getUid();
        String app= Constant.app;
        String tsp = String.valueOf(System.currentTimeMillis());
 
@@ -201,12 +202,14 @@ public class HttpRequest {
                         }
                     } else {
                         if ("success".equals(type) && "login.success".equals(content)){
-                            LoginUtils.checkLogin(task.activity, null, null);//不做处理 就传null
-                            //这里拦截了 登录成功
-                            while (!SessionOutManager.isEmpty()){//队列里如果有数据 就请求
-                                TaskBean taskBean = SessionOutManager.deQueue();
-                                //重新请求一遍
-                                new XRequest(taskBean.getActivity(), taskBean.getUrl(),taskBean.getMethod(), taskBean.getParams()).setOnRequestListener(taskBean.getListener()).execute();
+                            if(task.activity != null){
+                                LoginUtils.checkLogin(task.activity, null, null);//不做处理 就传null
+                                //这里拦截了 登录成功
+                                while (!SessionOutManager.isEmpty()){//队列里如果有数据 就请求
+                                    TaskBean taskBean = SessionOutManager.deQueue();
+                                    //重新请求一遍
+                                    new XRequest(taskBean.getActivity(), taskBean.getUrl(),taskBean.getMethod(), taskBean.getParams()).setOnRequestListener(taskBean.getListener()).execute();
+                                }
                             }
                         }
 

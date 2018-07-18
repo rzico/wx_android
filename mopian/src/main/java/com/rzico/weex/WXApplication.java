@@ -28,6 +28,7 @@ import com.rzico.weex.adapter.WeexHttpAdapter;
 import com.rzico.weex.adapter.WeexJSExceptionAdapter;
 import com.rzico.weex.adapter.WeexUriAdapter;
 import com.rzico.weex.module.AlbumModule;
+import com.rzico.weex.utils.PhoneUtil;
 import com.rzico.weex.utils.chat.Foreground;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
@@ -53,9 +54,11 @@ import com.tencent.qalsdk.sdk.MsfSdkUtils;
 
 import org.xutils.x;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 
 import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
 
@@ -68,11 +71,14 @@ public class WXApplication extends Application {
   private  static List<BaseActivity> activityList = new LinkedList<BaseActivity>();
 
   private final String tag = "sdar";
+  private static final String CACHE_NAME = "cache_path";
 
   //数据库管理类
   private static org.xutils.DbManager db;
 
   private static WXApplication instance;
+
+  private static String uid = "";
 
   public static WXApplication getInstance() {
     return instance;
@@ -108,6 +114,16 @@ public class WXApplication extends Application {
     initWeex();
     startAlarm();
 //    initIM();
+    getUid();
+  }
+
+  public static String getUid() {
+    if(uid == null || uid.equals("")){
+      uid = PhoneUtil.getDeviceId(context);
+      return uid;
+    }else{
+      return uid;
+    }
   }
 
   public static void initWeex(){
