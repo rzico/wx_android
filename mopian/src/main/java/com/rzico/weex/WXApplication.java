@@ -354,10 +354,11 @@ public class WXApplication extends Application {
     if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
       //注册小米推送服务
       MiPushClient.registerPush(this, Constant.mipushAppId, Constant.mipushAppSecret);
-    }else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
-      //请求华为推送设备 token
-      PushManager.requestToken(this);
     }
+//    else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
+//      //请求华为推送设备 token
+//      PushManager.requestToken(this);
+//    }
   }
 
 }

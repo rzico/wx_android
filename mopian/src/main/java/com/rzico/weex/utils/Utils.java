@@ -48,8 +48,8 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.rzico.weex.Constant;
 import com.rzico.weex.activity.BaseActivity;
-
-import org.apache.http.util.EncodingUtils;
+//
+//import org.apache.http.util.EncodingUtils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
