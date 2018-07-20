@@ -8,9 +8,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.util.Log;
+
+import com.huawei.android.pushagent.api.PushManager;
 import com.mob.MobSDK;
 import com.rzico.weex.service.LocationService;
 import com.rzico.weex.adapter.ImageAdapter;
@@ -51,12 +54,14 @@ import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 
 import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
@@ -77,7 +82,11 @@ public class WXApplication extends Application {
 
   private static WXApplication instance;
 
+  //用户ID
   private static String uid = "";
+
+  //小米,华为推送的token
+  private static String token = "";
 
   public static WXApplication getInstance() {
     return instance;
@@ -105,14 +114,16 @@ public class WXApplication extends Application {
         }
       });
     }
+
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
     instance = this;
     init();
     initAlbum();
     initWeex();
-//    startAlarm();
 //    initIM();
     getUid();
+
+    registerPush();
   }
 
   public static String getUid() {
@@ -163,6 +174,7 @@ public class WXApplication extends Application {
 
   }
   private void initIM() {
+
     //初始化SDK基本配置
     TIMSdkConfig config = new TIMSdkConfig(SDK_APPID)
             .enableCrashReport(false)
@@ -325,6 +337,32 @@ public class WXApplication extends Application {
     }
     return processName;
   }
+
+  public static void setUid(String uid) {
+    WXApplication.uid = uid;
+  }
+
+  public static String getToken() {
+    return token;
+  }
+
+  public static void setToken(String token) {
+    WXApplication.token = token;
+  }
+
+
+  public void registerPush(){
+    String vendor = Build.MANUFACTURER;
+    if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
+      //注册小米推送服务
+      MiPushClient.registerPush(this, Constant.mipushAppId, Constant.mipushAppSecret);
+    }
+//    else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
+//      //请求华为推送设备 token
+//      PushManager.requestToken(this);
+//    }
+  }
+
 
   public void startAlarm(){
     /**
