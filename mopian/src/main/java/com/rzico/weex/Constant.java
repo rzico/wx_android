@@ -27,8 +27,8 @@ public class Constant {
     public static final String resURL = "http://cdnx.ahxinying.cn/";
 
     //    云店wxkey
-    public static final String wxAppId = "wx52f15c8b810a6195";
-    public static final String wxAppSecret = "3875ec09a1306cd7637f241fb9400e5a";
+    public static final String wxAppId = "wxb438e93d669626a6";
+    public static final String wxAppSecret = "228a1c044aef868e2752f8de8495a48f";
 
     //    云店shareSDK
     public static final String shareAppId = "260ea801ce8a8";
@@ -68,7 +68,7 @@ public class Constant {
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://120.26.160.202:8082/";
+    public static final String SERVER = "https://www.ahxinying.cn";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
     public static boolean isLoginAcitivity = false;
