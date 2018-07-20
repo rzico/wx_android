@@ -218,12 +218,12 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkVision(Launch.data data) {
-        if (!Utils.isApkDebugable(SplashActivity.this)) {
+//        if (!Utils.isApkDebugable(SplashActivity.this)) {
             showUplodeDialog(data);
-        }else {
-            updateRes();
-        }
-
+//        }else {
+//            updateRes();
+//        }
+//
     }
 
     @Override
