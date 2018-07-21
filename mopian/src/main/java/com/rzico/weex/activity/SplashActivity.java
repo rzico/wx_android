@@ -458,13 +458,13 @@ public class SplashActivity extends BaseActivity {
 
 
     private void showUplodeDialog(final Launch.data versionInfo) {
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(SplashActivity.this);
-        // String msg = "\n更新版本为" + version + "\n" + " [更新内容] " + "\n" + updateInfo + "\n是否立即更新?";
-        dialog.setTitle("升级");
         final String currentVersion = VersionManagementUtil.getVersion(mContext);
         String appVersion = versionInfo.getAppVersion();
         final String minVersion = versionInfo.getMinVersion();
         if (VersionManagementUtil.VersionComparison(appVersion, currentVersion) == 1) {
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(SplashActivity.this);
+            // String msg = "\n更新版本为" + version + "\n" + " [更新内容] " + "\n" + updateInfo + "\n是否立即更新?";
+            dialog.setTitle("升级");
             dialog.setMessage("有新版本了,如果不更新,有些优惠功能将无法使用,程序将退出");
             dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
                 @Override
