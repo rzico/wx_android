@@ -21,6 +21,8 @@ public class HwPushMessageReceiver extends PushEventReceiver {
 //        String content = "获取token和belongId成功，token = " + token + ",belongId = " + belongId;
 //
         WXApplication.setToken(token);
+        System.out.println("HwPushMessageReceiverHwPushMessageReceiverHwPushMessageReceiverHwPushMessageReceiver");
+        System.out.println(token);
 //
 //        Log.e(TAG, content);
     }
