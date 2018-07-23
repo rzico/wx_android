@@ -95,7 +95,7 @@
 
     <!--tab-->
     <string name="main_activity_home_text">首页</string>
-    <string name="main_activity_vip_text">朋友</string>
+    <string name="main_activity_vip_text">附近</string>
     <string name="main_activity_huihua_text">会话</string>
     <string name="main_activity_yingxiao_text">营销</string>
     <string name="main_activity_me_text">我的</string>

@@ -161,7 +161,6 @@
     <orderEntry type="library" exported="" name="com.google.zxing:core:3.2.1@jar" level="project" />
     <orderEntry type="library" exported="" name="__local_aars__:D.\weex\wx_android\mopian\libs\ShareSDK-Wechat-Moments-3.1.1.jar:unspecified@jar" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="javax.inject:javax.inject:1@jar" level="project" />
-    <orderEntry type="library" exported="" name="__local_aars__:D.\weex\wx_android\mopian\libs\MiPush_SDK_Client_3_6_9.jar:unspecified@jar" level="project" />
     <orderEntry type="library" exported="" name="com.google.code.gson:gson:2.7@jar" level="project" />
     <orderEntry type="library" exported="" name="com.xw.repo:bubbleseekbar-3.5" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:support-fragment-25.3.1" level="project" />
@@ -180,8 +179,8 @@
     <orderEntry type="library" exported="" name="__local_aars__:D.\weex\wx_android\mopian\libs\MobCommons-2017.1024.1907.jar:unspecified@jar" level="project" />
     <orderEntry type="library" exported="" name="com.squareup.okhttp:okhttp:2.3.0@jar" level="project" />
     <orderEntry type="library" exported="" name="com.forward.androids:androids-1.1.4" level="project" />
-    <orderEntry type="library" exported="" name="com.github.bumptech.glide:glide:3.7.0@jar" level="project" />
     <orderEntry type="library" exported="" name="com.squareup.okio:okio:1.9.0@jar" level="project" />
+    <orderEntry type="library" exported="" name="com.github.bumptech.glide:glide:3.7.0@jar" level="project" />
     <orderEntry type="module" module-name="graffiti" exported="" />
     <orderEntry type="module" module-name="chat_ui" exported="" />
     <orderEntry type="module" module-name="ucrop" exported="" />
