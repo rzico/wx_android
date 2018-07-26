@@ -997,8 +997,11 @@ public class WXEventModule extends WXModule {
 
     @JSMethod(uiThread = false)
     public boolean haveTop(){
-        //顶部状态栏顶不上去
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            return true;
+        }else {
+            return false;//顶部状态栏顶不上去
+        }
     }
 
     @JSMethod

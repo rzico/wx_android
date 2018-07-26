@@ -1,11 +1,11 @@
 package com.rzico.weex.utils;
 
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 
 import com.google.gson.Gson;
-import com.huawei.android.pushagent.api.PushManager;
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
@@ -26,7 +26,6 @@ import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.imsdk.TIMOfflinePushToken;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.umeng.analytics.MobclickAgent;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
 

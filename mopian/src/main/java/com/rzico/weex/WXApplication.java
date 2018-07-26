@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
-import com.huawei.android.pushagent.api.PushManager;
 import com.mob.MobSDK;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.ImageAdapter;
@@ -53,7 +52,6 @@ import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
 
@@ -359,15 +357,15 @@ public class WXApplication extends Application {
 
 
   public void registerPush(){
-    String vendor = Build.MANUFACTURER;
-    if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
-      //注册小米推送服务
-      MiPushClient.registerPush(this, Constant.mipushAppId, Constant.mipushAppSecret);
-    }
-    else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
-      //请求华为推送设备 token
-      PushManager.requestToken(this);
-    }
+//    String vendor = Build.MANUFACTURER;
+//    if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
+//      //注册小米推送服务
+//      MiPushClient.registerPush(this, Constant.mipushAppId, Constant.mipushAppSecret);
+//    }
+//    else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
+//      //请求华为推送设备 token
+//      PushManager.requestToken(this);
+//    }
   }
 
 }
