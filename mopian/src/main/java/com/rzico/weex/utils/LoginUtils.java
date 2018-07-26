@@ -1,8 +1,6 @@
 package com.rzico.weex.utils;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.util.Log;
 
 
@@ -27,6 +25,7 @@ import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.imsdk.TIMOfflinePushToken;
 import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
@@ -108,12 +107,20 @@ public class LoginUtils  {
                                 //初始化消息监听
                                 MessageEvent.getInstance();
                                 String deviceMan = android.os.Build.MANUFACTURER;
+                                //注册小米和华为推送
+//                                if (deviceMan.equals("Xiaomi") && shouldMiInit(activity)){
+//                                    MiPushClient.registerPush(activity, "2882303761517628612", "UrZo3a7sRVny1YqoUS7m4A==");
+//                                }else if (deviceMan.equals("HUAWEI")){
+//                                    PushManager.requestToken(activity);
+//                                }
                                 if(listener!=null){
                                     listener.onSuccess(loginBean);
                                 }
-                                loginSuccess();
+                                    loginSuccess();
                             }
                         });
+
+
                     }
                 }
             }
@@ -132,6 +139,9 @@ public class LoginUtils  {
         Constant.loginState = true;
         SharedUtils.saveLoginId(Constant.userId);
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINSUCCESS));
+
+        //测试
+        MobclickAgent.onProfileSignIn(Constant.userId + "");
 
 //        //测试
 //        TIMOfflinePushSettings settings = new TIMOfflinePushSettings();

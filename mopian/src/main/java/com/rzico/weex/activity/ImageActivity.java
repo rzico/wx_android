@@ -12,6 +12,7 @@ import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.utils.ImageUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -79,5 +80,17 @@ public class ImageActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

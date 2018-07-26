@@ -1,7 +1,10 @@
 package com.rzico.weex.module;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -18,23 +21,34 @@ import com.taobao.weex.common.WXModule;
  * Created by Jinlesoft on 2017/11/30.
  */
 
-public class PhoneModule extends WXModule{
+public class PhoneModule extends WXModule {
 
 
     public BaseActivity getActivity() {
         return (BaseActivity) mWXSDKInstance.getContext();
     }
+
     @JSMethod
-    public void tel(final String number, final JSCallback callback){
+    public void tel(final String number, final JSCallback callback) {
         Dexter.withActivity(getActivity()).withPermission(android.Manifest.permission.CALL_PHONE)
                 .withListener(new com.karumi.dexter.listener.single.PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         //用intent启动拨打电话
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+number));
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         Message message = new Message().success("");
                         callback.invoke(message);
+                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
                         getActivity().startActivity(intent);
                     }
 

@@ -37,6 +37,7 @@ import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.PhotoUtils;
 import com.rzico.weex.utils.photo.PhotoHandle;
+import com.umeng.analytics.MobclickAgent;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.callback.BitmapLoadCallback;
 import com.yalantis.ucrop.model.AspectRatio;
@@ -100,6 +101,18 @@ public class FilterActivity extends AppCompatActivity {
         Intent intent = getIntent();
         initView(intent);
         initData(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void initData(Intent intent) {

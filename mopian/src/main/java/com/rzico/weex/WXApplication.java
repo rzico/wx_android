@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.huawei.android.pushagent.api.PushManager;
 import com.mob.MobSDK;
+import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
@@ -50,6 +51,8 @@ import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
@@ -101,6 +104,11 @@ public class WXApplication extends Application {
     super.onCreate();
     MultiDex.install(this);
     Foreground.init(this);
+    com.tencent.qcloud.ui.EmojiManager.init(this);
+
+    UMConfigure.init(getContext(), "5b3b22b18f4a9d7720000156","Android", UMConfigure.DEVICE_TYPE_PHONE, null);
+    UMConfigure.setLogEnabled(true);
+    MobclickAgent.setScenarioType(getContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
     context = getApplicationContext();
     if(MsfSdkUtils.isMainProcess(this)) {
       TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
@@ -165,6 +173,7 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
+
 
     } catch (WXException e) {
       e.printStackTrace();

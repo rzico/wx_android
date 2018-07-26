@@ -40,7 +40,7 @@ public class RecorderUtil {
      * 开始录音
      */
     public void startRecording(JSCallback jsCallback) {
-        mFileName = AllConstant.getDiskCachePath(WXApplication.getActivity()) + "/recorderUtils_" + System.currentTimeMillis() + ".mp4";
+        mFileName = AllConstant.getDiskCachePath(WXApplication.getActivity()) + "/recorderUtils_" + System.currentTimeMillis() + ".3gp";
         if (mFileName == null) {
             jsCallback.invoke(new Message().error("录音失败"));
             return;
@@ -52,8 +52,10 @@ public class RecorderUtil {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mRecorder.setAudioEncodingBitRate(16);
+        mRecorder.setAudioSamplingRate(44100);
         mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         startTime = System.currentTimeMillis();
         try {
             mRecorder.prepare();
