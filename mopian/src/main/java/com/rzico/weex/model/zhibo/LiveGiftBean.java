@@ -103,6 +103,8 @@ public class LiveGiftBean extends BaseEntity {
          */
         private Long price;
 
+        private Boolean isPlay;
+
         public Long getId() {
             return id;
         }
@@ -142,6 +144,14 @@ public class LiveGiftBean extends BaseEntity {
         public void setPrice(Long price) {
             this.price = price;
         }
+
+            public Boolean getPlay() {
+                return isPlay;
+            }
+
+            public void setPlay(Boolean play) {
+                isPlay = play;
+            }
         }
     }
 }

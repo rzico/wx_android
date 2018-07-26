@@ -52,6 +52,7 @@ import com.tencent.rtmp.TXLivePlayConfig;
 import com.tencent.rtmp.TXLivePlayer;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.tencent.ugc.TXRecordCommon;
+import com.umeng.analytics.MobclickAgent;
 
 public class LivePlayerActivity extends Activity implements ITXLivePlayListener, View.OnClickListener{
     private static final String TAG = LivePlayerActivity.class.getSimpleName();
@@ -106,15 +107,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
 
         setContentView();
 
-//        LinearLayout backLL = (LinearLayout)findViewById(R.id.back_ll);
-//        backLL.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                stopPlay();
-//                finish();
-//            }
-//        });
-
         checkPublishPermission();
 
 
@@ -137,8 +129,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
             mLivePlayer.setRenderMode(mCurrentRenderMode);
 
-//            mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
-//            mLivePlayer.setRenderRotation(mCurrentRenderRotation);
             //开始播放
             mIsPlaying = startPlay(livePlayerBean.getVideo());
         }
@@ -158,7 +148,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
                     mWebView.postUrl(livePlayerBean.getUrl(), null);
                 }else {
                     mWebView.loadUrl(livePlayerBean.getUrl());
-//                    mWebView.postUrl(livePlayerBean.getUrl(), null);
                 }
             }
 
@@ -166,8 +155,6 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
             mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
             mLivePlayer.setRenderMode(mCurrentRenderMode);
 
-//            mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
-//            mLivePlayer.setRenderRotation(mCurrentRenderRotation);
             //开始播放
             mIsPlaying = startPlay(livePlayerBean.getVideo());
         }
@@ -301,9 +288,11 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         Log.d(TAG,"vrender onDestroy");
 	}
 
+
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -321,6 +310,8 @@ public class LivePlayerActivity extends Activity implements ITXLivePlayListener,
         if(getRequestedOrientation()!=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
+
+        MobclickAgent.onResume(this);
     }
 
 

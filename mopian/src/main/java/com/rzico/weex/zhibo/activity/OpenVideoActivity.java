@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,8 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.rzico.weex.R;
 import com.rzico.weex.activity.BaseActivity;
+import com.rzico.weex.activity.MainActivity;
+import com.rzico.weex.activity.popwindow.CommonPopupWindow;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.BasePage;
 import com.rzico.weex.model.info.NoticeInfo;
@@ -52,6 +55,9 @@ import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
+import com.rzico.weex.utils.CommonUtil;
+import com.rzico.weex.utils.PathUtils;
+import com.rzico.weex.utils.ScreenHelper;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.UploadToAli;
 import com.rzico.weex.zhibo.activity.utils.BaseRoom;
@@ -63,7 +69,10 @@ import com.rzico.weex.zhibo.view.CircleImageView;
 import com.rzico.weex.zhibo.view.GifView;
 import com.rzico.weex.zhibo.view.MagicTextView;
 import com.squareup.picasso.Picasso;
+import com.taobao.weex.IWXRenderListener;
+import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.bridge.JSCallback;
+import com.taobao.weex.common.WXRenderStrategy;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMCustomElem;
@@ -78,6 +87,7 @@ import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.rtmp.ui.TXCloudVideoView;
+import com.umeng.analytics.MobclickAgent;
 import com.yalantis.ucrop.model.AspectRatio;
 
 import org.greenrobot.eventbus.EventBus;
@@ -88,6 +98,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -123,9 +134,13 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     private static final int CODE_RESULT_REQUEST = 0xa2;
     private static final int UPDAT_WALL_TIME_TIMER_TASK = 10;
     public static final int INVISIBLE = 132;
+    public static final int GIFPLAY = 137;
+    public static final int UPDATELIST = 138;
     public static final int UPLOADSUCCESS = 200;
     public static final int UPLOADERROR = 201;
     private boolean mIsFlashOpened = false;
+
+    private AlertView alertView;
 //initView
     private LinearLayout fengmian_ll01;//设置封面
     private LinearLayout ll_giftlist; //直播列表
@@ -235,6 +250,11 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             return new Danmakus();
         }
     };
+
+
+    private Thread mGiftThread;
+
+    List<LiveGiftBean.data.datagif> preGift = new ArrayList<>();//预发送的礼物
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -303,7 +323,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         fs_count = (TextView) findViewById(R.id.fs_count);
 //        gz_count = (TextView) findViewById(R.id.gz_count);
 
-        chatListAdapter = new ChatListAdapter();
+        chatListAdapter = new ChatListAdapter(OpenVideoActivity.this);
         chat_listview.setAdapter(chatListAdapter);
 
         bigivgift = (GifView) findViewById(R.id.bigivgift);
@@ -548,6 +568,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         chatListAdapter.addMessage(userInfo);
                                         chatListAdapter.notifyDataSetChanged();
                                     }
+                                    //开始直播
+                                    SharedUtils.saveLiveState(true);
                                 }
 
                                 @Override
@@ -655,7 +677,35 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             }
         });
     }
+    Runnable mGiftRunnable = new Runnable() {
+        @Override
+        public void run() {
 
+            if(preGift != null && preGift.size() > 0){
+                do {
+                    Message message = new Message();
+                    LiveGiftBean.data.datagif datagif = preGift.get(0);
+                    message.what = GIFPLAY;
+                    message.obj = datagif;
+                    mHandler.sendMessage(message);
+
+                    if(datagif.getPlay()){
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    preGift.remove(datagif);
+                }while (preGift.size() > 0);
+            }
+
+            Message message = new Message();
+            message.what = INVISIBLE;
+            mHandler.sendMessage(message);
+            mGiftThread = null;
+        }
+    };
     /**
      * 向聊天界面推送消息
      */
@@ -747,26 +797,15 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                                         }
                                         //这里需要请求接口赠送礼物 请求成功了以后 开始动画
 
-                                        //4秒后删除动画
-                                        Message message2 = mHandler.obtainMessage();
-                                        message2.what = INVISIBLE;
-                                        mHandler.sendMessageDelayed(message2, 4000);
                                         showGift(nowGif.getId() + "", nowGif, userInfo.headPic, userInfo.nickName);
+                                        preGift.add(nowGif);
                                         giftCount = giftCount + nowGif.getPrice();
                                         gift_count.setText("印票" + giftCount);
                                         //播放礼物动画
-                                        bigivgift.setMovieNet(nowGif.getAnimation());
-//                                        if (bigivgift.getVisibility() == VISIBLE) {
-//                                            bigivgift.setPaused(true);
-////                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
-//                                            bigivgift.setMovieNet(nowGif.getAnimation());
-//                                            bigivgift.setPaused(false);
-//                                        } else {
-//                                            bigivgift.setVisibility(VISIBLE);
-//                                            bigivgift.setMovieNet(nowGif.getAnimation());
-////                                            bigivgift.setMovieResource(liwu_gif[gifType - 1]);
-//                                            bigivgift.setPaused(false);
-//                                        }
+                                        if(mGiftThread == null){
+                                            mGiftThread = new Thread(mGiftRunnable);
+                                            mGiftThread.start();
+                                        }
                                     }
                                 }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomFollowMsg.name())){
                                     //被关注了
@@ -1104,39 +1143,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             String sendText = "";
             sendText = "送了【" + datagif.getName() +"】";
             gifView.setMovieNet(datagif.getAnimation());
-//            if (i == 1) {
-//                gifView.setMovieResource(R.raw.gg1);
-////                giftype.setText("送了【666】");
-//                sendText = "送了【666】";
-//            } else if (i == 2) {
-//                gifView.setMovieResource(R.raw.gg2);
-////                giftype.setText("送了【棒棒糖】");
-//                sendText = "送了【棒棒糖】";
-//            } else if (i == 3) {
-//                gifView.setMovieResource(R.raw.gg3);
-////                giftype.setText("送了【爱心】");
-//                sendText = "送了【爱心】";
-//            } else if (i == 4) {
-//                gifView.setMovieResource(R.raw.gg4);
-////                giftype.setText("送了【玫瑰】");
-//                sendText = "送了【玫瑰】";
-//            } else if (i == 5) {
-//                gifView.setMovieResource(R.raw.gg5);
-////                giftype.setText("送了【么么哒】");
-//                sendText = "送了【么么哒】";
-//            } else if (i == 6) {
-//                gifView.setMovieResource(R.raw.gg6);
-////                giftype.setText("送了【萌萌哒】");
-//                sendText = "送了【萌萌哒】";
-//            } else if (i == 7) {
-//                gifView.setMovieResource(R.raw.gg7);
-////                giftype.setText("送了【甜甜圈】");
-//                sendText = "送了【甜甜圈】";
-//            } else if (i == 8) {
-//                gifView.setMovieResource(R.raw.gg8);
-////                giftype.setText("送了【女神称号】");
-//                sendText = "送了【女神称号】";
-//            }
+
             giftype.setText(sendText);
 
             giftNum.setText("x1");/*设置礼物数量*/
@@ -1332,6 +1339,17 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 case UPLOADERROR:
                     showToast("上传错误");
                     break;
+
+                case GIFPLAY:
+
+                    LiveGiftBean.data.datagif datagif = (LiveGiftBean.data.datagif) msg.obj;
+                    if(datagif != null){
+                        if(datagif.getPlay()){
+                            bigivgift.setMovieNet(datagif.getAnimation());
+                            bigivgift.setVisibility(VISIBLE);
+                        }
+                    }
+                    break;
             }
 
         }
@@ -1343,6 +1361,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         super.onResume();
         mCaptureView.onResume();     // mCaptureView 是摄像头的图像渲染view
         liveRoom.switchToForeground();
+        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -1350,7 +1369,9 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         super.onPause();
         liveRoom.switchToBackground();
         mCaptureView.onPause();
+        MobclickAgent.onPause(this);
     }
+
 
     // activity 的 onStop 生命周期函数
     @Override
@@ -1365,6 +1386,8 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     protected void onDestroy() {
         super.onDestroy();
 
+        //停止直播
+        SharedUtils.saveLiveState(false);
         showDanmaku = false;
         if (danmaku_view != null) {
             danmaku_view.release();
@@ -1540,6 +1563,59 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
             }
         });
         exitAlert.show();
+    }
+
+
+    private CommonPopupWindow popupWindow;
+    private WXSDKInstance mWXSDKInstance;
+    private void openShop(String url){
+        /**
+         * popwindow test
+         */
+
+        mWXSDKInstance = new WXSDKInstance(this);
+        mWXSDKInstance.registerRenderListener(new IWXRenderListener() {
+            @Override
+            public void onViewCreated(WXSDKInstance instance, View view) {
+                if (popupWindow != null && popupWindow.isShowing()) return;
+//                        View upView = LayoutInflater.from(this).inflate(R.layout.activity_net_weex, null);
+                //测量View的宽高
+                CommonUtil.measureWidthAndHeight(view);
+                popupWindow = new CommonPopupWindow.Builder(OpenVideoActivity.this)
+                        .setView(view)
+                        .setWidthAndHeight(ViewGroup.LayoutParams.MATCH_PARENT, (int) (ScreenHelper.getScreenHeightPix(OpenVideoActivity.this) * 0.75))
+                        .setBackGroundLevel(1.0f)//取值范围0.0f-1.0f 值越小越暗
+                        .setAnimationStyle(R.style.AnimUp)
+                        .setViewOnclickListener(new CommonPopupWindow.ViewInterface() {
+                            @Override
+                            public void getChildView(View view, int layoutResId) {
+
+                            }
+                        })
+                        .create();
+                popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.BOTTOM, 0, 0);
+            }
+
+            @Override
+            public void onRenderSuccess(WXSDKInstance instance, int width, int height) {
+                Map<String, Object> options = new HashMap<>();
+            }
+
+            @Override
+            public void onRefreshSuccess(WXSDKInstance instance, int width, int height) {
+                Map<String, Object> options = new HashMap<>();
+            }
+
+            @Override
+            public void onException(WXSDKInstance instance, String errCode, String msg) {
+                Map<String, Object> options = new HashMap<>();
+            }
+        });
+
+
+        Map<String, Object> options = new HashMap<>();
+        options.put(WXSDKInstance.BUNDLE_URL, url);
+        mWXSDKInstance.render("openVideoShop", PathUtils.loadLocal(url, OpenVideoActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
     }
 
 }

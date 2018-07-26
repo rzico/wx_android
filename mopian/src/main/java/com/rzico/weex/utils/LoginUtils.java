@@ -5,7 +5,10 @@ import android.util.Log;
 
 
 import com.google.gson.Gson;
+import com.huawei.android.pushagent.api.PushManager;
 import com.rzico.weex.Constant;
+import com.rzico.weex.R;
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LoginActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
@@ -19,11 +22,18 @@ import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMManager;
 
+import com.tencent.imsdk.TIMOfflinePushSettings;
+import com.tencent.imsdk.TIMOfflinePushToken;
 import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.umeng.analytics.MobclickAgent;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.Locale;
+
+import static com.tencent.open.utils.Global.getPackageName;
 
 /**
  * Created by Jinlesoft on 2017/10/18.
@@ -131,8 +141,40 @@ public class LoginUtils  {
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINSUCCESS));
 
         //测试
+        MobclickAgent.onProfileSignIn(Constant.userId + "");
 
+//        //测试
+//        TIMOfflinePushSettings settings = new TIMOfflinePushSettings();
+////开启离线推送
+//        settings.setEnabled(true);
+////设置收到 C2C 离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+//        settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+////设置收到群离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+//        settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+//
+//        TIMManager.getInstance().setOfflinePushSettings(settings);
 
+        TIMOfflinePushToken param = new TIMOfflinePushToken(0L,"");
+        param.setToken(WXApplication.getToken());
+        String vendor = Build.MANUFACTURER;
+        if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
+            param.setBussid(Long.parseLong(Constant.mipushbussid));
+        }else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
+            //请求华为推送设备 token
+            param.setBussid(Long.parseLong(Constant.huaweibussid));
+        }
+        TIMManager.getInstance().setOfflinePushToken(param,
+                new TIMCallBack() {
+                    @Override
+                    public void onError(int code, String desc) {
+                        System.out.println(desc);
+                    }
+                    @Override
+                    public void onSuccess() {
+                       System.out.println("setOfflinePushToken.success");
+                    }
+                }
+        );
     }
     public static void loginError(){
         Constant.loginState = false;

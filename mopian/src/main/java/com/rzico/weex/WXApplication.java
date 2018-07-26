@@ -5,16 +5,21 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.util.Log;
+
+import com.huawei.android.pushagent.api.PushManager;
 import com.mob.MobSDK;
+import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
 import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.module.AudioModule;
 import com.rzico.weex.module.LivePlayerModule;
+import com.rzico.weex.module.MapModule;
 import com.rzico.weex.module.PhoneModule;
 import com.rzico.weex.module.PrintModule;
 import com.rzico.weex.module.WXEventModule;
@@ -23,6 +28,7 @@ import com.rzico.weex.adapter.WeexHttpAdapter;
 import com.rzico.weex.adapter.WeexJSExceptionAdapter;
 import com.rzico.weex.adapter.WeexUriAdapter;
 import com.rzico.weex.module.AlbumModule;
+import com.rzico.weex.utils.PhoneUtil;
 import com.rzico.weex.utils.chat.Foreground;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
@@ -45,12 +51,18 @@ import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+
 
 import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
 
@@ -62,16 +74,21 @@ public class WXApplication extends Application {
 
   private  static List<BaseActivity> activityList = new LinkedList<BaseActivity>();
 
-  private final String tag = "pine";
+  private final String tag = "yundian";
+
+
+  private static final String CACHE_NAME = "cache_path";
+
   //数据库管理类
   private static org.xutils.DbManager db;
 
   private static WXApplication instance;
 
+  //用户ID
+  private static String uid = "";
 
-
-
-
+  //小米,华为推送的token
+  private static String token = "";
 
   public static WXApplication getInstance() {
     return instance;
@@ -87,6 +104,11 @@ public class WXApplication extends Application {
     super.onCreate();
     MultiDex.install(this);
     Foreground.init(this);
+    com.tencent.qcloud.ui.EmojiManager.init(this);
+
+    UMConfigure.init(getContext(), "5b3b22b18f4a9d7720000156","Android", UMConfigure.DEVICE_TYPE_PHONE, null);
+    UMConfigure.setLogEnabled(true);
+    MobclickAgent.setScenarioType(getContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
     context = getApplicationContext();
     if(MsfSdkUtils.isMainProcess(this)) {
       TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
@@ -106,6 +128,18 @@ public class WXApplication extends Application {
     initAlbum();
     initWeex();
 //    initIM();
+    getUid();
+
+    registerPush();
+  }
+
+  public static String getUid() {
+    if(uid == null || uid.equals("")){
+      uid = PhoneUtil.getDeviceId(context);
+      return uid;
+    }else{
+      return uid;
+    }
   }
 
   public static void initWeex(){
@@ -133,6 +167,7 @@ public class WXApplication extends Application {
 
       WXSDKEngine.registerModule("webview", MYWXWebViewModule.class, true);
       WXSDKEngine.registerModule("event", WXEventModule.class);
+      WXSDKEngine.registerModule("map", MapModule.class);
       WXSDKEngine.registerModule("audio", AudioModule.class);
       WXSDKEngine.registerModule("album", AlbumModule.class);
       WXSDKEngine.registerModule("print", PrintModule.class);
@@ -146,6 +181,7 @@ public class WXApplication extends Application {
 
   }
   private void initIM() {
+
     //初始化SDK基本配置
     TIMSdkConfig config = new TIMSdkConfig(SDK_APPID)
             .enableCrashReport(false)
@@ -308,4 +344,30 @@ public class WXApplication extends Application {
     }
     return processName;
   }
+
+  public static void setUid(String uid) {
+    WXApplication.uid = uid;
+  }
+
+  public static String getToken() {
+    return token;
+  }
+
+  public static void setToken(String token) {
+    WXApplication.token = token;
+  }
+
+
+  public void registerPush(){
+    String vendor = Build.MANUFACTURER;
+    if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
+      //注册小米推送服务
+      MiPushClient.registerPush(this, Constant.mipushAppId, Constant.mipushAppSecret);
+    }
+    else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
+      //请求华为推送设备 token
+      PushManager.requestToken(this);
+    }
+  }
+
 }

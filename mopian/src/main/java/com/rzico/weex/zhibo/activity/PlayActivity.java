@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,6 +39,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.rzico.weex.R;
 import com.rzico.weex.activity.BaseActivity;
+import com.rzico.weex.activity.popwindow.CommonPopupWindow;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.BaseEntity;
 import com.rzico.weex.model.info.BasePage;
@@ -50,6 +52,9 @@ import com.rzico.weex.model.zhibo.UserBean;
 import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
+import com.rzico.weex.utils.CommonUtil;
+import com.rzico.weex.utils.PathUtils;
+import com.rzico.weex.utils.ScreenHelper;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.view.SlideSwitch;
 import com.rzico.weex.zhibo.activity.utils.BaseRoom;
@@ -63,7 +68,10 @@ import com.rzico.weex.zhibo.view.InputPanel;
 import com.rzico.weex.zhibo.view.MagicTextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.taobao.weex.IWXRenderListener;
+import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.bridge.JSCallback;
+import com.taobao.weex.common.WXRenderStrategy;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMCustomElem;
 import com.tencent.imsdk.TIMElem;
@@ -83,6 +91,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -154,6 +163,8 @@ public class PlayActivity extends BaseActivity {
     private LinearLayout concern_ll;//关注
 
     public static final int GIFSHOW = 135;
+    public static final int GIFPLAY = 137;
+    public static final int UPDATELIST = 138;
     public static final int INVISIBLE = 132;
     private static final int CANDASHAN = 136;//控制 打赏按钮 1秒后才可以再打赏
 
@@ -186,6 +197,9 @@ public class PlayActivity extends BaseActivity {
     private String userpic = "";
     //weex回调的 key
     private String key;
+
+
+    private Thread mGiftThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,6 +215,7 @@ public class PlayActivity extends BaseActivity {
         clearTiming();
 
     }
+
     private void initData() {
         HashMap<String, Object> params = new HashMap<>();
         params.put("id" , getIntent().getStringExtra("liveId"));
@@ -455,7 +470,7 @@ public class PlayActivity extends BaseActivity {
         danmaku_view.prepare(parser, danmakuContext);
 
 
-        chatListAdapter = new ChatListAdapter();
+        chatListAdapter = new ChatListAdapter(PlayActivity.this);
         chat_listview.setAdapter(chatListAdapter);
 
         //动画
@@ -719,6 +734,10 @@ public class PlayActivity extends BaseActivity {
     private boolean ischeck = false;
     private int gifid = 0;
     int count = 1;
+    int sendCount = 0;
+    List<LiveGiftBean.data.datagif> preGift = new ArrayList<>();//预发送的礼物
+
+    private boolean isPlaying = false;
     int servecount = 0;//服务器上传的count
 
     @SuppressLint("WrongConstant")
@@ -865,6 +884,11 @@ public class PlayActivity extends BaseActivity {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
+                case UPDATELIST:
+                    BaseRoom.UserInfo userInfo = (BaseRoom.UserInfo) msg.obj;
+                   chatListAdapter.addMessage(userInfo);
+                    chatListAdapter.notifyDataSetChanged();
+                    break;
                 case CANDASHAN:
                     dashan.setEnabled(true);
                     dashan.setFocusable(true);
@@ -874,8 +898,8 @@ public class PlayActivity extends BaseActivity {
                     dashan.setFocusable(false);
                     Message message = mHandler.obtainMessage();
                     message.what = CANDASHAN;
-
-                    mHandler.sendMessageDelayed(message, 1000);
+                    //
+                    mHandler.sendMessageDelayed(message, 500);
 //                    进行送礼物接口
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("id", liveGiftBean.getData().getData().get(gifid - 1 >= 0 ? gifid -1 : 0).getId());
@@ -920,6 +944,17 @@ public class PlayActivity extends BaseActivity {
                     bigivgift.setPaused(true);
                     bigivgift.setVisibility(GONE);
                     break;
+                case GIFPLAY:
+
+                    LiveGiftBean.data.datagif datagif = (LiveGiftBean.data.datagif) msg.obj;
+                    if(datagif != null){
+                        if(datagif.getPlay()){
+                            bigivgift.setMovieNet(datagif.getAnimation());
+                            bigivgift.setVisibility(VISIBLE);
+                        }
+                    }
+                    break;
+
             }
             return false;
         }
@@ -1029,12 +1064,13 @@ public class PlayActivity extends BaseActivity {
                 if (ischeck) {
                     if (!liveRoom.getLiveRoomBean().getData().getLiveId().equals("")) {
                         count = Integer.parseInt(counttv.getText().toString());
+                        int delayMillis = 100;
                         if (gifid == 1) {
                             if (cashmoney >= 1 * count) {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1044,7 +1080,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1054,7 +1090,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1064,7 +1100,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1074,7 +1110,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1084,7 +1120,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1094,7 +1130,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1104,7 +1140,7 @@ public class PlayActivity extends BaseActivity {
                                 for (int i = 0; i < count; i++) {
                                     Message message = mHandler.obtainMessage();
                                     message.what = GIFSHOW;
-                                    mHandler.sendMessageDelayed(message, 500);
+                                    mHandler.sendMessageDelayed(message, delayMillis);
 //                                    sendgif();
                                 }
                             } else
@@ -1117,6 +1153,36 @@ public class PlayActivity extends BaseActivity {
             }
         });
     }
+
+    Runnable mGiftRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            if(preGift != null && preGift.size() > 0){
+                do {
+                    Message message = new Message();
+                    LiveGiftBean.data.datagif datagif = preGift.get(0);
+                    message.what = GIFPLAY;
+                    message.obj = datagif;
+                    mHandler.sendMessage(message);
+
+                    if(datagif.getPlay()){
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    preGift.remove(datagif);
+                }while (preGift.size() > 0);
+            }
+
+            Message message = new Message();
+            message.what = INVISIBLE;
+            mHandler.sendMessage(message);
+            mGiftThread = null;
+        }
+    };
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void groupMessage(MessageBus messageBus){
@@ -1166,8 +1232,12 @@ public class PlayActivity extends BaseActivity {
                                     if(text.contains("加入房间") && room_count != null){
                                         room_count.setText("在线:" + formatLooker(++roomCount));
                                     }
-                                    chatListAdapter.addMessage(userInfo);
-                                    chatListAdapter.notifyDataSetChanged();
+                                    Message listdata = new Message();
+                                    listdata.what = UPDATELIST;
+                                    listdata.obj = userInfo;
+                                    mHandler.sendMessage(listdata);
+//                                    chatListAdapter.addMessage(userInfo);
+//                                    chatListAdapter.notifyDataSetChanged();
                                 }
                             }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomGifMsg.name())){
 
@@ -1182,26 +1252,7 @@ public class PlayActivity extends BaseActivity {
                                     chatListAdapter.addMessage(userInfo);
                                     chatListAdapter.notifyDataSetChanged();
 
-                                    //播放动画
-//                                    int gifType = 0;
-//                                    //播放GIF动画
-//                                    if(text.contains("送了【666】")){
-//                                        gifType = 1;
-//                                    }else if(text.contains("送了【棒棒糖】")){
-//                                        gifType = 2;
-//                                    }else if(text.contains("送了【爱心】")){
-//                                        gifType = 3;
-//                                    }else if(text.contains("送了【玫瑰】")){
-//                                        gifType = 4;
-//                                    }else if(text.contains("送了【么么哒】")){
-//                                        gifType = 5;
-//                                    }else if(text.contains("送了【萌萌哒】")){
-//                                        gifType = 6;
-//                                    }else if(text.contains("送了【甜甜圈】")){
-//                                        gifType = 7;
-//                                    }else if(text.contains("送了【女神称号】")){
-//                                        gifType = 8;
-//                                    }
+
                                     List<LiveGiftBean.data.datagif> gifts = liveGiftBean.getData().getData();
                                     LiveGiftBean.data.datagif nowGif = null;
                                     for(LiveGiftBean.data.datagif item: gifts){
@@ -1210,29 +1261,25 @@ public class PlayActivity extends BaseActivity {
                                         }
                                     }
 
-                                    //这里需要请求接口赠送礼物 请求成功了以后 开始动画
 
                                     //4秒后删除动画
-                                    Message message2 = mHandler.obtainMessage();
-                                    message2.what = INVISIBLE;
-                                    mHandler.sendMessageDelayed(message2, 4000);
+//                                    Message message2 = mHandler.obtainMessage();
+//                                    message2.what = INVISIBLE;
+//                                    mHandler.sendMessageDelayed(message2, 4000);
                                     showGift(nowGif.getId() + "", nowGif, userInfo.headPic, userInfo.nickName);
-//                                    giftCount = giftCount + liwu_money[gifType - 1 < 0 ? 0 : gifType - 1];
+                                    preGift.add(nowGif);//添加至礼物列表
                                     giftCount = giftCount + nowGif.getPrice();
-                                    gift_count.setText("印票" + giftCount);
+                                    gift_count.setText("炭币" + giftCount);
                                     //播放礼物动画
-                                        bigivgift.setMovieNet(nowGif.getAnimation());
-//                                    if (bigivgift.getVisibility() == VISIBLE) {
-//                                        bigivgift.setPaused(true);
-////                                        bigivgift.setMovieResource(liwu_gif[gifType - 1]);
-//                                        bigivgift.setMovieNet(nowGif.getAnimation());
-//                                        bigivgift.setPaused(false);
-//                                    } else {
-//                                        bigivgift.setVisibility(VISIBLE);
-////                                        bigivgift.setMovieResource(liwu_gif[gifType - 1]);
-//                                        bigivgift.setMovieNet(nowGif.getAnimation());
-//                                        bigivgift.setPaused(false);
-//                                    }
+                                    if(mGiftThread == null){
+                                        mGiftThread = new Thread(mGiftRunnable);
+                                        mGiftThread.start();
+                                    }
+//                                    Message message2 = mHandler.obtainMessage();
+//                                    message2.what = GIFPLAY;
+//                                    mHandler.sendMessageDelayed(message2, 2000);
+
+
                                 }
                             }else if(commonJson.cmd.equalsIgnoreCase(BaseRoom.MessageType.CustomFollowMsg.name())){
                                 //被关注了
@@ -1316,35 +1363,6 @@ public class PlayActivity extends BaseActivity {
             liveRoom.sendGroupKickMessage(userInfo, null);
         }
     }
-
-
-
-
-
-//    private int[] liwu_gif = {R.raw.gg1,R.raw.gg2,R.raw.gg3,R.raw.gg4,R.raw.gg5,R.raw.gg6,R.raw.gg7,R.raw.gg8};
-//    private int[] liwu_money = {1, 3, 5, 10, 20, 30, 50, 100};
-//    public void sendgif(){
-//
-//        //这里需要请求接口赠送礼物 请求成功了以后 开始动画
-//
-//        //4秒后删除动画
-//        Message message = mHandler.obtainMessage();
-//        message.what = INVISIBLE;
-//        mHandler.sendMessageDelayed(message, 4000);
-//        showGift(gifid + "", gifid, userpic, username);
-//
-//        //播放礼物动画
-//        if (bigivgift.getVisibility() == VISIBLE) {
-//            bigivgift.setPaused(true);
-//            bigivgift.setMovieResource(liwu_gif[gifid - 1]);
-//            bigivgift.setPaused(false);
-//        } else {
-//            bigivgift.setVisibility(VISIBLE);
-//            bigivgift.setMovieResource(liwu_gif[gifid - 1]);
-//            bigivgift.setPaused(false);
-//        }
-//
-//    }
 
     public void onClick(View view){
         switch (view.getId()){
@@ -1683,4 +1701,58 @@ public class PlayActivity extends BaseActivity {
         }
 
     }
+
+
+    private CommonPopupWindow popupWindow;
+    private WXSDKInstance mWXSDKInstance;
+    private void openShop(String url){
+        /**
+         * popwindow test
+         */
+
+        mWXSDKInstance = new WXSDKInstance(this);
+        mWXSDKInstance.registerRenderListener(new IWXRenderListener() {
+            @Override
+            public void onViewCreated(WXSDKInstance instance, View view) {
+                if (popupWindow != null && popupWindow.isShowing()) return;
+//                        View upView = LayoutInflater.from(this).inflate(R.layout.activity_net_weex, null);
+                //测量View的宽高
+                CommonUtil.measureWidthAndHeight(view);
+                popupWindow = new CommonPopupWindow.Builder(PlayActivity.this)
+                        .setView(view)
+                        .setWidthAndHeight(ViewGroup.LayoutParams.MATCH_PARENT, (int) (ScreenHelper.getScreenHeightPix(PlayActivity.this) * 0.75))
+                        .setBackGroundLevel(1.0f)//取值范围0.0f-1.0f 值越小越暗
+                        .setAnimationStyle(R.style.AnimUp)
+                        .setViewOnclickListener(new CommonPopupWindow.ViewInterface() {
+                            @Override
+                            public void getChildView(View view, int layoutResId) {
+
+                            }
+                        })
+                        .create();
+                popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.BOTTOM, 0, 0);
+            }
+
+            @Override
+            public void onRenderSuccess(WXSDKInstance instance, int width, int height) {
+                Map<String, Object> options = new HashMap<>();
+            }
+
+            @Override
+            public void onRefreshSuccess(WXSDKInstance instance, int width, int height) {
+                Map<String, Object> options = new HashMap<>();
+            }
+
+            @Override
+            public void onException(WXSDKInstance instance, String errCode, String msg) {
+                Map<String, Object> options = new HashMap<>();
+            }
+        });
+
+
+        Map<String, Object> options = new HashMap<>();
+        options.put(WXSDKInstance.BUNDLE_URL, url);
+        mWXSDKInstance.render("openVideoShop", PathUtils.loadLocal(url, PlayActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
+    }
+
 }

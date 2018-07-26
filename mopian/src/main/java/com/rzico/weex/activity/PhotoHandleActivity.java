@@ -40,6 +40,7 @@ import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.PhotoUtils;
 import com.rzico.weex.utils.UriToPathUtil;
 import com.rzico.weex.utils.photo.PhotoHandle;
+import com.umeng.analytics.MobclickAgent;
 import com.yalantis.ucrop.*;
 import com.yalantis.ucrop.callback.BitmapLoadCallback;
 import com.yalantis.ucrop.model.ExifInfo;
@@ -126,6 +127,9 @@ public class PhotoHandleActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception bitmapWorkerException) {
                             Log.e("PhotoHandle", "onFailure: setImageUri", bitmapWorkerException);
+                            setResult(UCrop.RESULT_ERROR, new Intent()
+                                    .putExtra(UCrop.EXTRA_OUTPUT_URI, inputUri));
+                            finish();
                         }
                     });
 
@@ -222,6 +226,17 @@ public class PhotoHandleActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
     private void initToolbar() {
         topView = (TopView) findViewById(R.id.toolbar);
         topView.setTitle("图片编辑");

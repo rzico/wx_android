@@ -18,6 +18,9 @@ import com.rzico.weex.utils.chat.MediaUtil;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMSoundElem;
+
+import org.xutils.common.util.DensityUtil;
+
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -56,15 +59,21 @@ public class VoiceMessage extends Message {
     @Override
     public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
         if (checkRevoke(viewHolder)) return;
+
+        long len = ((TIMSoundElem) message.getElement(0)).getDuration() * 5 + 40;
+        len = len < 50? 50: len;
+        len = len > 130? 130 : len;
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(DensityUtil.dip2px(len), ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout linearLayout = new LinearLayout(WXApplication.getContext());
+        linearLayout.setLayoutParams(llp);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.setGravity(Gravity.CENTER);
+//        linearLayout.setGravity(Gravity.CENTER);
         ImageView voiceIcon = new ImageView(WXApplication.getContext());
         voiceIcon.setBackgroundResource(message.isSelf()? R.drawable.right_voice: R.drawable.left_voice);
         final AnimationDrawable frameAnimatio = (AnimationDrawable) voiceIcon.getBackground();
 
         TextView tv = new TextView(WXApplication.getContext());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 //        tv.setTextColor(WXApplication.getContext().getResources().getColor(isSelf() ? R.color.white : R.color.black));
         tv.setTextColor(WXApplication.getContext().getResources().getColor(R.color.black));
         tv.setText(String.valueOf(((TIMSoundElem) message.getElement(0)).getDuration()) + "’");
@@ -74,13 +83,19 @@ public class VoiceMessage extends Message {
         LinearLayout.LayoutParams imageLp = new LinearLayout.LayoutParams(width, height);
         if (message.isSelf()){
             linearLayout.addView(tv);
-            imageLp.setMargins(10, 0, 0, 0);
+//            imageLp.setMargins(10, 0, 0, 0);
             voiceIcon.setLayoutParams(imageLp);
+            linearLayout.setGravity(Gravity.RIGHT|Gravity.CENTER_VERTICAL);
+            linearLayout.setPadding(0,0,10,0);
+            tv.setPadding(0,0,10,0);
             linearLayout.addView(voiceIcon);
         }else{
             voiceIcon.setLayoutParams(imageLp);
             linearLayout.addView(voiceIcon);
-            lp.setMargins(10, 0, 0, 0);
+            linearLayout.setGravity(Gravity.LEFT|Gravity.CENTER_VERTICAL);
+            linearLayout.setPadding(10,0,0,0);
+            tv.setPadding(10,0,0,0);
+//            lp.setMargins(10, 0, 0, 0);
             tv.setLayoutParams(lp);
             linearLayout.addView(tv);
         }

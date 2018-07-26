@@ -50,6 +50,7 @@ import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
@@ -98,6 +99,12 @@ public class SplashActivity extends BaseActivity {
         initIM();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
     /**
      * 清楚所有通知栏通知
      */
@@ -138,6 +145,7 @@ public class SplashActivity extends BaseActivity {
                         }
                     }).check();
         }
+        MobclickAgent.onResume(this);
     }
 
     private void initDb() {
@@ -184,6 +192,9 @@ public class SplashActivity extends BaseActivity {
                 Constant.imUserId = "";
                 SharedUtils.saveLoginId(Constant.userId);
                 EventBus.getDefault().post(new com.rzico.weex.model.event.MessageBus(com.rzico.weex.model.event.MessageBus.Type.FORCEOFFLINE));
+
+                //测试
+                MobclickAgent.onProfileSignOff();
             }
 
             @Override
@@ -262,7 +273,7 @@ public class SplashActivity extends BaseActivity {
                     } else {
                         //这里是后台返回的数据 解析出错
                         //无论什么错误 都要能运行 就是把assests里面的数据拷贝到 data里面
-                        Toast.makeText(SplashActivity.this, "包解析出错", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(SplashActivity.this, "包解析出错", Toast.LENGTH_SHORT).show();
                         toNext();
                     }
                 } catch (Exception e) {
@@ -462,13 +473,13 @@ public class SplashActivity extends BaseActivity {
 
 
     private void showUplodeDialog(final Launch.data versionInfo) {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(SplashActivity.this);
+        // String msg = "\n更新版本为" + version + "\n" + " [更新内容] " + "\n" + updateInfo + "\n是否立即更新?";
+        dialog.setTitle("升级");
         final String currentVersion = VersionManagementUtil.getVersion(mContext);
         String appVersion = versionInfo.getAppVersion();
         final String minVersion = versionInfo.getMinVersion();
         if (VersionManagementUtil.VersionComparison(appVersion, currentVersion) == 1) {
-            final AlertDialog.Builder dialog = new AlertDialog.Builder(SplashActivity.this);
-            // String msg = "\n更新版本为" + version + "\n" + " [更新内容] " + "\n" + updateInfo + "\n是否立即更新?";
-            dialog.setTitle("升级");
             dialog.setMessage("有新版本了,如果不更新,有些优惠功能将无法使用,程序将退出");
             dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
                 @Override
@@ -515,8 +526,6 @@ public class SplashActivity extends BaseActivity {
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
                 downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
-//                downloadFile("http://cdn.1xx.me/weex/release/res-1.0.0.zip" + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
-//                downloadFile("http://cdn.rzico.com/weex/release/res-1.0.1.zip" + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update.zip");
 //                toNext();
             } else {
                 if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){

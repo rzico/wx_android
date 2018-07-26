@@ -62,6 +62,7 @@ import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.RSAUtils;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
+import com.rzico.weex.utils.chat.FileUtil;
 import com.rzico.weex.utils.chat.MessageFactory;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
@@ -239,7 +240,7 @@ public class WXEventModule extends WXModule {
     }
 
 
-    @JSMethod
+    @JSMethod(uiThread = true)
     public void openURL(String url, JSCallback jsCallback) {
         try {
 //            Toast.makeText(getContext(), "url:" + url , Toast.LENGTH_SHORT).show();
@@ -315,6 +316,8 @@ public class WXEventModule extends WXModule {
     //    微信验证登录回调方法
     private RxWeiXinAuthFinalHolderListener rxScanfinalHolderListener = null;
 
+    private RxWeiXinAuthFinalHolderListener rxWeiXinPayFinalHolderLinstener = null;
+
     private static final class RxNativeFinalHolder {
         private static final WXEventModule RX_NATIVE_FINAL = new WXEventModule();
     }
@@ -329,6 +332,11 @@ public class WXEventModule extends WXModule {
     }
     public WXEventModule initScan(RxWeiXinAuthFinalHolderListener listener) {
         this.rxScanfinalHolderListener = listener;
+        return this;
+    }
+
+    public WXEventModule initWxAppPay(RxWeiXinAuthFinalHolderListener listener){
+        this.rxWeiXinPayFinalHolderLinstener = listener;
         return this;
     }
 
@@ -426,9 +434,37 @@ public class WXEventModule extends WXModule {
      * @param callback
      */
     @JSMethod
-    public void wxAppPay(String option, JSCallback callback){
+    public void wxAppPay(String option, final JSCallback callback){
 
-        sendWxAppPay(option, getActivity());
+        WXEventModule.get().initWxAppPay(new RxWeiXinAuthFinalHolderListener() {
+            @Override
+            public void userOk(String code) {
+                Message message = new Message();
+                message.setType("success");
+                message.setContent("支付成功");
+                message.setData(code);
+                callback.invoke(message);
+            }
+
+            @Override
+            public void userCancel() {
+
+                Message message = new Message();
+                message.setType("error");
+                message.setContent("用户取消");
+                callback.invoke(message);
+            }
+
+            @Override
+            public void authDenied() {
+
+                Message message = new Message();
+                message.setType("error");
+                message.setContent("支付失败");
+                callback.invoke(message);
+            }
+        }).sendWxAppPay(option, getActivity());
+
     }
 
     public void sendWxAppPay(String option, Activity activity){
@@ -540,6 +576,39 @@ public class WXEventModule extends WXModule {
 //        BarTextColorUtils.StatusBarLightMode(getActivity(), isDark);
     }
 
+    public void onWeiXinPayResult(BaseResp resp){
+        if (rxWeiXinPayFinalHolderLinstener != null) {
+            switch (resp.errCode) {
+                case BaseResp.ErrCode.ERR_OK:
+                    //发送成功
+                    try {
+                        SendAuth.Resp sendResp = (SendAuth.Resp) resp;
+                        if (sendResp != null) {
+                            String code = sendResp.code;
+                            rxWeiXinPayFinalHolderLinstener.userOk(code);
+                        }
+                    } catch (Exception e) {
+                    }
+                    Log.i("leon", "支付成功");
+                    break;
+                case BaseResp.ErrCode.ERR_USER_CANCEL:
+                    rxWeiXinPayFinalHolderLinstener.userCancel();
+                    //发送取消
+                    Log.i("leon", "取消支付");
+                    break;
+                case BaseResp.ErrCode.ERR_AUTH_DENIED:
+                    rxWeiXinPayFinalHolderLinstener.authDenied();
+                    Log.i("leon", "支付拒绝");
+                    //发送被拒绝
+                    break;
+                default:
+                    //发送返回
+                    break;
+            }
+        }
+
+    }
+
     /*这里是老土的接受返回信息*/
     public void onWinXinAuthResult(BaseResp resp) {
         if (rxWeiXinAuthFinalHolderListener != null) {
@@ -590,7 +659,7 @@ public class WXEventModule extends WXModule {
                         String afterencrypt = RSAUtils.encrypt(publicKey, data);
                         String safeBase64Str = afterencrypt.replace('+', '-');
                         safeBase64Str = safeBase64Str.replace('/', '_');
-//            afterencrypt = afterencrypt.replaceAll("/")
+//                      afterencrypt = afterencrypt.replaceAll("/")
 //                        System.out.println("key加密后:" + afterencrypt);
                         Message message = new Message();
                         message.setType("success");
@@ -964,7 +1033,13 @@ public class WXEventModule extends WXModule {
         if(filePath.endsWith("jpg") || filePath.endsWith("bmp") || filePath.endsWith("png") || filePath.endsWith("jpeg")){
             //在这里压缩 把压缩完的地址 放 filepath 里面
             cachefileName = AllConstant.getDiskCachePath(getActivity()) +"/"+ System.currentTimeMillis() + ".jpg";
-            NativeUtil.compressBitmap(filePath, cachefileName);
+            if(FileUtil.fileIsExists(filePath)){
+                NativeUtil.compressBitmap(filePath, cachefileName);
+            }else {
+                Message message = new Message().error("图片已被删除");
+                callback.invoke(message);
+            }
+
         }else{
             cachefileName = filePath;
         }
@@ -1454,9 +1529,8 @@ public class WXEventModule extends WXModule {
     }
     @JSMethod
     public void clearCache(String options, JSCallback callback){
-        String cachePath = PathUtils.getCachePath();
-        boolean success = DeleteFileUtil.delete(cachePath);
-        success = DeleteFileUtil.delete(AllConstant.getDiskCachePath(getActivity()));
+
+        boolean success = DeleteFileUtil.delete(AllConstant.getDiskCachePath(getActivity()));
         if(success){
             Message message = new Message().success("");
             callback.invoke(message);

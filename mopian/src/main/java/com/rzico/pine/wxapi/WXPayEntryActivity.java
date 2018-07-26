@@ -12,7 +12,9 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
+import cn.sharesdk.wechat.utils.WechatHandlerActivity;
+
+public class WXPayEntryActivity extends WechatHandlerActivity implements IWXAPIEventHandler {
 
 	private static final String TAG = "MicroMsg.SDKSample.WXPayEntryActivity";
 	
@@ -40,9 +42,11 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 	@Override
 	public void onResp(BaseResp resp) {
 		if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-
 			//返回给module做处理
-			WXEventModule.get().onWinXinAuthResult(resp);
+			WXEventModule.get().onWeiXinPayResult(resp);
+			//errCode == - 2 用户取消
+			//errCode == 0 支付成功
+
 			WXPayEntryActivity.this.finish();
 		}
 	}

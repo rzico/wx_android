@@ -34,6 +34,15 @@ public class Constant {
     public static final String shareAppId = "260ea801ce8a8";
     public static final String shareAppSecret = "33694f59b0d8fea28304d06bb410838f";
 
+    //    推送
+    public static final String mipushAppId = "2882303761517590666";
+    public static final String mipushAppSecret = "HIeNuUrWsLYZikL5h7Nz4A==";
+    public static final String mipushbussid = "2795";
+    public static final String huaweiAppId = "100100905";
+    public static final String huaweiAppSecret = "0da9d5cf19409fb965a8d93a080f7b8b";
+    public static final String huaweibussid = "2796";
+
+
 //    public static Handler loginHandler = null;
     //菜单路径
     public static  String index1 = "view/circle/circle.js";

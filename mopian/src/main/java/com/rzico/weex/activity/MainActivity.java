@@ -65,6 +65,7 @@ import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.rzico.weex.model.event.MessageBus;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -434,7 +435,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);       //强制为横屏
         setUnRead();
         PushUtil.getInstance().reset();
+        MobclickAgent.onPageStart("MainActivity");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("MainActivity");
     }
 
     public void setUnRead() {
@@ -490,6 +497,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void setBottonChange(int page) {
         switch (page) {
             case 0:
+                MobclickAgent.onEvent(mContext, "1_1", "首页按钮");
                 BarTextColorUtils.StatusBarLightMode(MainActivity.this, false);
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home_focus);
                 rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
@@ -502,6 +510,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
                 break;
             case 1:
+                MobclickAgent.onEvent(mContext, "1_1", "朋友按钮");
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
                 rgGroupFriendIm.setImageResource(R.mipmap.ico_friend_focus);
                 rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
@@ -513,6 +522,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
                 break;
             case 2:
+                MobclickAgent.onEvent(mContext, "1_1", "消息按钮");
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
                 rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
                 rgGroupMsgIm.setImageResource(R.mipmap.ico_msg_focus);
@@ -524,6 +534,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
                 break;
             case 3:
+                MobclickAgent.onEvent(mContext, "1_1", "我的按钮");
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
                 rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
                 rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);

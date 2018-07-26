@@ -10,11 +10,14 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Handler;  
 import android.os.Message;  
 import android.util.Log;  
-import android.widget.SeekBar;  
-  
+import android.widget.SeekBar;
+
+import com.taobao.weex.bridge.JSCallback;
+
 public class Player implements OnBufferingUpdateListener,  
         OnCompletionListener, MediaPlayer.OnPreparedListener{  
     public static MediaPlayer mediaPlayer;
+    public static  JSCallback jsCallback;
     private Timer mTimer=new Timer();
 
     private static Player player = null;
@@ -30,7 +33,8 @@ public class Player implements OnBufferingUpdateListener,
         try {  
             mediaPlayer = new MediaPlayer();  
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);  
-            mediaPlayer.setOnBufferingUpdateListener(this);  
+            mediaPlayer.setOnBufferingUpdateListener(this);
+            mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setOnPreparedListener(this);  
         } catch (Exception e) {  
             Log.e("mediaPlayer", "error", e);  
@@ -55,14 +59,15 @@ public class Player implements OnBufferingUpdateListener,
     public void play()
     {  
         mediaPlayer.start();  
-    }  
-      
-    public void playUrl(String videoUrl)  
+    }
+
+    public void playUrl(String videoUrl, JSCallback callback)
     {  
         try {  
             mediaPlayer.reset();  
             mediaPlayer.setDataSource(videoUrl);  
-            mediaPlayer.prepare();//prepare之后自动播放  
+            mediaPlayer.prepare();//prepare之后自动播放
+            jsCallback = callback;
             //mediaPlayer.start();  
         }  catch (Exception e){
             e.printStackTrace();
@@ -95,8 +100,11 @@ public class Player implements OnBufferingUpdateListener,
   
     @Override  
     public void onCompletion(MediaPlayer arg0) {  
-        Log.e("mediaPlayer", "onCompletion");  
-    }  
+        Log.e("mediaPlayer", "onCompletion");
+        if(jsCallback != null){
+            jsCallback.invoke(new com.rzico.weex.model.info.Message().success("播放结束"));
+        }
+    }
   
     @Override  
     public void onBufferingUpdate(MediaPlayer arg0, int bufferingProgress) {
