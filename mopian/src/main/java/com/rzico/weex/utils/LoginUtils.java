@@ -2,6 +2,7 @@ package com.rzico.weex.utils;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 
@@ -9,6 +10,7 @@ import com.google.gson.Gson;
 import com.huawei.android.pushagent.api.PushManager;
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LoginActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
@@ -23,11 +25,14 @@ import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMManager;
 
 import com.tencent.imsdk.TIMOfflinePushSettings;
+import com.tencent.imsdk.TIMOfflinePushToken;
 import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import static com.tencent.open.utils.Global.getPackageName;
 
@@ -103,17 +108,10 @@ public class LoginUtils  {
                                 //初始化消息监听
                                 MessageEvent.getInstance();
                                 String deviceMan = android.os.Build.MANUFACTURER;
-                                //注册小米和华为推送
-//                                if (deviceMan.equals("Xiaomi") && shouldMiInit(activity)){
-//                                    MiPushClient.registerPush(activity, "2882303761517628612", "UrZo3a7sRVny1YqoUS7m4A==");
-//                                }else
-                                  if (deviceMan.equals("HUAWEI")){
-                                    PushManager.requestToken(activity);
-                                    }
                                 if(listener!=null){
                                     listener.onSuccess(loginBean);
                                 }
-                                    loginSuccess();
+                                loginSuccess();
                             }
                         });
                     }
@@ -135,7 +133,7 @@ public class LoginUtils  {
         SharedUtils.saveLoginId(Constant.userId);
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINSUCCESS));
 
-        //测试
+//        //测试
 //        TIMOfflinePushSettings settings = new TIMOfflinePushSettings();
 ////开启离线推送
 //        settings.setEnabled(true);
@@ -146,6 +144,27 @@ public class LoginUtils  {
 //
 //        TIMManager.getInstance().setOfflinePushSettings(settings);
 
+        TIMOfflinePushToken param = new TIMOfflinePushToken(0L,"");
+        param.setToken(WXApplication.getToken());
+        String vendor = Build.MANUFACTURER;
+        if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
+            param.setBussid(Long.parseLong(Constant.mipushbussid));
+        }else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
+            //请求华为推送设备 token
+            param.setBussid(Long.parseLong(Constant.huaweibussid));
+        }
+        TIMManager.getInstance().setOfflinePushToken(param,
+                new TIMCallBack() {
+                    @Override
+                    public void onError(int code, String desc) {
+                        System.out.println(desc);
+                    }
+                    @Override
+                    public void onSuccess() {
+                       System.out.println("setOfflinePushToken.success");
+                    }
+                }
+        );
     }
     public static void loginError(){
         Constant.loginState = false;
