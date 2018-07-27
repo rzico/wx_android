@@ -435,7 +435,6 @@ public class WXEventModule extends WXModule {
      */
     @JSMethod
     public void wxAppPay(String option, final JSCallback callback){
-
         WXEventModule.get().initWxAppPay(new RxWeiXinAuthFinalHolderListener() {
             @Override
             public void userOk(String code) {
@@ -445,7 +444,6 @@ public class WXEventModule extends WXModule {
                 message.setData(code);
                 callback.invoke(message);
             }
-
             @Override
             public void userCancel() {
 
@@ -454,7 +452,6 @@ public class WXEventModule extends WXModule {
                 message.setContent("用户取消");
                 callback.invoke(message);
             }
-
             @Override
             public void authDenied() {
 
@@ -582,10 +579,10 @@ public class WXEventModule extends WXModule {
                 case BaseResp.ErrCode.ERR_OK:
                     //发送成功
                     try {
-                        SendAuth.Resp sendResp = (SendAuth.Resp) resp;
+                        BaseResp sendResp = (BaseResp) resp;
                         if (sendResp != null) {
-                            String code = sendResp.code;
-                            rxWeiXinPayFinalHolderLinstener.userOk(code);
+                            int code = sendResp.errCode;
+                            rxWeiXinPayFinalHolderLinstener.userOk(code+"");
                         }
                     } catch (Exception e) {
                     }
@@ -606,7 +603,6 @@ public class WXEventModule extends WXModule {
                     break;
             }
         }
-
     }
 
     /*这里是老土的接受返回信息*/

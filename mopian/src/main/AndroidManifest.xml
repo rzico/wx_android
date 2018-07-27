@@ -41,9 +41,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
-    <permission android:name="com.rzico.assistant.permission.MIPUSH_RECEIVE" android:protectionLevel="signature" />
+    <permission android:name="com.rzico.pine.permission.MIPUSH_RECEIVE" android:protectionLevel="signature" />
     <!--这里 com.tencent.imsdk 改成 App 的包名-->
-    <uses-permission android:name="com.rzico.assistant.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="com.rzico.pine.permission.MIPUSH_RECEIVE" />
     <!--这里 com.tencent.imsdk 改成 App 的包名-->
 
     <uses-feature android:name="android.hardware.camera" />
