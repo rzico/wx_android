@@ -19,8 +19,8 @@ import java.util.Map;
  */
 public class Constant {
 
-    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
-    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.YUNDIAN";
+    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.MOPIANA" />
+    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.MOPIANA";
 
     public static final String wxURL = "http://cdnx.rzico.com/weex/app/";
 
@@ -36,11 +36,14 @@ public class Constant {
 
     //    推送
     public static final String mipushAppId = "2882303761517590666";
-    public static final String mipushAppSecret = "HIeNuUrWsLYZikL5h7Nz4A==";
-    public static final String mipushbussid = "2795";
+    public static final String mipushAppKey = "5991759081666";
+    public static final long mipushbussid = 2795;
     public static final String huaweiAppId = "100100905";
     public static final String huaweiAppSecret = "0da9d5cf19409fb965a8d93a080f7b8b";
-    public static final String huaweibussid = "2796";
+    public static final long huaweibussid = 2796;
+    public static final String mzpushAppId = "2882303761517590666";
+    public static final String mzpushAppKey = "5991759081666";
+    public static final long mzpushbussid = 2795;
 
 
 //    public static Handler loginHandler = null;

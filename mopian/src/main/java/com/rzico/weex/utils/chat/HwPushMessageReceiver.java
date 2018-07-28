@@ -1,11 +1,13 @@
 package com.rzico.weex.utils.chat;
 
+
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.huawei.android.pushagent.api.PushEventReceiver;
+import com.rzico.weex.Constant;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMOfflinePushToken;
 
@@ -13,7 +15,7 @@ import com.tencent.imsdk.TIMOfflinePushToken;
 /**
  * 华为推送接收
  */
-public class HwPushMessageReceiver extends PushEventReceiver{
+public class HwPushMessageReceiver extends PushEventReceiver {
     private final String TAG = "HwPushMessageReceiver";
 
     private long mBussId = 73;
@@ -24,9 +26,9 @@ public class HwPushMessageReceiver extends PushEventReceiver{
     @Override
     public void onToken(Context context, String token, Bundle extras){
         String belongId = extras.getString("belongId");
-        String content = "获取token和belongId成功，token = " + token + ",belongId = " + belongId;
+        String content = "onToken， 获取token和belongId成功，token = " + token + ",belongId = " + belongId;
         Log.e(TAG, content);
-        TIMOfflinePushToken param = new TIMOfflinePushToken(mBussId, token);
+        TIMOfflinePushToken param = new TIMOfflinePushToken(Constant.huaweibussid, token);
         TIMManager.getInstance().setOfflinePushToken(param, null);
     }
 
@@ -34,7 +36,7 @@ public class HwPushMessageReceiver extends PushEventReceiver{
     @Override
     public boolean onPushMsg(Context context, byte[] msg, Bundle bundle) {
         try {
-            String content = "收到一条Push消息： " + new String(msg, "UTF-8");
+            String content = "onPushMsg， 收到一条Push消息： " + new String(msg, "UTF-8");
             Log.e(TAG, content);
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,7 +52,7 @@ public class HwPushMessageReceiver extends PushEventReceiver{
                 NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 manager.cancel(notifyId);
             }
-            String content = "收到通知附加消息： " + extras.getString(BOUND_KEY.pushMsgKey);
+            String content = "onEvent， 收到通知附加消息： " + extras.getString(BOUND_KEY.pushMsgKey);
             Log.e(TAG, content);
         } else if (Event.PLUGINRSP.equals(event)) {
             final int TYPE_LBS = 1;

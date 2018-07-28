@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '26.0.0'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.rzico.assistant"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 327
         versionName "3.2.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -153,4 +153,5 @@ dependencies {
     compile 'com.lht:paintview:1.16'
     //    弹幕
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
+    compile 'com.meizu.flyme.internet:push-internal:3.6.3@aar'
 }

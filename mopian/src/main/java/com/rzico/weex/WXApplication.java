@@ -84,8 +84,6 @@ public class WXApplication extends Application {
   //用户ID
   private static String uid = "";
 
-  //小米,华为推送的token
-  private static String token = "";
 
   public static WXApplication getInstance() {
     return instance;
@@ -122,7 +120,6 @@ public class WXApplication extends Application {
 //    initIM();
     getUid();
 
-    registerPush();
   }
 
   public static String getUid() {
@@ -340,25 +337,7 @@ public class WXApplication extends Application {
     WXApplication.uid = uid;
   }
 
-  public static String getToken() {
-    return token;
-  }
-
-  public static void setToken(String token) {
-    WXApplication.token = token;
-  }
 
 
-  public void registerPush(){
-    String vendor = Build.MANUFACTURER;
-    if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
-      //注册小米推送服务
-      MiPushClient.registerPush(this, Constant.mipushAppId, Constant.mipushAppSecret);
-    }
-    else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
-      //请求华为推送设备 token
-      PushManager.requestToken(this);
-    }
-  }
 
 }
