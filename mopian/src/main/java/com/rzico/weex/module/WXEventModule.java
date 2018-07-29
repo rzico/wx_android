@@ -582,9 +582,9 @@ public class WXEventModule extends WXModule {
                 case BaseResp.ErrCode.ERR_OK:
                     //发送成功
                     try {
-                        SendAuth.Resp sendResp = (SendAuth.Resp) resp;
+                        BaseResp sendResp = (BaseResp) resp;
                         if (sendResp != null) {
-                            String code = sendResp.code;
+                            String code = String.valueOf(sendResp.errCode);
                             rxWeiXinPayFinalHolderLinstener.userOk(code);
                         }
                     } catch (Exception e) {
