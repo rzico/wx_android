@@ -56,8 +56,10 @@ import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.imsdk.ext.message.TIMManagerExt;
 import com.tencent.qcloud.presentation.business.InitBusiness;
@@ -78,6 +80,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.rzico.weex.Constant.imUserId;
+import static com.tencent.open.utils.Global.getPackageName;
 import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
 import static com.rzico.weex.constant.AllConstant.isClearAll;
 
@@ -544,7 +547,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupFriendTv.setTextColor(getResources().getColor(R.color.text_default));
                 rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.wxColor));
-                break;
+
+//                //        //测试
+//                TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
+//                    @Override
+//                    public void onError(int i, String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(TIMOfflinePushSettings settings) {
+//                        //开启离线推送
+//                        settings.setEnabled(true);
+//                        //设置收到 C2C 离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+//                        settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+//                        //设置收到群离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+//                        settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+//
+//                        TIMManager.getInstance().setOfflinePushSettings(settings);
+//                    }
+//                });
+//                break;
         }
 
     }
@@ -607,16 +630,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         TextUtils.equals("https",
                                 scheme)) {
                     intent.putExtra("isLocal", "false");
-                    intent.setClass(MainActivity.this, RouterActivity.class);
+                    intent.setClass(MainActivity.this, WXPageActivity.class);
                 } else if (TextUtils.equals("file", scheme)) {
                     intent.putExtra("isLocal", "true");
-                    intent.setClass(MainActivity.this, RouterActivity.class);
+                    intent.setClass(MainActivity.this, WXPageActivity.class);
                 } else {
-                    intent.setClass(MainActivity.this, RouterActivity.class);
+                    intent.setClass(MainActivity.this, WXPageActivity.class);
                     uri = Uri.parse(new StringBuilder("http:").append("file://" + Constant.center).toString());
                 }
                 intent.setData(uri);
-                                startActivity(intent);
+                startActivity(intent);
                 break;
             case R.id.rg_group_me:
                 setSelectTab(3);

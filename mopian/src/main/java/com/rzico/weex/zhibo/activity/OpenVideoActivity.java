@@ -167,6 +167,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
     private int                                             mBeautyStyle        = TXLiveConstants.BEAUTY_STYLE_SMOOTH;
 
     private LinearLayout zhibo_jiesu_ll;//直播结束页面
+    private LinearLayout btnGood;//点赞
     private TextView tv_fs;//结束 粉丝数
     private TextView tv_gz;//结束 关注数
     private TextView js_tv;//结束 返回首页
@@ -272,6 +273,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         fengmian_ll01 = (LinearLayout) findViewById(R.id.fengmian_ll01);
         fengmian_ll02 = (RelativeLayout) findViewById(R.id.fengmian_ll02);
         ll_giftlist = (LinearLayout) findViewById(R.id.ll_giftlist);
+        btnGood  = (LinearLayout) findViewById(R.id.member_send_good);
 
         img_fengmian = (ImageView) findViewById(R.id.img_fengmian);
         title_zhibo = (EditText) findViewById(R.id.title_zhibo);
@@ -292,6 +294,12 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         gift_count = (TextView)findViewById(R.id.gift_count);
         tv_nickname = (TextView)findViewById(R.id.tv_nickname);
 
+        btnGood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openShop("file://view/live/goods.js");
+            }
+        });
         danmaku_view = (DanmakuView) findViewById(R.id.danmaku_view);
         danmaku_view.enableDanmakuDrawingCache(true);
         danmaku_view.setCallback(new DrawHandler.Callback() {

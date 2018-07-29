@@ -136,7 +136,7 @@ public class PushUtil implements Observer {
         Notification notify = mBuilder.build();
         notify.flags |= Notification.FLAG_AUTO_CANCEL;
         mNotificationManager.notify(pushId, notify);
-
+//
 //        Toast.makeText(WXApplication.getContext(), "推送成功", Toast.LENGTH_SHORT).show();
     }
 
