@@ -122,12 +122,9 @@ public class LoginUtils  {
                                 }
 
                                 //魅族推送只适用于Flyme系统,因此可以先行判断是否为魅族机型，再进行订阅，避免在其他机型上出现兼容性问题
-                                if(MzSystemUtils.isBrandMeizu(WXApplication.getContext())){
-                                    com.meizu.cloud.pushsdk.PushManager.register(activity, "112662", "3aaf89f8e13f43d2a4f97a703c6f65b3");
-                                }
-
-
-
+//                                if(MzSystemUtils.isBrandMeizu(WXApplication.getContext())){
+//                                    com.meizu.cloud.pushsdk.PushManager.register(activity, "112662", "3aaf89f8e13f43d2a4f97a703c6f65b3");
+//                                }
 
                                 if(listener!=null){
                                     listener.onSuccess(loginBean);
