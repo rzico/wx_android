@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -127,12 +128,19 @@ public class PushUtil implements Observer {
                 mBuilder.setTicker(userProfile.getIdentifier() + ":" + contentStr); //通知首次出现在通知栏，带上升动画效果的
             }
         }
+
+        System.out.println("===========================");
+        System.out.println(msg.getOfflinePushSettings().getAndroidSettings().getSound().toString());
         mBuilder.setContentText(contentStr)
                 .setContentIntent(intent) //设置通知栏点击意图
 //                .setNumber(++pushNum) //设置通知集合的数量
                 .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
-                .setDefaults(Notification.DEFAULT_ALL)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
+                .setDefaults(-1)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
                 .setSmallIcon(R.mipmap.ic_launcher);//设置通知小ICON
+        if (msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
+            mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound());
+            mBuilder.setDefaults(6);
+        }
         Notification notify = mBuilder.build();
         notify.flags |= Notification.FLAG_AUTO_CANCEL;
         mNotificationManager.notify(pushId, notify);
