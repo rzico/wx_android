@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.rzico.weex.Constant;
+import com.rzico.weex.WXApplication;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMOfflinePushToken;
 import com.xiaomi.mipush.sdk.ErrorCode;
@@ -63,10 +64,10 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
 
         Log.e(TAG, "regId: " + mRegId + " | topic: " + mTopic + " | alias: " + mAlias
                 + " | account: " + mAccount + " | starttime: " + mStartTime + " | endtime: " + mEndTime);
-        Intent i = new Intent();
-        i.setClassName("com.tencent.qcloud.timchat", "com.tencent.qcloud.timchat.ui.SplashActivity");
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);
+//        Intent i = new Intent();
+//        i.setClassName(WXApplication.getInstance().getPackageName(), "com.tencent.qcloud.timchat.ui.SplashActivity");
+//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        context.startActivity(i);
     }
 
     @Override

@@ -129,7 +129,7 @@ public class LoginUtils  {
 //                                    com.meizu.cloud.pushsdk.PushManager.register(activity, "112662", "3aaf89f8e13f43d2a4f97a703c6f65b3");
 //                                }
 
-                                c2cMusic();
+//                                c2cMusic();
                                 if(listener!=null){
                                     listener.onSuccess(loginBean);
                                 }
