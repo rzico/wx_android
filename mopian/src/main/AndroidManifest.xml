@@ -49,7 +49,6 @@
     <uses-permission android:name="com.rzico.assistant.permission.MIPUSH_RECEIVE" />
     <!--这里 com.tencent.imsdk 改成 App 的包名-->
 
-
     <!--mz push-->
     <!-- 兼容flyme5.0以下版本，魅族内部集成pushSDK必填，不然无法收到消息-->
     <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE"></uses-permission>
@@ -286,23 +285,34 @@
         <!--<meta-data android:name="Mob-AppSecret" android:value="1b8e2c508eac21106cc6cc2025acda29"/>-->
 
         <!-- mipush -->
-        <service
-            android:name="com.xiaomi.push.service.XMJobService"
-            android:enabled="true"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":MiPushService" />
-        <service
-            android:name="com.xiaomi.push.service.XMPushService"
-            android:enabled="true"
-            android:process=":MiPushService" />
-        <service
-            android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name="com.xiaomi.mipush.sdk.MessageHandleService"
-            android:enabled="true" />
+        <service android:enabled="true" android:process=":pushservice" android:name="com.xiaomi.push.service.XMPushService"/>
+
+        <service android:name="com.xiaomi.push.service.XMJobService" android:enabled="true" android:exported="false" android:permission="android.permission.BIND_JOB_SERVICE" android:process=":pushservice" /> <!--注：此service必须在3.0.1版本以后（包括3.0.1版本）加入-->
+
+        <service android:enabled="true" android:exported="true" android:name="com.xiaomi.mipush.sdk.PushMessageHandler" />
+
+        <service android:enabled="true" android:name="com.xiaomi.mipush.sdk.MessageHandleService" /> <!--注：此service必须在2.2.5版本以后（包括2.2.5版本）加入--> <receiver android:exported="true" android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver" >
+
+        <intent-filter>
+
+            <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+
+        </intent-filter>
+
+        </receiver>
+
+        <receiver android:exported="false" android:process=":pushservice" android:name="com.xiaomi.push.service.receivers.PingReceiver" >
+
+            <intent-filter>
+
+                <action android:name="com.xiaomi.push.PING_TIMER" />
+
+            </intent-filter>
+
+        </receiver>
+
 
         <receiver
             android:name="com.rzico.weex.utils.chat.MiPushMessageReceiver"
@@ -315,21 +325,6 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.ERROR" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver"
-            android:exported="true">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.xiaomi.push.service.receivers.PingReceiver"
-            android:exported="false"
-            android:process=":MiPushService">
-            <intent-filter>
-                <action android:name="com.xiaomi.push.PING_TIMER" />
             </intent-filter>
         </receiver>
         <!-- mipush -->

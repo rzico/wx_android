@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.widget.CompoundButton;
 
 
 import com.google.gson.Gson;
@@ -31,6 +32,7 @@ import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.imsdk.TIMOfflinePushToken;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.ui.LineControllerView;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
@@ -115,7 +117,8 @@ public class LoginUtils  {
                                 MessageEvent.getInstance();
                                 String deviceMan = android.os.Build.MANUFACTURER;
                                 //注册小米和华为推送
-                                if (deviceMan.equals("Xiaomi") && shouldMiInit()){
+                                if (deviceMan.equals("Xiaomi")){
+//                                    System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                                     MiPushClient.registerPush(WXApplication.getContext(), Constant.mipushAppId, Constant.mipushAppKey);
                                 }else if (deviceMan.equals("HUAWEI")){
                                     com.huawei.android.pushagent.PushManager.requestToken(activity);
@@ -126,6 +129,7 @@ public class LoginUtils  {
 //                                    com.meizu.cloud.pushsdk.PushManager.register(activity, "112662", "3aaf89f8e13f43d2a4f97a703c6f65b3");
 //                                }
 
+                                c2cMusic();
                                 if(listener!=null){
                                     listener.onSuccess(loginBean);
                                 }
@@ -151,25 +155,24 @@ public class LoginUtils  {
     /**
      * 判断小米推送是否已经初始化
      */
-    private static boolean shouldMiInit() {
-        ActivityManager am = ((ActivityManager) WXApplication.getContext().getSystemService(Context.ACTIVITY_SERVICE));
-        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
-        String mainProcessName = getPackageName();
-        int myPid = android.os.Process.myPid();
-        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
-            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private static boolean shouldMiInit() {
+//        ActivityManager am = ((ActivityManager) WXApplication.getContext().getSystemService(Context.ACTIVITY_SERVICE));
+//        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+//        String mainProcessName = getPackageName();
+//        int myPid = android.os.Process.myPid();
+//        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+//            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//
     public static void loginSuccess(){
         Constant.loginState = true;
         SharedUtils.saveLoginId(Constant.userId);
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINSUCCESS));
-
-
-
     }
     public static void loginError(){
         Constant.loginState = false;
@@ -184,5 +187,24 @@ public class LoginUtils  {
         }
 
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINERROR));
+    }
+
+    public static void c2cMusic() {
+        final Uri notifyMusic = Uri.parse("android.resource://"+WXApplication.getInstance().getPackageName()+"/" + R.raw.h0);
+        TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
+            @Override
+            public void onError(int i, String s) {
+//                Log.e(TAG, "get offline push setting error " + s);
+            }
+            @Override
+            public void onSuccess(TIMOfflinePushSettings timOfflinePushSettings) {
+                TIMOfflinePushSettings settings = timOfflinePushSettings;
+
+                        settings.setC2cMsgRemindSound(notifyMusic);
+                        TIMManager.getInstance().setOfflinePushSettings(settings);
+
+            }
+        });
+
     }
 }

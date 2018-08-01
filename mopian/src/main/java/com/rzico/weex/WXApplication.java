@@ -3,6 +3,7 @@ package com.rzico.weex;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -117,6 +118,9 @@ public class WXApplication extends Application {
           }
         }
       });
+
+
+
     }
 
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
@@ -273,5 +277,4 @@ public class WXApplication extends Application {
   public static void setUid(String uid) {
     WXApplication.uid = uid;
   }
-
 }

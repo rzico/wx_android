@@ -137,10 +137,14 @@ public class PushUtil implements Observer {
                 .setDefaults(Notification.DEFAULT_ALL)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
                 .setSmallIcon(R.mipmap.ic_launcher);//设置通知小ICON
 //
-//        if (msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
-//            mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound(),6);
-//            mBuilder.setDefaults(6);
-//        }
+        if (msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
+            mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound());
+            mBuilder.setDefaults(6);
+        } else {
+            final Uri notifyMusic = Uri.parse("android.resource://"+WXApplication.getInstance().getPackageName()+"/" + R.raw.h0);
+            mBuilder.setSound(notifyMusic);
+            mBuilder.setDefaults(6);
+        }
 //
 //        mBuilder.setSound(Uri.parse("android.resource://com.rzico.assistant/beep.ogg"),6);
 //        mBuilder.setDefaults(6);
