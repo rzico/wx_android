@@ -134,16 +134,16 @@ public class PushUtil implements Observer {
                 .setContentIntent(intent) //设置通知栏点击意图
 //                .setNumber(++pushNum) //设置通知集合的数量
                 .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
-                .setDefaults(-1)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
+                .setDefaults(Notification.DEFAULT_ALL)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
                 .setSmallIcon(R.mipmap.ic_launcher);//设置通知小ICON
-
-        if (msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
-            mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound(),6);
-            mBuilder.setDefaults(6);
-        }
-
-        mBuilder.setSound(Uri.parse("android.resource://com.rzico.assistant/beep.ogg"),6);
-        mBuilder.setDefaults(6);
+//
+//        if (msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
+//            mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound(),6);
+//            mBuilder.setDefaults(6);
+//        }
+//
+//        mBuilder.setSound(Uri.parse("android.resource://com.rzico.assistant/beep.ogg"),6);
+//        mBuilder.setDefaults(6);
 
         Notification notify = mBuilder.build();
         notify.flags |= Notification.FLAG_AUTO_CANCEL;
