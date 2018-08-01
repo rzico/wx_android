@@ -88,8 +88,6 @@ public class PushUtil implements Observer {
         if (message == null) return;
         senderStr = message.getSender();
         contentStr = message.getSummary();
-
-
         //获取会话扩展实例
         TIMConversation con = TIMManager.getInstance().getConversation(TIMConversationType.C2C, senderStr);
         TIMConversationExt conExt = new TIMConversationExt(con);
@@ -138,7 +136,7 @@ public class PushUtil implements Observer {
                 .setDefaults(-1)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
                 .setSmallIcon(R.mipmap.ic_launcher);//设置通知小ICON
         if (msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
-            mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound());
+            mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound(),6);
             mBuilder.setDefaults(6);
         }
         Notification notify = mBuilder.build();
