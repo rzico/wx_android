@@ -125,8 +125,8 @@ public class PushUtil implements Observer {
             }
         }
 
-        System.out.println("===========================");
-        System.out.println(msg.getOfflinePushSettings().getAndroidSettings().getSound().toString());
+//        System.out.println("===========================");
+//        System.out.println(msg.getOfflinePushSettings().getAndroidSettings().getSound().toString());
 //        grantUriPermission("com.android.systemui", soundUri,
 //                Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
