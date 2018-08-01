@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.UriPermission;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -61,7 +62,6 @@ public class PushUtil implements Observer {
 
     private void PushNotify(TIMMessage msg, List<TIMUserProfile> result) {
         //系统消息，自己发的消息，程序在前台的时候不通知
-
 //        boolean is1 = (msg.getConversation().getType() != TIMConversationType.Group &&
 //                msg.getConversation().getType() != TIMConversationType.C2C);
 //        boolean is2 = msg.isSelf();
@@ -78,7 +78,6 @@ public class PushUtil implements Observer {
                 msg.getRecvFlag() == TIMGroupReceiveMessageOpt.ReceiveNotNotify ||
                 MessageFactory.getMessage(msg) instanceof CustomMessage) return;
 
-
         String senderStr, contentStr;
         Message message = MessageFactory.getMessage(msg);
         TIMUserProfile userProfile = null;
@@ -92,7 +91,6 @@ public class PushUtil implements Observer {
         TIMConversation con = TIMManager.getInstance().getConversation(TIMConversationType.C2C, senderStr);
         TIMConversationExt conExt = new TIMConversationExt(con);
         if (conExt.getUnreadMessageNum() >= 1) {
-
             if (userProfile != null) {
                 if (!userProfile.getNickName().equals("")) {
                     contentStr = "[" + conExt.getUnreadMessageNum() + "条]" + userProfile.getNickName() + ": " + contentStr;
@@ -129,18 +127,27 @@ public class PushUtil implements Observer {
 
         System.out.println("===========================");
         System.out.println(msg.getOfflinePushSettings().getAndroidSettings().getSound().toString());
+//        grantUriPermission("com.android.systemui", soundUri,
+//                Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
         mBuilder.setContentText(contentStr)
                 .setContentIntent(intent) //设置通知栏点击意图
 //                .setNumber(++pushNum) //设置通知集合的数量
                 .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
                 .setDefaults(-1)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
                 .setSmallIcon(R.mipmap.ic_launcher);//设置通知小ICON
+
         if (msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
             mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound(),6);
             mBuilder.setDefaults(6);
         }
+
+        mBuilder.setSound(Uri.parse("android.resource://com.rzico.assistant/beep.ogg"),6);
+        mBuilder.setDefaults(6);
+
         Notification notify = mBuilder.build();
         notify.flags |= Notification.FLAG_AUTO_CANCEL;
+
         mNotificationManager.notify(pushId, notify);
 //
 //        Toast.makeText(WXApplication.getContext(), "推送成功", Toast.LENGTH_SHORT).show();
