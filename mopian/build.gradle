@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '28'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.sdar"
-        minSdkVersion 15
+        applicationId "com.rzico.assistant"
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 327
         versionName "3.2.7"
@@ -32,31 +32,30 @@ android {
         jumboMode true
     }
     signingConfigs {
+        release {
+            storeFile file("tools/rzico.jks")
+            storePassword "123456"
+            keyAlias "rzico"
+            keyPassword "123456"
+        }
+        debug {
+            storeFile file("tools/rzico.jks")
+            storePassword "123456"
+            keyAlias "rzico"
+            keyPassword "123456"
+        }
 //        release {
-//            storeFile file("tools/rzico.jks")
+//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
 //            storePassword "123456"
 //            keyAlias "rzico"
 //            keyPassword "123456"
 //        }
 //        debug {
-//            storeFile file("tools/rzico.jks")
+//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
 //            storePassword "123456"
 //            keyAlias "rzico"
 //            keyPassword "123456"
 //        }
-
-        release {
-            storeFile file("tools/sdar.jks")
-            storePassword "123456"
-            keyAlias "sdar"
-            keyPassword "123456"
-        }
-        debug {
-            storeFile file("tools/sdar.jks")
-            storePassword "123456"
-            keyAlias "sdar"
-            keyPassword "123456"
-        }
     }
     buildTypes {
         release {
@@ -117,14 +116,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:design:24.1.1'
     compile 'com.android.support:support-annotations:23.1.1'
-//    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'//delete
+    //    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'//delete
     compile 'com.journeyapps:zxing-android-embedded:3.4.0'
     compile 'com.karumi:dexter:4.1.0'
     compile 'com.android.support:multidex:'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.aliyun.dpa:oss-android-sdk:2.4.3'
     // PLUGIN GRADLE EXTENSIONS START
-
     // PLUGIN GRADLE EXTENSIONS END
     compile project(':xutils')
     compile project(':richeditor')
@@ -155,4 +153,5 @@ dependencies {
     compile 'com.lht:paintview:1.16'
     //    弹幕
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
+    compile 'com.meizu.flyme.internet:push-internal:3.6.3@aar'
 }

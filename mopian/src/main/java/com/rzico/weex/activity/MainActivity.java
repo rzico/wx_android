@@ -10,11 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +29,6 @@ import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.chat.ChatActivity;
-import com.rzico.weex.activity.popwindow.CommonPopupWindow;
 import com.rzico.weex.adapter.WeexPageAdapter;
 import com.rzico.weex.db.XDB;
 import com.rzico.weex.model.info.LoginBean;
@@ -43,10 +39,8 @@ import com.rzico.weex.net.XRequest;
 import com.rzico.weex.pageview.NoScrollPageView;
 import com.rzico.weex.utils.AntiShake;
 import com.rzico.weex.utils.BarTextColorUtils;
-import com.rzico.weex.utils.CommonUtil;
 import com.rzico.weex.utils.LoginUtils;
 import com.rzico.weex.utils.PathUtils;
-import com.rzico.weex.utils.ScreenHelper;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.chat.PushUtil;
 import com.rzico.weex.utils.weex.constants.Constants;
@@ -62,8 +56,10 @@ import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.imsdk.ext.message.TIMManagerExt;
 import com.tencent.qcloud.presentation.business.InitBusiness;
@@ -71,6 +67,7 @@ import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.rzico.weex.model.event.MessageBus;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -83,6 +80,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.rzico.weex.Constant.imUserId;
+import static com.tencent.open.utils.Global.getPackageName;
 import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
 import static com.rzico.weex.constant.AllConstant.isClearAll;
 
@@ -440,7 +438,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);       //强制为横屏
         setUnRead();
         PushUtil.getInstance().reset();
+        MobclickAgent.onPageStart("MainActivity");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("MainActivity");
     }
 
     public void setUnRead() {
@@ -492,11 +496,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         rgGroupAdd.setOnClickListener(this);
         rgGroupMy.setOnClickListener(this);
     }
+
     private void setBottonChange(int page) {
         switch (page) {
             case 0:
-
-
+                MobclickAgent.onEvent(mContext, "1_1", "首页按钮");
                 BarTextColorUtils.StatusBarLightMode(MainActivity.this, false);
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home_focus);
                 rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
@@ -509,6 +513,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
                 break;
             case 1:
+                MobclickAgent.onEvent(mContext, "1_1", "朋友按钮");
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
                 rgGroupFriendIm.setImageResource(R.mipmap.ico_friend_focus);
                 rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
@@ -520,6 +525,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
                 break;
             case 2:
+                MobclickAgent.onEvent(mContext, "1_1", "消息按钮");
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
                 rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
                 rgGroupMsgIm.setImageResource(R.mipmap.ico_msg_focus);
@@ -531,6 +537,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
                 break;
             case 3:
+                MobclickAgent.onEvent(mContext, "1_1", "我的按钮");
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
                 rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
                 rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
@@ -540,7 +547,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupFriendTv.setTextColor(getResources().getColor(R.color.text_default));
                 rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.wxColor));
-                break;
+
+//                //        //测试
+//                TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
+//                    @Override
+//                    public void onError(int i, String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(TIMOfflinePushSettings settings) {
+//                        //开启离线推送
+//                        settings.setEnabled(true);
+//                        //设置收到 C2C 离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+//                        settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+//                        //设置收到群离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+//                        settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+//
+//                        TIMManager.getInstance().setOfflinePushSettings(settings);
+//                    }
+//                });
+//                break;
         }
 
     }
@@ -603,16 +630,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         TextUtils.equals("https",
                                 scheme)) {
                     intent.putExtra("isLocal", "false");
-                    intent.setClass(MainActivity.this, RouterActivity.class);
+                    intent.setClass(MainActivity.this, WXPageActivity.class);
                 } else if (TextUtils.equals("file", scheme)) {
                     intent.putExtra("isLocal", "true");
-                    intent.setClass(MainActivity.this, RouterActivity.class);
+                    intent.setClass(MainActivity.this, WXPageActivity.class);
                 } else {
-                    intent.setClass(MainActivity.this, RouterActivity.class);
+                    intent.setClass(MainActivity.this, WXPageActivity.class);
                     uri = Uri.parse(new StringBuilder("http:").append("file://" + Constant.center).toString());
                 }
                 intent.setData(uri);
-                                startActivity(intent);
+                startActivity(intent);
                 break;
             case R.id.rg_group_me:
                 setSelectTab(3);

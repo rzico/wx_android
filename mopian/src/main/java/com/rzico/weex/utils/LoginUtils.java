@@ -1,13 +1,17 @@
 package com.rzico.weex.utils;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.widget.CompoundButton;
 
 
 import com.google.gson.Gson;
 import com.huawei.android.pushagent.api.PushManager;
+import com.meizu.cloud.pushsdk.util.MzSystemUtils;
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
@@ -26,12 +30,15 @@ import com.tencent.imsdk.TIMManager;
 
 import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.imsdk.TIMOfflinePushToken;
+import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.ui.LineControllerView;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import static com.tencent.open.utils.Global.getPackageName;
@@ -104,10 +111,26 @@ public class LoginUtils  {
                                         ChatActivity.navToChat(activity, identify, TIMConversationType.C2C);
                                     }
                                 }
+
+                                //初始化程序后台后消息推送
                                 PushUtil.getInstance();
                                 //初始化消息监听
                                 MessageEvent.getInstance();
                                 String deviceMan = android.os.Build.MANUFACTURER;
+
+                                //注册小米和华为推送
+                                if (deviceMan.equals("Xiaomi")){
+                                    MiPushClient.registerPush(WXApplication.getContext(), Constant.mipushAppId, Constant.mipushAppKey);
+                                }else if (deviceMan.equals("HUAWEI")){
+                                    com.huawei.android.pushagent.PushManager.requestToken(activity);
+                                }
+
+                                //魅族推送只适用于Flyme系统,因此可以先行判断是否为魅族机型，再进行订阅，避免在其他机型上出现兼容性问题
+//                                if(MzSystemUtils.isBrandMeizu(WXApplication.getContext())){
+//                                    com.meizu.cloud.pushsdk.PushManager.register(activity, "112662", "3aaf89f8e13f43d2a4f97a703c6f65b3");
+//                                }
+
+//                                c2cMusic();
                                 if(listener!=null){
                                     listener.onSuccess(loginBean);
                                 }
@@ -128,43 +151,29 @@ public class LoginUtils  {
             }
         }).execute();
     }
+
+
+    /**
+     * 判断小米推送是否已经初始化
+     */
+//    private static boolean shouldMiInit() {
+//        ActivityManager am = ((ActivityManager) WXApplication.getContext().getSystemService(Context.ACTIVITY_SERVICE));
+//        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+//        String mainProcessName = getPackageName();
+//        int myPid = android.os.Process.myPid();
+//        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+//            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//
     public static void loginSuccess(){
         Constant.loginState = true;
         SharedUtils.saveLoginId(Constant.userId);
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINSUCCESS));
-
-//        //测试
-//        TIMOfflinePushSettings settings = new TIMOfflinePushSettings();
-////开启离线推送
-//        settings.setEnabled(true);
-////设置收到 C2C 离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
-//        settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
-////设置收到群离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
-//        settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
-//
-//        TIMManager.getInstance().setOfflinePushSettings(settings);
-
-        TIMOfflinePushToken param = new TIMOfflinePushToken(0L,"");
-        param.setToken(WXApplication.getToken());
-        String vendor = Build.MANUFACTURER;
-        if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
-            param.setBussid(Long.parseLong(Constant.mipushbussid));
-        }else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
-            //请求华为推送设备 token
-            param.setBussid(Long.parseLong(Constant.huaweibussid));
-        }
-        TIMManager.getInstance().setOfflinePushToken(param,
-                new TIMCallBack() {
-                    @Override
-                    public void onError(int code, String desc) {
-                        System.out.println(desc);
-                    }
-                    @Override
-                    public void onSuccess() {
-                       System.out.println("setOfflinePushToken.success");
-                    }
-                }
-        );
     }
     public static void loginError(){
         Constant.loginState = false;
@@ -179,5 +188,24 @@ public class LoginUtils  {
         }
 
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINERROR));
+    }
+
+    public static void c2cMusic() {
+        final Uri notifyMusic = Uri.parse("android.resource://"+WXApplication.getInstance().getPackageName()+"/" + R.raw.h0);
+        TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
+            @Override
+            public void onError(int i, String s) {
+//                Log.e(TAG, "get offline push setting error " + s);
+            }
+            @Override
+            public void onSuccess(TIMOfflinePushSettings timOfflinePushSettings) {
+                TIMOfflinePushSettings settings = timOfflinePushSettings;
+
+                        settings.setC2cMsgRemindSound(notifyMusic);
+                        TIMManager.getInstance().setOfflinePushSettings(settings);
+
+            }
+        });
+
     }
 }

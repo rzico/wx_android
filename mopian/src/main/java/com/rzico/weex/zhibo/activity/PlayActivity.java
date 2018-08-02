@@ -132,6 +132,7 @@ public class PlayActivity extends BaseActivity {
     private BottomPanelFragment bottomPanel;
     private LinearLayout btnGift;//礼物
     private LinearLayout btnHeart;//点赞
+    private LinearLayout btnGood;//点赞
     private HeartLayout mHeartLayout;//点赞控件
     private GifView bigivgift;//送礼物时显示的最大数
     RelativeLayout mInView;
@@ -215,6 +216,7 @@ public class PlayActivity extends BaseActivity {
         clearTiming();
 
     }
+
     private void initData() {
         HashMap<String, Object> params = new HashMap<>();
         params.put("id" , getIntent().getStringExtra("liveId"));
@@ -422,6 +424,7 @@ public class PlayActivity extends BaseActivity {
         bottomPanel = (BottomPanelFragment) getSupportFragmentManager().findFragmentById(R.id.bottom_bar);
         btnGift = (LinearLayout) bottomPanel.getView().findViewById(R.id.member_menu_more);
         btnHeart = (LinearLayout) bottomPanel.getView().findViewById(R.id.member_fullscreen_btn);
+        btnGood  = (LinearLayout) bottomPanel.getView().findViewById(R.id.member_send_good);
         mInView = (RelativeLayout) findViewById(R.id.re_ll);
         mHeartLayout = (HeartLayout) findViewById(R.id.heart_layout);
         head_image = (ImageView) findViewById(R.id.head_image);//直播封面
@@ -440,7 +443,12 @@ public class PlayActivity extends BaseActivity {
 
         danmaku_view = (DanmakuView) findViewById(R.id.danmaku_view);
 
-
+        btnGood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openShop("file://view/live/product.js");
+            }
+        });
         danmaku_view.enableDanmakuDrawingCache(true);
         danmaku_view.setCallback(new DrawHandler.Callback() {
             @Override

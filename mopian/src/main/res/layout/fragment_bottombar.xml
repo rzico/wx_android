@@ -77,6 +77,26 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="40dp" />
+        <LinearLayout
+            android:layout_width="38dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/member_send_good"
+            android:background="@drawable/bg03"
+            android:layout_height="38dp">
+            <TextView
+                android:layout_width="20dp"
+                android:gravity="center"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:background="@drawable/shop"
+                />
+
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp" />
     </LinearLayout>
     <com.rzico.weex.zhibo.view.InputPanel
     android:id="@+id/input_panel"

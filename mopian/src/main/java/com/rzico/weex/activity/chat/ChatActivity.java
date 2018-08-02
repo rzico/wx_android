@@ -62,6 +62,7 @@ import com.tencent.qcloud.presentation.viewfeatures.ChatView;
 import com.tencent.qcloud.ui.ChatInput;
 import com.tencent.qcloud.ui.TemplateTitle;
 import com.tencent.qcloud.ui.VoiceSendingView;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.xutils.ex.DbException;
@@ -269,6 +270,14 @@ public class ChatActivity extends BaseActivity implements ChatView {
 //        RefreshEvent.getInstance().onRefresh();
         presenter.readMessages();
         MediaUtil.getInstance().stop();
+        MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MobclickAgent.onResume(this);
     }
 
     @Override

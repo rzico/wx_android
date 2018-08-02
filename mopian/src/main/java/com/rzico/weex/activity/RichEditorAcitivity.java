@@ -16,6 +16,7 @@ import com.rzico.weex.R;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.utils.BarTextColorUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.yalantis.ucrop.view.TopView;
 import java.util.List;
 
@@ -51,6 +52,17 @@ public class RichEditorAcitivity extends AppCompatActivity {
      */
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

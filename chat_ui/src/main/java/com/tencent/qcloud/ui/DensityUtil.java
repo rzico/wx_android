@@ -2,6 +2,8 @@ package com.tencent.qcloud.ui;
 
 import android.content.Context;
 
+
+
 public final class DensityUtil {
 
     private static float density = -1F;
