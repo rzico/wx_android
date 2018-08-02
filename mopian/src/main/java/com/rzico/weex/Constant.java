@@ -35,9 +35,9 @@ public class Constant {
     public static final String shareAppSecret = "214a3dd9a409189b5290b3577d77855e";
 
     //    推送
-    public static final String mipushAppId = "2882303761517590666";
-    public static final String mipushAppKey = "5991759081666";
-    public static final long mipushbussid = 2795;
+    public static final String mipushAppId = "2882303761517839827";
+    public static final String mipushAppKey = "5281783912827";
+    public static final long mipushbussid = 4003;
     public static final String huaweiAppId = "100100905";
     public static final String huaweiAppSecret = "0da9d5cf19409fb965a8d93a080f7b8b";
     public static final long huaweibussid = 2796;
