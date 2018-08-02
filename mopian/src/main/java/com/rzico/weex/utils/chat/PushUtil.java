@@ -17,6 +17,7 @@ import com.rzico.weex.model.chat.CustomMessage;
 import com.rzico.weex.model.chat.Message;
 import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.model.info.IMMessage;
+import com.rzico.weex.utils.Player;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMFriendshipManager;
@@ -70,6 +71,7 @@ public class PushUtil implements Observer {
 //
 //        Toast.makeText(WXApplication.getContext(), "is1:" + is1 + "is2:" + is2 + "is3:" + is3 + "is4:" + is4, Toast.LENGTH_SHORT).show();
 
+        System.out.println("xxxxx---"+msg.getConversation().getType());
         if (msg == null ||
 //                Foreground.get().isForeground()||
                 (msg.getConversation().getType() != TIMConversationType.Group &&
@@ -125,11 +127,6 @@ public class PushUtil implements Observer {
             }
         }
 
-//        System.out.println("===========================");
-//        System.out.println(msg.getOfflinePushSettings().getAndroidSettings().getSound().toString());
-//        grantUriPermission("com.android.systemui", soundUri,
-//                Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
         mBuilder.setContentText(contentStr)
                 .setContentIntent(intent) //设置通知栏点击意图
 //                .setNumber(++pushNum) //设置通知集合的数量
@@ -139,25 +136,17 @@ public class PushUtil implements Observer {
                 .setDefaults(Notification.DEFAULT_ALL)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
                 .setSmallIcon(R.mipmap.ic_launcher);//设置通知小ICON
 //
-//        if (msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
-//            mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound());
-//            int d = Notification.DEFAULT_ALL;
-//            d |= Notification.DEFAULT_SOUND;
-//            mBuilder.setDefaults(d);
-//        } else {
-//            final Uri notifyMusic = Uri.parse("android.resource://"+WXApplication.getInstance().getPackageName()+"/" + R.raw.h0);
-//            mBuilder.setSound(notifyMusic);
-//            int d = Notification.DEFAULT_ALL;
-//            d |= Notification.DEFAULT_SOUND;
-//            mBuilder.setDefaults(d);
-//        }
+
+        if (msg.getOfflinePushSettings()!=null && msg.getOfflinePushSettings().getAndroidSettings()!=null && msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
+            mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound());
+            mBuilder.setDefaults(6);
+        }
 
         Notification notify = mBuilder.build();
         notify.flags |= Notification.FLAG_AUTO_CANCEL;
 
         mNotificationManager.notify(pushId, notify);
-//
-//        Toast.makeText(WXApplication.getContext(), "推送成功", Toast.LENGTH_SHORT).show();
+
     }
 
     public static void resetPushNum() {

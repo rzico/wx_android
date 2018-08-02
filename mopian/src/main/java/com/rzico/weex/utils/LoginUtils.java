@@ -111,14 +111,15 @@ public class LoginUtils  {
                                         ChatActivity.navToChat(activity, identify, TIMConversationType.C2C);
                                     }
                                 }
+
                                 //初始化程序后台后消息推送
                                 PushUtil.getInstance();
                                 //初始化消息监听
                                 MessageEvent.getInstance();
                                 String deviceMan = android.os.Build.MANUFACTURER;
+
                                 //注册小米和华为推送
                                 if (deviceMan.equals("Xiaomi")){
-//                                    System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                                     MiPushClient.registerPush(WXApplication.getContext(), Constant.mipushAppId, Constant.mipushAppKey);
                                 }else if (deviceMan.equals("HUAWEI")){
                                     com.huawei.android.pushagent.PushManager.requestToken(activity);

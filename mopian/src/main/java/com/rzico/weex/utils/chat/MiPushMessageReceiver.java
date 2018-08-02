@@ -46,6 +46,8 @@ public class MiPushMessageReceiver extends PushMessageReceiver {
         } else if (!TextUtils.isEmpty(message.getAlias())) {
             mAlias = message.getAlias();
         }
+
+
         Log.e(TAG, "regId: " + mRegId + " | topic: " + mTopic + " | alias: " + mAlias
                 + " | account: " + mAccount + " | starttime: " + mStartTime + " | endtime: " + mEndTime);
     }
