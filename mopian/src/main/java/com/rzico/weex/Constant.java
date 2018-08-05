@@ -38,9 +38,9 @@ public class Constant {
     public static final String mipushAppId = "2882303761517839827";
     public static final String mipushAppKey = "5281783912827";
     public static final long mipushbussid = 4003;
-    public static final String huaweiAppId = "100100905";
-    public static final String huaweiAppSecret = "0da9d5cf19409fb965a8d93a080f7b8b";
-    public static final long huaweibussid = 2796;
+    public static final String huaweiAppId = "100367501";
+    public static final String huaweiAppSecret = "2358953dba5f811af1ad96e369f9e3d3";
+    public static final long huaweibussid = 4086;
     public static final String mzpushAppId = "2882303761517590666";
     public static final String mzpushAppKey = "5991759081666";
     public static final long mzpushbussid = 2795;
