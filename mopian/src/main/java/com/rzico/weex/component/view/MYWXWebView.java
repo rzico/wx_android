@@ -286,6 +286,13 @@ public class MYWXWebView implements IWebView {
                                         params.put("url", two[1]);
 
                                         EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "saveImage", params));
+                                    }else if(one[0].equals("redBag")){
+
+                                        //文件下载
+                                        Map<String, Object> params = new HashMap<>();
+                                        params.put("type", two[1]);
+
+                                        EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "redBag", params));
                                     }
                                 }
                             }

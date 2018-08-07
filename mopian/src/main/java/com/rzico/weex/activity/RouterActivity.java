@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.rzico.weex.R;
 import com.rzico.weex.db.DbUtils;
+import com.rzico.weex.model.event.MessageBus;
 import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.module.WXEventModule;
 import com.rzico.weex.net.session.SessionOutManager;
@@ -25,6 +26,10 @@ import com.taobao.weex.IWXRenderListener;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.common.WXRenderStrategy;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +56,7 @@ public class RouterActivity extends AbsWeexActivity{
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }else
             setStatusBarFullTransparent();
+        EventBus.getDefault().register(this);
         mContainer = (ViewGroup) findViewById(R.id.container);
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
         mTipView = (TextView) findViewById(R.id.index_tip);
@@ -90,6 +96,14 @@ public class RouterActivity extends AbsWeexActivity{
     public void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleEvent(MessageBus messageBus){
+        if(messageBus.getMessageType() == MessageBus.Type.GLOBAL){
+            getWXSDKInstance().fireGlobalEventCallback(messageBus.getEventKey(), messageBus.getParams());
+        }
+
     }
 
     @Override
@@ -136,7 +150,11 @@ public class RouterActivity extends AbsWeexActivity{
         return url;
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

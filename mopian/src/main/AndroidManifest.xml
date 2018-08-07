@@ -153,6 +153,7 @@
             android:name="com.yixiang.mopian.wxapi.WXPayEntryActivity"
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar"
+            android:launchMode="singleInstance"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
 

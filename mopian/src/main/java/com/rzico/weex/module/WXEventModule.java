@@ -977,6 +977,7 @@ public class WXEventModule extends WXModule {
                             onMessage.setContent("您有一条新消息");
                             IMMessage imMessage = new IMMessage();
 //
+
                             imMessage.setUnRead(unReadNumber.get(i));
                             imMessage.setContent(message.getSummary());
                             imMessage.setId(message.getSender());
@@ -989,6 +990,14 @@ public class WXEventModule extends WXModule {
                             EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, "onMessage", params));
 
                         }
+                    }
+                    if (Utils.isApkDebugable(getActivity())) {
+                        String log = "";
+                        for (int i = 0; i < len; i++){
+                            TIMUserProfile user = result.get(i);
+                            log = log + "name:" + user.getNickName() + "logo:" + user.getFaceUrl() + "\n";
+                        }
+                        Toast.makeText(getActivity(), log, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
