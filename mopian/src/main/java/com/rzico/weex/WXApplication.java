@@ -174,6 +174,8 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
+
+      WeexPluginContainer.loadAll(this);
     } catch (WXException e) {
       e.printStackTrace();
     }
