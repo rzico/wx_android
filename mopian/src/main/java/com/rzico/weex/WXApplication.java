@@ -53,8 +53,6 @@ import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.commonsdk.UMConfigure;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
@@ -174,8 +172,6 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
-
-      WeexPluginContainer.loadAll(this);
     } catch (WXException e) {
       e.printStackTrace();
     }
