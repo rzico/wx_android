@@ -521,7 +521,7 @@ public class SplashActivity extends BaseActivity {
         try {
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
-                downloadFile( "http://cdn.rzico.com/rzico/weex/release/res-0.0.1.zip?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
+                downloadFile( "http://cdn.rzico.com/weex/resources/release//res-0.0.1.zip?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
 //                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
 //                toNext();
             } else {
