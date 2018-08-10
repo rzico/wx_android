@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '28'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.pine"
-        minSdkVersion 15
+        applicationId "com.rzico.assistant"
+        minSdkVersion 16
         targetSdkVersion 23
-        versionCode 326
-        versionName "3.2.6"
+        versionCode 327
+        versionName "3.2.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
@@ -28,30 +28,39 @@ android {
             }
         }
     }
-
     dexOptions {
         jumboMode true
     }
-
     signingConfigs {
         release {
-            storeFile file('tools/pine.jks')
+            storeFile file("tools/rzico.jks")
             storePassword "123456"
-            keyAlias "pine"
+            keyAlias "rzico"
             keyPassword "123456"
         }
         debug {
-            storeFile file('tools/pine.jks')
+            storeFile file("tools/rzico.jks")
             storePassword "123456"
-            keyAlias "pine"
+            keyAlias "rzico"
             keyPassword "123456"
         }
+//        release {
+//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
+//            storePassword "123456"
+//            keyAlias "rzico"
+//            keyPassword "123456"
+//        }
+//        debug {
+//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
+//            storePassword "123456"
+//            keyAlias "rzico"
+//            keyPassword "123456"
+//        }
     }
-
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -94,11 +103,9 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.5'
     /*source dependency*/
     compile 'com.google.code.findbugs:jsr305:2.0.1'
-    //    compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile('com.squareup.okhttp:okhttp-ws:2.3.0') {
         transitive = true
     }
-    //    compile 'com.squareup.okio:okio:1.0.1'
     compile 'com.squareup.okio:okio:1.9.0'
     compile 'com.alibaba:fastjson:1.1.46.android'
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -107,7 +114,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:design:24.1.1'
     compile 'com.android.support:support-annotations:23.1.1'
-    //    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'//delete
     compile 'com.journeyapps:zxing-android-embedded:3.4.0'
     compile 'com.karumi:dexter:4.1.0'
     compile 'com.android.support:multidex:'
@@ -124,6 +130,9 @@ dependencies {
     compile project(':chat_ui')
     compile files('libs/pinyin4j-2.5.0.jar')
     compile project(':photoview')
+    compile 'com.amap.api:3dmap:5.4.0'
+    compile 'com.amap.api:location:3.6.1'
+
     compile files('libs/MobCommons-2017.1024.1907.jar')
     compile files('libs/MobTools-2017.1024.1907.jar')
     compile files('libs/ShareSDK-Core-3.1.1.jar')
@@ -135,7 +144,6 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Favorite-3.1.1.jar')
     compile files('libs/ShareSDK-Wechat-Moments-3.1.1.jar')
     compile project(path: ':alertview')
-    compile files('libs/AMap_Location_V3.6.1_20171012.jar')
     compile project(path: ':graffiti')
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
@@ -144,4 +152,5 @@ dependencies {
     compile 'com.lht:paintview:1.16'
     //    弹幕
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
+    compile 'com.meizu.flyme.internet:push-internal:3.6.3@aar'
 }

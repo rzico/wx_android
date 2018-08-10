@@ -3,16 +3,22 @@ package com.rzico.weex;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.huawei.android.pushagent.api.PushManager;
 import com.mob.MobSDK;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.ImageAdapter;
+import com.rzico.weex.component.amap.component.WXMapMarkerComponent;
+import com.rzico.weex.component.amap.component.WXMapViewComponent;
+import com.rzico.weex.component.amap.module.WXMapModule;
 import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
 import com.rzico.weex.component.view.WXImage;
@@ -50,8 +56,7 @@ import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.commonsdk.UMConfigure;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
 
@@ -61,9 +66,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-
 import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
-
 
 public class WXApplication extends Application {
 
@@ -85,8 +88,6 @@ public class WXApplication extends Application {
   //用户ID
   private static String uid = "";
 
-  //小米,华为推送的token
-  private static String token = "";
 
   public static WXApplication getInstance() {
     return instance;
@@ -104,9 +105,10 @@ public class WXApplication extends Application {
     Foreground.init(this);
     com.tencent.qcloud.ui.EmojiManager.init(this);
 
-    UMConfigure.init(getContext(), "5b3b22b18f4a9d7720000156","Android", UMConfigure.DEVICE_TYPE_PHONE, null);
-    UMConfigure.setLogEnabled(true);
-    MobclickAgent.setScenarioType(getContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
+//    UMConfigure.init(getContext(), "5b3b22b18f4a9d7720000156","Android", UMConfigure.DEVICE_TYPE_PHONE, null);
+//    UMConfigure.setLogEnabled(true);
+//    MobclickAgent.setScenarioType(getContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
+
     context = getApplicationContext();
     if(MsfSdkUtils.isMainProcess(this)) {
       TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
@@ -118,6 +120,9 @@ public class WXApplication extends Application {
           }
         }
       });
+
+
+
     }
 
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
@@ -128,7 +133,6 @@ public class WXApplication extends Application {
 //    initIM();
     getUid();
 
-    registerPush();
   }
 
   public static String getUid() {
@@ -153,6 +157,8 @@ public class WXApplication extends Application {
     );
     try {
       WXSDKEngine.registerComponent(WXBasicComponentType.WEB, MYWXWeb.class);
+      WXSDKEngine.registerComponent("weex-amap", WXMapViewComponent.class);
+      WXSDKEngine.registerComponent("weex-amap-marker", WXMapMarkerComponent.class);
       WXSDKEngine.registerComponent(
               new SimpleComponentHolder(
                       WXImage.class,
@@ -171,80 +177,10 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
-
-
+      WXSDKEngine.registerModule("amap", WXMapModule.class);
     } catch (WXException e) {
       e.printStackTrace();
     }
-
-  }
-  private void initIM() {
-
-    //初始化SDK基本配置
-    TIMSdkConfig config = new TIMSdkConfig(SDK_APPID)
-            .enableCrashReport(false)
-            .enableLogPrint(true)
-            .setLogLevel(TIMLogLevel.DEBUG)
-            .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/justfortest2/");
-
-//初始化SDK
-    TIMManager.getInstance().init(getApplicationContext(), config);
-    //基本用户配置
-    TIMUserConfig userConfig = new TIMUserConfig()
-            //设置用户状态变更事件监听器
-            .setUserStatusListener(new TIMUserStatusListener() {
-              @Override
-              public void onForceOffline() {
-                //被其他终端踢下线
-                Log.i(tag, "onForceOffline");
-
-              }
-
-              @Override
-              public void onUserSigExpired() {
-                //用户签名过期了，需要刷新userSig重新登录SDK
-                Log.i(tag, "onUserSigExpired");
-              }
-            })
-            //设置连接状态事件监听器
-            .setConnectionListener(new TIMConnListener() {
-              @Override
-              public void onConnected() {
-                Log.i(tag, "onConnected");
-              }
-
-              @Override
-              public void onDisconnected(int code, String desc) {
-                Log.i(tag, "onDisconnected");
-              }
-
-              @Override
-              public void onWifiNeedAuth(String name) {
-                Log.i(tag, "onWifiNeedAuth");
-              }
-            })
-            //设置群组事件监听器
-            .setGroupEventListener(new TIMGroupEventListener() {
-              @Override
-              public void onGroupTipsEvent(TIMGroupTipsElem elem) {
-                Log.i(tag, "onGroupTipsEvent, type: " + elem.getTipsType());
-              }
-            })
-            //设置会话刷新监听器
-            .setRefreshListener(new TIMRefreshListener() {
-              @Override
-              public void onRefresh() {
-                Log.i(tag, "onRefresh");
-              }
-
-              @Override
-              public void onRefreshConversation(List<TIMConversation> conversations) {
-                Log.i(tag, "onRefreshConversation, conversation size: " + conversations.size());
-              }
-            });
-//将用户配置与通讯管理器进行绑定
-    TIMManager.getInstance().setUserConfig(userConfig);
-
 
   }
 
@@ -346,26 +282,4 @@ public class WXApplication extends Application {
   public static void setUid(String uid) {
     WXApplication.uid = uid;
   }
-
-  public static String getToken() {
-    return token;
-  }
-
-  public static void setToken(String token) {
-    WXApplication.token = token;
-  }
-
-
-  public void registerPush(){
-//    String vendor = Build.MANUFACTURER;
-//    if(vendor.toLowerCase(Locale.ENGLISH).contains("xiaomi")) {
-//      //注册小米推送服务
-//      MiPushClient.registerPush(this, Constant.mipushAppId, Constant.mipushAppSecret);
-//    }
-//    else if(vendor.toLowerCase(Locale.ENGLISH).contains("huawei")) {
-//      //请求华为推送设备 token
-//      PushManager.requestToken(this);
-//    }
-  }
-
 }

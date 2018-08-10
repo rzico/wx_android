@@ -84,7 +84,7 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.rzico.weex.constant.AllConstant;
-import com.rzico.pine.wxapi.WXEntryActivity;
+import com.rzico.assistant.wxapi.WXEntryActivity;
 
 import net.bither.util.NativeUtil;
 
@@ -435,6 +435,7 @@ public class WXEventModule extends WXModule {
      */
     @JSMethod
     public void wxAppPay(String option, final JSCallback callback){
+
         WXEventModule.get().initWxAppPay(new RxWeiXinAuthFinalHolderListener() {
             @Override
             public void userOk(String code) {
@@ -444,6 +445,7 @@ public class WXEventModule extends WXModule {
                 message.setData(code);
                 callback.invoke(message);
             }
+
             @Override
             public void userCancel() {
 
@@ -452,6 +454,7 @@ public class WXEventModule extends WXModule {
                 message.setContent("用户取消");
                 callback.invoke(message);
             }
+
             @Override
             public void authDenied() {
 
@@ -581,8 +584,8 @@ public class WXEventModule extends WXModule {
                     try {
                         BaseResp sendResp = (BaseResp) resp;
                         if (sendResp != null) {
-                            int code = sendResp.errCode;
-                            rxWeiXinPayFinalHolderLinstener.userOk(code+"");
+                            String code = String.valueOf(sendResp.errCode);
+                            rxWeiXinPayFinalHolderLinstener.userOk(code);
                         }
                     } catch (Exception e) {
                     }
@@ -603,6 +606,7 @@ public class WXEventModule extends WXModule {
                     break;
             }
         }
+
     }
 
     /*这里是老土的接受返回信息*/
@@ -993,11 +997,8 @@ public class WXEventModule extends WXModule {
 
     @JSMethod(uiThread = false)
     public boolean haveTop(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            return true;
-        }else {
-            return false;//顶部状态栏顶不上去
-        }
+        //顶部状态栏顶不上去
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 
     @JSMethod

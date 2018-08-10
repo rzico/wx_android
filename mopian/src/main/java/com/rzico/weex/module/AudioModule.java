@@ -36,7 +36,7 @@ public class AudioModule extends WXModule {
         }
         Player.getInstance().stop();
         Player.getInstance().playUrl(url, callback);
-        Player.getInstance().play();
+//        Player.getInstance().play();
     }
 
     @JSMethod
