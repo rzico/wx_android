@@ -40,7 +40,6 @@ import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.PhotoUtils;
 import com.rzico.weex.utils.UriToPathUtil;
 import com.rzico.weex.utils.photo.PhotoHandle;
-import com.umeng.analytics.MobclickAgent;
 import com.yalantis.ucrop.*;
 import com.yalantis.ucrop.callback.BitmapLoadCallback;
 import com.yalantis.ucrop.model.ExifInfo;
@@ -229,13 +228,11 @@ public class PhotoHandleActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
     private void initToolbar() {
         topView = (TopView) findViewById(R.id.toolbar);

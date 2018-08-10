@@ -50,7 +50,7 @@ import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
-import com.umeng.analytics.MobclickAgent;
+
 
 import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
@@ -102,7 +102,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
     /**
@@ -145,7 +144,6 @@ public class SplashActivity extends BaseActivity {
                         }
                     }).check();
         }
-        MobclickAgent.onResume(this);
     }
 
     private void initDb() {
@@ -193,8 +191,6 @@ public class SplashActivity extends BaseActivity {
                 SharedUtils.saveLoginId(Constant.userId);
                 EventBus.getDefault().post(new com.rzico.weex.model.event.MessageBus(com.rzico.weex.model.event.MessageBus.Type.FORCEOFFLINE));
 
-                //测试
-                MobclickAgent.onProfileSignOff();
             }
 
             @Override
@@ -525,7 +521,8 @@ public class SplashActivity extends BaseActivity {
         try {
 //            为了阿轲测试注释
             if (Utils.isApkDebugable(SplashActivity.this)) {
-                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
+                downloadFile( "http://cdn.rzico.com/weex/resources/release/res-0.0.1.zip?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
+//                downloadFile(Constant.updateResUrl + "?t=" + System.currentTimeMillis(), PathUtils.getResPath(SplashActivity.this) + "update_net.zip");
 //                toNext();
             } else {
                 if(Utils.compareVersion(netResVersion, appResVersion) > 0 && Utils.compareVersion(netResVersion, nowResVersion) > 0){

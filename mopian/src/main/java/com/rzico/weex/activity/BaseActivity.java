@@ -43,7 +43,7 @@ import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.NetUtil;
 import com.rzico.weex.utils.NetWorkStateReceiver;
 import com.rzico.weex.utils.SystemBarTintManager;
-import com.umeng.analytics.MobclickAgent;
+
 
 
 import java.lang.reflect.Field;
@@ -114,10 +114,6 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MobclickAgent.openActivityDurationTrack(false);
-
-        // 设置为U-APP场景
-        MobclickAgent.setScenarioType(mContext, MobclickAgent.EScenarioType.E_UM_NORMAL);
         mContext = BaseActivity.this;
         evevt = this;
         initView();
@@ -127,13 +123,6 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(R.color.b3a);
         }
-
-        // SDK在统计Fragment时，需要关闭Activity自带的页面统计，
-        // 然后在每个页面中重新集成页面统计的代码(包括调用了 onResume 和 onPause 的Activity)。
-        MobclickAgent.openActivityDurationTrack(false);
-
-        // 设置为U-APP场景
-        MobclickAgent.setScenarioType(mContext, MobclickAgent.EScenarioType.E_UM_NORMAL);
     }
 
     /**
@@ -377,12 +366,10 @@ public class BaseActivity extends AppCompatActivity implements NetWorkStateRecei
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 }

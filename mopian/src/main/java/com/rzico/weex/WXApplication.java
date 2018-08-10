@@ -16,6 +16,9 @@ import com.huawei.android.pushagent.api.PushManager;
 import com.mob.MobSDK;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.ImageAdapter;
+import com.rzico.weex.component.amap.component.WXMapMarkerComponent;
+import com.rzico.weex.component.amap.component.WXMapViewComponent;
+import com.rzico.weex.component.amap.module.WXMapModule;
 import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
 import com.rzico.weex.component.view.WXImage;
@@ -53,8 +56,6 @@ import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.commonsdk.UMConfigure;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
@@ -156,6 +157,8 @@ public class WXApplication extends Application {
     );
     try {
       WXSDKEngine.registerComponent(WXBasicComponentType.WEB, MYWXWeb.class);
+      WXSDKEngine.registerComponent("weex-amap", WXMapViewComponent.class);
+      WXSDKEngine.registerComponent("weex-amap-marker", WXMapMarkerComponent.class);
       WXSDKEngine.registerComponent(
               new SimpleComponentHolder(
                       WXImage.class,
@@ -174,6 +177,7 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
+      WXSDKEngine.registerModule("amap", WXMapModule.class);
     } catch (WXException e) {
       e.printStackTrace();
     }

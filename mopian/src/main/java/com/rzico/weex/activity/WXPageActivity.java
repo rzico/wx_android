@@ -44,7 +44,6 @@ import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.ui.component.NestedContainer;
 import com.taobao.weex.utils.WXSoInstallMgrSdk;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -197,7 +196,6 @@ public class WXPageActivity extends AbsWeexActivity implements
       mShakeDetector.start((SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE));
       mIsShakeDetectorStarted = true;
     }
-    MobclickAgent.onResume(this);
   }
 
   @Override
@@ -207,7 +205,6 @@ public class WXPageActivity extends AbsWeexActivity implements
       mShakeDetector.stop();
       mIsShakeDetectorStarted = false;
     }
-    MobclickAgent.onPause(this);
   }
 
   private String getUrl(Uri uri) {
