@@ -120,9 +120,6 @@ public class WXApplication extends Application {
           }
         }
       });
-
-
-
     }
 
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
