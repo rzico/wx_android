@@ -71,7 +71,6 @@ public class PushUtil implements Observer {
 //
 //        Toast.makeText(WXApplication.getContext(), "is1:" + is1 + "is2:" + is2 + "is3:" + is3 + "is4:" + is4, Toast.LENGTH_SHORT).show();
 
-        System.out.println("xxxxx---"+msg.getConversation().getType());
         if (msg == null ||
 //                Foreground.get().isForeground()||
                 (msg.getConversation().getType() != TIMConversationType.Group &&
@@ -131,14 +130,20 @@ public class PushUtil implements Observer {
                 .setContentIntent(intent) //设置通知栏点击意图
 //                .setNumber(++pushNum) //设置通知集合的数量
                 .setAutoCancel(true)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
-                .setDefaults(Notification.DEFAULT_ALL)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
+                .setDefaults(Notification.DEFAULT_SOUND)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
                 .setSmallIcon(R.mipmap.ic_launcher);//设置通知小ICON
 //
 
         if (msg.getOfflinePushSettings()!=null && msg.getOfflinePushSettings().getAndroidSettings()!=null && msg.getOfflinePushSettings().getAndroidSettings().getSound()!=null) {
             mBuilder.setSound(msg.getOfflinePushSettings().getAndroidSettings().getSound());
+            mBuilder.setDefaults(6);
+            System.out.println("xxxxxxddddrrr18046282815");
+        } else {
+            final Uri notifyMusic = Uri.parse("android.resource://"+WXApplication.getInstance().getPackageName()+"/" + R.raw.h0);
+            mBuilder.setSound(notifyMusic);
             mBuilder.setDefaults(6);
         }
 
