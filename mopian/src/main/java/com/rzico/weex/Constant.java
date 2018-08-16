@@ -45,7 +45,6 @@ public class Constant {
     public static final String mzpushAppKey = "5991759081666";
     public static final long mzpushbussid = 2795;
 
-
 //    public static Handler loginHandler = null;
     //菜单路径
     public static  String index1 = "view/circle/circle.js";
