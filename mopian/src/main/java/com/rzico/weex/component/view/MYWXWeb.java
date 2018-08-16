@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import com.rzico.weex.Constant;
 import com.rzico.weex.model.info.Message;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.adapter.URIAdapter;
@@ -55,7 +56,7 @@ public class MYWXWeb extends WXComponent {
         super(instance, dom, parent, isLazy);
         createWebView();
 
-        extraHeaders.put("Referer", "https://mopian.1xx.me");
+        extraHeaders.put("Referer", Constant.SERVER);
     }
 
     protected void  createWebView(){

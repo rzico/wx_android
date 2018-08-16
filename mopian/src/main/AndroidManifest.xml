@@ -109,7 +109,7 @@
                 <action android:name="com.alibaba.weex.protocol.openurl" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.taobao.android.intent.category.YUNDIAN" />
+                <category android:name="com.taobao.android.intent.category.PINE" />
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />

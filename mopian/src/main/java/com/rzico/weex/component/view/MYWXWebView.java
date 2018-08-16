@@ -49,6 +49,7 @@ import java.util.Map;
 
 import cn.finalteam.rxgalleryfinal.utils.DensityUtil;
 
+import static com.rzico.weex.Constant.SERVER;
 import static com.rzico.weex.Constant.key;
 
 /**
@@ -68,7 +69,7 @@ public class MYWXWebView implements IWebView {
     private Map extraHeaders = new HashMap();
     public MYWXWebView(Context context) {
         mContext = context;
-        extraHeaders.put("Referer", "https://mopian.1xx.me");
+        extraHeaders.put("Referer",SERVER);
         extraHeaders.put(WXHttpUtil.KEY_USER_AGENT, WXHttpUtil.assembleUserAgent(mContext, WXEnvironment.getConfig())+ "weex");
         String uid= PhoneUtil.getDeviceId(mContext);
         String app= Constant.app;
