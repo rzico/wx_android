@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -24,6 +25,7 @@ import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapsInitializer;
+import com.amap.api.maps.Projection;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.CameraPosition;
@@ -192,6 +194,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         }
       });
 
+
       mAMap.setOnMapTouchListener(new AMap.OnMapTouchListener() {
         boolean dragged = false;
 
@@ -203,7 +206,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
               dragged = true;
               break;
             case MotionEvent.ACTION_UP:
-              if (dragged) getInstance().fireEvent(getRef(), Constant.EVENT.DRAG_CHANGE);
+              LatLng center = getMapCenterPoint();
+              if (dragged) getInstance().fireEvent(getRef(), Constant.EVENT.DRAG_CHANGE,convertLatLng(center));
               dragged = false;
               break;
           }
@@ -211,6 +215,31 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
       });
       setUpMap();
     }
+  }
+  public LatLng getMapCenterPoint() {
+
+    int left = mMapView.getLeft();
+
+    int top = mMapView.getTop();
+
+    int right = mMapView.getRight();
+
+    int bottom = mMapView.getBottom();
+
+    // 获得屏幕点击的位置
+
+    int x = (int) (mMapView.getX() + (right - left) / 2);
+
+    int y = (int) (mMapView.getY() + (bottom - top) / 2);
+
+    Projection projection = mAMap.getProjection();
+
+    LatLng pt = projection.fromScreenLocation(new Point(x, y));
+
+
+
+    return pt;
+
   }
 
   private void setUpMap() {
@@ -494,6 +523,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         mAMap.setMyLocationStyle(style);
       }
     });
+
   }
 
   @WXComponentProp(name = Constant.Name.CUSTOM_ENABLED)
