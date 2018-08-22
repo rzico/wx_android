@@ -55,6 +55,8 @@ public class Constant {
     public static  String index4 = "view/member/index.js";
     public static  String center = "view/member/editor/editor.js";
 
+
+    public static boolean isShowBottom = true;
     //   用户id
     public static long userId = 0;
     //   im的用户id

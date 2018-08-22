@@ -102,6 +102,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private final String MY = "weex_my";
     private Map<String, WXSDKInstance> wxsdkInstanceMap = null;
 
+    private LinearLayout ll_bottom;
+
 
     private boolean canReload = true;
     //打开扫描界面请求码
@@ -462,6 +464,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void initView() {
+        ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
 
         rgGroupHomeIm = (ImageView) findViewById(R.id.rg_group_home_im);
         rgGroupFriendIm = (ImageView) findViewById(R.id.rg_group_vip_im);
@@ -484,6 +487,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
         rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
         rgGroupMyIm.setImageResource(R.mipmap.ico_my);
+
+        ll_bottom.setVisibility(Constant.isShowBottom ? View.VISIBLE : View.GONE);
         initEvent();
         //默认首页
         setSelectTab(0);
