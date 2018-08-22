@@ -87,7 +87,6 @@ import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.rtmp.ui.TXCloudVideoView;
-import com.umeng.analytics.MobclickAgent;
 import com.yalantis.ucrop.model.AspectRatio;
 
 import org.greenrobot.eventbus.EventBus;
@@ -1369,7 +1368,6 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         super.onResume();
         mCaptureView.onResume();     // mCaptureView 是摄像头的图像渲染view
         liveRoom.switchToForeground();
-        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -1377,7 +1375,6 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         super.onPause();
         liveRoom.switchToBackground();
         mCaptureView.onPause();
-        MobclickAgent.onPause(this);
     }
 
 

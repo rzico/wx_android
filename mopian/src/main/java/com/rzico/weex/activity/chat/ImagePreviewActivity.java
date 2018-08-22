@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.rzico.weex.R;
 import com.rzico.weex.utils.BarTextColorUtils;
 import com.tencent.qcloud.ui.TemplateTitle;
-import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,13 +50,11 @@ public class ImagePreviewActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
     private void showImage(){

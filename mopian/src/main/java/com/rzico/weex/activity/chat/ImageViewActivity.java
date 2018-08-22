@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.rzico.weex.R;
 import com.rzico.weex.utils.chat.FileUtil;
-import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 
@@ -44,13 +43,11 @@ public class ImageViewActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
     private Bitmap getImage(String path){
         final BitmapFactory.Options options = new BitmapFactory.Options();

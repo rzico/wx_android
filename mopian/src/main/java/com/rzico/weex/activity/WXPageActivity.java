@@ -199,7 +199,6 @@ public class WXPageActivity extends AbsWeexActivity implements
       mShakeDetector.start((SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE));
       mIsShakeDetectorStarted = true;
     }
-    MobclickAgent.onResume(this);
   }
 
   @Override
@@ -209,7 +208,6 @@ public class WXPageActivity extends AbsWeexActivity implements
       mShakeDetector.stop();
       mIsShakeDetectorStarted = false;
     }
-    MobclickAgent.onPause(this);
   }
 
   private String getUrl(Uri uri) {

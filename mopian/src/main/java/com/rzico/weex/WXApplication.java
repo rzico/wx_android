@@ -3,8 +3,10 @@ package com.rzico.weex;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
@@ -52,8 +54,6 @@ import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.commonsdk.UMConfigure;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
@@ -64,9 +64,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-
 import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
-
 
 public class WXApplication extends Application {
 
@@ -108,6 +106,7 @@ public class WXApplication extends Application {
 //    UMConfigure.init(getContext(), "5b3b22b18f4a9d7720000156","Android", UMConfigure.DEVICE_TYPE_PHONE, null);
 //    UMConfigure.setLogEnabled(true);
 //    MobclickAgent.setScenarioType(getContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
+
     context = getApplicationContext();
     if(MsfSdkUtils.isMainProcess(this)) {
       TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
@@ -119,6 +118,9 @@ public class WXApplication extends Application {
           }
         }
       });
+
+
+
     }
 
 //    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
@@ -172,8 +174,6 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("phone", PhoneModule.class);
       WXSDKEngine.registerModule("pay", PayModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
-
-
     } catch (WXException e) {
       e.printStackTrace();
     }
@@ -278,5 +278,4 @@ public class WXApplication extends Application {
   public static void setUid(String uid) {
     WXApplication.uid = uid;
   }
-
 }

@@ -18,7 +18,7 @@ public class WeexUriAdapter implements URIAdapter {
     public Uri rewrite(WXSDKInstance instance, String type, Uri uri) {
         //file://resources/fonts/iconfont.ttf
         String path = uri.toString();
-        if(path.startsWith("file://") && path.endsWith(".ttf")){//这里处理了字体路径
+        if(path.startsWith("file://") && !path.startsWith("file:///android_asset") && path.endsWith(".ttf")){//这里处理了字体路径
             path = "file://" + path.replace( "file://", PathUtils.getResPath(WXApplication.getActivity()));
             uri = Uri.parse(path);
         }

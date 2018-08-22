@@ -6,12 +6,14 @@ import java.util.TimerTask;
 import android.media.AudioManager;  
 import android.media.MediaPlayer;  
 import android.media.MediaPlayer.OnBufferingUpdateListener;  
-import android.media.MediaPlayer.OnCompletionListener;  
-import android.os.Handler;  
+import android.media.MediaPlayer.OnCompletionListener;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.Message;  
 import android.util.Log;  
 import android.widget.SeekBar;
 
+import com.rzico.weex.WXApplication;
 import com.taobao.weex.bridge.JSCallback;
 
 public class Player implements OnBufferingUpdateListener,  
@@ -72,9 +74,20 @@ public class Player implements OnBufferingUpdateListener,
         }  catch (Exception e){
             e.printStackTrace();
         }
-    }  
-  
-      
+    }
+
+    public void playUri(Uri uri)
+    {
+        try {
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(WXApplication.getContext(),uri);
+            mediaPlayer.prepare();//prepare之后自动播放
+            //mediaPlayer.start();
+        }  catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public void pause()  
     {  
         mediaPlayer.pause();  
