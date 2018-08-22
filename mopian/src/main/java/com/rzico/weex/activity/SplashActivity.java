@@ -250,10 +250,11 @@ public class SplashActivity extends BaseActivity {
     private void handlerFrist() {
         //首先判断本地资源包是不是初始化的
         //这里作判断处理
-        new XRequest(SplashActivity.this, "weex/common/resources.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(SplashActivity.this, "/versionInfo/resources.do").setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 try {
+                    System.out.println(result);
                     Launch launch = new Gson().fromJson(result, Launch.class);
                     if (launch != null) {
 
@@ -277,35 +278,35 @@ public class SplashActivity extends BaseActivity {
                     toNext();
                 }
                 //获取主页导航路由的路径
-                new XRequest(SplashActivity.this, "weex/common/router.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
-                    @Override
-                    public void onSuccess(BaseActivity activity, String result, String type) {
-                        try {
-
-                            MainUrl mainUrl = new Gson().fromJson(result, MainUrl.class);
-                            Constant.index1 = handleUrl(mainUrl.getData().getTabnav().getHome());
-                            Constant.index2 = handleUrl(mainUrl.getData().getTabnav().getFriend());
-                            Constant.index3 = handleUrl(mainUrl.getData().getTabnav().getMessage());
-                            Constant.index4 = handleUrl(mainUrl.getData().getTabnav().getMember());
-
-                            Constant.center = handleUrl(mainUrl.getData().getTabnav().getAdd());
-
-                            SharedUtils.saveIndex1(Constant.index1);
-                            SharedUtils.saveIndex2(Constant.index2);
-                            SharedUtils.saveIndex3(Constant.index3);
-                            SharedUtils.saveIndex4(Constant.index4);
-                            SharedUtils.saveCenter(Constant.center);
-
-                        } catch (Exception e) {
-                            Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFail(BaseActivity activity, String cacheData, int code) {
-                        Toast.makeText(SplashActivity.this, "网络加载失败，请检查网络", Toast.LENGTH_SHORT).show();
-                    }
-                }).execute();
+//                new XRequest(SplashActivity.this, "weex/common/router.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+//                    @Override
+//                    public void onSuccess(BaseActivity activity, String result, String type) {
+//                        try {
+//
+//                            MainUrl mainUrl = new Gson().fromJson(result, MainUrl.class);
+//                            Constant.index1 = handleUrl(mainUrl.getData().getTabnav().getHome());
+//                            Constant.index2 = handleUrl(mainUrl.getData().getTabnav().getFriend());
+//                            Constant.index3 = handleUrl(mainUrl.getData().getTabnav().getMessage());
+//                            Constant.index4 = handleUrl(mainUrl.getData().getTabnav().getMember());
+//
+//                            Constant.center = handleUrl(mainUrl.getData().getTabnav().getAdd());
+//
+//                            SharedUtils.saveIndex1(Constant.index1);
+//                            SharedUtils.saveIndex2(Constant.index2);
+//                            SharedUtils.saveIndex3(Constant.index3);
+//                            SharedUtils.saveIndex4(Constant.index4);
+//                            SharedUtils.saveCenter(Constant.center);
+//
+//                        } catch (Exception e) {
+//                            Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFail(BaseActivity activity, String cacheData, int code) {
+//                        Toast.makeText(SplashActivity.this, "网络加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+//                    }
+//                }).execute();
             }
 
             @Override
