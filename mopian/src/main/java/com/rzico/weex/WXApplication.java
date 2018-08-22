@@ -20,6 +20,7 @@ import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.module.AudioModule;
 import com.rzico.weex.module.LivePlayerModule;
 import com.rzico.weex.module.MapModule;
+import com.rzico.weex.module.PayModule;
 import com.rzico.weex.module.PhoneModule;
 import com.rzico.weex.module.PrintModule;
 import com.rzico.weex.module.WXEventModule;
@@ -169,6 +170,7 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("album", AlbumModule.class);
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
+      WXSDKEngine.registerModule("pay", PayModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
 
 
