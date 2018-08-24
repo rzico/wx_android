@@ -85,7 +85,22 @@ public class PayModule extends WXModule {
 
 
     @JSMethod
-    public void pay(String title, String type, double amount, final JSCallback callback){
+    public void posPay(double amount){
+        try {
+            String transApp = "POS 通";
+            String transType = "POS通";
+
+            String transData = "{\"amt\":\"" + amount + "\", \"isNeedPrintReceipt\":\"false\", \"tradeType\":\"useScan\"}";
+            org.json.JSONObject json = null;
+            json = new org.json.JSONObject(transData);
+            AppHelper.callTrans(getActivity(), transApp, transType, json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @JSMethod
+    public void pay( double amount, final JSCallback callback){
         PayModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
@@ -107,7 +122,7 @@ public class PayModule extends WXModule {
             public void onPayError(@NonNull String errorMessage) {
                 callback.invoke(new Message().error(errorMessage));
             }
-        }).sendPay(title, type, amount);
+        }).sendPay("银行卡收款", "消费", amount);
     }
 
 

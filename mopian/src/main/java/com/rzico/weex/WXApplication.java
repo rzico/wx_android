@@ -213,7 +213,6 @@ public class WXApplication extends Application {
     x.Ext.init(this);
     //x.Ext.setDebug(false);
     x.Ext.setDebug(BuildConfig.DEBUG);
-    MobSDK.init(this, Constant.shareAppId,Constant.shareAppSecret);
 
   }
 
