@@ -32,6 +32,7 @@ import com.rzico.weex.module.JSCallBaskManager;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.rzico.weex.R;
 import com.rzico.weex.module.AlbumModule;
+import com.rzico.weex.module.PayModule;
 import com.rzico.weex.module.WXEventModule;
 import com.rzico.weex.utils.Player;
 import com.rzico.weex.utils.Utils;
@@ -44,6 +45,7 @@ import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.ui.component.NestedContainer;
 import com.taobao.weex.utils.WXSoInstallMgrSdk;
+import com.ums.AppHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -295,6 +297,8 @@ public class WXPageActivity extends AbsWeexActivity implements
     }
     if(requestCode == REQUEST_PHOTOHANDLER || requestCode == REQUEST_CROP){//而代表请求裁剪
       AlbumModule.get().onActivityResult(requestCode, resultCode, data);
+    }else if (AppHelper.TRANS_REQUEST_CODE == requestCode){
+      PayModule.get().onActivityResult(requestCode, resultCode, data);
     }else{
       WXEventModule.get().onActivityResult(requestCode, resultCode, data);
     }

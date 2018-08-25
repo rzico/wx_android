@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.rzico.weex.R;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.module.AlbumModule;
+import com.rzico.weex.module.PayModule;
 import com.rzico.weex.module.WXEventModule;
 import com.rzico.weex.net.session.SessionOutManager;
 import com.rzico.weex.utils.PathUtils;
@@ -24,6 +25,7 @@ import com.rzico.weex.utils.weex.constants.Constants;
 import com.taobao.weex.IWXRenderListener;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.common.WXRenderStrategy;
+import com.ums.AppHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -140,6 +142,8 @@ public class RouterActivity extends AbsWeexActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_PHOTOHANDLER || requestCode == REQUEST_CROP) {//而代表请求裁剪
             AlbumModule.get().onActivityResult(requestCode, resultCode, data);
+        }else if (AppHelper.TRANS_REQUEST_CODE == requestCode){
+            PayModule.get().onActivityResult(requestCode, resultCode, data);
         }else {
             WXEventModule.get().onActivityResult(requestCode, resultCode, data);
         }

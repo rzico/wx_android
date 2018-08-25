@@ -153,4 +153,5 @@ dependencies {
     //    弹幕
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
     compile 'com.meizu.flyme.internet:push-internal:3.6.3@aar'
+    compile files('libs/sdk4upos_20180411_mix.jar')
 }

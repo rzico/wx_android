@@ -1,9 +1,11 @@
 package com.rzico.weex.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -17,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.karumi.dexter.Dexter;
@@ -67,12 +70,15 @@ import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.rzico.weex.model.event.MessageBus;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
+import com.ums.AppHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
 import org.xutils.x;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,6 +106,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private final String MSG = "weex_msg";
     private final String MY = "weex_my";
     private Map<String, WXSDKInstance> wxsdkInstanceMap = null;
+
+    private LinearLayout ll_bottom;
 
 
     private boolean canReload = true;
@@ -459,6 +467,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void initView() {
+        ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
 
         rgGroupHomeIm = (ImageView) findViewById(R.id.rg_group_home_im);
         rgGroupFriendIm = (ImageView) findViewById(R.id.rg_group_vip_im);
@@ -481,6 +490,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
         rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
         rgGroupMyIm.setImageResource(R.mipmap.ico_my);
+
+        ll_bottom.setVisibility(Constant.isShowBottom ? View.VISIBLE : View.GONE);
         initEvent();
         //默认首页
         setSelectTab(0);
@@ -507,6 +518,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupFriendTv.setTextColor(getResources().getColor(R.color.text_default));
                 rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
+
                 break;
             case 1:
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
@@ -518,6 +530,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 rgGroupFriendTv.setTextColor(getResources().getColor(R.color.wxColor));
                 rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
                 rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
+
                 break;
             case 2:
                 rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
@@ -782,7 +795,60 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                handleDecodeInternally(result.getContents());
 //            }
 //        }
+        if (Activity.RESULT_OK != resultCode) {
+            showToast("调用失败");
+            return;
+        }
+//        if (data == null || data.getExtras() == null
+//                || data.getExtras().getString("result") == null) {
+//            //走查询交易
+//            if (isCallQuery) {
+//                callQuery(requestCode);
+//                isCallQuery = false;
+//            }
+//            return;
+//        }
 
+        if(AppHelper.TRANS_REQUEST_CODE == requestCode){
+
+            if (Activity.RESULT_OK == resultCode) {
+                if (null != data) {
+                    StringBuilder result = new StringBuilder();
+                    Map<String,String> map = AppHelper.filterTransResult(data);
+                    result.append(AppHelper.TRANS_APP_NAME + ":" +map.get(AppHelper.TRANS_APP_NAME) + "\r\n");
+                    result.append(AppHelper.TRANS_BIZ_ID + ":" +map.get(AppHelper.TRANS_BIZ_ID) + "\r\n");
+                    result.append(AppHelper.RESULT_CODE + ":" +map.get(AppHelper.RESULT_CODE) + "\r\n");
+                    result.append(AppHelper.RESULT_MSG + ":" +map.get(AppHelper.RESULT_MSG) + "\r\n");
+                    result.append(AppHelper.TRANS_DATA + ":" +map.get(AppHelper.TRANS_DATA) + "\r\n");
+
+                    if (null != result) {
+//                        if(listener != null){
+//                            listener.onPaySuccess(result.toString());
+//                        }
+                        showToast(result.toString());
+                    }
+                }else{
+                    showToast("Intent is null");
+                }
+            }else{
+                showToast("resultCode is not RESULT_OK");
+            }
+        } else if(AppHelper.PRINT_REQUEST_CODE == requestCode){
+            if (Activity.RESULT_OK == resultCode) {
+                if (null != data) {
+                    StringBuilder result = new StringBuilder();
+                    String printCode = data.getStringExtra("resultCode");
+                    result.append("resultCode:" + printCode);
+                    if (null != result) {
+                        showToast(result.toString());
+                    }
+                }else{
+                    showToast("Intent is null");
+                }
+            }else{
+                showToast("resultCode is not RESULT_OK");
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
