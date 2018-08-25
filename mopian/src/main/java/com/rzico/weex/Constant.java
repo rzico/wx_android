@@ -58,6 +58,7 @@ public class Constant {
     //   im的用户id
     public static String imUserId = "";
 
+    public static boolean isShowBottom = false;
 
     public static String app = AllConstant.PACKNAME;
     public static final String endpoint = "http://oss-cn-shanghai.aliyuncs.com";
