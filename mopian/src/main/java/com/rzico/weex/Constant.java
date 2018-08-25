@@ -19,8 +19,8 @@ import java.util.Map;
  */
 public class Constant {
 
-    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.PINE" />
-    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.PINE";
+    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.LAIYA" />
+    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.LAIYA";
 
     public static final String wxURL = "http://cdnx.ahxinying.cn/weex/app/";
 
@@ -47,7 +47,7 @@ public class Constant {
 
 //    public static Handler loginHandler = null;
     //菜单路径
-    public static  String index1 = "view/circle/circle.js";
+    public static  String index1 = "view/index.js";
     public static  String index2 = "view/mall/mall.js";
     public static  String index3 = "view/messagecenter/messagecenter.js";
     public static  String index4 = "view/mine/mine.js";
@@ -57,6 +57,8 @@ public class Constant {
     public static long userId = 0;
     //   im的用户id
     public static String imUserId = "";
+
+    public static String appId = "";
 
     public static boolean isShowBottom = false;
 
@@ -81,7 +83,7 @@ public class Constant {
 
     //生产环境服务器地址
     public static final String SERVER = "http://111.230.209.17:8080/laiya";
-    public static final String SCENE_NAME = "pine";
+    public static final String SCENE_NAME = "laiya";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
     public static boolean isLoginAcitivity = false;

@@ -1,4 +1,4 @@
-package com.rzico.pine.wxapi;
+package com.rzico.laiya.wxapi;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -109,7 +109,7 @@
                 <action android:name="com.alibaba.weex.protocol.openurl" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.taobao.android.intent.category.PINE" />
+                <category android:name="com.taobao.android.intent.category.LAIYA" />
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
@@ -159,14 +159,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
-            android:name="com.rzico.pine.wxapi.WXEntryActivity"
+            android:name="com.rzico.laiya.wxapi.WXEntryActivity"
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.rzico.pine.wxapi.WXPayEntryActivity"
+            android:name="com.rzico.laiya.wxapi.WXPayEntryActivity"
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
