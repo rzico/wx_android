@@ -43,23 +43,23 @@
 
 
     <!-- mi push -->
-    <permission android:name="com.rzico.pine.permission.MIPUSH_RECEIVE"
+    <permission android:name="com.rzico.laiya.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
     <!--这里 com.tencent.imsdk 改成 App 的包名-->
-    <uses-permission android:name="com.rzico.pine.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="com.rzico.laiya.permission.MIPUSH_RECEIVE" />
     <!--这里 com.tencent.imsdk 改成 App 的包名-->
 
     <!--mz push-->
     <!-- 兼容flyme5.0以下版本，魅族内部集成pushSDK必填，不然无法收到消息-->
     <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE"></uses-permission>
-    <permission android:name="com.rzico.pine.push.permission.MESSAGE" android:protectionLevel="signature"/>
-    <uses-permission android:name="com.rzico.pine.push.permission.MESSAGE"></uses-permission>
+    <permission android:name="com.rzico.laiya.push.permission.MESSAGE" android:protectionLevel="signature"/>
+    <uses-permission android:name="com.rzico.laiya.push.permission.MESSAGE"></uses-permission>
 
     <!--  兼容flyme3.0配置权限-->
     <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
-    <permission android:name="com.rzico.pine.permission.C2D_MESSAGE"
+    <permission android:name="com.rzico.laiya.permission.C2D_MESSAGE"
         android:protectionLevel="signature"></permission>
-    <uses-permission android:name="com.rzico.pine.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="com.rzico.laiya.permission.C2D_MESSAGE"/>
 
 
     <uses-feature android:name="android.hardware.camera"

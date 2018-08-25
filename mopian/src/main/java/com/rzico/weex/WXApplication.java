@@ -76,7 +76,7 @@ public class WXApplication extends Application {
 
   private  static List<BaseActivity> activityList = new LinkedList<BaseActivity>();
 
-  private final String tag = "pine";
+  private final String tag = "laiya";
 
 
   private static final String CACHE_NAME = "cache_path";
@@ -192,6 +192,7 @@ public class WXApplication extends Application {
     //设置主题
 
   }
+
   /**
    * @param enable enable remote debugger. valid only if host not to be "DEBUG_SERVER_HOST".
    *               true, you can launch a remote debugger and inspector both.

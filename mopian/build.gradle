@@ -6,7 +6,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.pine"
+        applicationId "com.rzico.laiya"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 327
@@ -33,15 +33,15 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("tools/pine.jks")
+            storeFile file("tools/laiya.jks")
             storePassword "123456"
-            keyAlias "pine"
+            keyAlias "laiya"
             keyPassword "123456"
         }
         debug {
-            storeFile file("tools/pine.jks")
+            storeFile file("tools/laiya.jks")
             storePassword "123456"
-            keyAlias "pine"
+            keyAlias "laiya"
             keyPassword "123456"
         }
 //        release {
