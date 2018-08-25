@@ -45,7 +45,6 @@ import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.ui.component.NestedContainer;
 import com.taobao.weex.utils.WXSoInstallMgrSdk;
-import com.umeng.analytics.MobclickAgent;
 import com.ums.AppHelper;
 
 import org.greenrobot.eventbus.EventBus;

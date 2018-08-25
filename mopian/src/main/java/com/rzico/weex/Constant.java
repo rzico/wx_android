@@ -45,6 +45,7 @@ public class Constant {
     public static final String mzpushAppKey = "5991759081666";
     public static final long mzpushbussid = 2795;
 
+    public static final String appId = "";
 
 //    public static Handler loginHandler = null;
 

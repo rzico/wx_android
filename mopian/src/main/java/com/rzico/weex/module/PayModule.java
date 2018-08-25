@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.rzico.weex.Constant;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.PuzzleActivity;
 import com.rzico.weex.constant.AllConstant;
@@ -26,6 +27,7 @@ import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
 import com.ums.AppHelper;
+import com.ums.upos.sdk.utils.json.JSONUtils;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.model.AspectRatio;
 
@@ -40,6 +42,7 @@ import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -83,9 +86,25 @@ public class PayModule extends WXModule {
 
     public Activity getActivity(){return (Activity) mWXSDKInstance.getContext();}
 
-
+    /**
+     * 退货
+     * @param refNo
+     * @param date
+     * @param tradeYear
+     * @param amount
+     * @param callback
+     */
     @JSMethod
-    public void pay(String title, String type, double amount, final JSCallback callback){
+    public void returnGoods(String refNo,String date,String tradeYear, double amount, final JSCallback callback){
+
+//            String transData = "{\"amt\":\"" + amount + "\", \"isNeedPrintReceipt\":\"false\", \"tradeType\":\"useScan\"}";
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("amt", String.valueOf(amount));
+        jsonObject.put("appId", Constant.appId);
+        jsonObject.put("refNo", refNo);
+        jsonObject.put("date", date);
+        jsonObject.put("tradeYear", tradeYear);
         PayModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
@@ -107,12 +126,116 @@ public class PayModule extends WXModule {
             public void onPayError(@NonNull String errorMessage) {
                 callback.invoke(new Message().error(errorMessage));
             }
-        }).sendPay(title, type, amount);
+        }).sendPay("公共资源", "退货",jsonObject);
+    }
+
+    /**
+     * 退货
+     * @param orgTraceNo
+     * @param callback
+     */
+    @JSMethod
+    public void revoke(String orgTraceNo, final JSCallback callback){
+
+//            String transData = "{\"amt\":\"" + amount + "\", \"isNeedPrintReceipt\":\"false\", \"tradeType\":\"useScan\"}";
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("appId", Constant.appId);
+        jsonObject.put("orgTraceNo", orgTraceNo);
+        PayModule.get().init(new RxGalleryFinalCropListener() {
+            @NonNull
+            @Override
+            public Activity getSimpleActivity() {
+                return getActivity();
+            }
+
+            @Override
+            public void onPayCancel() {
+                callback.invoke(new Message().error("用户取消"));
+            }
+
+            @Override
+            public void onPaySuccess(String data) {
+                callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPayError(@NonNull String errorMessage) {
+                callback.invoke(new Message().error(errorMessage));
+            }
+        }).sendPay("公共资源", "撤销",jsonObject);
+    }
+
+    @JSMethod
+    public void posPay(String extBillNo, String extOrderNo, double amount, final JSCallback callback){
+
+//            String transData = "{\"amt\":\"" + amount + "\", \"isNeedPrintReceipt\":\"false\", \"tradeType\":\"useScan\"}";
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("amt", String.valueOf(amount));
+        jsonObject.put("appId", Constant.appId);
+        jsonObject.put("extBillNo", extBillNo);
+        jsonObject.put("extOrderNo", extOrderNo);
+        PayModule.get().init(new RxGalleryFinalCropListener() {
+            @NonNull
+            @Override
+            public Activity getSimpleActivity() {
+                return getActivity();
+            }
+
+            @Override
+            public void onPayCancel() {
+                callback.invoke(new Message().error("用户取消"));
+            }
+
+            @Override
+            public void onPaySuccess(String data) {
+                callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPayError(@NonNull String errorMessage) {
+                callback.invoke(new Message().error(errorMessage));
+            }
+        }).sendPay("POS 通", "POS通", jsonObject);
+    }
+
+    @JSMethod
+    public void pay(String extBillNo, String extOrderNo, double amount, final JSCallback callback){
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("amt", String.valueOf(amount));
+        jsonObject.put("appId", Constant.appId);
+        jsonObject.put("extBillNo", extBillNo);
+        jsonObject.put("extOrderNo", extOrderNo);
+        PayModule.get().init(new RxGalleryFinalCropListener() {
+            @NonNull
+            @Override
+            public Activity getSimpleActivity() {
+                return getActivity();
+            }
+
+            @Override
+            public void onPayCancel() {
+                callback.invoke(new Message().error("用户取消"));
+            }
+
+            @Override
+            public void onPaySuccess(String data) {
+                callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPayError(@NonNull String errorMessage) {
+                callback.invoke(new Message().error(errorMessage));
+            }
+        }).sendPay("银行卡收款", "消费",jsonObject);
     }
 
 
     @JSMethod
-    public void select(String title, String orderNo, double amount, final JSCallback callback){
+    public void select( String extOrderNo, double amount, final JSCallback callback){
+
         PayModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
@@ -134,7 +257,7 @@ public class PayModule extends WXModule {
             public void onPayError(@NonNull String errorMessage) {
                 callback.invoke(new Message().error(errorMessage));
             }
-        }).callQuery(title, orderNo, amount);
+        }).callQuery("POS 通", extOrderNo, amount);
     }
 
     @JSMethod
@@ -259,11 +382,13 @@ public class PayModule extends WXModule {
         AppHelper.callPrint(getActivity(), fname);
     }
 
-    public void sendPay(String title, String type, double amount){
+    public void sendPay(String title, String type, JSONObject jsonObject){
         try {
             String transApp = title;
             String transType = type;
-            String transData = "{\"amt\":\"" + amount + "\"}";
+//            HashMap<String, String> transMap = new HashMap<>();
+
+            String transData = jsonObject.toJSONString();
             org.json.JSONObject json = null;
             json = new org.json.JSONObject(transData);
             AppHelper.callTrans(getActivity(), transApp, transType, json);
