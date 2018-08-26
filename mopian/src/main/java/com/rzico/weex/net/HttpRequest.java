@@ -14,6 +14,7 @@ import com.rzico.weex.model.info.Message;
 import com.rzico.weex.net.session.SessionOutManager;
 import com.rzico.weex.net.session.TaskBean;
 import com.rzico.weex.utils.LoginUtils;
+import com.rzico.weex.utils.MD5Utils;
 
 import org.xutils.common.Callback;
 import org.xutils.ex.HttpException;
@@ -142,7 +143,7 @@ public class HttpRequest {
        String app= Constant.app;
        String tsp = String.valueOf(System.currentTimeMillis());
 
-       String tkn = MD5.Md5(uid + app + tsp + key);
+       String tkn = MD5Utils.getMD5Str(uid + app + tsp + key);
 
         params.addHeader("x-uid", uid);//设备号
         params.addHeader("x-app", app);//包名

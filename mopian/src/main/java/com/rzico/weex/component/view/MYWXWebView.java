@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.model.event.MessageBus;
+import com.rzico.weex.utils.MD5Utils;
 import com.rzico.weex.utils.PhoneUtil;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.http.WXHttpUtil;
@@ -69,7 +70,7 @@ public class MYWXWebView implements IWebView {
         String app= Constant.app;
         String tsp = String.valueOf(System.currentTimeMillis());
 
-        String tkn = MD5.Md5(uid + app + tsp + key);
+        String tkn = MD5Utils.getMD5Str(uid + app + tsp + key);
 
         extraHeaders.put("x-uid", uid);//设备号
         extraHeaders.put("x-app", app);//包名

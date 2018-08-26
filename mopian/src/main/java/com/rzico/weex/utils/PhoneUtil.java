@@ -61,7 +61,7 @@ public class PhoneUtil {
         String uid=getDeviceId(context);
         String packetName= Constant.app;
         String key="myjsy2014$$";
-        String xkey = MD5.Md5(uid+packetName+key);
+        String xkey = MD5Utils.getMD5Str(uid+packetName+key);
         return xkey;
     }
 }
