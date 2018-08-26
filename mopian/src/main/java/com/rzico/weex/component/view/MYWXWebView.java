@@ -273,6 +273,9 @@ public class MYWXWebView implements IWebView {
                                     }else if(one[0].equals("topic")){
                                         // 专栏 file://view/topic/index.js?id=%@
                                         url = "file://view/perHome/perHome.js?id=" + two[1];
+                                    }else if(one[0].equals("product")){
+                                        // 专栏 file://view/topic/index.js?id=%@
+                                        url = "file://view/pdtdetail/pdtdetail.js?id=" + two[1];
                                     }
                                     else if(one[0].equals("buyGood")){
                                         //一键购
