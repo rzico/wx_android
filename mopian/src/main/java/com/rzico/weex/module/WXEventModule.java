@@ -1550,11 +1550,7 @@ public class WXEventModule extends WXModule {
         //判断当前页面是不是weex页面
     }
 
-    @JSMethod
-    public void getss(){
-
-    }
-    @JSMethod
+    @JSMethod(uiThread = false)
     public String md5(String data){
         return Utils.getMD5(data);
     }

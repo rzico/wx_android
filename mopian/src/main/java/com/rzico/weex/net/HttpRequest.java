@@ -5,36 +5,22 @@ import android.content.Intent;
 
 import com.google.gson.Gson;
 import com.rzico.weex.Constant;
-import com.rzico.weex.WXActivityManager;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LoginActivity;
 import com.rzico.weex.db.DbUtils;
-import com.rzico.weex.db.bean.Redis;
-import com.rzico.weex.db.notidmanager.DbCacheBean;
-import com.rzico.weex.db.notidmanager.NotIdManager;
 import com.rzico.weex.model.RequestBean;
-import com.rzico.weex.model.info.BaseEntity;
 import com.rzico.weex.model.info.Message;
 import com.rzico.weex.net.session.SessionOutManager;
 import com.rzico.weex.net.session.TaskBean;
 import com.rzico.weex.utils.LoginUtils;
-import com.rzico.weex.utils.MD5;
-import com.rzico.weex.utils.PhoneUtil;
-import com.rzico.weex.utils.SharedUtils;
-import com.rzico.weex.utils.Utils;
 
 import org.xutils.common.Callback;
-import org.xutils.ex.DbException;
 import org.xutils.ex.HttpException;
 import org.xutils.http.RequestParams;
-import org.xutils.http.body.RequestBody;
 import org.xutils.x;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
