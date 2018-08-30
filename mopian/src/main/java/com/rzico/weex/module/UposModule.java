@@ -4,78 +4,55 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.rzico.weex.Constant;
-import com.rzico.weex.WXApplication;
-import com.rzico.weex.activity.PuzzleActivity;
-import com.rzico.weex.constant.AllConstant;
 import com.rzico.weex.model.info.Message;
-import com.rzico.weex.model.info.VideoBean;
-import com.rzico.weex.utils.PathUtils;
-import com.rzico.weex.utils.photo.PhotoHandle;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
 import com.ums.AppHelper;
-import com.ums.upos.sdk.utils.json.JSONUtils;
-import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.model.AspectRatio;
+import com.ums.upos.sdk.cardslot.CardInfoEntity;
+import com.ums.upos.sdk.cardslot.CardSlotManager;
+import com.ums.upos.sdk.cardslot.CardSlotTypeEnum;
+import com.ums.upos.sdk.cardslot.CardTypeEnum;
+import com.ums.upos.sdk.cardslot.OnCardInfoListener;
+import com.ums.upos.sdk.exception.CallServiceException;
+import com.ums.upos.sdk.exception.SdkException;
+import com.ums.upos.sdk.scanner.OnScanListener;
+import com.ums.upos.sdk.scanner.ScannerConfig;
+import com.ums.upos.sdk.scanner.ScannerManager;
 
 import org.json.JSONException;
-import org.xutils.common.Callback;
-import org.xutils.common.util.FileUtil;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
 
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.Serializable;
-import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.UUID;
-
-import cn.finalteam.rxgalleryfinal.RxGalleryFinal;
-import cn.finalteam.rxgalleryfinal.RxGalleryFinalApi;
-import cn.finalteam.rxgalleryfinal.bean.MediaBean;
-import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType;
-import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable;
-import cn.finalteam.rxgalleryfinal.rxbus.event.ImageMultipleResultEvent;
-import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
-
-import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
+import java.util.Set;
 
 /**
  * Created by Jinlesoft on 2017/9/14.
  */
 
-public class PayModule extends WXModule {
+public class UposModule extends WXModule {
 
     private RxGalleryFinalCropListener listener = null;
 
 
     private static final class SimpleRxGalleryFinalHolder {
-        private static final PayModule SIMPLE_RX_GALLERY_FINAL = new PayModule();
+        private static final UposModule SIMPLE_RX_GALLERY_FINAL = new UposModule();
     }
 
-    public static PayModule get() {
+    public static UposModule get() {
         return SimpleRxGalleryFinalHolder.SIMPLE_RX_GALLERY_FINAL;
     }
 
 
-    public PayModule init(RxGalleryFinalCropListener listener) {
+    public UposModule init(RxGalleryFinalCropListener listener) {
         this.listener = listener;
         return this;
     }
@@ -105,7 +82,7 @@ public class PayModule extends WXModule {
         jsonObject.put("refNo", refNo);
         jsonObject.put("date", date);
         jsonObject.put("tradeYear", tradeYear);
-        PayModule.get().init(new RxGalleryFinalCropListener() {
+        UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
             public Activity getSimpleActivity() {
@@ -128,7 +105,41 @@ public class PayModule extends WXModule {
             }
         }).sendPay("公共资源", "退货",jsonObject);
     }
+    /**
+     * 预付卡支付
+     * @param callback
+     */
+    @JSMethod
+    public void pcardPay(double amount, final JSCallback callback){
 
+//            String transData = "{\"amt\":\"" + amount + "\", \"isNeedPrintReceipt\":\"false\", \"tradeType\":\"useScan\"}";
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("appId", Constant.appId);
+        jsonObject.put("amt", String.valueOf(amount));
+        UposModule.get().init(new RxGalleryFinalCropListener() {
+            @NonNull
+            @Override
+            public Activity getSimpleActivity() {
+                return getActivity();
+            }
+
+            @Override
+            public void onPayCancel() {
+                callback.invoke(new Message().error("用户取消"));
+            }
+
+            @Override
+            public void onPaySuccess(String data) {
+                callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPayError(@NonNull String errorMessage) {
+                callback.invoke(new Message().error(errorMessage));
+            }
+        }).sendPay("预付卡", "消费",jsonObject);
+    }
     /**
      * 退货
      * @param orgTraceNo
@@ -142,7 +153,7 @@ public class PayModule extends WXModule {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("appId", Constant.appId);
         jsonObject.put("orgTraceNo", orgTraceNo);
-        PayModule.get().init(new RxGalleryFinalCropListener() {
+        UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
             public Activity getSimpleActivity() {
@@ -176,7 +187,7 @@ public class PayModule extends WXModule {
         jsonObject.put("appId", Constant.appId);
         jsonObject.put("extBillNo", extBillNo);
         jsonObject.put("extOrderNo", extOrderNo);
-        PayModule.get().init(new RxGalleryFinalCropListener() {
+        UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
             public Activity getSimpleActivity() {
@@ -208,7 +219,7 @@ public class PayModule extends WXModule {
         jsonObject.put("appId", Constant.appId);
         jsonObject.put("extBillNo", extBillNo);
         jsonObject.put("extOrderNo", extOrderNo);
-        PayModule.get().init(new RxGalleryFinalCropListener() {
+        UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
             public Activity getSimpleActivity() {
@@ -236,7 +247,7 @@ public class PayModule extends WXModule {
     @JSMethod
     public void select( String extOrderNo, double amount, final JSCallback callback){
 
-        PayModule.get().init(new RxGalleryFinalCropListener() {
+        UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
             public Activity getSimpleActivity() {
@@ -262,7 +273,7 @@ public class PayModule extends WXModule {
 
     @JSMethod
     public void print(final JSCallback callback){
-        PayModule.get().init(new RxGalleryFinalCropListener() {
+        UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
             public Activity getSimpleActivity() {
@@ -290,6 +301,156 @@ public class PayModule extends WXModule {
         super.onActivityCreate();
     }
 
+    CardSlotManager cardSlotManager = null;
+
+    private ScannerManager scannerManager;
+    private Bundle bundle;
+    private int scanner_type = 1;
+
+    @JSMethod
+    private void scan(final JSCallback callback){
+        scannerManager = new ScannerManager();
+        bundle = new Bundle();
+        bundle.putInt(ScannerConfig.COMM_SCANNER_TYPE, scanner_type);
+        bundle.putBoolean(ScannerConfig.COMM_ISCONTINUOUS_SCAN, false);
+        try {
+            scannerManager.stopScan();
+            scannerManager.initScanner(bundle);
+            scannerManager.startScan(30000, new OnScanListener() {
+                @Override
+                public void onScanResult(int i, byte[] bytes) {
+                    //防止用户未扫描直接返回，导致bytes为空
+                    if (bytes != null && !bytes.equals("")) {
+                        callback.invoke(new Message().success(new String(bytes)));
+                    }
+                }
+            });
+
+        } catch (SdkException e) {
+            callback.invoke(new Message().error());
+            e.printStackTrace();
+        } catch (CallServiceException e) {
+            callback.invoke(new Message().error());
+            e.printStackTrace();
+        }
+    }
+
+    @JSMethod
+    private void continuScan(final JSCallback callback){
+        scannerManager = new ScannerManager();
+        bundle = new Bundle();
+        bundle.putInt(ScannerConfig.COMM_SCANNER_TYPE, scanner_type);
+        bundle.putBoolean(ScannerConfig.COMM_ISCONTINUOUS_SCAN, true);
+        try {
+            scannerManager.stopScan();
+            scannerManager.initScanner(bundle);
+            scannerManager.startScan(0, new OnScanListener() {
+                @Override
+                public void onScanResult(int i, byte[] bytes) {
+                    //防止用户未扫描直接返回，导致bytes为空
+                    if (bytes != null && !bytes.equals("")) {
+                        callback.invokeAndKeepAlive(new Message().success(new String(bytes)));
+                    }
+                }
+            });
+
+        } catch (SdkException e) {
+            callback.invokeAndKeepAlive(new Message().error());
+            e.printStackTrace();
+        } catch (CallServiceException e) {
+            callback.invokeAndKeepAlive(new Message().error());
+            e.printStackTrace();
+        }
+    }
+
+    @JSMethod
+    private void stopScan(JSCallback callback){
+        if(scannerManager != null){
+            try {
+                scannerManager.stopScan();
+                callback.invoke(new Message().success(""));
+            } catch (SdkException e) {
+                callback.invoke(new Message().error());
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (CallServiceException e) {
+                callback.invoke(new Message().error());
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @JSMethod
+    private void searchCardInfo(final JSCallback callback) {
+//        show("开始寻卡\n");
+        if(cardSlotManager == null){
+            cardSlotManager = new CardSlotManager();
+        }
+        Set<CardSlotTypeEnum> slotTypes = new HashSet<CardSlotTypeEnum>();
+        slotTypes.add(CardSlotTypeEnum.SWIPE);
+        Set<CardTypeEnum> cardTypes = new HashSet<CardTypeEnum>();
+        cardTypes.add(CardTypeEnum.MAG_CARD);
+        int timeout = 0;
+
+        try {
+            Map<CardSlotTypeEnum, Bundle> options = new HashMap<CardSlotTypeEnum, Bundle>();
+            Bundle bundle = new Bundle();
+            options.put(CardSlotTypeEnum.SWIPE, bundle);
+            cardSlotManager.setConfig(options);
+            cardSlotManager.readCard(slotTypes, cardTypes, timeout,
+                    new OnCardInfoListener() {
+
+                        @Override
+                        public void onCardInfo(int arg0, CardInfoEntity arg1) {
+                            if (0 != arg0) {
+                                try {
+                                    cardSlotManager.stopRead();
+                                    searchCardInfo(callback);
+                                } catch (SdkException e) {
+                                    callback.invoke(new Message().error());
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                } catch (CallServiceException e) {
+                                    callback.invoke(new Message().error());
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                switch (arg1.getActuralEnterType()) {
+                                    case MAG_CARD:
+                                        callback.invoke(new Message().success("磁道1：" + arg1.getTk1()
+                                                + "\n" + "磁道2：" + arg1.getTk2()
+                                                + "\n" + "磁道3：" + arg1.getTk3()+"\n"));
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                try {
+                                    cardSlotManager.stopRead();
+                                } catch (SdkException e) {
+                                    callback.invoke(new Message().error());
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                } catch (CallServiceException e) {
+                                    callback.invoke(new Message().error());
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }, null);
+        } catch (SdkException e) {
+            callback.invoke(new Message().error());
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (CallServiceException e) {
+            callback.invoke(new Message().error());
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
 
 
 

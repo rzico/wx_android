@@ -3,18 +3,10 @@ package com.rzico.weex;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
-import com.huawei.android.pushagent.api.PushManager;
-import com.mob.MobSDK;
-import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
@@ -22,7 +14,7 @@ import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.module.AudioModule;
 import com.rzico.weex.module.LivePlayerModule;
 import com.rzico.weex.module.MapModule;
-import com.rzico.weex.module.PayModule;
+import com.rzico.weex.module.UposModule;
 import com.rzico.weex.module.PhoneModule;
 import com.rzico.weex.module.PrintModule;
 import com.rzico.weex.module.WXEventModule;
@@ -40,31 +32,17 @@ import com.taobao.weex.common.WXException;
 import com.taobao.weex.ui.SimpleComponentHolder;
 import com.taobao.weex.ui.component.WXBasicComponentType;
 
-import com.tencent.imsdk.TIMConnListener;
-import com.tencent.imsdk.TIMConversation;
-import com.tencent.imsdk.TIMGroupEventListener;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
-import com.tencent.imsdk.TIMGroupTipsElem;
-import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMOfflinePushListener;
 import com.tencent.imsdk.TIMOfflinePushNotification;
-import com.tencent.imsdk.TIMRefreshListener;
-import com.tencent.imsdk.TIMSdkConfig;
-import com.tencent.imsdk.TIMUserConfig;
-import com.tencent.imsdk.TIMUserStatusListener;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.xutils.x;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-
-import static com.tencent.qcloud.sdk.Constant.SDK_APPID;
 
 public class WXApplication extends Application {
 
@@ -172,7 +150,7 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("album", AlbumModule.class);
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
-      WXSDKEngine.registerModule("pay", PayModule.class);
+      WXSDKEngine.registerModule("upos", UposModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
     } catch (WXException e) {
       e.printStackTrace();
