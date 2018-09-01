@@ -1,36 +1,23 @@
 package com.rzico.weex.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rzico.weex.R;
-import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.module.AlbumModule;
-import com.rzico.weex.module.PayModule;
+import com.rzico.weex.module.UposModule;
 import com.rzico.weex.module.WXEventModule;
-import com.rzico.weex.net.session.SessionOutManager;
-import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.weex.constants.Constants;
-import com.taobao.weex.IWXRenderListener;
-import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.common.WXRenderStrategy;
 import com.ums.AppHelper;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.rzico.weex.Constant.isLoginAcitivity;
 import static com.rzico.weex.utils.photo.PhotoHandle.REQUEST_PHOTOHANDLER;
 import static com.yalantis.ucrop.UCrop.REQUEST_CROP;
 
@@ -143,7 +130,7 @@ public class RouterActivity extends AbsWeexActivity{
         if(requestCode == REQUEST_PHOTOHANDLER || requestCode == REQUEST_CROP) {//而代表请求裁剪
             AlbumModule.get().onActivityResult(requestCode, resultCode, data);
         }else if (AppHelper.TRANS_REQUEST_CODE == requestCode){
-            PayModule.get().onActivityResult(requestCode, resultCode, data);
+            UposModule.get().onActivityResult(requestCode, resultCode, data);
         }else {
             WXEventModule.get().onActivityResult(requestCode, resultCode, data);
         }
