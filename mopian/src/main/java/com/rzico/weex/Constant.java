@@ -27,8 +27,12 @@ public class Constant {
     public static final String resURL = "http://cdnx.ahxinying.cn/";
 
     //    云店wxkey
-    public static final String wxAppId = "wxb438e93d669626a6";
-    public static final String wxAppSecret = "228a1c044aef868e2752f8de8495a48f";
+    public static final String wxAppId = "wx172bb216f6dc653f";
+    public static final String wxAppSecret = "00258936294ef08511ba68fac498cc67";
+
+
+//    public static final String wxAppId = "wxb438e93d669626a6";
+//    public static final String wxAppSecret = "228a1c044aef868e2752f8de8495a48f";
 
     //    云店shareSDK
     public static final String shareAppId = "260ea801ce8a8";
@@ -79,7 +83,8 @@ public class Constant {
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "https://www.ahxinying.cn/";
+    public static final String SERVER = "https://www.jdhone.com/";
+    //public static final String SERVER = "https://www.ahxinying.cn/";
     public static final String SCENE_NAME = "pine";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;

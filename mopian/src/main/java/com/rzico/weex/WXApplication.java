@@ -17,6 +17,8 @@ import com.mob.MobSDK;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.amap.component.WXMapMarkerComponent;
+import com.rzico.weex.component.amap.component.WXMapPolyLineComponent;
+import com.rzico.weex.component.amap.component.WXMapPolygonComponent;
 import com.rzico.weex.component.amap.component.WXMapViewComponent;
 import com.rzico.weex.component.amap.module.WXMapModule;
 import com.rzico.weex.component.view.MYWXWeb;
@@ -156,6 +158,10 @@ public class WXApplication extends Application {
       WXSDKEngine.registerComponent(WXBasicComponentType.WEB, MYWXWeb.class);
       WXSDKEngine.registerComponent("weex-amap", WXMapViewComponent.class);
       WXSDKEngine.registerComponent("weex-amap-marker", WXMapMarkerComponent.class);
+      WXSDKEngine.registerComponent("weex-amap-polygon", WXMapPolygonComponent.class);
+      WXSDKEngine.registerComponent("weex-amap-polyline", WXMapPolyLineComponent.class);
+
+
       WXSDKEngine.registerComponent(
               new SimpleComponentHolder(
                       WXImage.class,
