@@ -40,8 +40,8 @@ public class XRequest {
     String a,b,cc,d,m;
     boolean backend = false;
     public String encodeUrl(String url) {
-        if (url.startsWith("http")) {
-            return url;
+        if (url.startsWith("weex")) {
+            return url.replaceFirst("weex://","http://");
         } else {
             return Constant.helperUrl + url;
         }

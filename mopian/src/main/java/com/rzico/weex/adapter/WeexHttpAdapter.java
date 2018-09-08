@@ -40,7 +40,7 @@ public class WeexHttpAdapter  implements IWXHttpAdapter {
         }else{
             method = request.method;
         }
-        if(request.url.startsWith("http://")){
+        if(request.url.startsWith("http")){
             DefaultWXHttpAdapter defaultWXHttpAdapter = new DefaultWXHttpAdapter();
             defaultWXHttpAdapter.sendRequest(request, listener);
         }else{
