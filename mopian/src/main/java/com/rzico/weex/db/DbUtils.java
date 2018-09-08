@@ -36,7 +36,11 @@ public class DbUtils {
             if( redis == null){
             //现在是默认用userid = 1
             redis = new Redis();
-            redis.setUserId(SharedUtils.readLoginId());//这里要去从服务器获取
+            if (!"systemInfo".equals(key)) {
+                redis.setUserId(SharedUtils.readLoginId());//这里要去从服务器获取
+            } else {
+                redis.setUserId(0);
+            }
             redis.setType(type);
             redis.setKey(key);
             redis.setValue(value);
@@ -44,13 +48,17 @@ public class DbUtils {
             redis.setKeyword(keyword);
             WXApplication.getDb().save(redis);
             }else{
-                redis.setUserId(SharedUtils.readLoginId());//这里要去从服务器获取
+                if (!"systemInfo".equals(key)) {
+                    redis.setUserId(SharedUtils.readLoginId());//这里要去从服务器获取
+                } else {
+                    redis.setUserId(0);
+                }
                 redis.setType(type);
                 redis.setKey(key);
                 redis.setValue(value);
                 redis.setSort(sort);
                 redis.setKeyword(keyword);
-                WXApplication.getDb().update(redis, WhereBuilder.b("key", "=", key).and("type", "=", type), "value", "sort", "keyword");
+                WXApplication.getDb().update(redis, WhereBuilder.b("key", "=", key).and("type", "=", type).and("userId", "=", redis.getUserId()), "value", "sort", "keyword");
             }
             return true;//保存成功
         }else{
@@ -66,16 +74,16 @@ public class DbUtils {
      */
     public static Redis find(String type, String key) throws DbException {
             if(WXApplication.getDb() != null){
+                long uid = 0;
+                if (!"systemInfo".equals(key)) {
+                    uid = SharedUtils.readLoginId();
+                }
 //            List<Redis> data = WXApplication.getDb().selector(Redis.class).findAll();
                 if(type.equals(XRequest.HTTPCACHE)){//如果是保存缓存 则因前端要求 要去掉前缀
                     key = key.replace(Constant.helperUrl,"");
                 }
-                if(type.equals(XRequest.HTTPCACHE) && SharedUtils.readLoginId() == 0){
-                    //这种情况是 被注销了 或者第一次登录了 ， 还是要返回httpcache
-                    return WXApplication.getDb().selector(Redis.class).where("type", "=", type).and("key", "=", key).findFirst();
-                }else {
-                    return WXApplication.getDb().selector(Redis.class).where("userId","=", SharedUtils.readLoginId()).and("type", "=", type).and("key", "=", key).findFirst();
-                }
+
+                return WXApplication.getDb().selector(Redis.class).where("userId","=", uid).and("type", "=", type).and("key", "=", key).findFirst();
             }else{
                 return null;
             }
@@ -84,7 +92,6 @@ public class DbUtils {
     public static List<Redis> findList(String type,  String keyword, String orderBy, int pageSize) throws DbException {
         if(WXApplication.getDb() != null){
 //            List<Redis> data = WXApplication.getDb().selector(Redis.class).findAll();
-
             Selector<Redis> selector = null;
             if(!keyword.equals("")){
                 selector = WXApplication.getDb().selector(Redis.class).where("userId","=", SharedUtils.readLoginId()).and("keyword", "like",  "%" + keyword + "%").orderBy("type", orderBy.equals("desc")).orderBy("sort", orderBy.equals("desc"));

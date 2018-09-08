@@ -32,7 +32,7 @@ import com.rzico.weex.module.JSCallBaskManager;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.rzico.weex.R;
 import com.rzico.weex.module.AlbumModule;
-import com.rzico.weex.module.PayModule;
+import com.rzico.weex.module.UposModule;
 import com.rzico.weex.module.WXEventModule;
 import com.rzico.weex.utils.Player;
 import com.rzico.weex.utils.Utils;
@@ -298,7 +298,7 @@ public class WXPageActivity extends AbsWeexActivity implements
     if(requestCode == REQUEST_PHOTOHANDLER || requestCode == REQUEST_CROP){//而代表请求裁剪
       AlbumModule.get().onActivityResult(requestCode, resultCode, data);
     }else if (AppHelper.TRANS_REQUEST_CODE == requestCode){
-      PayModule.get().onActivityResult(requestCode, resultCode, data);
+      UposModule.get().onActivityResult(requestCode, resultCode, data);
     }else{
       WXEventModule.get().onActivityResult(requestCode, resultCode, data);
     }
