@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import com.rzico.weex.Constant;
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.bean.Redis;
@@ -38,9 +39,16 @@ public class XRequest {
     String method;
     String a,b,cc,d,m;
     boolean backend = false;
+    public String encodeUrl(String url) {
+        if (url.startsWith("http")) {
+            return url;
+        } else {
+            return Constant.helperUrl + url;
+        }
+    }
     public XRequest(BaseActivity activity, String url) {
         this.activity = activity;
-        this.url = Constant.helperUrl + url;
+        this.url = encodeUrl(url);
         this.method = GET;
         this.params = null;
     }
@@ -52,14 +60,14 @@ public class XRequest {
     }
     public XRequest(Context c, String url) {
         this.c = c;
-        this.url = Constant.helperUrl + url;
+        this.url = encodeUrl(url);
         this.method = GET;
         this.params = null;
     }
 
     public XRequest(BaseActivity activity, String url, String method, List<RequestBean> requestBean) {
         this.activity = activity;
-        this.url = Constant.helperUrl + url;
+        this.url = encodeUrl(url);
         this.method = method;
         this.requestBean = requestBean;
     }
@@ -67,32 +75,32 @@ public class XRequest {
 
     public XRequest(BaseActivity activity, String url, String method, Map<String, Object> params) {
         this.activity = activity;
-        this.url = Constant.helperUrl + url;
+        this.url = encodeUrl(url);
         this.method = method;
         this.params = params;
     }
     public XRequest(BaseActivity activity, String url, String method, Map<String, Object> params, String body) {
         this.activity = activity;
-        this.url = Constant.helperUrl + url;
+        this.url = encodeUrl(url);
         this.method = method;
         this.params = params;
         this.body   = body;
     }
     public XRequest(Context c, String url, String method, Map<String, Object> params) {
         this.c = c;
-        this.url = Constant.helperUrl + url;
+        this.url = encodeUrl(url);
         this.method = method;
         this.params = params;
     }
     public XRequest(AppCompatActivity activity, String url) {
         this.compatActivity = activity;
-        this.url = Constant.helperUrl + url;
+        this.url = encodeUrl(url);
         this.method = GET;
         this.params = null;
     }
     public XRequest(AppCompatActivity activity, String url, String method, List<RequestBean> requestBean) {
         this.compatActivity = activity;
-        this.url = Constant.helperUrl + url;
+        this.url = encodeUrl(url);
         this.method = method;
         this.requestBean = requestBean;
     }
@@ -100,7 +108,7 @@ public class XRequest {
 
     public XRequest(AppCompatActivity activity, String url, String method, Map<String, Object> params) {
         this.compatActivity = activity;
-        this.url = Constant.helperUrl + url;
+        this.url = encodeUrl(url);
         this.method = method;
         this.params = params;
     }

@@ -141,7 +141,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             return;
         }
         if (messageBus.getMessageType() == MessageBus.Type.LOGINSUCCESS) {
-
             if (canReload) {
                 destoryWeexInstance();
                 initWeexView();
@@ -171,9 +170,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 wxsdkInstanceMap.get(key).fireGlobalEventCallback(messageBus.getEventKey(), messageBus.getParams());
             }
         }
-
-
-
     }
 
     @Override
@@ -205,6 +201,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                             int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
                             InitBusiness.start(getApplicationContext(), loglvl);
+
+
                         }
 
                         @Override

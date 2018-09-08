@@ -14,6 +14,8 @@ import com.rzico.weex.component.amap.module.WXMapModule;
 import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
 import com.rzico.weex.component.view.WXImage;
+import com.rzico.weex.db.DbUtils;
+import com.rzico.weex.db.notidmanager.DbCacheBean;
 import com.rzico.weex.module.AudioModule;
 import com.rzico.weex.module.LivePlayerModule;
 import com.rzico.weex.module.MapModule;
@@ -26,6 +28,7 @@ import com.rzico.weex.adapter.WeexHttpAdapter;
 import com.rzico.weex.adapter.WeexJSExceptionAdapter;
 import com.rzico.weex.adapter.WeexUriAdapter;
 import com.rzico.weex.module.AlbumModule;
+import com.rzico.weex.net.XRequest;
 import com.rzico.weex.utils.PhoneUtil;
 import com.rzico.weex.utils.chat.Foreground;
 import com.taobao.weex.InitConfig;
@@ -56,7 +59,6 @@ public class WXApplication extends Application {
 
   private final String tag = "yundian";
 
-
   private static final String CACHE_NAME = "cache_path";
 
   //数据库管理类
@@ -66,7 +68,6 @@ public class WXApplication extends Application {
 
   //用户ID
   private static String uid = "";
-
 
   public static WXApplication getInstance() {
     return instance;
@@ -104,12 +105,10 @@ public class WXApplication extends Application {
 
     }
 
-//    initDebugEnvironment(true, false, "DEBUG_SERVER_HOST");
     instance = this;
     init();
     initAlbum();
     initWeex();
-//    initIM();
     getUid();
 
   }
@@ -261,4 +260,5 @@ public class WXApplication extends Application {
   public static void setUid(String uid) {
     WXApplication.uid = uid;
   }
+
 }
