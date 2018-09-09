@@ -133,11 +133,12 @@ public class DbUtils {
     }
 
     public static boolean checkLogin(){
-        if(SharedUtils.readLoginId() == 0){
-            return false;
-        }else {
-            return true;
-        }
+        return true;
+//        if(SharedUtils.readLoginId() == 0){
+//            return false;
+//        }else {
+//            return true;
+//        }
     }
     public static void handleNotLogin(DbCacheBean dbCacheBean){
         NotIdManager.enQueue(dbCacheBean);
