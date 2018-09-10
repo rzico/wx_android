@@ -75,9 +75,9 @@ public class Constant {
     public static boolean loginState = false;
     public static boolean unLinelogin = false;
     //当前程序的资源包版本
-    public static String resVerison = "1.3.5";
+    public static String resVerison = "1.3.6";
     //服务器资源包版本
-    public static String netResVerison = "1.3.5";
+    public static String netResVerison = "1.3.6";
     public static String appVerison = "";
 
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
