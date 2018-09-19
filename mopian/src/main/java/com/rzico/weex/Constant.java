@@ -58,7 +58,7 @@ public class Constant {
     //   im的用户id
     public static String imUserId = "";
 
-    public static String appId = "";
+    public static String appId = "8f281090d4044d69b4f05007a2218369";
 
     public static boolean isShowBottom = false;
 
@@ -82,7 +82,7 @@ public class Constant {
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://111.230.209.17:8080/laiya/";
+    public static final String SERVER = "http://111.230.209.17:8080/epos/";
 //    public static final String SERVER = "http://192.168.2.212:9000/laiya/";
     public static final String SCENE_NAME = "laiya";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";

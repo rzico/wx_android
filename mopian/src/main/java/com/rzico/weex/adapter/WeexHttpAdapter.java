@@ -1,11 +1,5 @@
 package com.rzico.weex.adapter;
 
-import android.support.v4.view.PagerAdapter;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.rzico.weex.Constant;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.model.info.Message;
