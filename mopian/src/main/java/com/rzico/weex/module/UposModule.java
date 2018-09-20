@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 import com.rzico.weex.Constant;
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.model.info.Message;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
@@ -25,10 +29,15 @@ import com.ums.upos.sdk.exception.SdkException;
 import com.ums.upos.sdk.scanner.OnScanListener;
 import com.ums.upos.sdk.scanner.ScannerConfig;
 import com.ums.upos.sdk.scanner.ScannerManager;
+import com.ums.upos.sdk.system.BaseSystemManager;
+import com.ums.upos.sdk.system.OnServiceStatusListener;
 
 import org.json.JSONException;
 
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -57,11 +66,20 @@ public class UposModule extends WXModule {
         return this;
     }
 
-    public Context getContext(){
-        return mWXSDKInstance.getContext();
+    public Context getContext() {
+        if(mWXSDKInstance == null){
+            return WXApplication.getContext();
+        }else{
+            return mWXSDKInstance.getContext();
+        }
     }
-
-    public Activity getActivity(){return (Activity) mWXSDKInstance.getContext();}
+    public com.rzico.weex.activity.BaseActivity getActivity() {
+        if(mWXSDKInstance == null){
+            return WXApplication.getActivity();
+        }else{
+            return (com.rzico.weex.activity.BaseActivity) mWXSDKInstance.getContext();
+        }
+    }
 
     /**
      * 退货
@@ -95,8 +113,13 @@ public class UposModule extends WXModule {
             }
 
             @Override
-            public void onPaySuccess(String data) {
+            public void onPaySuccess(Map<String,Object> data) {
                 callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
             }
 
             @Override
@@ -110,7 +133,7 @@ public class UposModule extends WXModule {
      * @param callback
      */
     @JSMethod
-    public void pcardPay(double amount, final JSCallback callback){
+    public void cardPay(double amount, final JSCallback callback){
 
 //            String transData = "{\"amt\":\"" + amount + "\", \"isNeedPrintReceipt\":\"false\", \"tradeType\":\"useScan\"}";
 
@@ -130,8 +153,13 @@ public class UposModule extends WXModule {
             }
 
             @Override
-            public void onPaySuccess(String data) {
+            public void onPaySuccess(Map<String,Object> data) {
                 callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
             }
 
             @Override
@@ -166,8 +194,13 @@ public class UposModule extends WXModule {
             }
 
             @Override
-            public void onPaySuccess(String data) {
+            public void onPaySuccess(Map<String,Object> data) {
                 callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
             }
 
             @Override
@@ -177,13 +210,15 @@ public class UposModule extends WXModule {
         }).sendPay("公共资源", "撤销",jsonObject);
     }
 
+    //阿里支付
     @JSMethod
-    public void posPay(String extBillNo, String extOrderNo, double amount, final JSCallback callback){
+    public void aliPay(String extBillNo, String extOrderNo, double amount, final JSCallback callback){
 
 //            String transData = "{\"amt\":\"" + amount + "\", \"isNeedPrintReceipt\":\"false\", \"tradeType\":\"useScan\"}";
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("amt", String.valueOf(amount));
+        jsonObject.put("tradeType", "useScan");
         jsonObject.put("appId", Constant.appId);
         jsonObject.put("extBillNo", extBillNo);
         jsonObject.put("extOrderNo", extOrderNo);
@@ -200,8 +235,53 @@ public class UposModule extends WXModule {
             }
 
             @Override
-            public void onPaySuccess(String data) {
+            public void onPaySuccess(Map<String,Object> data) {
                 callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
+            }
+
+            @Override
+            public void onPayError(@NonNull String errorMessage) {
+                callback.invoke(new Message().error(errorMessage));
+            }
+        }).sendPay("POS 通", "POS通", jsonObject);
+    }
+    //微信支付
+    @JSMethod
+    public void weixinPay(String extBillNo, String extOrderNo, double amount, final JSCallback callback){
+
+//            String transData = "{\"amt\":\"" + amount + "\", \"isNeedPrintReceipt\":\"false\", \"tradeType\":\"useScan\"}";
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("amt", String.valueOf(amount));
+        jsonObject.put("tradeType", "useScan");
+        jsonObject.put("appId", Constant.appId);
+        jsonObject.put("extBillNo", extBillNo);
+        jsonObject.put("extOrderNo", extOrderNo);
+        UposModule.get().init(new RxGalleryFinalCropListener() {
+            @NonNull
+            @Override
+            public Activity getSimpleActivity() {
+                return getActivity();
+            }
+
+            @Override
+            public void onPayCancel() {
+                callback.invoke(new Message().error("用户取消"));
+            }
+
+            @Override
+            public void onPaySuccess(Map<String,Object> data) {
+                callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
             }
 
             @Override
@@ -212,7 +292,7 @@ public class UposModule extends WXModule {
     }
 
     @JSMethod
-    public void pay(String extBillNo, String extOrderNo, double amount, final JSCallback callback){
+    public void bankPay(String extBillNo, String extOrderNo, double amount, String appName, final JSCallback callback){
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("amt", String.valueOf(amount));
@@ -232,15 +312,20 @@ public class UposModule extends WXModule {
             }
 
             @Override
-            public void onPaySuccess(String data) {
+            public void onPaySuccess(Map<String,Object> data) {
                 callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
             }
 
             @Override
             public void onPayError(@NonNull String errorMessage) {
                 callback.invoke(new Message().error(errorMessage));
             }
-        }).sendPay("银行卡收款", "消费",jsonObject);
+        }).sendPay(appName, "消费",jsonObject);
     }
 
 
@@ -260,8 +345,13 @@ public class UposModule extends WXModule {
             }
 
             @Override
-            public void onPaySuccess(String data) {
+            public void onPaySuccess(Map<String,Object> data) {
                 callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
             }
 
             @Override
@@ -272,7 +362,7 @@ public class UposModule extends WXModule {
     }
 
     @JSMethod
-    public void print(final JSCallback callback){
+    public void print(String url, final JSCallback callback){
         UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
@@ -286,7 +376,12 @@ public class UposModule extends WXModule {
             }
 
             @Override
-            public void onPaySuccess(String data) {
+            public void onPaySuccess(Map<String,Object> data) {
+
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
                 callback.invoke(new Message().success(data));
             }
 
@@ -294,7 +389,7 @@ public class UposModule extends WXModule {
             public void onPayError(@NonNull String errorMessage) {
                 callback.invoke(new Message().error(errorMessage));
             }
-        }).printTest();
+        }).printTest(url, callback);
     }
     @Override
     public void onActivityCreate() {
@@ -308,63 +403,91 @@ public class UposModule extends WXModule {
     private int scanner_type = 1;
 
     @JSMethod
-    private void scan(final JSCallback callback){
-        scannerManager = new ScannerManager();
-        bundle = new Bundle();
-        bundle.putInt(ScannerConfig.COMM_SCANNER_TYPE, scanner_type);
-        bundle.putBoolean(ScannerConfig.COMM_ISCONTINUOUS_SCAN, false);
-        try {
-            scannerManager.stopScan();
-            scannerManager.initScanner(bundle);
-            scannerManager.startScan(30000, new OnScanListener() {
-                @Override
-                public void onScanResult(int i, byte[] bytes) {
-                    //防止用户未扫描直接返回，导致bytes为空
-                    if (bytes != null && !bytes.equals("")) {
-                        callback.invoke(new Message().success(new String(bytes)));
-                    }
-                }
-            });
+    public void scan(final JSCallback callback){
+        try{
+        BaseSystemManager.getInstance().deviceServiceLogin(
+                getActivity(), null, "99999998",
+                new OnServiceStatusListener() {
+                    @Override
+                    public void onStatus(int arg0) {
+                        if (0 == arg0 || 2 == arg0 || 100 == arg0) {
+                            scannerManager = new ScannerManager();
+                            bundle = new Bundle();
+                            bundle.putInt(ScannerConfig.COMM_SCANNER_TYPE, scanner_type);
+                            bundle.putBoolean(ScannerConfig.COMM_ISCONTINUOUS_SCAN, false);
+                            try {
+                                scannerManager.stopScan();
+                                scannerManager.initScanner(bundle);
+                                scannerManager.startScan(30000, new OnScanListener() {
+                                    @Override
+                                    public void onScanResult(int i, byte[] bytes) {
+                                        //防止用户未扫描直接返回，导致bytes为空
+                                        if (bytes != null && !bytes.equals("")) {
+                                            callback.invoke(new Message().success(new String(bytes)));
+                                        }
+                                    }
+                                });
 
+                            } catch (SdkException e) {
+                                callback.invoke(new Message().error());
+                                e.printStackTrace();
+                            } catch (CallServiceException e) {
+                                callback.invoke(new Message().error());
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
         } catch (SdkException e) {
-            callback.invoke(new Message().error());
-            e.printStackTrace();
-        } catch (CallServiceException e) {
-            callback.invoke(new Message().error());
-            e.printStackTrace();
+
         }
+
     }
 
     @JSMethod
-    private void continuScan(final JSCallback callback){
-        scannerManager = new ScannerManager();
-        bundle = new Bundle();
-        bundle.putInt(ScannerConfig.COMM_SCANNER_TYPE, scanner_type);
-        bundle.putBoolean(ScannerConfig.COMM_ISCONTINUOUS_SCAN, true);
-        try {
-            scannerManager.stopScan();
-            scannerManager.initScanner(bundle);
-            scannerManager.startScan(0, new OnScanListener() {
-                @Override
-                public void onScanResult(int i, byte[] bytes) {
-                    //防止用户未扫描直接返回，导致bytes为空
-                    if (bytes != null && !bytes.equals("")) {
-                        callback.invokeAndKeepAlive(new Message().success(new String(bytes)));
-                    }
-                }
-            });
+    public void continuScan(final JSCallback callback){
+        try{
+            BaseSystemManager.getInstance().deviceServiceLogin(
+                    getActivity(), null, "99999998",
+                    new OnServiceStatusListener() {
+                        @Override
+                        public void onStatus(int arg0) {
+                            if (0 == arg0 || 2 == arg0 || 100 == arg0) {
+                                scannerManager = new ScannerManager();
+                                bundle = new Bundle();
+                                bundle.putInt(ScannerConfig.COMM_SCANNER_TYPE, scanner_type);
+                                bundle.putBoolean(ScannerConfig.COMM_ISCONTINUOUS_SCAN, true);
+                                try {
+                                    scannerManager.stopScan();
+                                    scannerManager.initScanner(bundle);
+                                    scannerManager.startScan(0, new OnScanListener() {
+                                        @Override
+                                        public void onScanResult(int i, byte[] bytes) {
+                                            //防止用户未扫描直接返回，导致bytes为空
+                                            if (bytes != null && !bytes.equals("")) {
+                                                callback.invokeAndKeepAlive(new Message().success(new String(bytes)));
+                                            }
+                                        }
+                                    });
 
+                                } catch (SdkException e) {
+                                    callback.invokeAndKeepAlive(new Message().error());
+                                    e.printStackTrace();
+                                } catch (CallServiceException e) {
+                                    callback.invokeAndKeepAlive(new Message().error());
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
         } catch (SdkException e) {
-            callback.invokeAndKeepAlive(new Message().error());
-            e.printStackTrace();
-        } catch (CallServiceException e) {
-            callback.invokeAndKeepAlive(new Message().error());
-            e.printStackTrace();
+
         }
+
     }
 
     @JSMethod
-    private void stopScan(JSCallback callback){
+    public void stopScan(JSCallback callback){
         if(scannerManager != null){
             try {
                 scannerManager.stopScan();
@@ -382,8 +505,37 @@ public class UposModule extends WXModule {
     }
 
     @JSMethod
-    private void searchCardInfo(final JSCallback callback) {
+    public void stopReadCard(){
+        try {
+            cardSlotManager.stopRead();
+        } catch (SdkException e) {
+            e.printStackTrace();
+        } catch (CallServiceException e) {
+            e.printStackTrace();
+        }
+    }
+    @JSMethod
+    public void readCard(final JSCallback callback) {
+        try {
+            BaseSystemManager.getInstance().deviceServiceLogin(
+                    getActivity(), null, "99999998",
+                    new OnServiceStatusListener() {
+                        @Override
+                        public void onStatus(int arg0) {
+                            if (0 == arg0 || 2 == arg0 || 100 == arg0) {
+                                seachCardInfo(callback);
+                            }else {
+                                callback.invoke(new Message().error("登陆失败"));
+                            }
+                        }
+                    });
+        } catch (SdkException e) {
+            e.printStackTrace();
+        }
 //        show("开始寻卡\n");
+    }
+
+    public void seachCardInfo(final JSCallback callback){
         if(cardSlotManager == null){
             cardSlotManager = new CardSlotManager();
         }
@@ -406,7 +558,7 @@ public class UposModule extends WXModule {
                             if (0 != arg0) {
                                 try {
                                     cardSlotManager.stopRead();
-                                    searchCardInfo(callback);
+                                        seachCardInfo(callback);
                                 } catch (SdkException e) {
                                     callback.invoke(new Message().error());
                                     // TODO Auto-generated catch block
@@ -419,9 +571,11 @@ public class UposModule extends WXModule {
                             } else {
                                 switch (arg1.getActuralEnterType()) {
                                     case MAG_CARD:
-                                        callback.invoke(new Message().success("磁道1：" + arg1.getTk1()
-                                                + "\n" + "磁道2：" + arg1.getTk2()
-                                                + "\n" + "磁道3：" + arg1.getTk3()+"\n"));
+                                        Map<String, String> map = new HashMap<>();
+                                        map.put("data1", arg1.getTk1());
+                                        map.put("data2", arg1.getTk2());
+                                        map.put("data3", arg1.getTk3());
+                                        callback.invoke(new Message().success(map));
                                         break;
                                     default:
                                         break;
@@ -449,9 +603,7 @@ public class UposModule extends WXModule {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
-
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -475,17 +627,26 @@ public class UposModule extends WXModule {
 
             if (Activity.RESULT_OK == resultCode) {
                 if (null != data) {
-                    StringBuilder result = new StringBuilder();
-                    Map<String,String> map = AppHelper.filterTransResult(data);
-                    result.append(AppHelper.TRANS_APP_NAME + ":" +map.get(AppHelper.TRANS_APP_NAME) + "\r\n");
-                    result.append(AppHelper.TRANS_BIZ_ID + ":" +map.get(AppHelper.TRANS_BIZ_ID) + "\r\n");
-                    result.append(AppHelper.RESULT_CODE + ":" +map.get(AppHelper.RESULT_CODE) + "\r\n");
-                    result.append(AppHelper.RESULT_MSG + ":" +map.get(AppHelper.RESULT_MSG) + "\r\n");
-                    result.append(AppHelper.TRANS_DATA + ":" +map.get(AppHelper.TRANS_DATA) + "\r\n");
-
-                    if (null != result) {
+                    Map<String, Object> map = AppHelper.filterTransResult(data);
+//                    Map<>
+//                    result.append(AppHelper.TRANS_APP_NAME + ":" +map.get(AppHelper.TRANS_APP_NAME));
+//                    result.append(AppHelper.TRANS_BIZ_ID + ":" +map.get(AppHelper.TRANS_BIZ_ID));
+//                    result.append(AppHelper.RESULT_CODE + ":" +map.get(AppHelper.RESULT_CODE));
+//                    result.append(AppHelper.RESULT_MSG + ":" +map.get(AppHelper.RESULT_MSG));
+//                    result.append(AppHelper.TRANS_DATA + ":" +map.get(AppHelper.TRANS_DATA));
+//                    String result = new Gson().toJson(map);
+                    if (null != map) {
                         if(listener != null){
-                            listener.onPaySuccess(result.toString());
+                            if ("0".equals(map.get("resultCode"))) {
+                                String tdJson = map.get("transData").toString();
+                                Map<String, Object> transData ;
+                                 transData = new Gson().fromJson(tdJson, Map.class);
+//                                map.put("transData", transData);
+                                listener.onPaySuccess(transData);
+                            } else {
+                                listener.onPayError(map.get("resultMsg").toString());
+                            }
+
                         }
                     }
                 }else{
@@ -506,7 +667,7 @@ public class UposModule extends WXModule {
                     result.append("resultCode:" + printCode);
                     if (null != result) {
                         if(listener != null){
-                            listener.onPaySuccess(result.toString());
+                            listener.onPrintSuccess(result.toString());
                         }
                     }
                 }else{
@@ -521,12 +682,57 @@ public class UposModule extends WXModule {
             }
         }
     }
-    private void printTest(){
-        View view = getActivity().getWindow().getDecorView();
-        view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
-        Bitmap bitmap = view.getDrawingCache();
-        if(bitmap == null){
+
+    /**
+     * 获取网络图片
+     * @param imageurl 图片网络地址
+     * @return Bitmap 返回位图
+     */
+    public Bitmap GetImageInputStream(String imageurl){
+        URL url;
+        HttpURLConnection connection=null;
+        Bitmap bitmap=null;
+        try {
+            url = new URL(imageurl);
+            connection=(HttpURLConnection)url.openConnection();
+            connection.setConnectTimeout(6000); //超时设置
+            connection.setDoInput(true);
+            connection.setUseCaches(false); //设置不使用缓存
+            InputStream inputStream=connection.getInputStream();
+            bitmap= BitmapFactory.decodeStream(inputStream);
+            inputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    private void printTest(final String url, JSCallback callback){
+//        View view = getActivity().getWindow().getDecorView();
+//        view.setDrawingCacheEnabled(true);
+//        view.buildDrawingCache();
+//        Bitmap bitmap = view.getDrawingCache();
+        final Bitmap[] bitmap = {null};
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                bitmap[0] = GetImageInputStream(url);
+            }
+        }).start();
+        long waitTime = 300;
+        while (bitmap[0] == null){
+            try {
+                Thread.sleep(waitTime);
+                waitTime += waitTime;
+                if(waitTime > 15000){
+                    callback.invoke(new Message().error("图片请求超时"));
+                    break;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if(bitmap[0] == null){
 
             return;
         }
@@ -534,7 +740,7 @@ public class UposModule extends WXModule {
         String fname = "/sdcard/ddd.png";
         try {
             FileOutputStream out = new FileOutputStream(fname);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            bitmap[0].compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -553,7 +759,7 @@ public class UposModule extends WXModule {
             org.json.JSONObject json = null;
             json = new org.json.JSONObject(transData);
             AppHelper.callTrans(getActivity(), transApp, transType, json);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -599,7 +805,9 @@ public class UposModule extends WXModule {
          *
          * @param data 支付数据
          */
-        void onPaySuccess(String data);
+        void onPaySuccess(Map<String,Object> data);
+
+        void onPrintSuccess(String data);
 
         /**
          * 裁剪失败

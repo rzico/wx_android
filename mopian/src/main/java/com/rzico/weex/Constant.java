@@ -58,7 +58,7 @@ public class Constant {
     //   im的用户id
     public static String imUserId = "";
 
-    public static String appId = "";
+    public static String appId = "8f281090d4044d69b4f05007a2218369";
 
     public static boolean isShowBottom = false;
 
