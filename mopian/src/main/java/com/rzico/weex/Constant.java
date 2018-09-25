@@ -82,7 +82,7 @@ public class Constant {
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://111.230.209.17:8080/epos/";
+    public static final String SERVER = "http://mov.laiyads.cn:9096/epos/";
 //    public static final String SERVER = "http://192.168.2.212:9000/laiya/";
     public static final String SCENE_NAME = "laiya";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
