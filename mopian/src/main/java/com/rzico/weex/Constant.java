@@ -51,9 +51,9 @@ public class Constant {
 
 //    public static Handler loginHandler = null;
     //菜单路径
-    public static  String index1 = "view/circle/circle.js";
-    public static  String index2 = "view/mall/mall.js";
-    public static  String index3 = "view/messagecenter/messagecenter.js";
+    public static  String index1 = "view/home/home";
+    public static  String index2 = "view/messagecenter/messagecenter";
+    public static  String index3 = "view/myMessage/myMessage";
     public static  String index4 = "view/mine/mine.js";
     public static  String center = "view/newarticle/newarticle.js";
 
