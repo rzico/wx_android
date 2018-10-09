@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">芸派</string>
+    <string name="app_name">芸派商家版</string>
 
     <string name="scan_qr_code">扫码</string>
     <string name="page_refresh">刷新</string>
