@@ -27,8 +27,8 @@ public class Constant {
     public static final String resURL = "http://cdnx.ahxinying.cn/";
 
     //    云店wxkey
-    public static final String wxAppId = "wx172bb216f6dc653f";
-    public static final String wxAppSecret = "00258936294ef08511ba68fac498cc67";
+    public static final String wxAppId = "wxda95e121d5a7d6ec";
+    public static final String wxAppSecret = "ec9b01bf6ae9885b0156a759e983ddff";
 
 
 //    public static final String wxAppId = "wxb438e93d669626a6";
