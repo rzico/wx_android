@@ -77,7 +77,7 @@ public class WXApplication extends Application {
 
   private  static List<BaseActivity> activityList = new LinkedList<BaseActivity>();
 
-  private final String tag = "pine";
+  private final String tag = "farmer";
 
 
   private static final String CACHE_NAME = "cache_path";

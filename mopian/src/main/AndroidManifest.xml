@@ -109,7 +109,7 @@
                 <action android:name="com.alibaba.weex.protocol.openurl" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.taobao.android.intent.category.farmer" />
+                <category android:name="com.taobao.android.intent.category.FARMET" />
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />

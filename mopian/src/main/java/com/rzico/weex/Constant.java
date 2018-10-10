@@ -19,8 +19,8 @@ import java.util.Map;
  */
 public class Constant {
 
-    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.PINE" />
-    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.PINE";
+    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.FARMER" />
+    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.FARMER";
 
     public static final String wxURL = "http://cdnx.ahxinying.cn/weex/app/";
 

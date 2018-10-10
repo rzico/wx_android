@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">芸派商家版</string>
+    <string name="app_name">芸派商家助手</string>
 
     <string name="scan_qr_code">扫码</string>
     <string name="page_refresh">刷新</string>
@@ -13,11 +13,11 @@
     </string>
 
     <!--伪协议-->
-    <string name="href_home">pine</string>
+    <string name="href_home">farmer</string>
 
     <!--config -->
     <!--高德地图key-->
-    <string name="amapkey">b6b33af45fdaf6b44f3155a197ab70d8</string>
+    <string name="amapkey">36d53d01a16f2b45768044f98725dc62</string>
 
     <!-- time -->
     <string name="time_yesterday">昨天</string>
