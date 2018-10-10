@@ -44,18 +44,6 @@ android {
             keyAlias "pine"
             keyPassword "123456"
         }
-//        release {
-//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
-//            storePassword "123456"
-//            keyAlias "rzico"
-//            keyPassword "123456"
-//        }
-//        debug {
-//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
-//            storePassword "123456"
-//            keyAlias "rzico"
-//            keyPassword "123456"
-//        }
     }
     buildTypes {
         release {
