@@ -19,12 +19,12 @@ import java.util.Map;
  */
 public class Constant {
 
-    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
-    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.YUNDIAN";
+    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.ZNZX" />
+    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.ZNZX";
 
-    public static final String wxURL = "http://cdnx.rzico.com/weex/app/";
+    public static final String wxURL = "http://cdnx.znzx.rzico.com/weex/app/";
 
-    public static final String resURL = "http://cdnx.rzico.com/";
+    public static final String resURL = "http://cdnx.znzx.rzico.com/";
 
     //    云店wxkey
     public static final String wxAppId = "wx490857e2baff7cfd";
@@ -66,7 +66,7 @@ public class Constant {
 
     public static String app = AllConstant.PACKNAME;
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-    public static final String bucket = "rzico-weex";
+    public static final String bucket = "znzx-weex";
     public static final  String upLoadImages = "upload/images/";
     public static final  String upLoadVideos = "upload/videos/";
 
