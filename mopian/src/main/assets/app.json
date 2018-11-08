@@ -1,0 +1,43 @@
+{
+  "color": "#707070",
+  "selectedColor": "#068F3D",
+  "borderStyle": "#707070",
+  "backgroundColor": "#FFFFFF",
+  "style":"both",
+  "dot":2,
+  "index":"file://view/home/index.js",
+  "tabBar": [
+    {
+      "text": "首页",
+      "tag":"home1",
+      "path": "file://view/home/index.js",
+      "icon": "ico_home",
+      "requireAuth": false,
+      "selectedIconPath": "ico_home_focus"
+    },
+    {
+      "text": "发现",
+      "tag":"home2",
+      "path": "file://view/home/index.js",
+      "icon": "ico_friend",
+      "requireAuth":false,
+      "selectedIconPath": "ico_friend_focus"
+    },
+    {
+      "text": "订单",
+      "tag":"home3",
+      "path": "file://view/home/index.js",
+      "icon": "ico_msg",
+      "requireAuth":true,
+      "selectedIconPath": "ico_msg_focus"
+    },
+    {
+      "text": "我的",
+      "tag":"home4",
+      "path": "file://view/home/index.js",
+      "icon": "ico_my",
+      "requireAuth":true,
+      "selectedIconPath": "ico_my_focus"
+    }
+  ]
+}

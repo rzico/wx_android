@@ -6,9 +6,11 @@ import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
@@ -28,8 +30,10 @@ import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.dialog.UpdateDialog;
 import com.rzico.weex.db.XDB;
+import com.rzico.weex.model.TabBar;
 import com.rzico.weex.model.info.Launch;
 import com.rzico.weex.model.info.MainUrl;
+import com.rzico.weex.module.JSCallBaskManager;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
 import com.rzico.weex.utils.AssetsCopyer;
@@ -60,6 +64,7 @@ import org.xutils.x;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.rzico.weex.Constant.imUserId;
@@ -243,6 +248,7 @@ public class SplashActivity extends BaseActivity {
 //            initWeexView();
 //            setSelectTab(0);
             if (imUserId.equals("")) {
+
             }
         }
     }
@@ -276,36 +282,36 @@ public class SplashActivity extends BaseActivity {
                     Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
                     toNext();
                 }
-                //获取主页导航路由的路径
-                new XRequest(SplashActivity.this, "weex/common/router.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
-                    @Override
-                    public void onSuccess(BaseActivity activity, String result, String type) {
-                        try {
-
-                            MainUrl mainUrl = new Gson().fromJson(result, MainUrl.class);
-                            Constant.index1 = handleUrl(mainUrl.getData().getTabnav().getHome());
-                            Constant.index2 = handleUrl(mainUrl.getData().getTabnav().getFriend());
-                            Constant.index3 = handleUrl(mainUrl.getData().getTabnav().getMessage());
-                            Constant.index4 = handleUrl(mainUrl.getData().getTabnav().getMember());
-
-                            Constant.center = handleUrl(mainUrl.getData().getTabnav().getAdd());
-
-                            SharedUtils.saveIndex1(Constant.index1);
-                            SharedUtils.saveIndex2(Constant.index2);
-                            SharedUtils.saveIndex3(Constant.index3);
-                            SharedUtils.saveIndex4(Constant.index4);
-                            SharedUtils.saveCenter(Constant.center);
-
-                        } catch (Exception e) {
-                            Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFail(BaseActivity activity, String cacheData, int code) {
-                        Toast.makeText(SplashActivity.this, "网络加载失败，请检查网络", Toast.LENGTH_SHORT).show();
-                    }
-                }).execute();
+                //获取主页导航路由的路径  导航改成配置文件
+//                new XRequest(SplashActivity.this, "weex/common/router.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+//                    @Override
+//                    public void onSuccess(BaseActivity activity, String result, String type) {
+//                        try {
+//
+//                            MainUrl mainUrl = new Gson().fromJson(result, MainUrl.class);
+//                            Constant.index1 = handleUrl(mainUrl.getData().getTabnav().getHome());
+//                            Constant.index2 = handleUrl(mainUrl.getData().getTabnav().getFriend());
+//                            Constant.index3 = handleUrl(mainUrl.getData().getTabnav().getMessage());
+//                            Constant.index4 = handleUrl(mainUrl.getData().getTabnav().getMember());
+//
+//                            Constant.center = handleUrl(mainUrl.getData().getTabnav().getAdd());
+//
+//                            SharedUtils.saveIndex1(Constant.index1);
+//                            SharedUtils.saveIndex2(Constant.index2);
+//                            SharedUtils.saveIndex3(Constant.index3);
+//                            SharedUtils.saveIndex4(Constant.index4);
+//                            SharedUtils.saveCenter(Constant.center);
+//
+//                        } catch (Exception e) {
+//                            Toast.makeText(SplashActivity.this, "程序出错", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFail(BaseActivity activity, String cacheData, int code) {
+//                        Toast.makeText(SplashActivity.this, "网络加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+//                    }
+//                }).execute();
             }
 
             @Override
@@ -435,10 +441,48 @@ public class SplashActivity extends BaseActivity {
     private void toNext() {
         //准备跳转
         SharedUtils.saveResVersion(writeResVersion);
-        Intent intent = new Intent();
-        intent.setClass(SplashActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+
+        if(WXApplication.getAppInfo() == null){
+           finish();
+            return;
+        }
+        List<TabBar> tabBars = WXApplication.getAppInfo().getTabBar();
+        if(tabBars == null || tabBars.size() < 1){
+
+           String  url = WXApplication.getAppInfo().getIndex();
+            if (TextUtils.isEmpty(url)) {
+                return;
+            }
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse(url);
+            String scheme = uri.getScheme();
+            if (TextUtils.equals("tel", scheme)) {
+
+            } else if (TextUtils.equals("sms", scheme)) {
+
+            } else if (TextUtils.equals("mailto", scheme)) {
+
+            } else if (TextUtils.equals("http", scheme) ||
+                    TextUtils.equals("https",
+                            scheme)) {
+                intent.putExtra("isLocal", "false");
+                intent.addCategory(Constant.WEEX_CATEGORY);
+            } else if (TextUtils.equals("file", scheme)) {
+                intent.putExtra("isLocal", "true");
+                intent.addCategory(Constant.WEEX_CATEGORY);
+            } else {
+                intent.addCategory(Constant.WEEX_CATEGORY);
+                uri = Uri.parse(new StringBuilder("http:").append(url).toString());
+            }
+            intent.setData(uri);
+            startActivity(intent);
+            finish();
+        }else {
+            Intent intent = new Intent();
+            intent.setClass(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
     }
     static class MyHandler extends Handler{

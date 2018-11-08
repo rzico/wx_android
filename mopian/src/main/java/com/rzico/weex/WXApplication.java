@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.multidex.MultiDex;
 
+import com.google.gson.Gson;
 import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.amap.component.WXMapMarkerComponent;
 import com.rzico.weex.component.amap.component.WXMapViewComponent;
@@ -16,6 +17,7 @@ import com.rzico.weex.component.module.MYWXWebViewModule;
 import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.notidmanager.DbCacheBean;
+import com.rzico.weex.model.APPINFO;
 import com.rzico.weex.module.AudioModule;
 import com.rzico.weex.module.LivePlayerModule;
 import com.rzico.weex.module.MapModule;
@@ -29,6 +31,7 @@ import com.rzico.weex.adapter.WeexJSExceptionAdapter;
 import com.rzico.weex.adapter.WeexUriAdapter;
 import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.net.XRequest;
+import com.rzico.weex.utils.AssetsCopyer;
 import com.rzico.weex.utils.PhoneUtil;
 import com.rzico.weex.utils.chat.Foreground;
 import com.taobao.weex.InitConfig;
@@ -60,6 +63,8 @@ public class WXApplication extends Application {
   private final String tag = "yundian";
 
   private static final String CACHE_NAME = "cache_path";
+
+  private static APPINFO appinfo;
 
   //数据库管理类
   private static org.xutils.DbManager db;
@@ -192,12 +197,12 @@ public class WXApplication extends Application {
    */
   private void init() {
 
-    //xUtil
-    x.Ext.init(this);
-    //x.Ext.setDebug(false);
-    x.Ext.setDebug(BuildConfig.DEBUG);
-
-  }
+        //xUtil
+        x.Ext.init(this);
+        //x.Ext.setDebug(false);
+        x.Ext.setDebug(BuildConfig.DEBUG);
+        getAppInfo();
+    }
 
   public static BaseActivity getActivity(){
     return activityList.get(activityList.size() - 1);
@@ -257,8 +262,14 @@ public class WXApplication extends Application {
     return processName;
   }
 
-  public static void setUid(String uid) {
-    WXApplication.uid = uid;
-  }
-
+    public static APPINFO getAppInfo() {
+        if (appinfo == null) {
+            //解析文件
+            String jsonData = AssetsCopyer.getJson("app.json", getContext());
+            appinfo = new Gson().fromJson(jsonData, APPINFO.class);
+            return appinfo;
+        } else {
+            return appinfo;
+        }
+    }
 }
