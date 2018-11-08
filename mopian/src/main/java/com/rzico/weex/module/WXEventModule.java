@@ -241,6 +241,11 @@ public class WXEventModule extends WXModule {
 
 
     @JSMethod(uiThread = true)
+    public void switchTab(int position) {
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.SWITCHTAB, position));
+    }
+
+    @JSMethod(uiThread = true)
     public void openURL(String url, JSCallback jsCallback) {
         try {
 //            Toast.makeText(getContext(), "url:" + url , Toast.LENGTH_SHORT).show();

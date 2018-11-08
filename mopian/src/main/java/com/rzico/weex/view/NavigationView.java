@@ -20,8 +20,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
+import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
 
 
@@ -217,7 +219,11 @@ public class NavigationView extends LinearLayout {
                     @Override
                     public void onClick(View v) {
                         int position = (Integer) v.getTag();
-                        setColorLing(position);
+                        if (WXApplication.getAppInfo().getTabBar().get(position).isRequireAuth() && (SharedUtils.readLoginId() == 0 || !Constant.loginState )) {//没有登录过
+
+                        }else {
+                            setColorLing(position);
+                        }
                         if (onItemClickListener != null) {
                             onItemClickListener.onItemClick(position);
                         }

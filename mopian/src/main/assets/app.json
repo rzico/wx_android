@@ -34,7 +34,7 @@
     {
       "text": "我的",
       "tag":"home4",
-      "path": "file://view/home/index.js",
+      "path": "file://view/member/mine.js",
       "icon": "ico_my",
       "requireAuth":true,
       "selectedIconPath": "ico_my_focus"

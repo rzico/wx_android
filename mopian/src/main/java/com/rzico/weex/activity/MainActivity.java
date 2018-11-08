@@ -180,6 +180,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             for (String key : wxsdkInstanceMap.keySet()) {
                 wxsdkInstanceMap.get(key).fireGlobalEventCallback(messageBus.getEventKey(), messageBus.getParams());
             }
+        } else if (messageBus.getMessageType() == MessageBus.Type.SWITCHTAB){
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, MainActivity.class);
+            intent.putExtra("SWITCHTAB", (Integer) messageBus.getMessage());
+            startActivity(intent);
         }
     }
 
@@ -569,7 +574,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         });
         //默认首页
-        setSelectTab(0);
+
     }
 
 
@@ -830,6 +835,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }).show();
 
             }
+
+            int switchtabIndex = getIntent().getIntExtra("SWITCHTAB", 0);
+            setSelectTab(switchtabIndex);
+            nv.setColorLing(switchtabIndex);
+
         }
 
     }
@@ -880,7 +890,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //            }
 //        }
         if (Activity.RESULT_OK != resultCode) {
-            showToast("调用失败");
+//            showToast("调用失败");
             return;
         }
 //        if (data == null || data.getExtras() == null
