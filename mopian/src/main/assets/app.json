@@ -9,31 +9,31 @@
   "tabBar": [
     {
       "text": "首页",
-      "tag":"home1",
+      "tag":"home",
       "path": "file://view/home/index.js",
       "icon": "ico_home",
       "requireAuth": false,
       "selectedIconPath": "ico_home_focus"
     },
     {
-      "text": "发现",
-      "tag":"home2",
-      "path": "file://view/home/index.js",
+      "text": "会员",
+      "tag":"friend",
+      "path": "file://view/friend/list.js",
       "icon": "ico_friend",
       "requireAuth":false,
       "selectedIconPath": "ico_friend_focus"
     },
     {
-      "text": "订单",
-      "tag":"home3",
-      "path": "file://view/home/index.js",
+      "text": "消息",
+      "tag":"message",
+      "path": "file://view/message/list.js",
       "icon": "ico_msg",
       "requireAuth":true,
       "selectedIconPath": "ico_msg_focus"
     },
     {
       "text": "我的",
-      "tag":"home4",
+      "tag":"center",
       "path": "file://view/member/mine.js",
       "icon": "ico_my",
       "requireAuth":true,
