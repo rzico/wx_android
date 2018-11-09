@@ -937,8 +937,35 @@ public class WXEventModule extends WXModule {
         }
         callback.invoke(message);
     }
-//    获取未读消息
 
+    @JSMethod(uiThread = false)
+    public int getUnReadMessageCount(){
+        List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
+        List<String> userIds = new ArrayList<>();
+
+        final List<com.rzico.weex.model.chat.Message> unReadUserMessages = new ArrayList<>();//未读消息
+        final List<Long> unReadNumber = new ArrayList<>();//未读消息
+
+        long unRead = 0;
+        for (TIMConversation item :list){
+            if(item.getPeer().equals("")) continue;
+            TIMConversationExt conExt = new TIMConversationExt(item);
+            if(conExt.getUnreadMessageNum() > 0){
+                List<TIMMessage> messages = conExt.getLastMsgs(1);
+                if(messages !=null && messages.size() > 0){
+                    final com.rzico.weex.model.chat.Message message = MessageFactory.getMessage(messages.get(0));
+                    unReadUserMessages.add(message);
+                    userIds.add(item.getPeer());
+                    unReadNumber.add(conExt.getUnreadMessageNum());
+                }
+            }else {
+                return 0;
+            }
+        }
+        return unReadNumber.size();
+    }
+
+//    获取未读消息
     @JSMethod
     public void getUnReadMessage(){
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.RECEIVEMSG));
