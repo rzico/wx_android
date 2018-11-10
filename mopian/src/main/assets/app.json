@@ -1,39 +1,39 @@
 {
   "color": "#707070",
-  "selectedColor": "#068F3D",
-  "borderStyle": "#707070",
-  "backgroundColor": "#FFFFFF",
+  "selectedColor": "#eb4e40",
+  "borderStyle": "#eeeeee",
+  "backgroundColor": "#ffffff",
   "style":"both",
   "dot":2,
-  "index":"file://view/home/index.js",
+  "index":"file://view/shop/cashier/index.js",
   "tabBar": [
     {
       "text": "首页",
-      "tag":"home1",
-      "path": "file://view/home/index.js",
+      "tag":"0",
+      "path": "file://view/shop/cashier/index.js",
       "icon": "ico_home",
       "requireAuth": false,
       "selectedIconPath": "ico_home_focus"
     },
     {
-      "text": "发现",
-      "tag":"home2",
-      "path": "file://view/home/index.js",
+      "text": "会员",
+      "tag":"1",
+      "path": "file://view/friend/list.js",
       "icon": "ico_friend",
       "requireAuth":false,
       "selectedIconPath": "ico_friend_focus"
     },
     {
-      "text": "订单",
-      "tag":"home3",
-      "path": "file://view/home/index.js",
+      "text": "消息",
+      "tag":"2",
+      "path": "file://view/message/list.js",
       "icon": "ico_msg",
       "requireAuth":true,
       "selectedIconPath": "ico_msg_focus"
     },
     {
       "text": "我的",
-      "tag":"home4",
+      "tag":"3",
       "path": "file://view/member/mine.js",
       "icon": "ico_my",
       "requireAuth":true,
