@@ -11,33 +11,33 @@
       "text": "首页",
       "tag":"0",
       "path": "file://pages/index/index.js",
-      "icon": "ico_home",
+      "icon": "ico_tab1",
       "requireAuth": false,
-      "selectedIconPath": "ico_home_focus"
+      "selectedIconPath": "ico_tab1_focus"
     },
     {
       "text": "发现",
       "tag":"1",
       "path": "file://pages/weibo/index.js",
-      "icon": "ico_friend",
+      "icon": "ico_tab2",
       "requireAuth":false,
-      "selectedIconPath": "ico_friend_focus"
+      "selectedIconPath": "ico_tab2_focus"
     },
     {
       "text": "订单",
       "tag":"2",
       "path": "file://pages/member/order/index.js",
-      "icon": "ico_msg",
+      "icon": "ico_tab3",
       "requireAuth":true,
-      "selectedIconPath": "ico_msg_focus"
+      "selectedIconPath": "ico_tab3_focus"
     },
     {
       "text": "我的",
       "tag":"3",
       "path": "file://pages/member/index.js",
-      "icon": "ico_my",
+      "icon": "ico_tab4",
       "requireAuth":true,
-      "selectedIconPath": "ico_my_focus"
+      "selectedIconPath": "ico_tab4_focus"
     }
   ]
 }
