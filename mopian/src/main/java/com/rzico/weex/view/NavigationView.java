@@ -64,7 +64,8 @@ public class NavigationView extends LinearLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.NavigationView);
         image_height = typedArray.getInteger(R.styleable.NavigationView_image_height, 20);
         image_width = typedArray.getInteger(R.styleable.NavigationView_image_width, 20);
-        text_size = typedArray.getDimension(R.styleable.NavigationView_text_size, 12);
+//        text_size = typedArray.getDimension(R.styleable.NavigationView_text_size, 12);
+        text_size = 12;
         dotText = new TextView(context);
         LinearLayout.LayoutParams textDotLp = new LinearLayout.LayoutParams(Utils.dp2px(context, 20), Utils.dp2px(context, 20));
         dotText.setTextColor(Color.WHITE);
@@ -128,7 +129,7 @@ public class NavigationView extends LinearLayout {
                 TextView tv_title = new TextView(context);
                 LinearLayout.LayoutParams textLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-                tv_title.setTextSize(text_size);
+                tv_title.setTextSize(TypedValue.COMPLEX_UNIT_SP, text_size);
                 tv_title.setText(titles[i]);
                 tv_title.setLayoutParams(textLp);
 

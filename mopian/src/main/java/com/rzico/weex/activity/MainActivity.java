@@ -748,6 +748,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         if(page == 1){
 
+//            EventBus.getDefault().post(new MessageBus(MessageBus.Type.SWITCHTAB, 2));
         }
         if(page != 0 && handleCount < (page + 1)) return;
 //        if (page != 0) {
@@ -818,7 +819,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
 
             }
-            boolean is = getIntent().getBooleanExtra("FORCEOFFLINE", false);
+            boolean is = intent.getBooleanExtra("FORCEOFFLINE", false);
             if(is){//是否被强制登录
                 //被注销了
                 destoryWeexInstance();
@@ -836,7 +837,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             }
 
-            int switchtabIndex = getIntent().getIntExtra("SWITCHTAB", 0);
+            int switchtabIndex = intent.getIntExtra("SWITCHTAB", 0);
             setSelectTab(switchtabIndex);
             nv.setColorLing(switchtabIndex);
 

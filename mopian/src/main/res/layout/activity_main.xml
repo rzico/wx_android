@@ -23,7 +23,6 @@
         android:layout_alignParentBottom="true"
         app:image_width="23"
         app:image_height="23"
-        app:text_size="5sp"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
