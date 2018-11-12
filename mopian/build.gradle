@@ -83,6 +83,12 @@ android {
     configurations.all {
         resolutionStrategy.force 'com.android.support:support-annotations:23.1.0'
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+            dirs project(':presentation').file('libs')
+        }
+    }
 }
 
 dependencies {
@@ -111,8 +117,7 @@ dependencies {
     // PLUGIN GRADLE EXTENSIONS START
     // PLUGIN GRADLE EXTENSIONS END
     compile project(':xutils')
-    compile project(':richeditor')
-    compile project(':weex_sdk')
+
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile files('libs/bcprov-jdk15on-147.jar')
     compile project(':presentation')
@@ -133,7 +138,6 @@ dependencies {
     compile files('libs/ShareSDK-Wechat-Favorite-3.1.1.jar')
     compile files('libs/ShareSDK-Wechat-Moments-3.1.1.jar')
     compile project(path: ':alertview')
-    compile project(path: ':graffiti')
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
     //    哎吖包包特效
@@ -144,4 +148,8 @@ dependencies {
     compile 'com.meizu.flyme.internet:push-internal:3.6.3@aar'
     compile files('libs/sdk4upos_20180411_mix.jar')
     testCompile 'junit:junit:4.12'
+
+//    aar
+    compile(name: 'weex_sdk-release', ext: 'aar')
+    compile(name: 'richeditor-release', ext: 'aar')
 }

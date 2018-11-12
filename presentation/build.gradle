@@ -43,11 +43,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile project(':wx_sdk')
     compile 'org.jetbrains:annotations-java5:15.0'
+    compile(name: 'wx_sdk-release', ext: 'aar')
+
 }

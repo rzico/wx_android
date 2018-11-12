@@ -5,13 +5,13 @@ rootProject.name = 'weex-project'
 
 include ":xutils"
 include ":library"
-include ":richeditor"
+//include ":richeditor"
 include ":presentation"
 include ":alertview"
 include ":photoview"
-include ":wx_sdk"
-include ":graffiti"
+//include ":wx_sdk"
+//include ":graffiti"
 include ":chat_ui"
 include ":ucrop"
 
-include ":weex_sdk"
+//include ":weex_sdk"
