@@ -1575,10 +1575,11 @@ public class WXEventModule extends WXModule {
     public void sendGlobalEvent(String eventKey, Message data){
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
-        //推送前面4个页面
 
+        //推送前面4个页面
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, eventKey, params));
         //判断当前页面是不是weex页面
+
     }
 
     @JSMethod
@@ -1598,8 +1599,5 @@ public class WXEventModule extends WXModule {
         //        发送被拒绝了
         void authDenied();
     }
-
-
-
 
 }
