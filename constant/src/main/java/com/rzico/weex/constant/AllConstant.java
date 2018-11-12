@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 
 public class AllConstant {
-    public static final String PACKNAME = "com.rzico.assistant";
+    public static final String PACKNAME = "com.rzico.farmer";
 
     public static int isClearAll = 1;
 
@@ -44,10 +44,10 @@ public class AllConstant {
         if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             //sd路径
             //        return ;
-            return Environment.getExternalStorageDirectory().getPath() + "/" + "mopian/";
+            return Environment.getExternalStorageDirectory().getPath() + "/" + "weex/";
         }else {
             //本地路径
-            return Environment.getRootDirectory().getPath() + "/" + "mopian/";
+            return Environment.getRootDirectory().getPath() + "/" + "weex/";
         }
     }
 
