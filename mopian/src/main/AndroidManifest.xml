@@ -43,23 +43,23 @@
 
 
     <!-- mi push -->
-    <permission android:name="com.rzico.assistant.permission.MIPUSH_RECEIVE"
+    <permission android:name="com.rzico.farmer.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
     <!--这里 com.tencent.imsdk 改成 App 的包名-->
-    <uses-permission android:name="com.rzico.assistant.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="com.rzico.farmer.permission.MIPUSH_RECEIVE" />
     <!--这里 com.tencent.imsdk 改成 App 的包名-->
 
     <!--mz push-->
     <!-- 兼容flyme5.0以下版本，魅族内部集成pushSDK必填，不然无法收到消息-->
     <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE"></uses-permission>
-    <permission android:name="com.rzico.assistant.push.permission.MESSAGE" android:protectionLevel="signature"/>
-    <uses-permission android:name="com.rzico.assistant.push.permission.MESSAGE"></uses-permission>
+    <permission android:name="com.rzico.farmer.push.permission.MESSAGE" android:protectionLevel="signature"/>
+    <uses-permission android:name="com.rzico.farmer.push.permission.MESSAGE"></uses-permission>
 
     <!--  兼容flyme3.0配置权限-->
     <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
-    <permission android:name="com.rzico.assistant.permission.C2D_MESSAGE"
+    <permission android:name="com.rzico.farmer.permission.C2D_MESSAGE"
         android:protectionLevel="signature"></permission>
-    <uses-permission android:name="com.rzico.assistant.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="com.rzico.farmer.permission.C2D_MESSAGE"/>
 
 
     <uses-feature android:name="android.hardware.camera"
@@ -109,7 +109,7 @@
                 <action android:name="com.alibaba.weex.protocol.openurl" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.taobao.android.intent.category.YUNDIAN" />
+                <category android:name="com.taobao.android.intent.category.FARMER" />
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
@@ -159,7 +159,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
-            android:name="com.rzico.assistant.wxapi.WXEntryActivity"
+            android:name="com.rzico.farmer.wxapi.WXEntryActivity"
+            android:exported="true"
+            android:theme="@style/FullscreenTheme_haveActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.rzico.farmer.wxapi.WXPayEntryActivity"
             android:exported="true"
             android:theme="@style/FullscreenTheme_haveActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"

@@ -6,11 +6,11 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.assistant"
+        applicationId "com.rzico.farmer"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 327
-        versionName "3.2.7"
+        versionCode 331
+        versionName "3.3.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
@@ -33,15 +33,15 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/pine.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "pine"
             keyPassword "123456"
         }
         debug {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/pine.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "pine"
             keyPassword "123456"
         }
 

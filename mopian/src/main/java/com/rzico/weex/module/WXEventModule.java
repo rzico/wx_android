@@ -58,7 +58,6 @@ import com.rzico.weex.oos.STSGetter;
 import com.rzico.weex.utils.ContactUtils;
 import com.rzico.weex.utils.DateUtils;
 import com.rzico.weex.utils.DeleteFileUtil;
-import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.RSAUtils;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
