@@ -246,7 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onForceOffline() {
                 //登出
-                new XRequest(MainActivity.this, "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                new XRequest(MainActivity.this, "/farmer/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                     @Override
                     public void onSuccess(BaseActivity activity, String result, String type) {
                         TIMManager.getInstance().logout(new TIMCallBack() {
@@ -797,10 +797,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         if (one != null && one.length == 2) {
                             if (one[0].equals("article")) {
                                 // 文章 file://view/article/preview.js?articleId=%@&publish=true
-                                url = "file://view/article/preview.js?articleId=" + two[1] + "&publish=true";
+                                url = "file://view/articlePreview/articlePreview.js?articleId=" + two[1] + "&publish=true";
                             } else if (one[0].equals("topic")) {
                                 // 专栏 file://view/topic/author.js?id=%@
-                                url = "file://view/topic/author.js?id=" + two[1];
+                                url = "file://view/perHome/perHome.js?id=" + two[1];
                             }
                         }
                     }
