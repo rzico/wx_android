@@ -79,7 +79,7 @@ public class UploadToAli {
         }
 
         if (error) {
-            new XRequest((BaseActivity) context, "weex/member/oss/sts.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+            new XRequest((BaseActivity) context, "farmer/member/oss/sts.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
                 @Override
                 public void onSuccess(BaseActivity activity, String result, String type) {
                     Message entity = new Gson().fromJson(result, Message.class);

@@ -164,7 +164,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onForceOffline() {
                 //登出
-                new XRequest(SplashActivity.this, "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                new XRequest(SplashActivity.this, "/farmer/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                     @Override
                     public void onSuccess(BaseActivity activity, String result, String type) {
                         TIMManager.getInstance().logout(new TIMCallBack() {
@@ -256,7 +256,7 @@ public class SplashActivity extends BaseActivity {
     private void handlerFrist() {
         //首先判断本地资源包是不是初始化的
         //这里作判断处理
-        new XRequest(SplashActivity.this, "weex/common/resources.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(SplashActivity.this, "farmer/common/resources.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 try {

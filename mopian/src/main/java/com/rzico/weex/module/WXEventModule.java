@@ -83,7 +83,7 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.rzico.weex.constant.AllConstant;
-import com.rzico.assistant.wxapi.WXEntryActivity;
+import com.rzico.farmer.wxapi.WXEntryActivity;
 
 import net.bither.util.NativeUtil;
 
@@ -115,7 +115,7 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void logout(final JSCallback callback){
-        new XRequest(getActivity(), "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(getActivity(), "/farmer/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 if(!TIMManager.getInstance().getLoginUser().equals("")){
@@ -1095,7 +1095,7 @@ public class WXEventModule extends WXModule {
         }
 
         if (error) {
-            new XRequest(getActivity(), "weex/member/oss/sts.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+            new XRequest(getActivity(), "farmer/member/oss/sts.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
                 @Override
                 public void onSuccess(BaseActivity activity, String result, String type) {
                     Message entity = new Gson().fromJson(result, Message.class);
