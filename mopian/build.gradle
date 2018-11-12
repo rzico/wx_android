@@ -6,7 +6,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.assistant"
+        applicationId "com.lequdong.lequdong"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 327

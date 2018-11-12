@@ -1,6 +1,5 @@
-package com.rzico.assistant.wxapi;
+package com.lequdong.lequdong.wxapi;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
