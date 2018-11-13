@@ -113,7 +113,6 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 
 public class WXEventModule extends WXModule {
 
-
     @JSMethod
     public void logout(final JSCallback callback){
         new XRequest(getActivity(), "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
@@ -1573,13 +1572,14 @@ public class WXEventModule extends WXModule {
     }
 
     @JSMethod
-    public void sendGlobalEvent(String eventKey, Message data){
+    public void sendGlobalEvent(String eventKey, Object data){
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
-        //推送前面4个页面
 
+       // mWXSDKInstance.fireGlobalEventCallback(eventKey, params);
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, eventKey, params));
         //判断当前页面是不是weex页面
+
     }
 
     @JSMethod
@@ -1599,8 +1599,5 @@ public class WXEventModule extends WXModule {
         //        发送被拒绝了
         void authDenied();
     }
-
-
-
 
 }
