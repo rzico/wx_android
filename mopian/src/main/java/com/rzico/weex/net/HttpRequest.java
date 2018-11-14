@@ -178,6 +178,7 @@ public class HttpRequest {
             @Override
             public void onSuccess(String result) {
                 System.out.println("======================" + task.url + "|success|请求耗时:" + (System.currentTimeMillis() - requestTime));
+                System.out.println(result);
                 try {
                     Message entity= new Gson().fromJson(result, Message.class);
                     String type= entity.getType();

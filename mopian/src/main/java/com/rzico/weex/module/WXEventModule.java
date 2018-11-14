@@ -1572,7 +1572,7 @@ public class WXEventModule extends WXModule {
     }
 
     @JSMethod
-    public void sendGlobalEvent(String eventKey, Message data){
+    public void sendGlobalEvent(String eventKey, Object data){
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
 

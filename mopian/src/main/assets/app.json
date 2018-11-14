@@ -20,7 +20,7 @@
       "tag":"1",
       "path": "file://view/messagecenter/messagecenter.js",
       "icon": "ico_tab2",
-      "requireAuth":false,
+      "requireAuth":true,
       "selectedIconPath": "ico_tab2_focus"
     },
     {

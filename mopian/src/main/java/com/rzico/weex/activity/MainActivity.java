@@ -376,7 +376,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         for (TabBar item: tabBars){
             if(!item.isRequireAuth()){
-                if (item.getPath().startsWith("http://")) {//如果是网络url
+                if (item.getPath().startsWith("http")) {//如果是网络url
 
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex1());
@@ -435,7 +435,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         List<TabBar> tabBars = WXApplication.getAppInfo().getTabBar();
         for (TabBar item: tabBars){
             if(item.isRequireAuth()){
-                if (item.getPath().startsWith("http://")) {//如果是网络url
+                if (item.getPath().startsWith("http")) {//如果是网络url
 
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex1());
@@ -740,7 +740,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void setSelectTab(int page) {
-        if (WXApplication.getAppInfo().getTabBar().get(page).isRequireAuth() && (SharedUtils.readLoginId() == 0 || !Constant.loginState )) {//没有登录过
+        if (WXApplication.getAppInfo().getTabBar().get(page).isRequireAuth() && (SharedUtils.readLoginId() == 0) ) {//没有登录过
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, LoginActivity.LOGINCODE);
