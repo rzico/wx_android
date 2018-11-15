@@ -17,7 +17,6 @@ import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.notidmanager.DbCacheBean;
 import com.rzico.weex.module.AudioModule;
-import com.rzico.weex.module.LivePlayerModule;
 import com.rzico.weex.module.MapModule;
 import com.rzico.weex.module.UposModule;
 import com.rzico.weex.module.PhoneModule;

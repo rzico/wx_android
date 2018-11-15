@@ -19,9 +19,9 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.sdk.android.oss.OSS;
-import com.alibaba.sdk.android.oss.OSSClient;
-import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+//import com.alibaba.sdk.android.oss.OSS;
+//import com.alibaba.sdk.android.oss.OSSClient;
+//import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationListener;
@@ -52,9 +52,9 @@ import com.rzico.weex.model.info.REABean;
 import com.rzico.weex.model.info.WxConfig;
 import com.rzico.weex.net.HttpRequest;
 import com.rzico.weex.net.XRequest;
-import com.rzico.weex.oos.OssService;
-import com.rzico.weex.oos.PauseableUploadTask;
-import com.rzico.weex.oos.STSGetter;
+//import com.rzico.weex.oos.OssService;
+////import com.rzico.weex.oos.PauseableUploadTask;
+//import com.rzico.weex.oos.STSGetter;
 import com.rzico.weex.utils.ContactUtils;
 import com.rzico.weex.utils.DateUtils;
 import com.rzico.weex.utils.DeleteFileUtil;
@@ -84,7 +84,7 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.rzico.weex.constant.AllConstant;
-import com.rzico.laiya.wxapi.WXEntryActivity;
+//import com.rzico.laiya.wxapi.WXEntryActivity;
 
 import net.bither.util.NativeUtil;
 
@@ -102,13 +102,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.wechat.favorite.WechatFavorite;
-import cn.sharesdk.wechat.friends.Wechat;
-import cn.sharesdk.wechat.moments.WechatMoments;
+//
+//import cn.sharesdk.framework.Platform;
+//import cn.sharesdk.framework.PlatformActionListener;
+//import cn.sharesdk.framework.ShareSDK;
+//import cn.sharesdk.wechat.favorite.WechatFavorite;
+//import cn.sharesdk.wechat.friends.Wechat;
+//import cn.sharesdk.wechat.moments.WechatMoments;
 
 
 public class WXEventModule extends WXModule {
@@ -393,178 +393,178 @@ public class WXEventModule extends WXModule {
      *
      * @param callback
      */
-
-    @JSMethod
-    public void wxAuth(final JSCallback callback) {
-
-        final com.rzico.weex.activity.BaseActivity activity = getActivity();
-        WXEventModule.get().init(new RxWeiXinAuthFinalHolderListener() {
-            @Override
-            public void userOk(String code) {
-                Message message = new Message();
-                message.setType("success");
-                message.setContent("用户授权成功");
-                message.setData(code);
-                callback.invoke(message);
-            }
-
-            @Override
-            public void userCancel() {
-                Message message = new Message();
-                message.setType("error");
-                message.setContent("用户取消");
-                callback.invoke(message);
-//                activity.setResult(Activity.RESULT_CANCELED);
-            }
-
-            @Override
-            public void authDenied() {
-                Message message = new Message();
-                message.setType("error");
-                message.setContent("发送被拒绝");
-                callback.invoke(message);
-//              activity.setResult(Activity.RESULT_CANCELED);
-            }
-        }).sendWxAuth(activity);
-    }
+//
+//    @JSMethod
+//    public void wxAuth(final JSCallback callback) {
+//
+//        final com.rzico.weex.activity.BaseActivity activity = getActivity();
+//        WXEventModule.get().init(new RxWeiXinAuthFinalHolderListener() {
+//            @Override
+//            public void userOk(String code) {
+//                Message message = new Message();
+//                message.setType("success");
+//                message.setContent("用户授权成功");
+//                message.setData(code);
+//                callback.invoke(message);
+//            }
+//
+//            @Override
+//            public void userCancel() {
+//                Message message = new Message();
+//                message.setType("error");
+//                message.setContent("用户取消");
+//                callback.invoke(message);
+////                activity.setResult(Activity.RESULT_CANCELED);
+//            }
+//
+//            @Override
+//            public void authDenied() {
+//                Message message = new Message();
+//                message.setType("error");
+//                message.setContent("发送被拒绝");
+//                callback.invoke(message);
+////              activity.setResult(Activity.RESULT_CANCELED);
+//            }
+//        }).sendWxAuth(activity);
+//    }
 
     /**
      * {"partnerid":"","prepayid":"","package":"","noncestr":"","timestamp":unsignedInt,"sign":""}
      * @param option
      * @param callback
      */
-    @JSMethod
-    public void wxAppPay(String option, final JSCallback callback){
-
-        WXEventModule.get().initWxAppPay(new RxWeiXinAuthFinalHolderListener() {
-            @Override
-            public void userOk(String code) {
-                Message message = new Message();
-                message.setType("success");
-                message.setContent("支付成功");
-                message.setData(code);
-                callback.invoke(message);
-            }
-
-            @Override
-            public void userCancel() {
-
-                Message message = new Message();
-                message.setType("error");
-                message.setContent("用户取消");
-                callback.invoke(message);
-            }
-
-            @Override
-            public void authDenied() {
-
-                Message message = new Message();
-                message.setType("error");
-                message.setContent("支付失败");
-                callback.invoke(message);
-            }
-        }).sendWxAppPay(option, getActivity());
-
-    }
-
-    public void sendWxAppPay(String option, Activity activity){
-        String partnerid = "";
-        String prepayid = "";
-        String packagea = "";
-        String noncestr = "";
-        String timestamp = "";
-        String sign = "";
-        try {
-            option = URLDecoder.decode(option, "utf-8");
-            com.alibaba.fastjson.JSONObject jsObj = JSON.parseObject(option);
-            if (jsObj.containsKey("partnerid")) {
-                partnerid = jsObj.getString("partnerid");
-            }
-            if (jsObj.containsKey("prepayid")) {
-                prepayid = jsObj.getString("prepayid");
-
-            }
-            if (jsObj.containsKey("package")) {
-                packagea = jsObj.getString("package");
-            }
-            if (jsObj.containsKey("noncestr")) {
-                noncestr = jsObj.getString("noncestr");
-            }
-            if (jsObj.containsKey("timestamp")) {
-                timestamp = jsObj.getString("timestamp");
-            }
-            if (jsObj.containsKey("sign")) {
-                sign = jsObj.getString("sign");
-            }
-
-            IWXAPI mApi = WXAPIFactory.createWXAPI(activity, WXEntryActivity.WEIXIN_APP_ID, true);
-            mApi.registerApp(WXEntryActivity.WEIXIN_APP_ID);
-            if (mApi != null && mApi.isWXAppInstalled()) {
-                PayReq request = new PayReq();
-                request.appId = WXEntryActivity.WEIXIN_APP_ID;
-                request.partnerId = partnerid;
-                request.prepayId = prepayid;
-                request.packageValue = packagea;
-                request.nonceStr = noncestr;
-                request.timeStamp = timestamp;
-                request.sign = sign;
-                mApi.sendReq(request);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @JSMethod
-    public void wxPay(String url, final JSCallback callback) {
-        final Map map = new HashMap();
-        map.put("Referer", Constant.SERVER);
-        WebView webView = new WebView(getActivity());
-        WebSettings mWebSettings = webView.getSettings();
-        mWebSettings.setJavaScriptEnabled(true);
-        webView.loadUrl(url, map);
-        webView.setWebViewClient(new WebViewClient() {
-                                     @Override
-                                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                                         view.loadUrl(url, map);
-                                         // 如下方案可在非微信内部WebView的H5页面中调出微信支付
-                                         if (url.startsWith("weixin://wap/pay?")) {
-                                             Intent intent = new Intent();
-                                             intent.setAction(Intent.ACTION_VIEW);
-                                             intent.setData(Uri.parse(url));
-                                             getActivity().startActivity(intent);
-                                             Message message = new Message();
-                                             message.setType("success");
-                                             callback.invoke(message);
-                                         } else {
-                                             Message message = new Message();
-                                             message.setType("error");
-                                             callback.invoke(message);
-                                         }
-                                         return true;
-                                     }
-                                 }
-
-        );
-    }
-
-    /**
-     * 发送验证
-     *
-     * @param activity
-     */
-    public void sendWxAuth(Activity activity) {
-        IWXAPI mApi = WXAPIFactory.createWXAPI(activity, WXEntryActivity.WEIXIN_APP_ID, true);
-        mApi.registerApp(WXEntryActivity.WEIXIN_APP_ID);
-        if (mApi != null && mApi.isWXAppInstalled()) {
-            SendAuth.Req req = new SendAuth.Req();
-            req.scope = "snsapi_userinfo";
-            req.state = "wechat_sdk_demo_test_neng";
-            mApi.sendReq(req);
-
-        } else
-            Toast.makeText(activity, "用户未安装微信", Toast.LENGTH_SHORT).show();
-
-    }
+//    @JSMethod
+//    public void wxAppPay(String option, final JSCallback callback){
+//
+//        WXEventModule.get().initWxAppPay(new RxWeiXinAuthFinalHolderListener() {
+//            @Override
+//            public void userOk(String code) {
+//                Message message = new Message();
+//                message.setType("success");
+//                message.setContent("支付成功");
+//                message.setData(code);
+//                callback.invoke(message);
+//            }
+//
+//            @Override
+//            public void userCancel() {
+//
+//                Message message = new Message();
+//                message.setType("error");
+//                message.setContent("用户取消");
+//                callback.invoke(message);
+//            }
+//
+//            @Override
+//            public void authDenied() {
+//
+//                Message message = new Message();
+//                message.setType("error");
+//                message.setContent("支付失败");
+//                callback.invoke(message);
+//            }
+//        }).sendWxAppPay(option, getActivity());
+//
+//    }
+//
+//    public void sendWxAppPay(String option, Activity activity){
+//        String partnerid = "";
+//        String prepayid = "";
+//        String packagea = "";
+//        String noncestr = "";
+//        String timestamp = "";
+//        String sign = "";
+//        try {
+//            option = URLDecoder.decode(option, "utf-8");
+//            com.alibaba.fastjson.JSONObject jsObj = JSON.parseObject(option);
+//            if (jsObj.containsKey("partnerid")) {
+//                partnerid = jsObj.getString("partnerid");
+//            }
+//            if (jsObj.containsKey("prepayid")) {
+//                prepayid = jsObj.getString("prepayid");
+//
+//            }
+//            if (jsObj.containsKey("package")) {
+//                packagea = jsObj.getString("package");
+//            }
+//            if (jsObj.containsKey("noncestr")) {
+//                noncestr = jsObj.getString("noncestr");
+//            }
+//            if (jsObj.containsKey("timestamp")) {
+//                timestamp = jsObj.getString("timestamp");
+//            }
+//            if (jsObj.containsKey("sign")) {
+//                sign = jsObj.getString("sign");
+//            }
+//
+//            IWXAPI mApi = WXAPIFactory.createWXAPI(activity, WXEntryActivity.WEIXIN_APP_ID, true);
+//            mApi.registerApp(WXEntryActivity.WEIXIN_APP_ID);
+//            if (mApi != null && mApi.isWXAppInstalled()) {
+//                PayReq request = new PayReq();
+//                request.appId = WXEntryActivity.WEIXIN_APP_ID;
+//                request.partnerId = partnerid;
+//                request.prepayId = prepayid;
+//                request.packageValue = packagea;
+//                request.nonceStr = noncestr;
+//                request.timeStamp = timestamp;
+//                request.sign = sign;
+//                mApi.sendReq(request);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//    @JSMethod
+//    public void wxPay(String url, final JSCallback callback) {
+//        final Map map = new HashMap();
+//        map.put("Referer", Constant.SERVER);
+//        WebView webView = new WebView(getActivity());
+//        WebSettings mWebSettings = webView.getSettings();
+//        mWebSettings.setJavaScriptEnabled(true);
+//        webView.loadUrl(url, map);
+//        webView.setWebViewClient(new WebViewClient() {
+//                                     @Override
+//                                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                                         view.loadUrl(url, map);
+//                                         // 如下方案可在非微信内部WebView的H5页面中调出微信支付
+//                                         if (url.startsWith("weixin://wap/pay?")) {
+//                                             Intent intent = new Intent();
+//                                             intent.setAction(Intent.ACTION_VIEW);
+//                                             intent.setData(Uri.parse(url));
+//                                             getActivity().startActivity(intent);
+//                                             Message message = new Message();
+//                                             message.setType("success");
+//                                             callback.invoke(message);
+//                                         } else {
+//                                             Message message = new Message();
+//                                             message.setType("error");
+//                                             callback.invoke(message);
+//                                         }
+//                                         return true;
+//                                     }
+//                                 }
+//
+//        );
+//    }
+//
+//    /**
+//     * 发送验证
+//     *
+//     * @param activity
+//     */
+//    public void sendWxAuth(Activity activity) {
+//        IWXAPI mApi = WXAPIFactory.createWXAPI(activity, WXEntryActivity.WEIXIN_APP_ID, true);
+//        mApi.registerApp(WXEntryActivity.WEIXIN_APP_ID);
+//        if (mApi != null && mApi.isWXAppInstalled()) {
+//            SendAuth.Req req = new SendAuth.Req();
+//            req.scope = "snsapi_userinfo";
+//            req.state = "wechat_sdk_demo_test_neng";
+//            mApi.sendReq(req);
+//
+//        } else
+//            Toast.makeText(activity, "用户未安装微信", Toast.LENGTH_SHORT).show();
+//
+//    }
 
     /**
      * 改变标题拦颜色 ture 为 暗色
@@ -1055,7 +1055,7 @@ public class WXEventModule extends WXModule {
                 }
                 if (!error) {
                     //取本地缓存不用去服务器取
-                    uploadFile(stsData, getActivity(), finalCacheFileName, callback, progressCallback);
+//                    uploadFile(stsData, getActivity(), finalCacheFileName, callback, progressCallback);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1070,7 +1070,7 @@ public class WXEventModule extends WXModule {
                     Message entity = new Gson().fromJson(result, Message.class);
                     String data = new Gson().toJson(entity.getData());
                     SharedUtils.save("stsData", data);
-                    uploadFile(data, getActivity(), finalCacheFileName, callback, progressCallback);
+//                    uploadFile(data, getActivity(), finalCacheFileName, callback, progressCallback);
                 }
 
                 @Override
@@ -1143,32 +1143,33 @@ public class WXEventModule extends WXModule {
                 }).check();
 
     }
-    private WeakReference<PauseableUploadTask> task;
+//    private WeakReference<PauseableUploadTask> task;
     //上传文件
-    public void uploadFile(String stsData, BaseActivity activity, String filePath, JSCallback callback, JSCallback progressCallback) {
-        try{
-            OSSCredentialProvider credentialProvider = new STSGetter(stsData);
-            OSS oss = new OSSClient(activity, Constant.endpoint, credentialProvider);
-            OssService ossService = new OssService(oss, Constant.bucket);
-            Date nowTime = new Date();
-            SimpleDateFormat time = new SimpleDateFormat("yyyy/MM/dd");
-            String [] text = filePath.split("/");
-            String [] houzui = text[text.length - 1].split("\\.");
-            String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + "." + houzui[houzui.length - 1];
-//        ossService.asyncPutImage(imagePath, filePath, callback, progressCallback);
-//        if ((task == null) || (task.get() == null)){
-//            Log.d("MultiPartUpload", "Start");
-            PauseableUploadTask pauseableUploadTask = ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback);
-            if(pauseableUploadTask != null){
-                task = new WeakReference<>(pauseableUploadTask);
-            }else {
-                callback.invoke(new Message().error("图片地址不合法"));
-            }
-        } catch (Exception e){
-            callback.invoke(new Message().error("图片地址不合法"));
-        }
-
-    }    /**获取库Phon表字段**/
+//    public void uploadFile(String stsData, BaseActivity activity, String filePath, JSCallback callback, JSCallback progressCallback) {
+//        try{
+//            OSSCredentialProvider credentialProvider = new STSGetter(stsData);
+//            OSS oss = new OSSClient(activity, Constant.endpoint, credentialProvider);
+//            OssService ossService = new OssService(oss, Constant.bucket);
+//            Date nowTime = new Date();
+//            SimpleDateFormat time = new SimpleDateFormat("yyyy/MM/dd");
+//            String [] text = filePath.split("/");
+//            String [] houzui = text[text.length - 1].split("\\.");
+//            String imagePath = Constant.upLoadImages + time.format(nowTime) + "/" + UUID.randomUUID().toString() + "." + houzui[houzui.length - 1];
+////        ossService.asyncPutImage(imagePath, filePath, callback, progressCallback);
+////        if ((task == null) || (task.get() == null)){
+////            Log.d("MultiPartUpload", "Start");
+//            PauseableUploadTask pauseableUploadTask = ossService.asyncMultiPartUpload(imagePath, filePath, callback, progressCallback);
+//            if(pauseableUploadTask != null){
+//                task = new WeakReference<>(pauseableUploadTask);
+//            }else {
+//                callback.invoke(new Message().error("图片地址不合法"));
+//            }
+//        } catch (Exception e){
+//            callback.invoke(new Message().error("图片地址不合法"));
+//        }
+//
+//    }
+    /**获取库Phon表字段**/
     private static final String[] PHONES_PROJECTION = new String[] {
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY, ContactsContract.CommonDataKinds.Photo.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.DATA1 };
 
@@ -1263,7 +1264,7 @@ public class WXEventModule extends WXModule {
 
     /**
      *
-     * @param option
+//     * @param option
      *  String title = "";   // 这个是分享的标题
     String text = ""; //这个是分享的介绍
     String imagePath = "";//这里图片可能是路径 可能是url path 不必加file
@@ -1271,98 +1272,98 @@ public class WXEventModule extends WXModule {
     String url = "";// 这个是分享的url
     String type = [appMessage,timeline,favorite] //分别是 微信好友、 微信朋友圈、 微信收藏
     copyHref 复制连接 browser 打开浏览器
-     * @param callback
+//     * @param callback
      */
-    @JSMethod
-    public void share(String option, final JSCallback callback){
-        String title = "";
-        String text = "";
-        String imagePath = "";
-        String imageUrl = "";
-        String url = "";
-        String type = "Wechat";
-
-        try {
-            option = URLDecoder.decode(option, "utf-8");
-            com.alibaba.fastjson.JSONObject jsObj = JSON.parseObject(option);
-            if (jsObj.containsKey("title")) {
-                title = jsObj.getString("title");
-            }
-            if (jsObj.containsKey("text")) {
-                text = jsObj.getString("text");
-            }
-            if (jsObj.containsKey("imagePath")) {
-                imagePath = jsObj.getString("imagePath");
-            }
-            if (jsObj.containsKey("imageUrl")) {
-                imageUrl = jsObj.getString("imageUrl");
-            }
-            if (jsObj.containsKey("url")) {
-                url = jsObj.getString("url");
-            }
-            if (jsObj.containsKey("type")) {
-                type = jsObj.getString("type");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Platform.ShareParams params =  new Platform.ShareParams();
-        params.setShareType(Platform.SHARE_WEBPAGE);//一般都是网页 如果要别的再另外加
-        if(!imagePath.equals("")){
-            params.setImagePath(imagePath);
-        }else if(!imageUrl.equals("")){
-            params.setImageUrl(imageUrl);
-        }
-        params.setText(text);
-        params.setTitle(title);
-        params.setUrl(url);
-        Platform platform = null;
-        if(type.equals("favorite")){
-            platform = ShareSDK.getPlatform(WechatFavorite.NAME);
-        }else if(type.equals("timeline")){
-            platform = ShareSDK.getPlatform(WechatMoments.NAME);
-        }else if(type.equals("appMessage")){
-            platform = ShareSDK.getPlatform(Wechat.NAME);
-        }else if(type.equals("copyHref")){
-            // 得到剪贴板管理器
-            ClipboardManager cmb = (ClipboardManager)getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            cmb.setText(title.trim() + "\r\n" + text.trim() + "\r\n" +url.trim());
-            Message message = new Message().success("");
-            callback.invoke(message);
-        }else if(type.equals("browser")){
-            //分享到浏览器
-            Intent intent = new Intent();
-            intent.setAction("android.intent.action.VIEW");
-            Uri content_url = Uri.parse(url);
-            intent.setData(content_url);
-            getActivity().startActivity(intent);
-
-            Message message = new Message().success("");
-            callback.invoke(message);
-        }
-        if(platform!=null){
-            platform.setPlatformActionListener(new PlatformActionListener() {
-                @Override
-                public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-                    Message message = new Message().success("分享成功");
-                    callback.invoke(message);
-                }
-
-                @Override
-                public void onError(Platform platform, int i, Throwable throwable) {
-                    Message message = new Message().error("分享出错");
-                    callback.invoke(message);
-                }
-                @Override
-                public void onCancel(Platform platform, int i) {
-                    Message message = new Message().error("用户取消");
-                    callback.invoke(message);
-                }
-            });
-            platform.share(params);
-        }
-    }
+//    @JSMethod
+//    public void share(String option, final JSCallback callback){
+//        String title = "";
+//        String text = "";
+//        String imagePath = "";
+//        String imageUrl = "";
+//        String url = "";
+//        String type = "Wechat";
+//
+//        try {
+//            option = URLDecoder.decode(option, "utf-8");
+//            com.alibaba.fastjson.JSONObject jsObj = JSON.parseObject(option);
+//            if (jsObj.containsKey("title")) {
+//                title = jsObj.getString("title");
+//            }
+//            if (jsObj.containsKey("text")) {
+//                text = jsObj.getString("text");
+//            }
+//            if (jsObj.containsKey("imagePath")) {
+//                imagePath = jsObj.getString("imagePath");
+//            }
+//            if (jsObj.containsKey("imageUrl")) {
+//                imageUrl = jsObj.getString("imageUrl");
+//            }
+//            if (jsObj.containsKey("url")) {
+//                url = jsObj.getString("url");
+//            }
+//            if (jsObj.containsKey("type")) {
+//                type = jsObj.getString("type");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        Platform.ShareParams params =  new Platform.ShareParams();
+//        params.setShareType(Platform.SHARE_WEBPAGE);//一般都是网页 如果要别的再另外加
+//        if(!imagePath.equals("")){
+//            params.setImagePath(imagePath);
+//        }else if(!imageUrl.equals("")){
+//            params.setImageUrl(imageUrl);
+//        }
+//        params.setText(text);
+//        params.setTitle(title);
+//        params.setUrl(url);
+//        Platform platform = null;
+//        if(type.equals("favorite")){
+//            platform = ShareSDK.getPlatform(WechatFavorite.NAME);
+//        }else if(type.equals("timeline")){
+//            platform = ShareSDK.getPlatform(WechatMoments.NAME);
+//        }else if(type.equals("appMessage")){
+//            platform = ShareSDK.getPlatform(Wechat.NAME);
+//        }else if(type.equals("copyHref")){
+//            // 得到剪贴板管理器
+//            ClipboardManager cmb = (ClipboardManager)getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+//            cmb.setText(title.trim() + "\r\n" + text.trim() + "\r\n" +url.trim());
+//            Message message = new Message().success("");
+//            callback.invoke(message);
+//        }else if(type.equals("browser")){
+//            //分享到浏览器
+//            Intent intent = new Intent();
+//            intent.setAction("android.intent.action.VIEW");
+//            Uri content_url = Uri.parse(url);
+//            intent.setData(content_url);
+//            getActivity().startActivity(intent);
+//
+//            Message message = new Message().success("");
+//            callback.invoke(message);
+//        }
+//        if(platform!=null){
+//            platform.setPlatformActionListener(new PlatformActionListener() {
+//                @Override
+//                public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+//                    Message message = new Message().success("分享成功");
+//                    callback.invoke(message);
+//                }
+//
+//                @Override
+//                public void onError(Platform platform, int i, Throwable throwable) {
+//                    Message message = new Message().error("分享出错");
+//                    callback.invoke(message);
+//                }
+//                @Override
+//                public void onCancel(Platform platform, int i) {
+//                    Message message = new Message().error("用户取消");
+//                    callback.invoke(message);
+//                }
+//            });
+//            platform.share(params);
+//        }
+//    }
 
 
     @JSMethod(uiThread = false)
