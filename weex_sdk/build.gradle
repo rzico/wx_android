@@ -132,7 +132,6 @@ android {
             jvmArgs += ['-XX:-UseSplitVerifier', '-noverify','-Xverify:none']/* fix VerifyError  */
         }
     }
-    buildToolsVersion '28'
 }
 
 dependencies {
