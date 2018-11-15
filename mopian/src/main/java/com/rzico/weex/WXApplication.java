@@ -90,17 +90,17 @@ public class WXApplication extends Application {
 //    MobclickAgent.setScenarioType(getContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
 
     context = getApplicationContext();
-    if(MsfSdkUtils.isMainProcess(this)) {
-      TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
-        @Override
-        public void handleNotification(TIMOfflinePushNotification notification) {
-          if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify){
-            //消息被设置为需要提醒
-            notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
-          }
-        }
-      });
-    }
+//    if(MsfSdkUtils.isMainProcess(this)) {
+//      TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
+//        @Override
+//        public void handleNotification(TIMOfflinePushNotification notification) {
+//          if (notification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify){
+//            //消息被设置为需要提醒
+//            notification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
+//          }
+//        }
+//      });
+//    }
 
     instance = this;
     init();
@@ -120,7 +120,7 @@ public class WXApplication extends Application {
   }
 
   public static void initWeex(){
-    WXSDKEngine.addCustomOptions("appName", WXApplication.getInstance().getResources().getString(R.string.app_name));
+    WXSDKEngine.addCustomOptions("appName","来雅");
     WXSDKEngine.addCustomOptions("appGroup", "WXApp");
     WXSDKEngine.initialize(WXApplication.getInstance(),
             new InitConfig.Builder()
@@ -152,7 +152,7 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
       WXSDKEngine.registerModule("upos", UposModule.class);
-      WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
+//      WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
       WXSDKEngine.registerModule("amap", WXMapModule.class);
     } catch (WXException e) {
       e.printStackTrace();

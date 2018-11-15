@@ -10,10 +10,10 @@ import android.widget.CompoundButton;
 
 
 import com.google.gson.Gson;
-import com.huawei.android.pushagent.api.PushManager;
-import com.meizu.cloud.pushsdk.util.MzSystemUtils;
+//import com.huawei.android.pushagent.api.PushManager;
+//import com.meizu.cloud.pushsdk.util.MzSystemUtils;
 import com.rzico.weex.Constant;
-import com.rzico.weex.R;
+//import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LoginActivity;
@@ -33,7 +33,7 @@ import com.tencent.imsdk.TIMOfflinePushToken;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.ui.LineControllerView;
-import com.xiaomi.mipush.sdk.MiPushClient;
+//import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -189,23 +189,23 @@ public class LoginUtils  {
 
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.LOGINERROR));
     }
-
-    public static void c2cMusic() {
-        final Uri notifyMusic = Uri.parse("android.resource://"+WXApplication.getInstance().getPackageName()+"/" + R.raw.h0);
-        TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
-            @Override
-            public void onError(int i, String s) {
-//                Log.e(TAG, "get offline push setting error " + s);
-            }
-            @Override
-            public void onSuccess(TIMOfflinePushSettings timOfflinePushSettings) {
-                TIMOfflinePushSettings settings = timOfflinePushSettings;
-
-                        settings.setC2cMsgRemindSound(notifyMusic);
-                        TIMManager.getInstance().setOfflinePushSettings(settings);
-
-            }
-        });
-
-    }
+//
+//    public static void c2cMusic() {
+//        final Uri notifyMusic = Uri.parse("android.resource://"+WXApplication.getInstance().getPackageName()+"/" + R.raw.h0);
+//        TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
+//            @Override
+//            public void onError(int i, String s) {
+////                Log.e(TAG, "get offline push setting error " + s);
+//            }
+//            @Override
+//            public void onSuccess(TIMOfflinePushSettings timOfflinePushSettings) {
+//                TIMOfflinePushSettings settings = timOfflinePushSettings;
+//
+//                        settings.setC2cMsgRemindSound(notifyMusic);
+//                        TIMManager.getInstance().setOfflinePushSettings(settings);
+//
+//            }
+//        });
+//
+//    }
 }

@@ -118,7 +118,7 @@ dependencies {
     compile 'com.karumi:dexter:4.1.0'
     compile 'com.android.support:multidex:'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.aliyun.dpa:oss-android-sdk:2.4.3'
+//    compile 'com.aliyun.dpa:oss-android-sdk:2.4.3'
     // PLUGIN GRADLE EXTENSIONS START
     // PLUGIN GRADLE EXTENSIONS END
     compile project(':xutils')
@@ -135,23 +135,23 @@ dependencies {
 
     compile files('libs/MobCommons-2017.1024.1907.jar')
     compile files('libs/MobTools-2017.1024.1907.jar')
-    compile files('libs/ShareSDK-Core-3.1.1.jar')
-    compile files('libs/ShareSDK-QQ-3.1.1.jar')
-    compile files('libs/ShareSDK-QZone-3.1.1.jar')
-    compile files('libs/ShareSDK-SinaWeibo-3.1.1.jar')
-    compile files('libs/ShareSDK-Wechat-3.1.1.jar')
-    compile files('libs/ShareSDK-Wechat-Core-3.1.1.jar')
-    compile files('libs/ShareSDK-Wechat-Favorite-3.1.1.jar')
-    compile files('libs/ShareSDK-Wechat-Moments-3.1.1.jar')
+//    compile files('libs/ShareSDK-Core-3.1.1.jar')
+//    compile files('libs/ShareSDK-QQ-3.1.1.jar')
+//    compile files('libs/ShareSDK-QZone-3.1.1.jar')
+//    compile files('libs/ShareSDK-SinaWeibo-3.1.1.jar')
+//    compile files('libs/ShareSDK-Wechat-3.1.1.jar')
+//    compile files('libs/ShareSDK-Wechat-Core-3.1.1.jar')
+//    compile files('libs/ShareSDK-Wechat-Favorite-3.1.1.jar')
+//    compile files('libs/ShareSDK-Wechat-Moments-3.1.1.jar')
     compile project(path: ':alertview')
     compile project(path: ':graffiti')
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
-    //    哎吖包包特效
-    compile 'com.xw.repo:bubbleseekbar:3.5'
-    compile 'com.lht:paintview:1.16'
-    //    弹幕
-    compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
-    compile 'com.meizu.flyme.internet:push-internal:3.6.3@aar'
+//    //    哎吖包包特效
+//    compile 'com.xw.repo:bubbleseekbar:3.5'
+//    compile 'com.lht:paintview:1.16'
+//    //    弹幕
+//    compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
+//    compile 'com.meizu.flyme.internet:push-internal:3.6.3@aar'
     compile files('libs/sdk4upos_20180411_mix.jar')
 }
