@@ -242,10 +242,10 @@ public class Utils {
     }
 
     public static void call(Context context, String phoneNumber) {
-        Intent it = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-            context.startActivity(it);
-        }
+//        Intent it = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
+//        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+//            context.startActivity(it);
+//        }
     }
 
     public static void changeFragment(FragmentActivity activity, int container, Class fragmentClass, String tag, Bundle args, boolean isAnim) {

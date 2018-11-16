@@ -8,16 +8,13 @@ import android.content.pm.PackageManager;
 import android.support.multidex.MultiDex;
 
 import com.rzico.weex.adapter.ImageAdapter;
-import com.rzico.weex.component.amap.component.WXMapMarkerComponent;
-import com.rzico.weex.component.amap.component.WXMapViewComponent;
-import com.rzico.weex.component.amap.module.WXMapModule;
+
 import com.rzico.weex.component.view.MYWXWeb;
 import com.rzico.weex.component.module.MYWXWebViewModule;
 import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.notidmanager.DbCacheBean;
 import com.rzico.weex.module.AudioModule;
-import com.rzico.weex.module.MapModule;
 import com.rzico.weex.module.UposModule;
 import com.rzico.weex.module.PhoneModule;
 import com.rzico.weex.module.PrintModule;
@@ -131,8 +128,8 @@ public class WXApplication extends Application {
     );
     try {
       WXSDKEngine.registerComponent(WXBasicComponentType.WEB, MYWXWeb.class);
-      WXSDKEngine.registerComponent("weex-amap", WXMapViewComponent.class);
-      WXSDKEngine.registerComponent("weex-amap-marker", WXMapMarkerComponent.class);
+//      WXSDKEngine.registerComponent("weex-amap", WXMapViewComponent.class);
+//      WXSDKEngine.registerComponent("weex-amap-marker", WXMapMarkerComponent.class);
       WXSDKEngine.registerComponent(
               new SimpleComponentHolder(
                       WXImage.class,
@@ -145,14 +142,14 @@ public class WXApplication extends Application {
 
       WXSDKEngine.registerModule("webview", MYWXWebViewModule.class, true);
       WXSDKEngine.registerModule("event", WXEventModule.class);
-      WXSDKEngine.registerModule("map", MapModule.class);
+//      WXSDKEngine.registerModule("map", MapModule.class);
       WXSDKEngine.registerModule("audio", AudioModule.class);
       WXSDKEngine.registerModule("album", AlbumModule.class);
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
       WXSDKEngine.registerModule("upos", UposModule.class);
 //      WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
-      WXSDKEngine.registerModule("amap", WXMapModule.class);
+//      WXSDKEngine.registerModule("amap", WXMapModule.class);
     } catch (WXException e) {
       e.printStackTrace();
     }
@@ -191,8 +188,8 @@ public class WXApplication extends Application {
 
     //xUtil
     x.Ext.init(this);
-    //x.Ext.setDebug(false);
-    x.Ext.setDebug(BuildConfig.DEBUG);
+    x.Ext.setDebug(false);
+//    x.Ext.setDebug(BuildConfig.DEBUG);
 
   }
 
@@ -234,25 +231,25 @@ public class WXApplication extends Application {
       e.printStackTrace();
     }
   }
-
-  private String getAppName(int pID) {
-    String processName = null;
-    ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-    List l = am.getRunningAppProcesses();
-    Iterator i = l.iterator();
-    PackageManager pm = this.getPackageManager();
-    while (i.hasNext()) {
-      ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i.next());
-      try {
-        if (info.pid == pID) {
-          processName = info.processName;
-          return processName;
-        }
-      } catch (Exception e) {
-      }
-    }
-    return processName;
-  }
+//
+//  private String getAppName(int pID) {
+//    String processName = null;
+//    ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+//    List l = am.getRunningAppProcesses();
+//    Iterator i = l.iterator();
+//    PackageManager pm = this.getPackageManager();
+//    while (i.hasNext()) {
+//      ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i.next());
+//      try {
+//        if (info.pid == pID) {
+//          processName = info.processName;
+//          return processName;
+//        }
+//      } catch (Exception e) {
+//      }
+//    }
+//    return processName;
+//  }
 
   public static void setUid(String uid) {
     WXApplication.uid = uid;

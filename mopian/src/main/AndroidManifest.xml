@@ -84,6 +84,7 @@
             android:name=".activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
@@ -102,6 +103,7 @@
         <activity
             android:name=".activity.WXPageActivity"
             android:label="@string/app_name"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme_haveActionBar">
             <intent-filter>
@@ -119,6 +121,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask"
+            android:exported="false"
             android:configChanges="orientation|screenSize"
             android:theme="@style/FullscreenTheme_haveActionBar"
             >
@@ -151,7 +154,7 @@
             android:theme="@style/FullscreenTheme_haveActionBar" />
         <activity
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/FullscreenTheme_haveActionBar" />
 
         <activity
@@ -173,7 +176,7 @@
             <!--android:screenOrientation="portrait" />-->
 
         <!--  网络监听 -->
-        <receiver android:name=".utils.NetWorkStateReceiver">
+        <receiver android:name=".utils.NetWorkStateReceiver"  android:exported="false">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
