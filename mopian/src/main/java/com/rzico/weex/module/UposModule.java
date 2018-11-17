@@ -174,13 +174,16 @@ public class UposModule extends WXModule {
      * @param callback
      */
     @JSMethod
-    public void revoke(String orgTraceNo, final JSCallback callback){
+    public void revoke(String orgTraceNo,String appName, final JSCallback callback){
 
 //            String transData = "{\"amt\":\"" + amount + "\", \"isNeedPrintReceipt\":\"false\", \"tradeType\":\"useScan\"}";
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("appId", Constant.appId);
         jsonObject.put("orgTraceNo", orgTraceNo);
+        if (appName==null || "".equals(appName)) {
+            appName = "公共资源";
+        }
         UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
@@ -207,7 +210,7 @@ public class UposModule extends WXModule {
             public void onPayError(@NonNull String errorMessage) {
                 callback.invoke(new Message().error(errorMessage));
             }
-        }).sendPay("公共资源", "撤销",jsonObject);
+        }).sendPay(appName, "撤销",jsonObject);
     }
 
     //阿里支付
