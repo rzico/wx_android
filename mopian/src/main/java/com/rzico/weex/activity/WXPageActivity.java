@@ -41,6 +41,7 @@ import com.rzico.weex.utils.weex.DevOptionHandler;
 import com.rzico.weex.utils.weex.ShakeDetector;
 import com.rzico.weex.utils.weex.constants.Constants;
 import com.taobao.weex.WXEnvironment;
+import com.taobao.weex.WXGlobalEventReceiver;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.ui.component.NestedContainer;
@@ -186,18 +187,12 @@ public class WXPageActivity extends AbsWeexActivity implements
   @Override
   public void onResume() {
     super.onResume();
-    if(!isFirst){
-//      Toast.makeText(WXPageActivity.this, "onResume", Toast.LENGTH_SHORT).show();
-      Map<String,Object> params=new HashMap<>();
-      params.put("key","value");
 
-    mInstance.fireGlobalEventCallback("onResume", params);
-    }
-    isFirst = false;
     if (!mIsShakeDetectorStarted && mShakeDetector != null) {
       mShakeDetector.start((SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE));
       mIsShakeDetectorStarted = true;
     }
+
   }
 
   @Override

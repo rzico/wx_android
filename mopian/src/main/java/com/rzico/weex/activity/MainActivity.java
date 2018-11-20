@@ -486,6 +486,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
+
+        Map<String,Object> params=new HashMap<>();
+        params.put("key","value");
+
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, com.taobao.weex.common.Constants.Event.RESUME_EVENT, params));
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);       //强制为横屏
         setUnRead();
         PushUtil.getInstance().reset();

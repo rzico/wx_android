@@ -105,9 +105,6 @@ public class WXApplication extends Application {
           }
         }
       });
-
-
-
     }
 
     instance = this;
