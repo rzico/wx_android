@@ -21,7 +21,6 @@ import com.rzico.weex.model.APPINFO;
 import com.rzico.weex.module.AudioModule;
 import com.rzico.weex.module.LivePlayerModule;
 import com.rzico.weex.module.MapModule;
-import com.rzico.weex.module.UposModule;
 import com.rzico.weex.module.PhoneModule;
 import com.rzico.weex.module.PrintModule;
 import com.rzico.weex.module.WXEventModule;
@@ -159,7 +158,6 @@ public class WXApplication extends Application {
       WXSDKEngine.registerModule("album", AlbumModule.class);
       WXSDKEngine.registerModule("print", PrintModule.class);
       WXSDKEngine.registerModule("phone", PhoneModule.class);
-      WXSDKEngine.registerModule("upos", UposModule.class);
       WXSDKEngine.registerModule("livePlayer", LivePlayerModule.class);
       WXSDKEngine.registerModule("amap", WXMapModule.class);
     } catch (WXException e) {

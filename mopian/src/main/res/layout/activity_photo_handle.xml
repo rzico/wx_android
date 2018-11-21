@@ -84,23 +84,6 @@
             </FrameLayout>
 
             <FrameLayout
-                android:id="@+id/state_photo_doodle"
-                style="@style/ucrop_WrapperIconState">
-
-                <cn.finalteam.rxgalleryfinal.view.ImageButtonWithText
-                    xmlns:custom="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/image_view_photo_doodle"
-                    style="@style/ucrop_ImageViewWidgetIcon"
-                    custom:picture="@mipmap/ico_doodle"
-                    android:text="涂鸦"/>
-                <!--<ImageView-->
-                    <!--android:id="@+id/image_view_photo_puzzle"-->
-                    <!--style="@style/ucrop_ImageViewWidgetIcon"-->
-                    <!--android:src="@mipmap/ico_puzzle"/>-->
-
-            </FrameLayout>
-
-            <FrameLayout
                 android:id="@+id/state_filter"
                 style="@style/ucrop_WrapperIconState">
 

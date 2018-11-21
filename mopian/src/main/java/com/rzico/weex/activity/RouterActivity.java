@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.rzico.weex.R;
 import com.rzico.weex.module.AlbumModule;
-import com.rzico.weex.module.UposModule;
 import com.rzico.weex.module.WXEventModule;
 import com.rzico.weex.utils.weex.constants.Constants;
 import com.ums.AppHelper;
@@ -129,8 +128,6 @@ public class RouterActivity extends AbsWeexActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_PHOTOHANDLER || requestCode == REQUEST_CROP) {//而代表请求裁剪
             AlbumModule.get().onActivityResult(requestCode, resultCode, data);
-        }else if (AppHelper.TRANS_REQUEST_CODE == requestCode){
-            UposModule.get().onActivityResult(requestCode, resultCode, data);
         }else {
             WXEventModule.get().onActivityResult(requestCode, resultCode, data);
         }

@@ -21,7 +21,6 @@ import com.rzico.weex.zhibo.view.utils.EmojiManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.forward.androids.utils.Util;
 
 
 public class EmojiBoard extends LinearLayout {
@@ -166,7 +165,7 @@ public class EmojiBoard extends LinearLayout {
                 ViewGroup view;
                 if (convertView == null) {
                     view = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.input_emoji_griditem, null);
-                    view.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Util.dp2px(viewPager.getContext(), 40)));
+                    view.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(viewPager.getContext(), 40)));
                 } else {
                     view = (ViewGroup) convertView;
                 }
@@ -175,6 +174,9 @@ public class EmojiBoard extends LinearLayout {
                 return view;
             }
         }
+    }
+    private int dp2px(Context context, float dp) {
+        return (int) (context.getResources().getDisplayMetrics().density * dp + 0.5f);
     }
 
     private class Indicator {
@@ -187,7 +189,7 @@ public class EmojiBoard extends LinearLayout {
             for (int i = 0; i < pageSize; i++) {
                 ImageView imageView = new ImageView(getContext());
                 LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                int px =  Util.dp2px(viewPager.getContext(), 4);
+                int px =  dp2px(viewPager.getContext(), 4);
                 params.setMargins(px, 0, px, 0);
                 imageView.setLayoutParams(params);
                 if (i == 0) {

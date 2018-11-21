@@ -508,8 +508,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 nv.getDotTextView().setText(String.valueOf(unRead));
             }
         } else {
-            nv.getDotTextView().setVisibility(View.VISIBLE);
-            nv.getDotTextView().setText(String.valueOf(1));
 //            nv.getDotTextView().setVisibility(View.INVISIBLE);
         }
     }
@@ -746,6 +744,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             startActivityForResult(intent, LoginActivity.LOGINCODE);
             return;
         }
+        nv.setColorLing(page);
         if(page == 1){
 
 //            EventBus.getDefault().post(new MessageBus(MessageBus.Type.SWITCHTAB, 2));
