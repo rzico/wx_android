@@ -58,6 +58,7 @@ import com.rzico.weex.oos.STSGetter;
 import com.rzico.weex.utils.ContactUtils;
 import com.rzico.weex.utils.DateUtils;
 import com.rzico.weex.utils.DeleteFileUtil;
+import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.RSAUtils;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.Utils;
@@ -83,7 +84,7 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.rzico.weex.constant.AllConstant;
-import com.rzico.farmer.wxapi.WXEntryActivity;
+import com.rzico.assistant.wxapi.WXEntryActivity;
 
 import net.bither.util.NativeUtil;
 
@@ -112,10 +113,9 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 
 public class WXEventModule extends WXModule {
 
-
     @JSMethod
     public void logout(final JSCallback callback){
-        new XRequest(getActivity(), "/farmer/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(getActivity(), "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 if(!TIMManager.getInstance().getLoginUser().equals("")){
@@ -1095,7 +1095,7 @@ public class WXEventModule extends WXModule {
         }
 
         if (error) {
-            new XRequest(getActivity(), "farmer/member/oss/sts.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
+            new XRequest(getActivity(), "weex/member/oss/sts.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
                 @Override
                 public void onSuccess(BaseActivity activity, String result, String type) {
                     Message entity = new Gson().fromJson(result, Message.class);
@@ -1576,7 +1576,7 @@ public class WXEventModule extends WXModule {
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
 
-        //推送前面4个页面
+       // mWXSDKInstance.fireGlobalEventCallback(eventKey, params);
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, eventKey, params));
         //判断当前页面是不是weex页面
 
