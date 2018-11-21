@@ -87,11 +87,12 @@
         默认值为false。此外，微信收藏不支持此字段。wx4868b35061f87885
     -->
 	<!--要分享微信小应用程序时用userName,path-->
+
     <Wechat
         Id="4"
         SortId="4"
-        AppId="wxda95e121d5a7d6ec"
-        AppSecret="ec9b01bf6ae9885b0156a759e983ddff"
+        AppId="wx6cc49384f155ec65"
+        AppSecret="56f426e3c107ed4135eba463ac931427"
 		userName="gh_afb25ac019c9"
 		path="pages/index/index.html?id=1"
 		BypassApproval="false"
@@ -100,16 +101,16 @@
     <WechatMoments
         Id="5"
         SortId="5"
-        AppId="wxda95e121d5a7d6ec"
-        AppSecret="ec9b01bf6ae9885b0156a759e983ddff"
+        AppId="wx6cc49384f155ec65"
+        AppSecret="56f426e3c107ed4135eba463ac931427"
         BypassApproval="false"
         Enable="true" />
 
 	<WechatFavorite
         Id="6"
         SortId="6"
-        AppId="wxda95e121d5a7d6ec"
-        AppSecret="ec9b01bf6ae9885b0156a759e983ddff"
+        AppId="wx6cc49384f155ec65"
+        AppSecret="56f426e3c107ed4135eba463ac931427"
         Enable="true" />
 
 	<!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->

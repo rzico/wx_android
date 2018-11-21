@@ -377,7 +377,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         for (TabBar item: tabBars){
             if(!item.isRequireAuth()){
                 if (item.getPath().startsWith("http")) {//如果是网络url
-
                     Map<String, Object> options = new HashMap<>();
                     options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex1());
                     wxsdkInstanceMap.get(item.getTag()).renderByUrl(item.getTag(), item.getPath(), options, null, WXRenderStrategy.APPEND_ASYNC);
@@ -753,7 +752,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             return;
         }
         if(page == 1){
-
 //            EventBus.getDefault().post(new MessageBus(MessageBus.Type.SWITCHTAB, 2));
         }
         if(page != 0 && handleCount < (page + 1)) return;
@@ -762,7 +760,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        } else {
 //            BarTextColorUtils.StatusBarLightMode(this, true);
 //        }
-
         mContainer.setCurrentItem(page);
         //设置底部图标
 //        setBottonChange(page);

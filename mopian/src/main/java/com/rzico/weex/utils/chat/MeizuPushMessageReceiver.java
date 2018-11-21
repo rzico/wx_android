@@ -23,7 +23,6 @@ public class MeizuPushMessageReceiver extends MzPushMessageReceiver {
 
     private static final String TAG = MeizuPushMessageReceiver.class.getSimpleName();
 
-    private static final int busiid = 3443;
 
     /**
      * 已废弃接口，不建议使用
@@ -55,7 +54,6 @@ public class MeizuPushMessageReceiver extends MzPushMessageReceiver {
     @Override
     public void onRegisterStatus(Context context, RegisterStatus registerStatus) {
         Log.d(TAG, "pushId: " + registerStatus.getPushId() + "|Expiretime: " + registerStatus.getExpireTime() + "|str: " + registerStatus.toString());
-
 
         //上报busiid和pushid到腾讯云，需要在登录成功后进行上报
         TIMOfflinePushToken token = new TIMOfflinePushToken(Constant.mzpushbussid, registerStatus.getPushId());
@@ -102,13 +100,13 @@ public class MeizuPushMessageReceiver extends MzPushMessageReceiver {
     @Override
     public void onNotificationClicked(Context context, MzPushMessage mzPushMessage) {
 
-        // 消息正文内容
-        String content = mzPushMessage.getContent();
-
-        // 消息扩展内容
-        String ext = mzPushMessage.getSelfDefineContentString();
-
-        Log.i(TAG, "onNotificationClicked content: " + content + "|selfDefined ext: " + ext);
+//        // 消息正文内容
+//        String content = mzPushMessage.getContent();
+//
+//        // 消息扩展内容
+//        String ext = mzPushMessage.getSelfDefineContentString();
+//
+//        Log.i(TAG, "onNotificationClicked content: " + content + "|selfDefined ext: " + ext);
     }
 
 }

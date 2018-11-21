@@ -18,11 +18,6 @@ import com.tencent.imsdk.TIMOfflinePushToken;
 public class HwPushMessageReceiver extends PushEventReceiver {
     private final String TAG = "HwPushMessageReceiver";
 
-    private long mBussId = 73;
-
-
-
-
     @Override
     public void onToken(Context context, String token, Bundle extras){
         String belongId = extras.getString("belongId");

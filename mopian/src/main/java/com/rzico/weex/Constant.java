@@ -27,27 +27,23 @@ public class Constant {
     public static final String resURL = "http://cdnx.ahxinying.cn/";
 
     //    云店wxkey
-    public static final String wxAppId = "wxda95e121d5a7d6ec";
-    public static final String wxAppSecret = "ec9b01bf6ae9885b0156a759e983ddff";
-
-
-//    public static final String wxAppId = "wxb438e93d669626a6";
-//    public static final String wxAppSecret = "228a1c044aef868e2752f8de8495a48f";
+    public static final String wxAppId = "wx6cc49384f155ec65";
+    public static final String wxAppSecret = "70dc6d0d3a4fbf6a080bbdf3a8e46172";
 
     //    云店shareSDK
-    public static final String shareAppId = "260ea801ce8a8";
+    public static final String shareAppId = "28dfe7bd78cdc";
     public static final String shareAppSecret = "33694f59b0d8fea28304d06bb410838f";
 
     //    推送
     public static final String mipushAppId = "2882303761517590666";
-    public static final String mipushAppKey = "5991759081666";
-    public static final long mipushbussid = 2795;
-    public static final String huaweiAppId = "100100905";
-    public static final String huaweiAppSecret = "0da9d5cf19409fb965a8d93a080f7b8b";
-    public static final long huaweibussid = 2796;
-    public static final String mzpushAppId = "2882303761517590666";
-    public static final String mzpushAppKey = "5991759081666";
-    public static final long mzpushbussid = 2795;
+    public static final String mipushAppKey = "5941789561577";
+    public static final long mipushbussid = 4576;
+    public static final String huaweiAppId = "100502985";
+    public static final String huaweiAppSecret = "879fd05362da8b14ba167c855326fed3";
+    public static final long huaweibussid = 4584;
+    public static final String mzpushAppId = "3231035";
+    public static final String mzpushAppKey = "5d1ec357a6764f768486d7caaaa176dd";
+    public static final long mzpushbussid = 4585;
 
     public static final String appId = "";
 
@@ -80,15 +76,15 @@ public class Constant {
     public static boolean loginState = false;
     public static boolean unLinelogin = false;
     //当前程序的资源包版本
-    public static String resVerison = "1.4.0";
+    public static String resVerison = "1.5.3";
     //服务器资源包版本
-    public static String netResVerison = "1.4.0";
+    public static String netResVerison = "1.5.3";
     public static String appVerison = "";
 
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "https://www.ahxinying.cn/";
+    public static final String SERVER = "https://www.jdhone.com/";
     //public static final String SERVER = "https://www.ahxinying.cn/";
     public static final String SCENE_NAME = "farmer";
     public static final String PUBLIC_KEY =  "farmer/common/public_key.jhtml";
