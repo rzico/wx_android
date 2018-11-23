@@ -115,7 +115,7 @@ public class WXEventModule extends WXModule {
 
     @JSMethod
     public void logout(final JSCallback callback){
-        new XRequest(getActivity(), "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(getActivity(), Constant.path+"login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 if(!TIMManager.getInstance().getLoginUser().equals("")){
