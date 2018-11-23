@@ -220,18 +220,16 @@ public class NavigationView extends LinearLayout {
                     @Override
                     public void onClick(View v) {
                         int position = (Integer) v.getTag();
-                        setColorLing(position);
+                        if (WXApplication.getAppInfo().getTabBar().get(position).isRequireAuth() && (SharedUtils.readLoginId() == 0 || !Constant.loginState )) {//没有登录过
+
+                        }else {
+                            setColorLing(position);
+                        }
                         if (onItemClickListener != null) {
                             onItemClickListener.onItemClick(position);
                         }
-//                        if (WXApplication.getAppInfo().getTabBar().get(position).isRequireAuth() && (SharedUtils.readLoginId() == 0)) {//没有登录过
-//
-//                        }else {
-//                            setColorLing(position);
-//                            if (onItemClickListener != null) {
-//                                onItemClickListener.onItemClick(position);
-//                            }
-//                        }
+
+
                     }
                 });
 

@@ -745,7 +745,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void setSelectTab(int page) {
-        if (WXApplication.getAppInfo().getTabBar().get(page).isRequireAuth() && (SharedUtils.readLoginId() == 0) ) {//没有登录过
+        if (WXApplication.getAppInfo().getTabBar().get(page).isRequireAuth() && (SharedUtils.readLoginId() == 0 || !Constant.loginState )) {//没有登录过
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, LoginActivity.LOGINCODE);
