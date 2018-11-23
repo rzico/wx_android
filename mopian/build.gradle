@@ -6,7 +6,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.assistant"
+        applicationId "com.rzico.znzx"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 327
@@ -33,15 +33,15 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("tools/znzx.jks")
+            storeFile file("tools/rzico.jks")
             storePassword "123456"
-            keyAlias "znzx"
+            keyAlias "rzico"
             keyPassword "123456"
         }
         debug {
-            storeFile file("tools/znzx.jks")
+            storeFile file("tools/rzico.jks")
             storePassword "123456"
-            keyAlias "znzx"
+            keyAlias "rzico"
             keyPassword "123456"
         }
 
