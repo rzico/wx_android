@@ -119,11 +119,11 @@ public class LoginUtils  {
                                 String deviceMan = android.os.Build.MANUFACTURER;
 
                                 //注册小米和华为推送
-                                if (deviceMan.equals("Xiaomi")){
-                                    MiPushClient.registerPush(WXApplication.getContext(), Constant.mipushAppId, Constant.mipushAppKey);
-                                }else if (deviceMan.equals("HUAWEI")){
-                                    com.huawei.android.pushagent.PushManager.requestToken(activity);
-                                }
+//                                if (deviceMan.equals("Xiaomi")){
+//                                    MiPushClient.registerPush(WXApplication.getContext(), Constant.mipushAppId, Constant.mipushAppKey);
+//                                }else if (deviceMan.equals("HUAWEI")){
+//                                    com.huawei.android.pushagent.PushManager.requestToken(activity);
+//                                }
 
                                 //魅族推送只适用于Flyme系统,因此可以先行判断是否为魅族机型，再进行订阅，避免在其他机型上出现兼容性问题
 //                                if(MzSystemUtils.isBrandMeizu(WXApplication.getContext())){
