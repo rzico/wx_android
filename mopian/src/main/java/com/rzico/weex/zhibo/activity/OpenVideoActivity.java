@@ -41,6 +41,7 @@ import com.bigkoo.alertview.OnItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.MainActivity;
@@ -395,7 +396,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         HashMap<String, Object> params = new HashMap<>();
         params.put("id", SharedUtils.readLoginId());
         //获取用户信息
-        new XRequest(OpenVideoActivity.this, "/weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(OpenVideoActivity.this, Constant.path+"user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 UserBean data = new Gson().fromJson(result, UserBean.class);
@@ -543,14 +544,14 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                 playParams.put("frontcover", frontcover);
                 playParams.put("record", getIntent().getBooleanArrayExtra("record"));
 //                Constant.groupId = liveRoomBean.getData().getLiveId().toString();
-                new XRequest(OpenVideoActivity.this, "/weex/live/play.jhtml", XRequest.POST, playParams).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                new XRequest(OpenVideoActivity.this, Constant.path+"live/play.jhtml", XRequest.POST, playParams).setOnRequestListener(new HttpRequest.OnRequestListener() {
                     @Override
                     public void onSuccess(BaseActivity activity, String result, String type) {
                         LiveRoomBean data = new Gson().fromJson(result, LiveRoomBean.class);
                         if(data != null){
                             liveRoom.setLiveRoomBean(data);
                             //这里请求获取公告：
-                            new XRequest(OpenVideoActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                            new XRequest(OpenVideoActivity.this, Constant.path+"live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                                 @Override
                                 public void onSuccess(BaseActivity activity, String result, String type) {
                                     BasePage notiveInfo = new Gson().fromJson(result, BasePage.class);
@@ -638,7 +639,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
                         HashMap<String, Object> params = new HashMap<>();
                         params.put("id", SharedUtils.readLoginId());
                         //获取用户信息
-                        new XRequest(OpenVideoActivity.this, "weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                        new XRequest(OpenVideoActivity.this, Constant.path+"user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                             @Override
                             public void onSuccess(BaseActivity activity, String result, String type) {
                                 UserBean data = new Gson().fromJson(result, UserBean.class);
@@ -1077,7 +1078,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         }
 
         //        获取礼物信息
-        new XRequest(OpenVideoActivity.this, "/weex/live/gift/list.jhtml", XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(OpenVideoActivity.this, Constant.path+"live/gift/list.jhtml", XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 LiveGiftBean data = new Gson().fromJson(result, LiveGiftBean.class);
@@ -1402,7 +1403,7 @@ public class OpenVideoActivity extends BaseActivity implements BeautySettingPann
         if(mRecording){
             HashMap<String, Object> params = new HashMap<>();
             params.put("id", liveRoom.getLiveRoomBean().getData().getLiveId());
-            new XRequest(OpenVideoActivity.this, "/weex/live/stop.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+            new XRequest(OpenVideoActivity.this, Constant.path+"live/stop.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                 @Override
                 public void onSuccess(BaseActivity activity, String result, String type) {
                     Log.e("live", result);
