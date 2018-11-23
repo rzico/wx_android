@@ -63,6 +63,8 @@ public class Constant {
     //   im的用户id
     public static String imUserId = "";
 
+    //   im的用户id
+    public static String path = "weex/";
 
     public static String app = AllConstant.PACKNAME;
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";

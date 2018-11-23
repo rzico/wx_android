@@ -246,7 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onForceOffline() {
                 //登出
-                new XRequest(MainActivity.this, "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                new XRequest(MainActivity.this, Constant.path+"login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                     @Override
                     public void onSuccess(BaseActivity activity, String result, String type) {
                         TIMManager.getInstance().logout(new TIMCallBack() {
