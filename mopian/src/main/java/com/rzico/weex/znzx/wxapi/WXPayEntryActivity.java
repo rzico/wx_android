@@ -1,4 +1,4 @@
-package com.rzico.znzx.wxapi;
+package com.rzico.weex.znzx.wxapi;
 
 import android.content.Intent;
 import android.os.Bundle;
