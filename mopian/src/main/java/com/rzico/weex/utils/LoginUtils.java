@@ -1,11 +1,15 @@
 package com.rzico.weex.utils;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 
 import com.google.gson.Gson;
+import com.huawei.android.pushagent.PushManager;
 import com.rzico.weex.Constant;
+import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.LoginActivity;
 import com.rzico.weex.activity.chat.ChatActivity;
@@ -19,12 +23,16 @@ import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMManager;
 
+import com.tencent.imsdk.TIMOfflinePushSettings;
+import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.umeng.analytics.MobclickAgent;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Jinlesoft on 2017/10/18.
@@ -99,11 +107,26 @@ public class LoginUtils  {
                                 MessageEvent.getInstance();
                                 String deviceMan = android.os.Build.MANUFACTURER;
                                 //注册小米和华为推送
-//                                if (deviceMan.equals("Xiaomi") && shouldMiInit(activity)){
-//                                    MiPushClient.registerPush(activity, "2882303761517628612", "UrZo3a7sRVny1YqoUS7m4A==");
-//                                }else if (deviceMan.equals("HUAWEI")){
-//                                    PushManager.requestToken(activity);
+                                if (deviceMan.equals("Xiaomi") && shouldMiInit()){
+                                    MiPushClient.registerPush(activity, Constant.xmPushAppId, Constant.xmPushKey);
+                                }else if (deviceMan.equals("HUAWEI")){
+                                    PushManager.requestToken(activity);
+                                }
+                                //魅族推送只适用于Flyme系统,因此可以先行判断是否为魅族机型，再进行订阅，避免在其他机型上出现兼容性问题
+//                                if(MzSystemUtils.isBrandMeizu(getApplicationContext())){
+//                                    com.meizu.cloud.pushsdk.PushManager.register(this, "112662", "3aaf89f8e13f43d2a4f97a703c6f65b3");
 //                                }
+                                TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
+                                    @Override
+                                    public void onError(int i, String s) {
+
+                                    }
+                                    @Override
+                                    public void onSuccess(TIMOfflinePushSettings settings) {
+                                        settings.setEnabled(true);
+                                        TIMManager.getInstance().setOfflinePushSettings(settings);
+                                    }
+                                });
                                 if(listener!=null){
                                     listener.onSuccess(loginBean);
                                 }
@@ -134,6 +157,21 @@ public class LoginUtils  {
         //测试
         MobclickAgent.onProfileSignIn(Constant.userId + "");
 
+    }
+    /**
+     * 判断小米推送是否已经初始化
+     */
+    private static boolean shouldMiInit() {
+        ActivityManager am = ((ActivityManager) WXApplication.getActivity().getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        String mainProcessName = WXApplication.getActivity().getPackageName();
+        int myPid = android.os.Process.myPid();
+        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
     }
     public static void loginError(){
         Constant.loginState = false;

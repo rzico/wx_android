@@ -77,11 +77,6 @@ public class WXApplication extends Application {
 
   private static WXApplication instance;
 
-
-
-
-
-
   public static WXApplication getInstance() {
     return instance;
   }

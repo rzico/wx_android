@@ -115,16 +115,6 @@ public class WXPageActivity extends AbsWeexActivity implements
       setStatusBarFullTransparent();
     EventBus.getDefault().register(this);
 
-//    if (Constant.userId == 0) {
-//      if (null != savedInstanceState) {
-//        // activity由系统打开 (是由于手机内存不够,activity在后台被系统回收,再打开时出现的现象)
-//        // 因为系统加载的所有的Activity不在同一个线程,所以要结束除了loginActivity之外的其他线程
-//        android.os.Process.killProcess(android.os.Process.myPid());
-//      } else {
-//        this.finish();
-//      }
-//      return;
-//    }
     mContainer = (ViewGroup) findViewById(R.id.container);
     mProgressBar = (ProgressBar) findViewById(R.id.progress);
     mTipView = (TextView) findViewById(R.id.index_tip);

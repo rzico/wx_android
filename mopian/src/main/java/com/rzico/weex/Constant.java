@@ -37,6 +37,14 @@ public class Constant {
 
 //    public static Handler loginHandler = null;
 
+    public static final long   xmPushBussId = 4106;
+    public static final String xmPushAppId = "2882303761517708851";
+    public static final String xmPushKey = "5491770862851";
+
+    public static final long   hwPushBussId = 4107;
+    public static final String hwPushAppId = "";
+    public static final String hwPushKey = "";
+
     //菜单路径
     public static  String index1 = "view/home/index.js";
     public static  String index2 = "view/friend/list.js";
@@ -62,7 +70,7 @@ public class Constant {
     public static boolean loginState = false;
     public static boolean unLinelogin = false;
     //当前程序的资源包版本
-    public static String resVerison = "1.1.2";
+    public static String resVerison = "1.2.3";
     //服务器资源包版本
     public static String netResVerison = "1.0.0";
     public static String appVerison = "";
