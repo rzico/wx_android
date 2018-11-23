@@ -33,15 +33,15 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/znzx.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "znzx"
             keyPassword "123456"
         }
         debug {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/znzx.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "znzx"
             keyPassword "123456"
         }
 

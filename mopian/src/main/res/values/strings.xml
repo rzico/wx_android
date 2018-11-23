@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">芸店</string>
+    <string name="app_name">珍农在线</string>
 
     <string name="scan_qr_code">扫码</string>
     <string name="page_refresh">刷新</string>
@@ -13,12 +13,11 @@
     </string>
 
     <!--伪协议-->
-    <string name="href_home">yundian</string>
+    <string name="href_home">znzx</string>
 
     <!--config -->
     <!--高德地图key-->
-    <string name="amapkey">aa41342a5bc536c1d910187f5ada9524</string>
-
+    <string name="amapkey">a568c16e8806b2fa3f689e338ec221cb</string>
 
     <!-- time -->
     <string name="time_yesterday">昨天</string>

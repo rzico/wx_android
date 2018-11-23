@@ -20,19 +20,19 @@ import java.util.Map;
 public class Constant {
 
     //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
-    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.YUNDIAN";
+    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.ZNZX";
 
-    public static final String wxURL = "http://cdnx.rzico.com/weex/app/";
+    public static final String wxURL = "http://cdnx.znzx.rzico.com/weex/app/";
 
-    public static final String resURL = "http://cdnx.rzico.com/";
+    public static final String resURL = "http://cdnx.znzx.rzico.com/";
 
     //    云店wxkey
-    public static final String wxAppId = "wx490857e2baff7cfd";
-    public static final String wxAppSecret = "46acecbfa148ca89d443d38b0ce7c865";
+    public static final String wxAppId = "wxad5f961fde71cfc8";
+    public static final String wxAppSecret = "2de8346fb297b801e16989709a92efd5";
 
     //    云店shareSDK
-    public static final String shareAppId = "1d927fd47d636";
-    public static final String shareAppSecret = "277f7181f07499357cfa33531fe818ab";
+    public static final String shareAppId = "28e8259a0c746";
+    public static final String shareAppSecret = "4eb19ef3f1d7f9ee80c25b1cbe3b0e82";
 
     //    推送
     public static final String mipushAppId = "2882303761517590666";
@@ -66,7 +66,7 @@ public class Constant {
 
     public static String app = AllConstant.PACKNAME;
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-    public static final String bucket = "rzico-weex";
+    public static final String bucket = "znzx-weex";
     public static final  String upLoadImages = "upload/images/";
     public static final  String upLoadVideos = "upload/videos/";
 
@@ -84,7 +84,7 @@ public class Constant {
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://weex.rzico.com/";
+    public static final String SERVER = "http://znzx.rzico.com/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
     public static boolean isLoginAcitivity = false;
