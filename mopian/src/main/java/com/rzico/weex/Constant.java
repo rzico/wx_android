@@ -86,7 +86,7 @@ public class Constant {
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://znzx.rzico.com/";
+    public static final String SERVER = "https://znzx.rzico.com/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
     public static boolean isLoginAcitivity = false;
