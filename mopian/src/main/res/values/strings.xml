@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">芸店</string>
+    <string name="app_name">水达人</string>
 
     <string name="scan_qr_code">扫码</string>
     <string name="page_refresh">刷新</string>
@@ -13,13 +13,11 @@
     </string>
 
     <!--伪协议-->
-    <string name="href_home">yundian</string>
+    <string name="href_home">sdar</string>
 
     <!--config -->
     <!--高德地图key-->
-    <string name="amapkey">aa41342a5bc536c1d910187f5ada9524</string>
-
-
+    <string name="amapkey">d66133a58022c1561ec7452997c7996b</string>
     <!-- time -->
     <string name="time_yesterday">昨天</string>
     <string name="time_day">日</string>

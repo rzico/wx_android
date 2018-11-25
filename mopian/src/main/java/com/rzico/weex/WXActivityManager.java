@@ -15,7 +15,7 @@ public class WXActivityManager {
 
     //weex路径
     //  登录页面
-    public static final String login = "filt://view/index.js";
+    public static final String login = "file://pages/index.js";
     public static final String test = "http://192.168.1.108:8081/cover.weex.js?hot-reload_controller=1&_wx_tpl=http://192.168.1.108:8081/cover.weex.js";
 
 

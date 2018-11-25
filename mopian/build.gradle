@@ -6,7 +6,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.rzico.assistant"
+        applicationId "com.rzico.sdar"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 327
@@ -32,16 +32,17 @@ android {
         jumboMode true
     }
     signingConfigs {
+
         release {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/sdar.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "sdar"
             keyPassword "123456"
         }
         debug {
-            storeFile file("tools/rzico.jks")
+            storeFile file("tools/sdar.jks")
             storePassword "123456"
-            keyAlias "rzico"
+            keyAlias "sdar"
             keyPassword "123456"
         }
 

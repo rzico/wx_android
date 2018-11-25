@@ -20,27 +20,27 @@ import java.util.Map;
 public class Constant {
 
     //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
-    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.YUNDIAN";
+    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.SDAR";
 
-    public static final String wxURL = "http://cdnx.rzico.com/weex/app/";
+    public static final String wxURL = "http://cdnx.xmsdar.com/weex/app/";
 
-    public static final String resURL = "http://cdnx.rzico.com/";
+    public static final String resURL = "http://cdnx.xmsdar.com/";
 
     //    云店wxkey
-    public static final String wxAppId = "wx490857e2baff7cfd";
-    public static final String wxAppSecret = "46acecbfa148ca89d443d38b0ce7c865";
+    public static final String wxAppId = "wxdba4570916ab4957";
+    public static final String wxAppSecret = "0cb7d0aee2c7d9f38bf097e2aadc4edd";
 
     //    云店shareSDK
-    public static final String shareAppId = "1d927fd47d636";
-    public static final String shareAppSecret = "277f7181f07499357cfa33531fe818ab";
+    public static final String shareAppId = "26765cc5409d6";
+    public static final String shareAppSecret = "214a3dd9a409189b5290b3577d77855e";
 
     //    推送
-    public static final String mipushAppId = "2882303761517590666";
-    public static final String mipushAppKey = "5991759081666";
-    public static final long mipushbussid = 2795;
-    public static final String huaweiAppId = "100100905";
-    public static final String huaweiAppSecret = "0da9d5cf19409fb965a8d93a080f7b8b";
-    public static final long huaweibussid = 2796;
+    public static final String mipushAppId = "2882303761517839827";
+    public static final String mipushAppKey = "5281783912827";
+    public static final long mipushbussid = 4003;
+    public static final String huaweiAppId = "100367501";
+    public static final String huaweiAppSecret = "2358953dba5f811af1ad96e369f9e3d3";
+    public static final long huaweibussid = 4086;
     public static final String mzpushAppId = "2882303761517590666";
     public static final String mzpushAppKey = "5991759081666";
     public static final long mzpushbussid = 2795;
@@ -64,11 +64,11 @@ public class Constant {
     public static String imUserId = "";
 
     //   im的用户id
-    public static String path = "weex/";
+    public static String path = "applet/";
 
     public static String app = AllConstant.PACKNAME;
-    public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-    public static final String bucket = "rzico-weex";
+    public static final String endpoint = "http://oss-cn-shanghai.aliyuncs.com";
+    public static final String bucket = "sdar";
     public static final  String upLoadImages = "upload/images/";
     public static final  String upLoadVideos = "upload/videos/";
 
@@ -86,7 +86,7 @@ public class Constant {
 //    public static Map<String, WXSDKInstance> wxsdkInstanceMap;
 
     //生产环境服务器地址
-    public static final String SERVER = "http://weex.rzico.com/";
+    public static final String SERVER = "http://water.rzico.com/";
     public static final String PUBLIC_KEY =  "weex/common/public_key.jhtml";
     public static final String helperUrl = SERVER;
     public static boolean isLoginAcitivity = false;
