@@ -128,6 +128,7 @@ public class UposModule extends WXModule {
             }
         }).sendPay("公共资源", "退货",jsonObject);
     }
+
     /**
      * 预付卡支付
      * @param callback
@@ -168,6 +169,7 @@ public class UposModule extends WXModule {
             }
         }).sendPay("预付卡", "消费",jsonObject);
     }
+
     /**
      * 退货
      * @param orgTraceNo
@@ -211,6 +213,83 @@ public class UposModule extends WXModule {
                 callback.invoke(new Message().error(errorMessage));
             }
         }).sendPay(appName, "撤销",jsonObject);
+    }
+
+    /**
+     * 签到
+     * @param appName
+     * @param callback
+     */
+    @JSMethod
+    public void signin(String appName, final JSCallback callback){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("appId", Constant.appId);
+        UposModule.get().init(new RxGalleryFinalCropListener() {
+            @NonNull
+            @Override
+            public Activity getSimpleActivity() {
+                return getActivity();
+            }
+
+            @Override
+            public void onPayCancel() {
+                callback.invoke(new Message().error("用户取消"));
+            }
+
+            @Override
+            public void onPaySuccess(Map<String,Object> data) {
+                callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
+            }
+
+            @Override
+            public void onPayError(@NonNull String errorMessage) {
+                callback.invoke(new Message().error(errorMessage));
+            }
+        }).sendPay(appName, "签到",jsonObject);
+    }
+
+    /**
+     * 明细
+     * @param appName
+     * @param callback
+     */
+    @JSMethod
+    public void showDetail(String appName, final JSCallback callback){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("appId", Constant.appId);
+        jsonObject.put("isShowDetailPage",true);
+        UposModule.get().init(new RxGalleryFinalCropListener() {
+            @NonNull
+            @Override
+            public Activity getSimpleActivity() {
+                return getActivity();
+            }
+
+            @Override
+            public void onPayCancel() {
+                callback.invoke(new Message().error("用户取消"));
+            }
+
+            @Override
+            public void onPaySuccess(Map<String,Object> data) {
+                callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
+            }
+
+            @Override
+            public void onPayError(@NonNull String errorMessage) {
+                callback.invoke(new Message().error(errorMessage));
+            }
+        }).sendPay(appName, "交易明细",jsonObject);
     }
 
     //阿里支付
