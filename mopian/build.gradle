@@ -9,8 +9,8 @@ android {
         applicationId "com.rzico.laiya"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 330
-        versionName "3.3.0"
+        versionCode 331
+        versionName "3.3.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
