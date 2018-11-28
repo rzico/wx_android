@@ -35,15 +35,15 @@ public class Constant {
     public static final String shareAppSecret = "33694f59b0d8fea28304d06bb410838f";
 
     //    推送
-    public static final String mipushAppId = "2882303761517590666";
+    public static final String mipushAppId = "2882303761517895577";
     public static final String mipushAppKey = "5941789561577";
-    public static final long mipushbussid = 4576;
+    public static final long mipushbussid = 4609;
     public static final String huaweiAppId = "100502985";
     public static final String huaweiAppSecret = "879fd05362da8b14ba167c855326fed3";
-    public static final long huaweibussid = 4584;
+    public static final long huaweibussid = 4610;
     public static final String mzpushAppId = "3231035";
     public static final String mzpushAppKey = "5d1ec357a6764f768486d7caaaa176dd";
-    public static final long mzpushbussid = 4585;
+    public static final long mzpushbussid = 4611;
 
     public static final String appId = "";
 
