@@ -80,7 +80,8 @@ package com.rzico.weex.utils;    /*
          * 
          * @param activity The host activity. 
          */  
-        @TargetApi(19)  
+        @TargetApi(19)
+        @SuppressWarnings("ResourceType")
         public SystemBarTintManager(Activity activity) {  
 
             Window win = activity.getWindow();  
@@ -91,8 +92,9 @@ package com.rzico.weex.utils;    /*
                 int[] attrs = {android.R.attr.windowTranslucentStatus,  
                         android.R.attr.windowTranslucentNavigation};  
                 TypedArray a = activity.obtainStyledAttributes(attrs);  
-                try {  
-                    mStatusBarAvailable = a.getBoolean(0, false);  
+                try {
+                    mStatusBarAvailable = a.getBoolean(0, false);
+
                     mNavBarAvailable = a.getBoolean(1, false);
                 } finally {  
                     a.recycle();  
