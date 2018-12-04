@@ -292,6 +292,45 @@ public class UposModule extends WXModule {
         }).sendPay(appName, "交易明细",jsonObject);
     }
 
+
+    /**
+     * 打印
+     * @param appName
+     * @param callback
+     */
+    @JSMethod
+    public void printDetail(String appName, final JSCallback callback){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("appId", Constant.appId);
+        UposModule.get().init(new RxGalleryFinalCropListener() {
+            @NonNull
+            @Override
+            public Activity getSimpleActivity() {
+                return getActivity();
+            }
+
+            @Override
+            public void onPayCancel() {
+                callback.invoke(new Message().error("用户取消"));
+            }
+
+            @Override
+            public void onPaySuccess(Map<String,Object> data) {
+                callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
+            }
+
+            @Override
+            public void onPayError(@NonNull String errorMessage) {
+                callback.invoke(new Message().error(errorMessage));
+            }
+        }).sendPay(appName, "打印交易汇总",jsonObject);
+    }
+
     //阿里支付
     @JSMethod
     public void aliPay(String extBillNo, String extOrderNo, double amount, final JSCallback callback){
@@ -332,6 +371,7 @@ public class UposModule extends WXModule {
             }
         }).sendPay("POS 通", "POS通", jsonObject);
     }
+
     //微信支付
     @JSMethod
     public void weixinPay(String extBillNo, String extOrderNo, double amount, final JSCallback callback){
