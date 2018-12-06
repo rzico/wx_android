@@ -55,6 +55,7 @@ import com.rzico.weex.net.XRequest;
 import com.rzico.weex.oos.OssService;
 import com.rzico.weex.oos.PauseableUploadTask;
 import com.rzico.weex.oos.STSGetter;
+import com.rzico.weex.utils.BarTextColorUtils;
 import com.rzico.weex.utils.ContactUtils;
 import com.rzico.weex.utils.DateUtils;
 import com.rzico.weex.utils.DeleteFileUtil;
@@ -577,7 +578,7 @@ public class WXEventModule extends WXModule {
      */
     @JSMethod
     public void changeWindowsBar(boolean isDark) {
-//        BarTextColorUtils.StatusBarLightMode(getActivity(), isDark);
+        BarTextColorUtils.StatusBarLightMode(getActivity(), isDark);
     }
 
     public void onWeiXinPayResult(BaseResp resp){

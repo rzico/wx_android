@@ -1,6 +1,6 @@
 {
-  "color": "#707070",
-  "selectedColor": "#eb4e40",
+  "color": "#CCCCCC",
+  "selectedColor": "#28F59C",
   "borderStyle": "#eeeeee",
   "backgroundColor": "#ffffff",
   "style":"both",
@@ -11,33 +11,25 @@
       "text": "首页",
       "tag":"0",
       "path": "file://view/home/index.js",
-      "icon": "ico_home",
+      "icon": "icon_home",
       "requireAuth": false,
-      "selectedIconPath": "ico_home_focus"
+      "selectedIconPath": "icon_home_focus"
     },
     {
-      "text": "会员",
+      "text": "圈子",
       "tag":"1",
       "path": "file://view/friend/list.js",
-      "icon": "ico_friend",
-      "requireAuth":false,
-      "selectedIconPath": "ico_friend_focus"
-    },
-    {
-      "text": "消息",
-      "tag":"2",
-      "path": "file://view/message/list.js",
-      "icon": "ico_msg",
+      "icon": "icon_mood",
       "requireAuth":true,
-      "selectedIconPath": "ico_msg_focus"
+      "selectedIconPath": "icon_mood_focus"
     },
     {
       "text": "我的",
-      "tag":"3",
+      "tag":"2",
       "path": "file://view/member/index.js",
-      "icon": "ico_my",
+      "icon": "icon_my",
       "requireAuth":true,
-      "selectedIconPath": "ico_my_focus"
+      "selectedIconPath": "icon_my_focus"
     }
   ]
 }

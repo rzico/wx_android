@@ -736,7 +736,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                break;
 //        }
     }
-
+boolean is = false;
     public void setSelectTab(int page) {
         if (WXApplication.getAppInfo().getTabBar().get(page).isRequireAuth() && (SharedUtils.readLoginId() == 0 || !Constant.loginState )) {//没有登录过
             Intent intent = new Intent();
@@ -745,9 +745,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             return;
         }
         nv.setColorLing(page);
-        if(page == 1){
+        if(page == 0){
 
-//            EventBus.getDefault().post(new MessageBus(MessageBus.Type.SWITCHTAB, 2));
+            BarTextColorUtils.StatusBarLightMode(MainActivity.this, is);
+            is = !is;
         }
         if(page != 0 && handleCount < (page + 1)) return;
 //        if (page != 0) {

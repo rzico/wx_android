@@ -237,6 +237,7 @@ public class ImageAdapter implements IWXImgLoaderAdapter {
   public void setImage(final String url, final ImageView view,
                        WXImageQuality quality, final WXImageStrategy strategy) {
 
+
     WXSDKManager.getInstance().postOnUiThread(new Runnable() {
 
       @Override
@@ -299,9 +300,10 @@ public class ImageAdapter implements IWXImgLoaderAdapter {
                   });
         }else{
           //这里是处理本地图片的
+                  final long sss = System.currentTimeMillis();
           Picasso.with(WXApplication.getActivity())
                   .load(img)
-                  .memoryPolicy(NO_CACHE, NO_STORE)
+//                  .memoryPolicy(NO_CACHE, NO_STORE)
 //                  .resize(Utils.dp2px(WXApplication.getActivity(), 250),Utils.dp2px(WXApplication.getActivity(), 250))
 //                  .centerCrop()
                   .transform(new CropSquareTransformation())
@@ -309,6 +311,7 @@ public class ImageAdapter implements IWXImgLoaderAdapter {
                   .into(view, new Callback() {
                     @Override
                     public void onSuccess() {
+                      System.out.println(url + "耗时:" + (System.currentTimeMillis() - sss));
                       if(strategy.getImageListener()!=null){
                         strategy.getImageListener().onImageFinish(url,view,true,null);
                       }

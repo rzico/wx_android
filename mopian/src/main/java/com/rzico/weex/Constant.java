@@ -38,11 +38,11 @@ public class Constant {
 //    public static Handler loginHandler = null;
 
     //菜单路径
-    public static  String index1 = "view/home/index.js";
-    public static  String index2 = "view/friend/list.js";
-    public static  String index3 = "view/message/list.js";
-    public static  String index4 = "view/member/index.js";
-    public static  String center = "view/member/editor/editor.js";
+//    public static  String index1 = "view/home/index.js";
+//    public static  String index2 = "view/friend/list.js";
+//    public static  String index3 = "view/message/list.js";
+//    public static  String index4 = "view/member/index.js";
+//    public static  String center = "view/member/editor/editor.js";
 
     //   用户id
     public static long userId = 0;
@@ -52,7 +52,7 @@ public class Constant {
 
     public static String app = AllConstant.PACKNAME;
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
-    public static final String bucket = "mopian";
+    public static final String bucket = "yueqidian";
     public static final  String upLoadImages = "upload/images/";
     public static final  String upLoadVideos = "upload/videos/";
 

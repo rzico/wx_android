@@ -21,7 +21,7 @@ public class CropSquareTransformation implements Transformation {
             }
 
             if (source.getWidth() > source.getHeight()) {//横向长图
-                if (source.getHeight() < targetHeight && source.getWidth() <= newWidth) {
+                if (source.getHeight() < newHeight && source.getWidth() <= newWidth) {
                     return source;
                 } else {
                     //如果图片大小大于等于设置的高度，则按照设置的高度比例来缩放
@@ -44,7 +44,7 @@ public class CropSquareTransformation implements Transformation {
                 }
             } else {//竖向长图
                 //如果图片小于设置的宽度，则返回原图
-                if (source.getWidth() < targetWidth && source.getHeight() <= newHeight) {
+                if (source.getWidth() < newWidth && source.getHeight() <= newHeight) {
                     return source;
                 } else {
                     //如果图片大小大于等于设置的宽度，则按照设置的宽度比例来缩放

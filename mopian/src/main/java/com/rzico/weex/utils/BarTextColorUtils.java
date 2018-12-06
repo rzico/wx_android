@@ -28,12 +28,12 @@ public class BarTextColorUtils {
 
         if(activity==null) return 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if(MIUISetStatusBarLightMode(activity.getWindow(), setBlack)){//判断是不是小米系统
-                result=1;
-            }else if(FlymeSetStatusBarLightMode(activity.getWindow(), setBlack)){//判断是不是魅族系统
-                result=2;
-            }
-            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//判断当前是不是6.0以上的系统
+//            if(MIUISetStatusBarLightMode(activity.getWindow(), setBlack)){//判断是不是小米系统
+//                result=1;
+//            }else if(FlymeSetStatusBarLightMode(activity.getWindow(), setBlack)){//判断是不是魅族系统
+//                result=2;
+//            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//判断当前是不是6.0以上的系统
                 if(setBlack){
                     //暗色
                     activity.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
