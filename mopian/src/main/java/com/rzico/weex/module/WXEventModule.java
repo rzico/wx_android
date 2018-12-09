@@ -113,10 +113,9 @@ import cn.sharesdk.wechat.moments.WechatMoments;
 
 public class WXEventModule extends WXModule {
 
-
     @JSMethod
     public void logout(final JSCallback callback){
-        new XRequest(getActivity(), "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(getActivity(), Constant.path+"login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 if(!TIMManager.getInstance().getLoginUser().equals("")){
@@ -239,6 +238,11 @@ public class WXEventModule extends WXModule {
         getActivity().finish();
     }
 
+
+    @JSMethod(uiThread = true)
+    public void switchTab(int position) {
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.SWITCHTAB, position));
+    }
 
     @JSMethod(uiThread = true)
     public void openURL(String url, JSCallback jsCallback) {
@@ -932,8 +936,35 @@ public class WXEventModule extends WXModule {
         }
         callback.invoke(message);
     }
-//    获取未读消息
 
+    @JSMethod(uiThread = false)
+    public int getUnReadMessageCount(){
+        List<TIMConversation> list = TIMManagerExt.getInstance().getConversationList();
+        List<String> userIds = new ArrayList<>();
+
+        final List<com.rzico.weex.model.chat.Message> unReadUserMessages = new ArrayList<>();//未读消息
+        final List<Long> unReadNumber = new ArrayList<>();//未读消息
+
+        long unRead = 0;
+        for (TIMConversation item :list){
+            if(item.getPeer().equals("")) continue;
+            TIMConversationExt conExt = new TIMConversationExt(item);
+            if(conExt.getUnreadMessageNum() > 0){
+                List<TIMMessage> messages = conExt.getLastMsgs(1);
+                if(messages !=null && messages.size() > 0){
+                    final com.rzico.weex.model.chat.Message message = MessageFactory.getMessage(messages.get(0));
+                    unReadUserMessages.add(message);
+                    userIds.add(item.getPeer());
+                    unReadNumber.add(conExt.getUnreadMessageNum());
+                }
+            }else {
+                return 0;
+            }
+        }
+        return unReadNumber.size();
+    }
+
+//    获取未读消息
     @JSMethod
     public void getUnReadMessage(){
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.RECEIVEMSG));
@@ -1541,13 +1572,14 @@ public class WXEventModule extends WXModule {
     }
 
     @JSMethod
-    public void sendGlobalEvent(String eventKey, Message data){
+    public void sendGlobalEvent(String eventKey, Object data){
         Map<String, Object> params = new HashMap<>();
         params.put("data", data);
-        //推送前面4个页面
 
+       // mWXSDKInstance.fireGlobalEventCallback(eventKey, params);
         EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, eventKey, params));
         //判断当前页面是不是weex页面
+
     }
 
     @JSMethod
@@ -1567,8 +1599,5 @@ public class WXEventModule extends WXModule {
         //        发送被拒绝了
         void authDenied();
     }
-
-
-
 
 }

@@ -19,6 +19,7 @@ public class MessageBus {
         ZHIBOCLOSE,//直播房间被关闭
         SENDGAG,//禁言发送消息
         SENDKICK,//踢人发送消息
+        SWITCHTAB//跳转主页面
     }
 
     //向weex推送全局消息

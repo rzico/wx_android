@@ -1,0 +1,43 @@
+{
+  "color": "#707070",
+  "selectedColor": "#068F3D",
+  "borderStyle": "#eeeeee",
+  "backgroundColor": "#ffffff",
+  "style":"both",
+  "dot":2,
+  "index":"file://view/shop/cashier/index.js",
+  "tabBar": [
+    {
+      "text": "首页",
+      "tag":"0",
+      "path": "file://view/shop/cashier/index.js",
+      "icon": "ico_tab1",
+      "requireAuth": false,
+      "selectedIconPath": "ico_tab1_focus"
+    },
+    {
+      "text": "会员",
+      "tag":"1",
+      "path": "file://view/friend/list.js",
+      "icon": "ico_tab2",
+      "requireAuth":true,
+      "selectedIconPath": "ico_tab2_focus"
+    },
+    {
+      "text": "消息",
+      "tag":"2",
+      "path": "file://view/message/list.js",
+      "icon": "ico_tab3",
+      "requireAuth":true,
+      "selectedIconPath": "ico_tab3_focus"
+    },
+    {
+      "text": "我的",
+      "tag":"3",
+      "path": "file://view/member/mine.js",
+      "icon": "ico_tab4",
+      "requireAuth":true,
+      "selectedIconPath": "ico_tab4_focus"
+    }
+  ]
+}

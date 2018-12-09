@@ -60,7 +60,7 @@ public class LoginUtils  {
     }
     private static final String tag = "weex_loginutils";
     public static void checkLogin(BaseActivity activity,final Intent intent,final OnLoginListener listener) {
-        new XRequest(activity, "/weex/login/isAuthenticated.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(activity, Constant.path+"login/isAuthenticated.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(final BaseActivity activity, String result, String type) {
                 final LoginBean loginBean = new Gson().fromJson(result, LoginBean.class);

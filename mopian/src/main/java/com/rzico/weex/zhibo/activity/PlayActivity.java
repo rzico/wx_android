@@ -37,6 +37,7 @@ import com.bigkoo.alertview.OnItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.rzico.weex.Constant;
 import com.rzico.weex.R;
 import com.rzico.weex.activity.BaseActivity;
 import com.rzico.weex.activity.popwindow.CommonPopupWindow;
@@ -223,7 +224,7 @@ public class PlayActivity extends BaseActivity {
         params.put("lat", "");
         params.put("lng", "");
         //进入直播间
-        new XRequest(PlayActivity.this, "weex/live/into.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(PlayActivity.this, Constant.path+"live/into.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 LiveRoomBean data = new Gson().fromJson(result, LiveRoomBean.class);
@@ -233,7 +234,7 @@ public class PlayActivity extends BaseActivity {
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("id", data.getData().getLiveMemberId());
                     //获取用户信息
-                    new XRequest(PlayActivity.this, "weex/user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayActivity.this, Constant.path+"user/view.jhtml", XRequest.GET, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
 
@@ -260,7 +261,7 @@ public class PlayActivity extends BaseActivity {
                         }
                     }).execute();
                     //这里请求获取公告：
-                    new XRequest(PlayActivity.this, "weex/live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayActivity.this, Constant.path+"live/notice/list.jhtml", XRequest.GET,new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             BasePage notiveInfo = new Gson().fromJson(result, BasePage.class);
@@ -376,7 +377,7 @@ public class PlayActivity extends BaseActivity {
         HashMap<String, Object> params2 = new HashMap<>();
         params2.put("id", SharedUtils.readLoginId());
         //获取用户信息
-        new XRequest(PlayActivity.this, "/weex/user/view.jhtml", XRequest.GET, params2).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(PlayActivity.this, Constant.path+"user/view.jhtml", XRequest.GET, params2).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
 
@@ -400,7 +401,7 @@ public class PlayActivity extends BaseActivity {
         }).execute();
 
 //        获取礼物信息
-        new XRequest(PlayActivity.this, "/weex/live/gift/list.jhtml", XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+        new XRequest(PlayActivity.this, Constant.path+"live/gift/list.jhtml", XRequest.GET, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
             @Override
             public void onSuccess(BaseActivity activity, String result, String type) {
                 LiveGiftBean data = new Gson().fromJson(result, LiveGiftBean.class);
@@ -528,7 +529,7 @@ public class PlayActivity extends BaseActivity {
                 params.put("authorId", liveRoom.getLiveRoomBean().getData().getLiveMemberId());
 
                 if(liveRoom.getLiveRoomBean().getData().getFollow()){
-                    new XRequest(PlayActivity.this, "/weex/member/follow/delete.jhtml", XRequest.POST,params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayActivity.this, Constant.path+"member/follow/delete.jhtml", XRequest.POST,params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             BaseEntity data = new Gson().fromJson(result, BaseEntity.class);
@@ -548,7 +549,7 @@ public class PlayActivity extends BaseActivity {
                     }).execute();
                 }else{
                     //关注
-                    new XRequest(PlayActivity.this, "/weex/member/follow/add.jhtml", XRequest.POST,params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayActivity.this, Constant.path+"member/follow/add.jhtml", XRequest.POST,params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             BaseEntity data = new Gson().fromJson(result, BaseEntity.class);
@@ -609,7 +610,7 @@ public class PlayActivity extends BaseActivity {
                     if(showDanmaku){
                         HashMap<String, Object> params = new HashMap<>();
                         params.put("liveId", liveRoom.getLiveRoomBean().getData().getLiveId());
-                        new XRequest(PlayActivity.this, "weex/live/gift/barrage.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                        new XRequest(PlayActivity.this, Constant.path+"live/gift/barrage.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                             @Override
                             public void onSuccess(BaseActivity activity, String result, String type) {
                                 SendGift data = new Gson().fromJson(result, SendGift.class);
@@ -911,7 +912,7 @@ public class PlayActivity extends BaseActivity {
                     HashMap<String, Object> params = new HashMap<>();
                     params.put("id", liveGiftBean.getData().getData().get(gifid - 1 >= 0 ? gifid -1 : 0).getId());
                     params.put("liveId", liveRoom.getLiveRoomBean().getData().getLiveId());
-                    new XRequest(PlayActivity.this, "weex/live/gift/submit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                    new XRequest(PlayActivity.this, Constant.path+"live/gift/submit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                         @Override
                         public void onSuccess(BaseActivity activity, String result, String type) {
                             SendGift data = new Gson().fromJson(result, SendGift.class);
@@ -1694,7 +1695,7 @@ public class PlayActivity extends BaseActivity {
         }else {
             HashMap<String, Object> params = new HashMap<>();
             params.put("id", liveRoom.getLiveRoomBean().getData().getLiveId());
-            new XRequest((BaseActivity) mContext, "/weex/live/quit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
+            new XRequest((BaseActivity) mContext, Constant.path+"live/quit.jhtml", XRequest.POST, params).setOnRequestListener(new HttpRequest.OnRequestListener() {
                 @Override
                 public void onSuccess(BaseActivity activity, String result, String type) {
                     Log.e("live", result);

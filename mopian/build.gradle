@@ -9,8 +9,8 @@ android {
         applicationId "com.rzico.assistant"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 327
-        versionName "3.2.7"
+        versionCode 328
+        versionName "3.2.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk{
             abiFilters "x86"
@@ -44,18 +44,7 @@ android {
             keyAlias "rzico"
             keyPassword "123456"
         }
-//        release {
-//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
-//            storePassword "123456"
-//            keyAlias "rzico"
-//            keyPassword "123456"
-//        }
-//        debug {
-//            storeFile file('D:/weex/wx_android/mopian/tools/rzico.jks')
-//            storePassword "123456"
-//            keyAlias "rzico"
-//            keyPassword "123456"
-//        }
+
     }
     buildTypes {
         release {
@@ -154,4 +143,5 @@ dependencies {
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
     compile 'com.meizu.flyme.internet:push-internal:3.6.3@aar'
     compile files('libs/sdk4upos_20180411_mix.jar')
+    testCompile 'junit:junit:4.12'
 }

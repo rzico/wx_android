@@ -7,13 +7,16 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,7 +36,9 @@ import com.rzico.weex.R;
 import com.rzico.weex.WXApplication;
 import com.rzico.weex.activity.chat.ChatActivity;
 import com.rzico.weex.adapter.WeexPageAdapter;
+import com.rzico.weex.constant.AllConstant;
 import com.rzico.weex.db.XDB;
+import com.rzico.weex.model.TabBar;
 import com.rzico.weex.model.info.LoginBean;
 import com.rzico.weex.module.AlbumModule;
 import com.rzico.weex.module.WXEventModule;
@@ -42,11 +47,13 @@ import com.rzico.weex.net.XRequest;
 import com.rzico.weex.pageview.NoScrollPageView;
 import com.rzico.weex.utils.AntiShake;
 import com.rzico.weex.utils.BarTextColorUtils;
+import com.rzico.weex.utils.DrawableUtils;
 import com.rzico.weex.utils.LoginUtils;
 import com.rzico.weex.utils.PathUtils;
 import com.rzico.weex.utils.SharedUtils;
 import com.rzico.weex.utils.chat.PushUtil;
 import com.rzico.weex.utils.weex.constants.Constants;
+import com.rzico.weex.view.NavigationView;
 import com.taobao.weex.IWXRenderListener;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKEngine;
@@ -94,21 +101,25 @@ import static com.rzico.weex.constant.AllConstant.isClearAll;
  * Created by Jinlesoft on 2017/9/2.
  */
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, IWXRenderListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, IWXRenderListener, NavigationView.OnItemClickListener {
 
-    private ImageView rgGroupHomeIm, rgGroupFriendIm, rgGroupMsgIm, rgGroupMyIm;
-    private TextView rgGroupHomeTv, rgGroupFriendTv, rgGroupMsgTv, rgGroupMyTv;
-    private TextView ivMessageDot;
-    private LinearLayout rgGroupHome, rgGroupFriend, rgGroupMsg, rgGroupMy, rgGroupAdd;
+//    private ImageView rgGroupHomeIm, rgGroupFriendIm, rgGroupMsgIm, rgGroupMyIm;
+//    private TextView rgGroupHomeTv, rgGroupFriendTv, rgGroupMsgTv, rgGroupMyTv;
+//    private TextView ivMessageDot;
+//    private LinearLayout rgGroupHome, rgGroupFriend, rgGroupMsg, rgGroupMy, rgGroupAdd;
     private final String TAG = "MainActivity";
     private final String HOME = "weex_home";
     private final String FRIEND = "weex_friend";
     private final String MSG = "weex_msg";
     private final String MY = "weex_my";
+    private View line;
     private Map<String, WXSDKInstance> wxsdkInstanceMap = null;
 
-    private LinearLayout ll_bottom;
+//    private LinearLayout ll_bottom;
 
+    private boolean isGetHeight = true;
+    private int mHeight;
+    private NavigationView nv;
 
     private boolean canReload = true;
     //打开扫描界面请求码
@@ -169,6 +180,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             for (String key : wxsdkInstanceMap.keySet()) {
                 wxsdkInstanceMap.get(key).fireGlobalEventCallback(messageBus.getEventKey(), messageBus.getParams());
             }
+        } else if (messageBus.getMessageType() == MessageBus.Type.SWITCHTAB){
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, MainActivity.class);
+            intent.putExtra("SWITCHTAB", (Integer) messageBus.getMessage());
+            startActivity(intent);
         }
     }
 
@@ -230,7 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onForceOffline() {
                 //登出
-                new XRequest(MainActivity.this, "/weex/login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
+                new XRequest(MainActivity.this, Constant.path+"login/logout.jhtml", XRequest.POST, new HashMap<String, Object>()).setOnRequestListener(new HttpRequest.OnRequestListener() {
                     @Override
                     public void onSuccess(BaseActivity activity, String result, String type) {
                         TIMManager.getInstance().logout(new TIMCallBack() {
@@ -338,31 +354,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void initWeexView() {
         mContainer = (NoScrollPageView) findViewById(R.id.viewpager_content);
         viewLists = new ArrayList<>();
-        WXSDKInstance mWeexInstanceHome = new WXSDKInstance(this);
-        mWeexInstanceHome.registerRenderListener(this);
-        WXSDKInstance mWeexInstanceFriend = new WXSDKInstance(this);
-        mWeexInstanceFriend.registerRenderListener(this);
-        WXSDKInstance mWeexInstanceMsg = new WXSDKInstance(this);
-        mWeexInstanceMsg.registerRenderListener(this);
-        WXSDKInstance mWeexInstanceMy = new WXSDKInstance(this);
-        mWeexInstanceMy.registerRenderListener(this);
+        List<TabBar> tabBars = WXApplication.getAppInfo().getTabBar();
         wxsdkInstanceMap = new HashMap<>();
-        wxsdkInstanceMap.put(HOME, mWeexInstanceHome);
-        wxsdkInstanceMap.put(FRIEND, mWeexInstanceFriend);
-        wxsdkInstanceMap.put(MSG, mWeexInstanceMsg);
-        wxsdkInstanceMap.put(MY, mWeexInstanceMy);
+        for (TabBar item: tabBars){
+            WXSDKInstance itemWXSDKI = new WXSDKInstance(this);
+            itemWXSDKI.registerRenderListener(this);
+            wxsdkInstanceMap.put(item.getTag(), itemWXSDKI);
+        }
+//        WXSDKInstance mWeexInstanceHome = new WXSDKInstance(this);
+//        mWeexInstanceHome.registerRenderListener(this);
+//        WXSDKInstance mWeexInstanceFriend = new WXSDKInstance(this);
+//        mWeexInstanceFriend.registerRenderListener(this);
+//        WXSDKInstance mWeexInstanceMsg = new WXSDKInstance(this);
+//        mWeexInstanceMsg.registerRenderListener(this);
+//        WXSDKInstance mWeexInstanceMy = new WXSDKInstance(this);
+//        mWeexInstanceMy.registerRenderListener(this);
+//        wxsdkInstanceMap.put(HOME, mWeexInstanceHome);
+//        wxsdkInstanceMap.put(FRIEND, mWeexInstanceFriend);
+//        wxsdkInstanceMap.put(MSG, mWeexInstanceMsg);
+//        wxsdkInstanceMap.put(MY, mWeexInstanceMy);
 
-        if (SharedUtils.readIndex1().startsWith("http://")) {//如果是网络url
-            Map<String, Object> options = new HashMap<>();
-            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex1());
+        for (TabBar item: tabBars){
+            if(!item.isRequireAuth()){
+                if (item.getPath().startsWith("http://")) {//如果是网络url
 
-            wxsdkInstanceMap.get(HOME).renderByUrl(HOME, SharedUtils.readIndex1(), options, null, WXRenderStrategy.APPEND_ASYNC);
-        } else {
-            String url = SharedUtils.readIndex1();
+                    Map<String, Object> options = new HashMap<>();
+                    options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex1());
+                    wxsdkInstanceMap.get(item.getTag()).renderByUrl(item.getTag(), item.getPath(), options, null, WXRenderStrategy.APPEND_ASYNC);
 
-            Map<String, Object> options = new HashMap<>();
-            options.put(WXSDKInstance.BUNDLE_URL, url);
-            wxsdkInstanceMap.get(HOME).render(HOME, PathUtils.loadLocal(url, MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
+                } else {
+
+                    Map<String, Object> options = new HashMap<>();
+                    options.put(WXSDKInstance.BUNDLE_URL, item.getPath());
+                    wxsdkInstanceMap.get(item.getTag()).render(item.getTag(), PathUtils.loadLocal(item.getPath(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
+
+                }
+            }
         }
 
 
@@ -405,41 +432,66 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void loadPage() {
-        if (SharedUtils.readIndex2().startsWith("http://")) {//如果是网络url
+        List<TabBar> tabBars = WXApplication.getAppInfo().getTabBar();
+        for (TabBar item: tabBars){
+            if(item.isRequireAuth()){
+                if (item.getPath().startsWith("http://")) {//如果是网络url
 
-            Map<String, Object> options = new HashMap<>();
-            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex2());
-            wxsdkInstanceMap.get(FRIEND).renderByUrl(FRIEND, SharedUtils.readIndex2(), options, null, WXRenderStrategy.APPEND_ASYNC);
-        } else {
-            Map<String, Object> options = new HashMap<>();
-            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex2());
-            wxsdkInstanceMap.get(FRIEND).render(FRIEND, PathUtils.loadLocal(SharedUtils.readIndex2(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
-        }
-        if (SharedUtils.readIndex3().startsWith("http://")) {//如果是网络url
+                    Map<String, Object> options = new HashMap<>();
+                    options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex1());
+                    wxsdkInstanceMap.get(item.getTag()).renderByUrl(item.getTag(), item.getPath(), options, null, WXRenderStrategy.APPEND_ASYNC);
 
-            Map<String, Object> options = new HashMap<>();
-            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-            wxsdkInstanceMap.get(MSG).renderByUrl(MSG, SharedUtils.readIndex3(), options, null, WXRenderStrategy.APPEND_ASYNC);
-        } else {
-            Map<String, Object> options = new HashMap<>();
-            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
-            wxsdkInstanceMap.get(MSG).render(MSG, PathUtils.loadLocal(SharedUtils.readIndex3(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
-        }
-        if (SharedUtils.readIndex4().startsWith("http://")) {//如果是网络url
+                } else {
 
-            Map<String, Object> options = new HashMap<>();
-            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-            wxsdkInstanceMap.get(MY).renderByUrl(MY, SharedUtils.readIndex4(), options, null, WXRenderStrategy.APPEND_ASYNC);
-        } else {
-            Map<String, Object> options = new HashMap<>();
-            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
-            wxsdkInstanceMap.get(MY).render(MY, PathUtils.loadLocal(SharedUtils.readIndex4(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
+                    Map<String, Object> options = new HashMap<>();
+                    options.put(WXSDKInstance.BUNDLE_URL, item.getPath());
+                    wxsdkInstanceMap.get(item.getTag()).render(item.getTag(), PathUtils.loadLocal(item.getPath(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
+
+                }
+            }
         }
+
+//        if (SharedUtils.readIndex2().startsWith("http://")) {//如果是网络url
+//
+//            Map<String, Object> options = new HashMap<>();
+//            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex2());
+//            wxsdkInstanceMap.get(FRIEND).renderByUrl(FRIEND, SharedUtils.readIndex2(), options, null, WXRenderStrategy.APPEND_ASYNC);
+//        } else {
+//            Map<String, Object> options = new HashMap<>();
+//            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex2());
+//            wxsdkInstanceMap.get(FRIEND).render(FRIEND, PathUtils.loadLocal(SharedUtils.readIndex2(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
+//        }
+//        if (SharedUtils.readIndex3().startsWith("http://")) {//如果是网络url
+//
+//            Map<String, Object> options = new HashMap<>();
+//            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
+//            wxsdkInstanceMap.get(MSG).renderByUrl(MSG, SharedUtils.readIndex3(), options, null, WXRenderStrategy.APPEND_ASYNC);
+//        } else {
+//            Map<String, Object> options = new HashMap<>();
+//            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex3());
+//            wxsdkInstanceMap.get(MSG).render(MSG, PathUtils.loadLocal(SharedUtils.readIndex3(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
+//        }
+//        if (SharedUtils.readIndex4().startsWith("http://")) {//如果是网络url
+//
+//            Map<String, Object> options = new HashMap<>();
+//            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
+//            wxsdkInstanceMap.get(MY).renderByUrl(MY, SharedUtils.readIndex4(), options, null, WXRenderStrategy.APPEND_ASYNC);
+//        } else {
+//            Map<String, Object> options = new HashMap<>();
+//            options.put(WXSDKInstance.BUNDLE_URL, SharedUtils.readIndex4());
+//            wxsdkInstanceMap.get(MY).render(MY, PathUtils.loadLocal(SharedUtils.readIndex4(), MainActivity.this), options, null, WXRenderStrategy.APPEND_ASYNC);
+//        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        Map<String,Object> params=new HashMap<>();
+        params.put("key","value");
+
+        EventBus.getDefault().post(new MessageBus(MessageBus.Type.GLOBAL, com.taobao.weex.common.Constants.Event.RESUME_EVENT, params));
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);       //强制为横屏
         setUnRead();
         PushUtil.getInstance().reset();
@@ -450,137 +502,179 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onPause();
     }
 
+    //未读数做处理
     public void setUnRead() {
         //未读数
         long unRead = getUnRead();
         if (unRead > 0) {
-            ivMessageDot.setVisibility(View.VISIBLE);
-            ivMessageDot.setText(String.valueOf(unRead));
+
+            nv.getDotTextView().setVisibility(View.VISIBLE);
+            nv.getDotTextView().setText(String.valueOf(unRead));
             if (unRead > 99) {
-                ivMessageDot.setText("···");
+                nv.getDotTextView().setText(String.valueOf(unRead));
             }
         } else {
-            ivMessageDot.setVisibility(View.INVISIBLE);
+            nv.getDotTextView().setVisibility(View.VISIBLE);
+            nv.getDotTextView().setText(String.valueOf(1));
+//            nv.getDotTextView().setVisibility(View.INVISIBLE);
         }
     }
 
     public void initView() {
-        ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
+//        ll_bottom = (LinearLayout) findViewById(R.id.ll_bottom);
 
-        rgGroupHomeIm = (ImageView) findViewById(R.id.rg_group_home_im);
-        rgGroupFriendIm = (ImageView) findViewById(R.id.rg_group_vip_im);
-        rgGroupMsgIm = (ImageView) findViewById(R.id.rg_group_huihua_im);
-        rgGroupMyIm = (ImageView) findViewById(R.id.rg_group_me_im);
-        ivMessageDot = (TextView) findViewById(R.id.iv_message_dot);
-        rgGroupHomeTv = (TextView) findViewById(R.id.rg_group_home_tv);
-        rgGroupFriendTv = (TextView) findViewById(R.id.rg_group_vip_tv);
-        rgGroupMsgTv = (TextView) findViewById(R.id.rg_group_huihua_tv);
-        rgGroupMyTv = (TextView) findViewById(R.id.rg_group_me_tv);
+//        rgGroupHomeIm = (ImageView) findViewById(R.id.rg_group_home_im);
+//        rgGroupFriendIm = (ImageView) findViewById(R.id.rg_group_vip_im);
+//        rgGroupMsgIm = (ImageView) findViewById(R.id.rg_group_huihua_im);
+//        rgGroupMyIm = (ImageView) findViewById(R.id.rg_group_me_im);
+//        ivMessageDot = (TextView) findViewById(R.id.iv_message_dot);
+//        rgGroupHomeTv = (TextView) findViewById(R.id.rg_group_home_tv);
+//        rgGroupFriendTv = (TextView) findViewById(R.id.rg_group_vip_tv);
+//        rgGroupMsgTv = (TextView) findViewById(R.id.rg_group_huihua_tv);
+//        rgGroupMyTv = (TextView) findViewById(R.id.rg_group_me_tv);
+//
+//        rgGroupHome = (LinearLayout) findViewById(R.id.rg_group_home);
+//        rgGroupFriend = (LinearLayout) findViewById(R.id.rg_group_vip);
+//        rgGroupMsg = (LinearLayout) findViewById(R.id.rg_group_huihua);
+//        rgGroupMy = (LinearLayout) findViewById(R.id.rg_group_me);
+//        rgGroupAdd = (LinearLayout) findViewById(R.id.rg_group_yingxiao);
+//
+//
+//        rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
+//        rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
+//        rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
+//        rgGroupMyIm.setImageResource(R.mipmap.ico_my);
 
-        rgGroupHome = (LinearLayout) findViewById(R.id.rg_group_home);
-        rgGroupFriend = (LinearLayout) findViewById(R.id.rg_group_vip);
-        rgGroupMsg = (LinearLayout) findViewById(R.id.rg_group_huihua);
-        rgGroupMy = (LinearLayout) findViewById(R.id.rg_group_me);
-        rgGroupAdd = (LinearLayout) findViewById(R.id.rg_group_yingxiao);
-
-
-        rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
-        rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
-        rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
-        rgGroupMyIm.setImageResource(R.mipmap.ico_my);
-
-        ll_bottom.setVisibility(Constant.isShowBottom ? View.VISIBLE : View.GONE);
+//        ll_bottom.setVisibility(Constant.isShowBottom ? View.VISIBLE : View.GONE);
+        line = findViewById(R.id.line);
+        line.setBackgroundColor(Color.parseColor(WXApplication.getAppInfo().getBorderStyle()));
         initEvent();
+        // 获取屏幕宽度
+        Display dm = getWindowManager().getDefaultDisplay();
+        final int screenWidth = dm.getWidth();
+        nv = (NavigationView) findViewById(R.id.nv);
+
+// 初始化获取底部导航自身高度
+        final ViewTreeObserver vt = nv.getViewTreeObserver();
+        vt.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                if (isGetHeight) {
+                    mHeight = nv.getMeasuredHeight();
+                    List<TabBar> tabBars = WXApplication.getAppInfo().getTabBar();
+                    int len = tabBars.size();
+                    String[] titles = new String[len];
+                    int[] selectedImage = new int[len];
+                    int[] unSelectedImage = new int[len];
+                    for (int i = 0 ; i < len ; i++){
+                        titles[i] = tabBars.get(i).getText();
+                        selectedImage[i] = getResources().getIdentifier(tabBars.get(i).getSelectedIconPath(), "drawable", AllConstant.PACKNAME);
+                        unSelectedImage[i] = getResources().getIdentifier(tabBars.get(i).getIcon(), "drawable",  AllConstant.PACKNAME);
+                    }
+                    nv.setLayout(titles, selectedImage, unSelectedImage, screenWidth, mHeight, MainActivity.this);
+                    nv.setColorLing(0);
+                    nv.setOnItemClickListener(MainActivity.this);
+                    isGetHeight = false;
+                }
+                return true;
+            }
+        });
         //默认首页
-        setSelectTab(0);
+
+    }
+
+
+    @Override
+    public void onItemClick(int position) {
+        setSelectTab(position);
     }
 
     private void initEvent() {
-        rgGroupHome.setOnClickListener(this);
-        rgGroupFriend.setOnClickListener(this);
-        rgGroupMsg.setOnClickListener(this);
-        rgGroupAdd.setOnClickListener(this);
-        rgGroupMy.setOnClickListener(this);
+//        rgGroupHome.setOnClickListener(this);
+//        rgGroupFriend.setOnClickListener(this);
+//        rgGroupMsg.setOnClickListener(this);
+//        rgGroupAdd.setOnClickListener(this);
+//        rgGroupMy.setOnClickListener(this);
     }
 
-    private void setBottonChange(int page) {
-        switch (page) {
-            case 0:
-                BarTextColorUtils.StatusBarLightMode(MainActivity.this, false);
-                rgGroupHomeIm.setImageResource(R.mipmap.ico_home_focus);
-                rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
-                rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
-                rgGroupMyIm.setImageResource(R.mipmap.ico_my);
-
-                rgGroupHomeTv.setTextColor(getResources().getColor(R.color.wxColor));
-                rgGroupFriendTv.setTextColor(getResources().getColor(R.color.text_default));
-                rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
-                rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
-
-                break;
-            case 1:
-                rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
-                rgGroupFriendIm.setImageResource(R.mipmap.ico_friend_focus);
-                rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
-                rgGroupMyIm.setImageResource(R.mipmap.ico_my);
-
-                rgGroupHomeTv.setTextColor(getResources().getColor(R.color.text_default));
-                rgGroupFriendTv.setTextColor(getResources().getColor(R.color.wxColor));
-                rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
-                rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
-
-                break;
-            case 2:
-                rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
-                rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
-                rgGroupMsgIm.setImageResource(R.mipmap.ico_msg_focus);
-                rgGroupMyIm.setImageResource(R.mipmap.ico_my);
-
-                rgGroupHomeTv.setTextColor(getResources().getColor(R.color.text_default));
-                rgGroupFriendTv.setTextColor(getResources().getColor(R.color.text_default));
-                rgGroupMsgTv.setTextColor(getResources().getColor(R.color.wxColor));
-                rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
-                break;
-            case 3:
-                rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
-                rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
-                rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
-                rgGroupMyIm.setImageResource(R.mipmap.ico_my_focus);
-
-                rgGroupHomeTv.setTextColor(getResources().getColor(R.color.text_default));
-                rgGroupFriendTv.setTextColor(getResources().getColor(R.color.text_default));
-                rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
-                rgGroupMyTv.setTextColor(getResources().getColor(R.color.wxColor));
-
-//                //        //测试
-//                TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
-//                    @Override
-//                    public void onError(int i, String s) {
+//    private void setBottonChange(int page) {
+//        switch (page) {
+//            case 0:
+//                BarTextColorUtils.StatusBarLightMode(MainActivity.this, false);
+//                rgGroupHomeIm.setImageResource(R.mipmap.ico_home_focus);
+//                rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
+//                rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
+//                rgGroupMyIm.setImageResource(R.mipmap.ico_my);
 //
-//                    }
+//                rgGroupHomeTv.setTextColor(getResources().getColor(R.color.wxColor));
+//                rgGroupFriendTv.setTextColor(getResources().getColor(R.color.text_default));
+//                rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
+//                rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
 //
-//                    @Override
-//                    public void onSuccess(TIMOfflinePushSettings settings) {
-//                        //开启离线推送
-//                        settings.setEnabled(true);
-//                        //设置收到 C2C 离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
-//                        settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
-//                        //设置收到群离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
-//                        settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
-//
-//                        TIMManager.getInstance().setOfflinePushSettings(settings);
-//                    }
-//                });
 //                break;
-        }
-
-    }
+//            case 1:
+//                rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
+//                rgGroupFriendIm.setImageResource(R.mipmap.ico_friend_focus);
+//                rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
+//                rgGroupMyIm.setImageResource(R.mipmap.ico_my);
+//
+//                rgGroupHomeTv.setTextColor(getResources().getColor(R.color.text_default));
+//                rgGroupFriendTv.setTextColor(getResources().getColor(R.color.wxColor));
+//                rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
+//                rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
+//
+//                break;
+//            case 2:
+//                rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
+//                rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
+//                rgGroupMsgIm.setImageResource(R.mipmap.ico_msg_focus);
+//                rgGroupMyIm.setImageResource(R.mipmap.ico_my);
+//
+//                rgGroupHomeTv.setTextColor(getResources().getColor(R.color.text_default));
+//                rgGroupFriendTv.setTextColor(getResources().getColor(R.color.text_default));
+//                rgGroupMsgTv.setTextColor(getResources().getColor(R.color.wxColor));
+//                rgGroupMyTv.setTextColor(getResources().getColor(R.color.text_default));
+//                break;
+//            case 3:
+//                rgGroupHomeIm.setImageResource(R.mipmap.ico_home);
+//                rgGroupFriendIm.setImageResource(R.mipmap.ico_friend);
+//                rgGroupMsgIm.setImageResource(R.mipmap.ico_msg);
+//                rgGroupMyIm.setImageResource(R.mipmap.ico_my_focus);
+//
+//                rgGroupHomeTv.setTextColor(getResources().getColor(R.color.text_default));
+//                rgGroupFriendTv.setTextColor(getResources().getColor(R.color.text_default));
+//                rgGroupMsgTv.setTextColor(getResources().getColor(R.color.text_default));
+//                rgGroupMyTv.setTextColor(getResources().getColor(R.color.wxColor));
+//
+////                //        //测试
+////                TIMManager.getInstance().getOfflinePushSettings(new TIMValueCallBack<TIMOfflinePushSettings>() {
+////                    @Override
+////                    public void onError(int i, String s) {
+////
+////                    }
+////
+////                    @Override
+////                    public void onSuccess(TIMOfflinePushSettings settings) {
+////                        //开启离线推送
+////                        settings.setEnabled(true);
+////                        //设置收到 C2C 离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+////                        settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+////                        //设置收到群离线消息时的提示声音，这里把声音文件放到了 res/raw 文件夹下
+////                        settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+////
+////                        TIMManager.getInstance().setOfflinePushSettings(settings);
+////                    }
+////                });
+////                break;
+//        }
+//
+//    }
 
     @Override
     public void onClick(View view) {
         if (antiShake.check(view.getId())) return;//防抖动
-        switch (view.getId()) {
-            case R.id.rg_group_home:
+//        switch (view.getId()) {
+//            case R.id.rg_group_home:
 //                new XRequest(MainActivity.this, "weex/member/nihtan/view.jhtml").setOnRequestListener(new HttpRequest.OnRequestListener() {
 //                    @Override
 //                    public void onSuccess(BaseActivity activity, String result, String type) {
@@ -610,53 +704,57 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                Intent intent2 = new Intent(MainActivity.this, LivePlayerActivity.class);
 //                startActivity(intent2);
 
-                setSelectTab(0);
-                break;
-            case R.id.rg_group_vip:
-                setSelectTab(1);//如果登录 就直接切换
-                break;
-            case R.id.rg_group_huihua:
-                setSelectTab(2);
-                break;
-            case R.id.rg_group_yingxiao:
-//                Intent intent = new Intent(MainActivity.this, EditActivity.class);
-
-                Intent intent = new Intent();
-                Uri uri = Uri.parse("file://" + Constant.center);
-                String scheme = uri.getScheme();
-                if (TextUtils.equals("tel", scheme)) {
-
-                } else if (TextUtils.equals("sms", scheme)) {
-
-                } else if (TextUtils.equals("mailto", scheme)) {
-
-                } else if (TextUtils.equals("http", scheme) ||
-                        TextUtils.equals("https",
-                                scheme)) {
-                    intent.putExtra("isLocal", "false");
-                    intent.setClass(MainActivity.this, WXPageActivity.class);
-                } else if (TextUtils.equals("file", scheme)) {
-                    intent.putExtra("isLocal", "true");
-                    intent.setClass(MainActivity.this, WXPageActivity.class);
-                } else {
-                    intent.setClass(MainActivity.this, WXPageActivity.class);
-                    uri = Uri.parse(new StringBuilder("http:").append("file://" + Constant.center).toString());
-                }
-                intent.setData(uri);
-                startActivity(intent);
-                break;
-            case R.id.rg_group_me:
-                setSelectTab(3);
-                break;
-        }
+//                setSelectTab(0);
+//                break;
+//            case R.id.rg_group_vip:
+//                setSelectTab(1);//如果登录 就直接切换
+//                break;
+//            case R.id.rg_group_huihua:
+//                setSelectTab(2);
+//                break;
+//            case R.id.rg_group_yingxiao:
+////                Intent intent = new Intent(MainActivity.this, EditActivity.class);
+//
+//                Intent intent = new Intent();
+//                Uri uri = Uri.parse("file://" + Constant.center);
+//                String scheme = uri.getScheme();
+//                if (TextUtils.equals("tel", scheme)) {
+//
+//                } else if (TextUtils.equals("sms", scheme)) {
+//
+//                } else if (TextUtils.equals("mailto", scheme)) {
+//
+//                } else if (TextUtils.equals("http", scheme) ||
+//                        TextUtils.equals("https",
+//                                scheme)) {
+//                    intent.putExtra("isLocal", "false");
+//                    intent.setClass(MainActivity.this, WXPageActivity.class);
+//                } else if (TextUtils.equals("file", scheme)) {
+//                    intent.putExtra("isLocal", "true");
+//                    intent.setClass(MainActivity.this, WXPageActivity.class);
+//                } else {
+//                    intent.setClass(MainActivity.this, WXPageActivity.class);
+//                    uri = Uri.parse(new StringBuilder("http:").append("file://" + Constant.center).toString());
+//                }
+//                intent.setData(uri);
+//                startActivity(intent);
+//                break;
+//            case R.id.rg_group_me:
+//                setSelectTab(3);
+//                break;
+//        }
     }
 
     public void setSelectTab(int page) {
-        if (page > 0 && (SharedUtils.readLoginId() == 0 ||!Constant.loginState )) {//没有登录过
+        if (WXApplication.getAppInfo().getTabBar().get(page).isRequireAuth() && (SharedUtils.readLoginId() == 0 || !Constant.loginState )) {//没有登录过
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, LoginActivity.LOGINCODE);
             return;
+        }
+        if(page == 1){
+
+//            EventBus.getDefault().post(new MessageBus(MessageBus.Type.SWITCHTAB, 2));
         }
         if(page != 0 && handleCount < (page + 1)) return;
 //        if (page != 0) {
@@ -667,7 +765,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         mContainer.setCurrentItem(page);
         //设置底部图标
-        setBottonChange(page);
+//        setBottonChange(page);
     }
 
     private boolean haveSysMsg = false;
@@ -727,7 +825,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
 
             }
-            boolean is = getIntent().getBooleanExtra("FORCEOFFLINE", false);
+            boolean is = intent.getBooleanExtra("FORCEOFFLINE", false);
             if(is){//是否被强制登录
                 //被注销了
                 destoryWeexInstance();
@@ -744,6 +842,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }).show();
 
             }
+
+            int switchtabIndex = intent.getIntExtra("SWITCHTAB", 0);
+            setSelectTab(switchtabIndex);
+            nv.setColorLing(switchtabIndex);
+
         }
 
     }
@@ -794,7 +897,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //            }
 //        }
         if (Activity.RESULT_OK != resultCode) {
-            showToast("调用失败");
+//            showToast("调用失败");
             return;
         }
 //        if (data == null || data.getExtras() == null
@@ -910,4 +1013,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //            startActivity(home);
         }
     }
+
 }
