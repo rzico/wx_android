@@ -4,7 +4,7 @@
   "borderStyle": "#eeeeee",
   "backgroundColor": "#ffffff",
   "style":"both",
-  "dot":2,
+  "dot":1,
   "index":"file://view/shop/cashier/index.js",
   "tabBar": [
     {
@@ -14,14 +14,6 @@
       "icon": "ico_tab1",
       "requireAuth": false,
       "selectedIconPath": "ico_tab1_focus"
-    },
-    {
-      "text": "会员",
-      "tag":"1",
-      "path": "file://view/friend/list.js",
-      "icon": "ico_tab2",
-      "requireAuth":true,
-      "selectedIconPath": "ico_tab2_focus"
     },
     {
       "text": "消息",

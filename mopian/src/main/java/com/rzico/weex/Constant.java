@@ -19,8 +19,8 @@ import java.util.Map;
  */
 public class Constant {
 
-    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.ZNZX" />
-    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.ZNZX";
+    //这里的WEEX_CATEGORY 需要与配置文件中的意图配置统一： <category android:name="com.taobao.android.intent.category.YUNDIAN" />
+    public static final String WEEX_CATEGORY = "com.taobao.android.intent.category.YUNDIAN";
 
     public static final String wxURL = "http://cdnx.znzx.rzico.com/weex/app/";
 
@@ -63,6 +63,7 @@ public class Constant {
     //   im的用户id
     public static String imUserId = "";
 
+    public static String path = "weex/";
 
     public static String app = AllConstant.PACKNAME;
     public static final String endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
