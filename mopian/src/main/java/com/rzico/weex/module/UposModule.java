@@ -51,6 +51,8 @@ public class UposModule extends WXModule {
 
     private RxGalleryFinalCropListener listener = null;
 
+    private static Boolean printing=false;
+
 
     private static final class SimpleRxGalleryFinalHolder {
         private static final UposModule SIMPLE_RX_GALLERY_FINAL = new UposModule();
@@ -485,6 +487,10 @@ public class UposModule extends WXModule {
 
     @JSMethod
     public void print(String url, final JSCallback callback){
+        if (printing) {
+            callback.invoke(new Message().error("printing"));
+            return;
+        }
         UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
@@ -494,6 +500,7 @@ public class UposModule extends WXModule {
 
             @Override
             public void onPayCancel() {
+                printing = false;
                 callback.invoke(new Message().error("用户取消"));
             }
 
@@ -504,11 +511,13 @@ public class UposModule extends WXModule {
 
             @Override
             public void onPrintSuccess(String data) {
+                printing = false;
                 callback.invoke(new Message().success(data));
             }
 
             @Override
             public void onPayError(@NonNull String errorMessage) {
+                printing = false;
                 callback.invoke(new Message().error(errorMessage));
             }
         }).printTest(url, callback);
@@ -830,6 +839,7 @@ public class UposModule extends WXModule {
     }
 
     private void printTest(final String url, JSCallback callback){
+        printing = true;
 //        View view = getActivity().getWindow().getDecorView();
 //        view.setDrawingCacheEnabled(true);
 //        view.buildDrawingCache();
@@ -841,21 +851,26 @@ public class UposModule extends WXModule {
                 bitmap[0] = GetImageInputStream(url);
             }
         }).start();
+
         long waitTime = 300;
         while (bitmap[0] == null){
             try {
                 Thread.sleep(waitTime);
                 waitTime += waitTime;
                 if(waitTime > 15000){
+                    printing = false;
                     callback.invoke(new Message().error("图片请求超时"));
                     break;
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                printing = false;
+                callback.invoke(new Message().error("图片请求失败"));
             }
         }
         if(bitmap[0] == null){
-
+            printing = false;
+            callback.invoke(new Message().error("图片请求无效"));
             return;
         }
 
@@ -864,11 +879,15 @@ public class UposModule extends WXModule {
             FileOutputStream out = new FileOutputStream(fname);
             bitmap[0].compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
+            printing = false;
+            callback.invoke(new Message().error("图片请求无效"));
             e.printStackTrace();
             return;
         }
 
-        AppHelper.callPrint(getActivity(), fname);
+        AppHelper.callSyncPrint(getActivity(), fname);
+        printing = false;
+        callback.invoke(new Message().success(null));
     }
 
     public void sendPay(String title, String type, JSONObject jsonObject){
