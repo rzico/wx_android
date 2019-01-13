@@ -416,6 +416,42 @@ public class UposModule extends WXModule {
     }
 
     @JSMethod
+    public void bankQuery(String traceNo, String extOrderNo,String appName, final JSCallback callback){
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("appId", Constant.appId);
+        jsonObject.put("extOrderNo", extOrderNo);
+        UposModule.get().init(new RxGalleryFinalCropListener() {
+            @NonNull
+            @Override
+            public Activity getSimpleActivity() {
+                return getActivity();
+            }
+
+            @Override
+            public void onPayCancel() {
+                callback.invoke(new Message().error("用户取消"));
+            }
+
+            @Override
+            public void onPaySuccess(Map<String,Object> data) {
+                callback.invoke(new Message().success(data));
+            }
+
+            @Override
+            public void onPrintSuccess(String data) {
+
+            }
+
+            @Override
+            public void onPayError(@NonNull String errorMessage) {
+                callback.invoke(new Message().error(errorMessage));
+            }
+        }).sendPay(appName, "交易明细",jsonObject);
+    }
+
+
+    @JSMethod
     public void bankPay(String extBillNo, String extOrderNo, double amount, String appName, final JSCallback callback){
 
         JSONObject jsonObject = new JSONObject();
@@ -738,60 +774,32 @@ public class UposModule extends WXModule {
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Activity.RESULT_OK != resultCode) {
+
             if(listener != null){
                 listener.onPayError("调用失败");
+                return;
             }
-            return;
-        }
-//        if (data == null || data.getExtras() == null
-//                || data.getExtras().getString("result") == null) {
-//            //走查询交易
-//            if (isCallQuery) {
-//                callQuery(requestCode);
-//                isCallQuery = false;
-//            }
-//            return;
-//        }
 
         if(AppHelper.TRANS_REQUEST_CODE == requestCode){
-
-            if (Activity.RESULT_OK == resultCode) {
-                if (null != data) {
-                    Map<String, Object> map = AppHelper.filterTransResult(data);
-//                    Map<>
-//                    result.append(AppHelper.TRANS_APP_NAME + ":" +map.get(AppHelper.TRANS_APP_NAME));
-//                    result.append(AppHelper.TRANS_BIZ_ID + ":" +map.get(AppHelper.TRANS_BIZ_ID));
-//                    result.append(AppHelper.RESULT_CODE + ":" +map.get(AppHelper.RESULT_CODE));
-//                    result.append(AppHelper.RESULT_MSG + ":" +map.get(AppHelper.RESULT_MSG));
-//                    result.append(AppHelper.TRANS_DATA + ":" +map.get(AppHelper.TRANS_DATA));
-//                    String result = new Gson().toJson(map);
-                    if (null != map) {
-                        if(listener != null){
-                            if ("0".equals(map.get("resultCode"))) {
-                                String tdJson = map.get("transData").toString();
-                                Map<String, Object> transData ;
-                                 transData = new Gson().fromJson(tdJson, Map.class);
-//                                map.put("transData", transData);
-                                listener.onPaySuccess(transData);
-                            } else {
-                                listener.onPayError(map.get("resultMsg").toString());
-                            }
-
-                        }
-                    }
-                }else{
-                    if(listener != null){
-                        listener.onPayError("Intent is null");
-                    }
-                }
-            }else{
+            Map<String, Object> map = AppHelper.filterTransResult(data);
+            if (null != map) {
                 if(listener != null){
-                    listener.onPayError("resultCode is not RESULT_OK");
+                    if ("0".equals(map.get("resultCode"))) {
+                        String tdJson = map.get("transData").toString();
+                        Map<String, Object> transData ;
+                        transData = new Gson().fromJson(tdJson, Map.class);
+                        listener.onPaySuccess(transData);
+                    } else {
+                        listener.onPayError(map.get("resultMsg").toString());
+                    }
+
                 }
+            } else{
+               if(listener != null){
+                   listener.onPayError("Intent is null");
+               }
             }
         } else if(AppHelper.PRINT_REQUEST_CODE == requestCode){
-            if (Activity.RESULT_OK == resultCode) {
                 if (null != data) {
                     StringBuilder result = new StringBuilder();
                     String printCode = data.getStringExtra("resultCode");
@@ -806,11 +814,6 @@ public class UposModule extends WXModule {
                         listener.onPayError("Intent is null");
                     }
                 }
-            }else{
-                if(listener != null){
-                    listener.onPayError("resultCode is not RESULT_OK");
-                }
-            }
         }
     }
 
