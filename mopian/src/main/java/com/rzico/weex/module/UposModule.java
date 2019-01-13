@@ -416,7 +416,7 @@ public class UposModule extends WXModule {
     }
 
     @JSMethod
-    public void bankQuery(String traceNo, String extOrderNo,String appName, final JSCallback callback){
+    public void bankQuery(String appName, String extOrderNo, final JSCallback callback){
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("appId", Constant.appId);
@@ -774,12 +774,6 @@ public class UposModule extends WXModule {
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-            if(listener != null){
-                listener.onPayError("调用失败");
-                return;
-            }
-
         if(AppHelper.TRANS_REQUEST_CODE == requestCode){
             Map<String, Object> map = AppHelper.filterTransResult(data);
             if (null != map) {
