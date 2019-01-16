@@ -112,7 +112,7 @@ dependencies {
     // PLUGIN GRADLE EXTENSIONS END
     compile project(':xutils')
     compile project(':richeditor')
-    compile project(':weex_sdk')
+//    compile project(':weex_sdk')
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile files('libs/bcprov-jdk15on-147.jar')
     compile project(':presentation')
@@ -121,6 +121,8 @@ dependencies {
     compile project(':photoview')
     compile 'com.amap.api:3dmap:5.4.0'
     compile 'com.amap.api:location:3.6.1'
+
+    compile 'com.taobao.android:weex_sdk:0.20.3.0-beta'
 
     compile files('libs/MobCommons-2017.1024.1907.jar')
     compile files('libs/MobTools-2017.1024.1907.jar')
