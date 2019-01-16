@@ -14,7 +14,6 @@
       <module fileurl="file://$PROJECT_DIR$/ucrop/ucrop.iml" filepath="$PROJECT_DIR$/ucrop/ucrop.iml" />
       <module fileurl="file://$PROJECT_DIR$/weex-project.iml" filepath="$PROJECT_DIR$/weex-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/weex_sdk/weex_sdk.iml" filepath="$PROJECT_DIR$/weex_sdk/weex_sdk.iml" />
-      <module fileurl="file://D:\weex\wx_android\weex_sdk\weex_sdk.iml" filepath="D:\weex\wx_android\weex_sdk\weex_sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/wx_sdk/wx_sdk.iml" filepath="$PROJECT_DIR$/wx_sdk/wx_sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/xutils/xutils.iml" filepath="$PROJECT_DIR$/xutils/xutils.iml" />
     </modules>
