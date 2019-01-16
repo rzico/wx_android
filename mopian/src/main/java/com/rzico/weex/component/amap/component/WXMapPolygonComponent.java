@@ -12,7 +12,6 @@ import com.amap.api.maps.model.Polygon;
 import com.amap.api.maps.model.PolygonOptions;
 import com.rzico.weex.component.amap.util.Constant;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 
@@ -31,8 +30,8 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent<Polygon> {
   private int mFillColor = 0;
   private float mWidth = 1.0f;
 
-  public WXMapPolygonComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-    super(instance, dom, parent);
+  public WXMapPolygonComponent(WXSDKInstance instance, WXVContainer parent) {
+    super(instance,parent);
   }
 
   @Override

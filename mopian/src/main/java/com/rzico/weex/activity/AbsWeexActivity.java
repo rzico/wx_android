@@ -225,7 +225,6 @@ import com.rzico.weex.utils.weex.CommonUtils;
 import com.taobao.weex.IWXRenderListener;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.common.IWXDebugProxy;
 import com.taobao.weex.common.WXRenderStrategy;
 
 import java.util.HashMap;
@@ -412,7 +411,7 @@ public abstract class AbsWeexActivity extends BaseActivity implements IWXRenderL
     if (filter == null) {
       filter = new IntentFilter();
     }
-    filter.addAction(IWXDebugProxy.ACTION_DEBUG_INSTANCE_REFRESH);
+//    filter.addAction(IWXDebugProxy.ACTION_DEBUG_INSTANCE_REFRESH);
     filter.addAction(WXSDKEngine.JS_FRAMEWORK_RELOAD);
     LocalBroadcastManager.getInstance(getApplicationContext())
         .registerReceiver(mBroadcastReceiver, filter);
@@ -507,13 +506,14 @@ public abstract class AbsWeexActivity extends BaseActivity implements IWXRenderL
   public class DefaultBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-      if (IWXDebugProxy.ACTION_DEBUG_INSTANCE_REFRESH.equals(intent.getAction())) {
-        if (mRefreshListener != null) {
-          mRefreshListener.onRefresh();
-        }
-      } else if (WXSDKEngine.JS_FRAMEWORK_RELOAD.equals(intent.getAction())) {
-        if (mReloadListener != null) {
-          mReloadListener.onReload();
+//      if (WXSDKEngine.JS_FRAMEWORK_RELOAD.equals(intent.getAction())) {
+//        if (mRefreshListener != null) {
+//          mRefreshListener.onRefresh();
+//        }
+//      } else
+        if (WXSDKEngine.JS_FRAMEWORK_RELOAD.equals(intent.getAction())) {
+          if (mReloadListener != null) {
+            mReloadListener.onReload();
         }
       }
     }

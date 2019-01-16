@@ -94,20 +94,16 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.karumi/dexter/4.1.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.lht/paintview/1.16/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.meizu.flyme.internet/push-internal/3.6.3/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.taobao.android/weex_sdk/0.20.3.0-beta/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.xw.repo/bubbleseekbar/3.5/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/pl.droidsonroids.gif/android-gif-drawable/1.2.8/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-safeguard" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-support" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/multi-dex" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/pre-dexed" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
@@ -180,6 +176,7 @@
     <orderEntry type="library" exported="" name="com.android.support:appcompat-v7-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="com.android.support:transition-25.2.0" level="project" />
     <orderEntry type="library" exported="" name="__local_aars__:D.\weex\wx_android\mopian\libs\MobCommons-2017.1024.1907.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" exported="" name="com.taobao.android:weex_sdk-0.20.3.0-beta" level="project" />
     <orderEntry type="library" exported="" name="__local_aars__:D.\weex\wx_android\mopian\libs\sdk4upos_20180411_mix.jar:unspecified@jar" level="project" />
     <orderEntry type="library" exported="" name="com.squareup.okhttp:okhttp:2.3.0@jar" level="project" />
     <orderEntry type="library" exported="" name="com.forward.androids:androids-1.1.4" level="project" />
@@ -189,7 +186,6 @@
     <orderEntry type="module" module-name="chat_ui" exported="" />
     <orderEntry type="module" module-name="ucrop" exported="" />
     <orderEntry type="module" module-name="wx_sdk" exported="" />
-    <orderEntry type="module" module-name="weex_sdk" exported="" />
     <orderEntry type="module" module-name="xutils" exported="" />
     <orderEntry type="module" module-name="constant" exported="" />
     <orderEntry type="module" module-name="photoview" exported="" />

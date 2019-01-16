@@ -12,7 +12,6 @@ import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.rzico.weex.component.amap.util.Constant;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 
@@ -31,8 +30,8 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent<Polyline>
   private String mStyle;
   private float mWeight = 1.0f;
 
-  public WXMapPolyLineComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-    super(instance, dom, parent);
+  public WXMapPolyLineComponent(WXSDKInstance instance, WXVContainer parent) {
+    super(instance,parent);
   }
 
   @Override
