@@ -420,7 +420,7 @@ public class UposModule extends WXModule {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("appId", Constant.appId);
-        jsonObject.put("extOrderNo", extOrderNo);
+        jsonObject.put("extOrderNo",extOrderNo);
         UposModule.get().init(new RxGalleryFinalCropListener() {
             @NonNull
             @Override
