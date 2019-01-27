@@ -22,7 +22,6 @@ import com.rzico.weex.component.amap.util.GifDecoder;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.adapter.URIAdapter;
 import com.taobao.weex.common.Constants;
-import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXLogUtils;
@@ -50,8 +49,8 @@ import java.util.List;
 
 public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
 
-  public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-    super(instance, dom, parent);
+  public WXMapMarkerComponent(WXSDKInstance instance,WXVContainer parent) {
+    super(instance,parent);
 
   }
 
@@ -80,9 +79,9 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
   @Override
   protected View initComponentHostView(@NonNull Context context) {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      String title = (String) getDomObject().getAttrs().get(Constant.Name.TITLE);
-      String icon = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
-      String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
+      String title = (String) getParent().getAttrs().get(Constant.Name.TITLE);
+      String icon = (String) getParent().getAttrs().get(Constant.Name.ICON);
+      String position = getParent().getAttrs().get(Constant.Name.POSITION).toString();
       initMarker(title, position, icon);
     }
     // FixMe： 只是为了绕过updateProperties中的逻辑检查

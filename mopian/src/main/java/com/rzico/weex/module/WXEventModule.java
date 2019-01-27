@@ -1350,11 +1350,11 @@ public class WXEventModule extends WXModule {
         params.setUrl(url);
         Platform platform = null;
         if(type.equals("favorite")){
-            platform = ShareSDK.getPlatform(WechatFavorite.NAME);
+            platform = ShareSDK.getPlatform("WechatFavorite");
         }else if(type.equals("timeline")){
-            platform = ShareSDK.getPlatform(WechatMoments.NAME);
+            platform = ShareSDK.getPlatform("WechatMoments");
         }else if(type.equals("appMessage")){
-            platform = ShareSDK.getPlatform(Wechat.NAME);
+            platform = ShareSDK.getPlatform("Wechat");
         }else if(type.equals("copyHref")){
             // 得到剪贴板管理器
             ClipboardManager cmb = (ClipboardManager)getContext().getSystemService(Context.CLIPBOARD_SERVICE);

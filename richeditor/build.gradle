@@ -10,4 +10,5 @@ android {
     versionCode VERSION_CODE as int
     versionName VERSION_NAME
   }
+    buildToolsVersion '26.0.2'
 }

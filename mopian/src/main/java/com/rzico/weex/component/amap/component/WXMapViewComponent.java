@@ -34,7 +34,6 @@ import com.amap.api.maps.model.VisibleRegion;
 import com.rzico.weex.component.amap.util.Constant;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.annotation.JSMethod;
-import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.view.WXFrameLayout;
@@ -82,8 +81,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   private FrameLayout mapContainer;
   private int fakeBackgroundColor = Color.rgb(242, 238, 232);
 
-  public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
-    super(instance, dom, parent, isLazy);
+  public WXMapViewComponent(WXSDKInstance instance, WXVContainer parent, boolean isLazy) {
+    super(instance, parent, isLazy,parent!=null?parent.getBasicComponentData():null);
   }
 
   @Override
@@ -404,11 +403,6 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         }
       }
     });
-  }
-
-  @Override
-  protected void addSubView(View child, int index) {
-
   }
 
   @WXComponentProp(name = Constant.Name.CENTER)

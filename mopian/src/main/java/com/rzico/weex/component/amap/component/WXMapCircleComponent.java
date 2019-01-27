@@ -13,7 +13,6 @@ import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.LatLng;
 import com.rzico.weex.component.amap.util.Constant;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 
@@ -31,8 +30,8 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent<Circle> {
   private float mWeight = 1.0f;
   private float mRadius = 1.0f;
 
-  public WXMapCircleComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-    super(instance, dom, parent);
+  public WXMapCircleComponent(WXSDKInstance instance,WXVContainer parent) {
+    super(instance,parent);
   }
 
   @Override

@@ -12,8 +12,7 @@ import com.rzico.weex.adapter.ImageAdapter;
 import com.rzico.weex.component.amap.component.WXMapMarkerComponent;
 import com.rzico.weex.component.amap.component.WXMapViewComponent;
 import com.rzico.weex.component.amap.module.WXMapModule;
-import com.rzico.weex.component.view.MYWXWeb;
-import com.rzico.weex.component.module.MYWXWebViewModule;
+
 import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.notidmanager.DbCacheBean;
@@ -136,20 +135,18 @@ public class WXApplication extends Application {
                     .build()
     );
     try {
-      WXSDKEngine.registerComponent(WXBasicComponentType.WEB, MYWXWeb.class);
       WXSDKEngine.registerComponent("weex-amap", WXMapViewComponent.class);
       WXSDKEngine.registerComponent("weex-amap-marker", WXMapMarkerComponent.class);
       WXSDKEngine.registerComponent(
               new SimpleComponentHolder(
                       WXImage.class,
-                      new WXImage.Ceator()
+                      new WXImage.Creator()
               ),
               false,
               WXBasicComponentType.IMAGE,
               WXBasicComponentType.IMG
       );
 
-      WXSDKEngine.registerModule("webview", MYWXWebViewModule.class, true);
       WXSDKEngine.registerModule("event", WXEventModule.class);
       WXSDKEngine.registerModule("map", MapModule.class);
       WXSDKEngine.registerModule("audio", AudioModule.class);
