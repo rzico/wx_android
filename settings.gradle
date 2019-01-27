@@ -13,5 +13,3 @@ include ":wx_sdk"
 include ":graffiti"
 include ":chat_ui"
 include ":ucrop"
-
-include ":weex_sdk"
