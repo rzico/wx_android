@@ -3,9 +3,9 @@
   "selectedColor": "#068F3D",
   "borderStyle": "#eeeeee",
   "backgroundColor": "#ffffff",
-  "style":"both",
-  "dot":-1,
-  "index":"file://view/shop/cashier/index.js",
+  "style":"single",
+  "dot":3,
+  "index":"file://pages/index/index.js",
   "tabBar": [
     {
       "text": "首页",
@@ -24,18 +24,26 @@
       "selectedIconPath": "ico_tab2_focus"
     },
     {
-      "text": "订单",
+      "text": "发布",
       "tag":"2",
-      "path": "file://pages/member/order/index.js",
+      "path": "file://pages/editor/index.js",
       "icon": "ico_tab3",
+      "requireAuth":true,
+      "selectedIconPath": "ico_tab2_focus"
+    },
+    {
+      "text": "消息",
+      "tag":"3",
+      "path": "file://pages/message/list.js",
+      "icon": "ico_tab4",
       "requireAuth":true,
       "selectedIconPath": "ico_tab3_focus"
     },
     {
       "text": "我的",
-      "tag":"3",
+      "tag":"4",
       "path": "file://pages/member/index.js",
-      "icon": "ico_tab4",
+      "icon": "ico_tab5",
       "requireAuth":true,
       "selectedIconPath": "ico_tab4_focus"
     }
