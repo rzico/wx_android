@@ -3,7 +3,7 @@
   "selectedColor": "#068F3D",
   "borderStyle": "#eeeeee",
   "backgroundColor": "#ffffff",
-  "style":"single",
+  "style":"image",
   "dot":3,
   "index":"file://pages/index/index.js",
   "tabBar": [
