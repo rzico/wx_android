@@ -22,6 +22,7 @@ package com.rzico.weex.component.video;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
@@ -47,7 +48,8 @@ import java.util.Map;
 
 public class WXVideo extends WXComponent<FrameLayout> {
 
-    private boolean mAutoPlay;
+    private boolean mAutoPlay = true;
+    private String mPlaystatus="pause";
     private WXVideoView.Wrapper mWrapper;
 
     /**
@@ -97,6 +99,13 @@ public class WXVideo extends WXComponent<FrameLayout> {
                 mPrepared = true;
                 if (mAutoPlay) {
                     video.start();
+//                    Handler handler = new Handler();
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+                            WXVideo.this.notify(Constants.Event.START, Constants.Value.PLAY);
+//                        }
+//                    }, 1000);
                 }
 
                 //callback from video view, so videoview should not null
@@ -146,9 +155,9 @@ public class WXVideo extends WXComponent<FrameLayout> {
                     WXLogUtils.d("Video", "onStart");
                 }
 
-                if (getEvents().contains(Constants.Event.START)) {
-                    WXVideo.this.notify(Constants.Event.START, Constants.Value.PLAY);
-                }
+//                if (getEvents().contains(Constants.Event.START)) {
+//                    WXVideo.this.notify(Constants.Event.START, Constants.Value.PLAY);
+//                }
             }
         });
         mWrapper = video;
@@ -225,11 +234,11 @@ public class WXVideo extends WXComponent<FrameLayout> {
 
     @WXComponentProp(name = Constants.Name.AUTO_PLAY)
     public void setAutoPlay(boolean autoPlay) {
-        mAutoPlay = autoPlay;
-        if(autoPlay){
-            mWrapper.createIfNotExist();
-            mWrapper.start();
-        }
+        mAutoPlay = true;
+//        if(autoPlay){
+//            mWrapper.createIfNotExist();
+//            mWrapper.start();
+//        }
     }
 
     @WXComponentProp(name = Constants.Name.CONTROLS)
@@ -246,20 +255,23 @@ public class WXVideo extends WXComponent<FrameLayout> {
     @WXComponentProp(name = Constants.Name.PLAY_STATUS)
     public void setPlaystatus(String playstatus) {
 
-        if (mPrepared && !mError && !mStopped) {
-            if (playstatus.equals(Constants.Value.PLAY)) {
-                mWrapper.start();
-            } else if (playstatus.equals(Constants.Value.PAUSE)) {
-                mWrapper.pause();
-            } else if (playstatus.equals(Constants.Value.STOP)) {
-                mWrapper.stopPlayback();
-                mStopped = true;
-            }
-        } else if ((mError || mStopped) && playstatus.equals(Constants.Value.PLAY)) {
-            mError = false;
-            mWrapper.resume();
-
-            mWrapper.getProgressBar().setVisibility(View.VISIBLE);
-        }
+//        if (mPrepared && !mError && !mStopped) {
+//            if (playstatus.equals(Constants.Value.PLAY)) {
+//                mPlaystatus = Constants.Value.PLAY;
+//                mWrapper.start();
+//            } else if (playstatus.equals(Constants.Value.PAUSE)) {
+//                mPlaystatus = Constants.Value.PAUSE;
+//                mWrapper.pause();
+//            } else if (playstatus.equals(Constants.Value.STOP)) {
+//                mPlaystatus = Constants.Value.STOP;
+//                mWrapper.stopPlayback();
+//                mStopped = true;
+//            }
+//        } else if ((mError || mStopped) && playstatus.equals(Constants.Value.PLAY)) {
+//            mError = false;
+//            mWrapper.resume();
+//
+//            mWrapper.getProgressBar().setVisibility(View.VISIBLE);
+//        }
     }
 }

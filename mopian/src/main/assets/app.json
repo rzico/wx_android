@@ -29,7 +29,7 @@
       "path": "file://pages/editor/index.js",
       "icon": "ico_tab3",
       "requireAuth":true,
-      "selectedIconPath": "ico_tab2_focus"
+      "selectedIconPath": "ico_tab3_focus"
     },
     {
       "text": "消息",
@@ -37,7 +37,7 @@
       "path": "file://pages/message/list.js",
       "icon": "ico_tab4",
       "requireAuth":true,
-      "selectedIconPath": "ico_tab3_focus"
+      "selectedIconPath": "ico_tab4_focus"
     },
     {
       "text": "我的",
@@ -45,7 +45,7 @@
       "path": "file://pages/member/index.js",
       "icon": "ico_tab5",
       "requireAuth":true,
-      "selectedIconPath": "ico_tab4_focus"
+      "selectedIconPath": "ico_tab5_focus"
     }
   ]
 }
