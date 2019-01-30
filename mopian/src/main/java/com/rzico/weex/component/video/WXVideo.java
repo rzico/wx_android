@@ -99,13 +99,13 @@ public class WXVideo extends WXComponent<FrameLayout> {
                 mPrepared = true;
                 if (mAutoPlay) {
                     video.start();
-//                    Handler handler = new Handler();
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
                             WXVideo.this.notify(Constants.Event.START, Constants.Value.PLAY);
-//                        }
-//                    }, 1000);
+                        }
+                    }, 1000);
                 }
 
                 //callback from video view, so videoview should not null
