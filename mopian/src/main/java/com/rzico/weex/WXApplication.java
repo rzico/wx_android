@@ -13,6 +13,7 @@ import com.rzico.weex.component.amap.component.WXMapMarkerComponent;
 import com.rzico.weex.component.amap.component.WXMapViewComponent;
 import com.rzico.weex.component.amap.module.WXMapModule;
 
+import com.rzico.weex.component.video.WXVideo;
 import com.rzico.weex.component.view.WXImage;
 import com.rzico.weex.db.DbUtils;
 import com.rzico.weex.db.notidmanager.DbCacheBean;
@@ -137,6 +138,7 @@ public class WXApplication extends Application {
     try {
       WXSDKEngine.registerComponent("weex-amap", WXMapViewComponent.class);
       WXSDKEngine.registerComponent("weex-amap-marker", WXMapMarkerComponent.class);
+      WXSDKEngine.registerComponent("video", WXVideo.class);
       WXSDKEngine.registerComponent(
               new SimpleComponentHolder(
                       WXImage.class,
