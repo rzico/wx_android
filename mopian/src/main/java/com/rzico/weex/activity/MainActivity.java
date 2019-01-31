@@ -217,8 +217,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                             int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
                             InitBusiness.start(getApplicationContext(), loglvl);
-
-
                         }
 
                         @Override

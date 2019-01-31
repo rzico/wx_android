@@ -41,6 +41,7 @@ import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.view.WXVideoView;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
+import com.tencent.rtmp.ui.TXCloudVideoView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,8 +52,7 @@ public class WXVideo extends WXComponent<FrameLayout> {
     private boolean mAutoPlay = true;
     private String mPlaystatus="pause";
     private WXVideoView.Wrapper mWrapper;
-
-    /**
+      /**
      * package
      **/
     boolean mPrepared;
@@ -110,7 +110,7 @@ public class WXVideo extends WXComponent<FrameLayout> {
 
                 //callback from video view, so videoview should not null
                 WXVideoView videoView = video.getVideoView();
-                videoView.seekTo(5);
+                videoView.seekTo(0);
 
                 if (video.getMediaController() != null) {
                     if (!mStopped) {
@@ -224,7 +224,6 @@ public class WXVideo extends WXComponent<FrameLayout> {
         if (TextUtils.isEmpty(src) || getHostView() == null) {
             return;
         }
-
         if (!TextUtils.isEmpty(src)) {
             WXSDKInstance instance = getInstance();
             mWrapper.setVideoURI(instance.rewriteUri(Uri.parse(src), URIAdapter.VIDEO));

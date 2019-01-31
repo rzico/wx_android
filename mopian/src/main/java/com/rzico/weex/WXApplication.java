@@ -112,7 +112,6 @@ public class WXApplication extends Application {
     initAlbum();
     initWeex();
     getUid();
-
   }
 
   public static String getUid() {
