@@ -176,8 +176,6 @@ public class NavigationView extends LinearLayout {
                 linearLayout2.setOrientation(VERTICAL);
                 linearLayout2.setLayoutParams(textLl2);
 
-
-
                 if(WXApplication.getAppInfo().getStyle().equals("both")){
                     if (WXApplication.getAppInfo().getDot() != i){
                         layout.addView(image);
