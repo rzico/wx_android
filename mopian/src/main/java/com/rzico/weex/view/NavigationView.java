@@ -62,8 +62,8 @@ public class NavigationView extends LinearLayout {
     public NavigationView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.NavigationView);
-        image_height = typedArray.getInteger(R.styleable.NavigationView_image_height, 20);
-        image_width = typedArray.getInteger(R.styleable.NavigationView_image_width, 20);
+        image_height = typedArray.getInteger(R.styleable.NavigationView_image_height, 23);
+        image_width = typedArray.getInteger(R.styleable.NavigationView_image_width, 23);
 //        text_size = typedArray.getDimension(R.styleable.NavigationView_text_size, 12);
         text_size = 12;
         dotText = new TextView(context);
@@ -102,6 +102,10 @@ public class NavigationView extends LinearLayout {
         setOrientation(LinearLayout.HORIZONTAL);
         if (titles != null && titles.length != 0) {
             int widthScale = screenWidth / titles.length;
+            if(!WXApplication.getAppInfo().getStyle().equals("both")) {
+                image_width = image_width + 12;
+                image_height = image_height + 12;
+            }
             for (int i = 0; i < titles.length; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -120,6 +124,7 @@ public class NavigationView extends LinearLayout {
 
 
                 ImageView image = new ImageView(context);
+
                 LinearLayout.LayoutParams imageLp = new LinearLayout.LayoutParams(Utils.dp2px(context, image_width), Utils.dp2px(context, image_height));
                 imageLp.gravity = Gravity.CENTER_HORIZONTAL;
                 imageLp.topMargin = 5;
@@ -166,12 +171,19 @@ public class NavigationView extends LinearLayout {
 
                 LinearLayout linearLayout = new LinearLayout(context);
                 LinearLayout.LayoutParams textLl = new LinearLayout.LayoutParams(Utils.dp2px(context, 45), Utils.dp2px(context, 25));
-                linearLayout.setGravity(Gravity.BOTTOM | Gravity.CENTER);
-                linearLayout.setOrientation(VERTICAL);
+
+                if(!WXApplication.getAppInfo().getStyle().equals("both")) {
+                    linearLayout.setGravity(Gravity.CENTER);
+                    linearLayout.setOrientation(VERTICAL);
+                } else {
+                    linearLayout.setGravity(Gravity.BOTTOM | Gravity.CENTER);
+                    linearLayout.setOrientation(VERTICAL);
+                }
+
                 linearLayout.setLayoutParams(textLl);
 
                 LinearLayout linearLayout2 = new LinearLayout(context);
-                LinearLayout.LayoutParams textLl2 = new LinearLayout.LayoutParams(Utils.dp2px(context, 45), Utils.dp2px(context, 25));
+                LinearLayout.LayoutParams textLl2 = new LinearLayout.LayoutParams(Utils.dp2px(context, 40), Utils.dp2px(context, 25));
                 linearLayout2.setGravity(Gravity.TOP | Gravity.END);
                 linearLayout2.setOrientation(VERTICAL);
                 linearLayout2.setLayoutParams(textLl2);
@@ -187,7 +199,7 @@ public class NavigationView extends LinearLayout {
                         layout.addView(frameLayout);
                     }
                     layout.addView(tv_title);
-                }else if(WXApplication.getAppInfo().getStyle().equals("image")){
+                }else {
                     if (WXApplication.getAppInfo().getDot() != i){
                         layout.addView(image);
                     }else {
@@ -197,20 +209,7 @@ public class NavigationView extends LinearLayout {
                         frameLayout.addView(linearLayout2);
                         layout.addView(frameLayout);
                     }
-                }else if(WXApplication.getAppInfo().getStyle().equals("text")){
-                    if (WXApplication.getAppInfo().getDot() != i){
-                        layout.addView(tv_title);
-                    }else {
-//                        layout.addView(tv_title);
-                        linearLayout.setGravity(Gravity.CENTER);
-                        linearLayout.addView(tv_title);
-                        linearLayout2.addView(dotText);
-                        frameLayout.addView(linearLayout);
-                        frameLayout.addView(linearLayout2);
-                        layout.addView(frameLayout);
-                    }
                 }
-
 
                 layout.setOnClickListener(new OnClickListener() {
 
@@ -226,8 +225,6 @@ public class NavigationView extends LinearLayout {
                         if (onItemClickListener != null) {
                             onItemClickListener.onItemClick(position);
                         }
-
-
                     }
                 });
 

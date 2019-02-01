@@ -152,17 +152,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             return;
         }
         if (messageBus.getMessageType() == MessageBus.Type.LOGINSUCCESS) {
+            setUnRead();
             if (canReload) {
-                destoryWeexInstance();
-                initWeexView();
-                setSelectTab(0);
+                if (SharedUtils.readLoginId() != 0) {
+                    loadPage();
+                }
             }
+            setSelectTab(0);
             canReload = true;//恢复默认
         } else if (messageBus.getMessageType() == MessageBus.Type.LOGOUT) {
 //                    //注销登录
 //                    //跳转到首页
-            destoryWeexInstance();
-            initWeexView();
+//            destoryWeexInstance();
+//            initWeexView();
             setSelectTab(0);
         } else if (messageBus.getMessageType() == MessageBus.Type.FORCEOFFLINE) {
             Intent intent = new Intent();
@@ -173,8 +175,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             setUnRead();
         } else if (messageBus.getMessageType() == MessageBus.Type.LOGINERROR) {
             //被注销了
-            destoryWeexInstance();
-            initWeexView();
+//            destoryWeexInstance();
+//            initWeexView();
             setSelectTab(0);
         } else if (messageBus.getMessageType() == MessageBus.Type.GLOBAL){
             for (String key : wxsdkInstanceMap.keySet()) {
@@ -318,7 +320,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //            initWeexView();
 //            setSelectTab(0);
             if (imUserId.equals("")) {
-                canReload = false;
                 LoginUtils.checkLogin(MainActivity.this, null, null);
             }
         }
@@ -396,19 +397,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             LoginUtils.checkLogin(MainActivity.this, getIntent(), new LoginUtils.OnLoginListener() {
                 @Override
                 public void onSuccess(LoginBean loginBean) {
-                    setUnRead();
-                    if (SharedUtils.readLoginId() != 0) {
-                        loadPage();
-                    }
+//                    setUnRead();
+//                    if (SharedUtils.readLoginId() != 0) {
+//                        loadPage();
+//                    }
                     isfirst = false;
                 }
 
                 @Override
                 public void onError(LoginUtils.LoginErrorType loginErrorType) {
                     isfirst = false;
-                    if (SharedUtils.readLoginId() != 0) { //登录过就加载 没登录过不加载
-                        loadPage();
-                    }
+//                    if (SharedUtils.readLoginId() != 0) { //登录过就加载 没登录过不加载
+//                        loadPage();
+//                    }
                     //登录失败 等其他原因登录失败   则跳转登录 页面
 //                    Intent intent = new Intent();
 //                    intent.setClass(MainActivity.this, LoginActivity.class);
@@ -826,8 +827,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             boolean is = intent.getBooleanExtra("FORCEOFFLINE", false);
             if(is){//是否被强制登录
                 //被注销了
-                destoryWeexInstance();
-                initWeexView();
+//                destoryWeexInstance();
+//                initWeexView();
                 setSelectTab(0);
                 //弹窗
                 new AlertView("账号异常", "您的账号再另一台设备登录！", null, new String[]{"确定"}, null, MainActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
