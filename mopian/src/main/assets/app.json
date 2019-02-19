@@ -8,17 +8,17 @@
   "index":"file://view/shop/cashier/index.js",
   "tabBar": [
     {
-      "text": "首页",
+      "text": "应用",
       "tag":"0",
-      "path": "file://view/shop/cashier/index.js",
+      "path": "file://view/shop/index.js",
       "icon": "ico_tab1",
       "requireAuth": false,
       "selectedIconPath": "ico_tab1_focus"
     },
     {
-      "text": "会员",
+      "text": "发现",
       "tag":"1",
-      "path": "file://view/friend/list.js",
+      "path": "file://view/home/index.js",
       "icon": "ico_tab2",
       "requireAuth":true,
       "selectedIconPath": "ico_tab2_focus"
@@ -34,7 +34,7 @@
     {
       "text": "我的",
       "tag":"3",
-      "path": "file://view/member/mine.js",
+      "path": "file://view/member/index.js",
       "icon": "ico_tab4",
       "requireAuth":true,
       "selectedIconPath": "ico_tab4_focus"
